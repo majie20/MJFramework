@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 429251671
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e293585a5d05a2c78e92a3d4320fd1aa
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 67f36314385ee3305f3ef4c431f5288a
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: e903585689a898d4685c955a47f28a59, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c737338a2c490e64bbc264143f8eaf71, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Model/ReferenceCollector.prefab
+- Assets/Model/Cube.json
+- Assets/Model/Cube.prefab
+Dependencies: []

@@ -1,0 +1,10 @@
+.vs
+.vscode
+Library
+DOTween.Modules.csproj
+UtilsEditor.sln
+UtilsEditor.sln.DotSettings.user
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor.csproj
+obj
+Temp
