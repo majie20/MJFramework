@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class PoolMgr : Singleton<PoolMgr>
+﻿namespace Game.Singleton
 {
-    protected override void init()
+    public class PoolMgr : Singleton<PoolMgr>
     {
-        base.init();
-    }
+        public override void Init()
+        {
+            base.Init();
+        }
 
-    public override void Dispose()
-    {
-        base.Dispose();
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
     }
 }

@@ -82,6 +82,39 @@ public class PrefabAssociateEditor : EditorWindow
 
         GUILayout.BeginHorizontal();
         targetSerPro.objectReferenceValue = EditorGUILayout.ObjectField(targetSerPro.objectReferenceValue, typeof(GameObject), false);
+        
+        if (targetSerPro.objectReferenceValue == null)
+        {
+            serObj.ApplyModifiedProperties();
+            serObj.UpdateIfRequiredOrScript();
+            return;
+        }
+        else
+        {
+            if (targetSerPro.objectReferenceValue != targetObj)
+            {
+                bornDatasSerPro.ClearArray();
+                bornDatas = new List<PrefabAssociateData>();
+                var jsonPath = GetPrefabJsonDataPath(targetSerPro.objectReferenceValue);
+                if (File.Exists(jsonPath))
+                {
+                    using (FileStream fs = File.OpenRead(jsonPath))
+                    {
+                        using (var sr = new StreamReader(fs))
+                        {
+                            var reader = new JsonTextReader(sr);
+                            var datas = JToken.ReadFrom(reader);
+
+                            for (int i = 0; i < datas.Count(); i++)
+                            {
+                                AddAssociate(datas[i]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (GUILayout.Button("生成数据文件"))
         {
             using (FileStream fs = File.Create(GetPrefabJsonDataPath(targetObj)))
@@ -145,38 +178,6 @@ public class PrefabAssociateEditor : EditorWindow
             }
         }
         GUILayout.EndHorizontal();
-
-        if (targetSerPro.objectReferenceValue == null)
-        {
-            serObj.ApplyModifiedProperties();
-            serObj.UpdateIfRequiredOrScript();
-            return;
-        }
-        else
-        {
-            if (targetSerPro.objectReferenceValue != targetObj)
-            {
-                bornDatasSerPro.ClearArray();
-                bornDatas = new List<PrefabAssociateData>();
-                var jsonPath = GetPrefabJsonDataPath(targetSerPro.objectReferenceValue);
-                if (File.Exists(jsonPath))
-                {
-                    using (FileStream fs = File.OpenRead(jsonPath))
-                    {
-                        using (var sr = new StreamReader(fs))
-                        {
-                            var reader = new JsonTextReader(sr);
-                            var datas = JToken.ReadFrom(reader);
-
-                            for (int i = 0; i < datas.Count(); i++)
-                            {
-                                AddAssociate(datas[i]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         GUILayout.Space(10);
         GUILayout.Label("要引用的预制体：", new GUIStyle { fontSize = 15, alignment = TextAnchor.MiddleLeft });
@@ -363,6 +364,11 @@ public class PrefabAssociateEditor : EditorWindow
         }
     }
 
+    /// <summary>
+    /// 获取预制体的json数据路径
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     private string GetPrefabJsonDataPath(Object obj)
     {
         var path = $"./{AssetDatabase.GetAssetPath(obj)}";

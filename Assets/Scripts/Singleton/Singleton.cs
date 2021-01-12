@@ -1,35 +1,37 @@
-﻿public class Singleton<T> where T : Singleton<T>, new()
+﻿namespace Game.Singleton
 {
-    protected static T _instance;
-    private static readonly object padlock = new object();
-
-    public static T Instance
+    public class Singleton<T> where T : Singleton<T>, new()
     {
-        get
+        private static T instance;
+        private static readonly object padlock = new object();
+
+        public static T Instance
         {
-            if (_instance == null)
+            get
             {
-                lock (padlock)
+                if (instance == null)
                 {
-                    if (_instance == null)
+                    lock (padlock)
                     {
-                        var t = new T();
-                        t.init();
-                        System.Threading.Thread.MemoryBarrier();
-                        _instance = t;
+                        if (instance == null)
+                        {
+                            var t = new T();
+                            System.Threading.Thread.MemoryBarrier();
+                            instance = t;
+                        }
                     }
                 }
+                return instance;
             }
-            return _instance;
         }
-    }
 
-    protected virtual void init()
-    {
-    }
+        public virtual void Init()
+        {
+        }
 
-    public virtual void Dispose()
-    {
-        _instance = null;
+        public virtual void Dispose()
+        {
+            instance = null;
+        }
     }
 }
