@@ -19,6 +19,7 @@ namespace Game.Event
         public override void Dispose()
         {
             base.Dispose();
+            allEvents = null;
         }
 
         private T1 Add<T1>() where T1 : UnityEventBase, new()

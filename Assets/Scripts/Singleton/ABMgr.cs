@@ -105,17 +105,17 @@ namespace Game.Singleton
                     yield return null; // 协程等待
                 }
 
-                if (abRequestSub1.asset is GameObject obj)
+                if (abRequestSub1.asset is GameObject obj1)
                 {
-                    var component = obj.GetComponent<ReferenceCollector>();
-                    for (int i = 0; i < component.data.Count; i++)
+                    var collector = obj1.GetComponent<ReferenceCollector>();
+                    for (int i = 0; i < collector.data.Count; i++)
                     {
-                        if (!prefabDic.ContainsKey(component.data[i].key))
+                        if (!prefabDic.ContainsKey(collector.data[i].key))
                         {
-                            prefabDic.Add(component.data[i].key, item);
+                            prefabDic.Add(collector.data[i].key, item);
                         }
                     }
-                    prefabCollectors.Add(item, component);
+                    prefabCollectors.Add(item, collector);
                 }
 
                 var abRequestSub2 = abcrSub.assetBundle.LoadAssetAsync<GameObject>("JsonReferenceCollector");
@@ -123,8 +123,11 @@ namespace Game.Singleton
                 {
                     yield return null; // 协程等待
                 }
-                if (abRequestSub2.asset is ReferenceCollector rc2)
-                    jsonDataCollectors.Add(item, rc2);
+
+                if (abRequestSub2.asset is GameObject obj2)
+                {
+                    jsonDataCollectors.Add(item, obj2.GetComponent<ReferenceCollector>());
+                }
             }
 
             foreach (var key in prefabDic.Keys)
@@ -133,6 +136,16 @@ namespace Game.Singleton
             }
 
             EventSystem.Instance.Run<AssetBundleLoadComplete>();
+        }
+
+        public IEnumerable<ReferenceCollector> GetAllPrefabJsonDataCollector()
+        {
+            return jsonDataCollectors.Values;
+        }
+
+        public GameObject GetPrefabByName(string name)
+        {
+            return prefabCollectors[prefabDic[name]].Get<GameObject>(name);
         }
     }
 }

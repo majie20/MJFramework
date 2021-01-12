@@ -4,7 +4,7 @@ public class AssetBundleTest {
 
     [MenuItem("Tools/Build AssetBundle")]
     public static void CreateAssetBundle () {
-        string path = "AssetBundleRes";
+        string path = "./AssetBundleRes";
         if (!Directory.Exists (path)) {
             Directory.CreateDirectory (path);
         }

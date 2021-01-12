@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Game.Event;
 using Game.Singleton;
@@ -7,12 +8,27 @@ using UnityEngine.Networking;
 
 public class GameRoot : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         EventSystem.Instance.Init();
         PrefabAssociateMgr.Instance.Init();
         PoolMgr.Instance.Init();
         ABMgr.Instance.Init();
         StartCoroutine(ABMgr.Instance.LoadAssetBundleManifestFileByIO("./AssetBundleRes/AssetBundleRes"));
+    }
+
+    private void OnEnable()
+    {
+        EventSystem.Instance.Add<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
+    }
+
+    private void OnDisable()
+    {
+        EventSystem.Instance.Remove<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
+    }
+
+    private void OnAssetBundleLoadComplete()
+    {
+       
     }
 }

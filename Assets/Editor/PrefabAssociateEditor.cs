@@ -16,20 +16,6 @@ public class PrefabAssociateData
     public List<PrefabCreateData> datas = new List<PrefabCreateData>();
 }
 
-[Serializable]
-public class PrefabCreateData
-{
-    public string name;
-    public string guid;
-    public string tag;
-    public string layer;
-    public string parentPath;
-    public bool isDisplay;
-    public Vector3 position;
-    public Vector3 rotation;
-    public Vector3 scale;
-}
-
 public class PrefabAssociateEditor : EditorWindow
 {
     public GameObject targetObj;
@@ -176,6 +162,8 @@ public class PrefabAssociateEditor : EditorWindow
                     sw.Write(sb);
                 }
             }
+
+            Debug.Log($"预制体[{targetObj.name}]生成数据文件成功!");
         }
         GUILayout.EndHorizontal();
 
@@ -206,7 +194,7 @@ public class PrefabAssociateEditor : EditorWindow
                 element.FindPropertyRelative("isDisplay").boolValue = true;
                 element.FindPropertyRelative("position").vector3Value = Vector3.zero;
                 element.FindPropertyRelative("rotation").vector3Value = Vector3.zero;
-                element.FindPropertyRelative("scale").vector3Value = Vector3.zero;
+                element.FindPropertyRelative("scale").vector3Value = Vector3.one;
             }
             if (GUILayout.Button("删除"))
             {
