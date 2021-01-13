@@ -1,25 +1,40 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 [Serializable]
-public class PrefabAssociateData
+public class PrefabAssociateEditorData
 {
     public GameObject obj;
-    public List<PrefabCreateData> datas = new List<PrefabCreateData>();
+
+    public List<PrefabCreateEditorData> datas = new List<PrefabCreateEditorData>();
+}
+
+[Serializable]
+public class PrefabCreateEditorData
+{
+    public GameObject createObj;
+    public string name;
+    public string tag;
+    public string layer;
+    public string parentPath;
+    public bool isDisplay;
+    public Vector3 localPosition;
+    public Vector3 localEulerAngles;
+    public Vector3 localScale;
 }
 
 public class PrefabAssociateEditor : EditorWindow
 {
     public GameObject targetObj;
-    public List<PrefabAssociateData> bornDatas = new List<PrefabAssociateData>();
+    public List<PrefabAssociateEditorData> bornDatas = new List<PrefabAssociateEditorData>();
 
     private SerializedObject serObj;
     private SerializedProperty targetSerPro;
@@ -30,6 +45,8 @@ public class PrefabAssociateEditor : EditorWindow
     private bool isHint = false;
     private string hintContent = "";
 
+    private GameObject createObj;
+
     private void Awake()
     {
         titleContent = new GUIContent("预制体关联工具");
@@ -38,6 +55,11 @@ public class PrefabAssociateEditor : EditorWindow
         //获取当前类中可序列话的属性
         targetSerPro = serObj.FindProperty("targetObj");
         bornDatasSerPro = serObj.FindProperty("bornDatas");
+    }
+
+    private void OnDestroy()
+    {
+        UnityEngine.Object.DestroyImmediate(createObj);
     }
 
     private void OnGUI()
@@ -68,7 +90,7 @@ public class PrefabAssociateEditor : EditorWindow
 
         GUILayout.BeginHorizontal();
         targetSerPro.objectReferenceValue = EditorGUILayout.ObjectField(targetSerPro.objectReferenceValue, typeof(GameObject), false);
-        
+
         if (targetSerPro.objectReferenceValue == null)
         {
             serObj.ApplyModifiedProperties();
@@ -79,8 +101,9 @@ public class PrefabAssociateEditor : EditorWindow
         {
             if (targetSerPro.objectReferenceValue != targetObj)
             {
+                createObj = PrefabUtility.InstantiatePrefab(targetSerPro.objectReferenceValue) as GameObject;
                 bornDatasSerPro.ClearArray();
-                bornDatas = new List<PrefabAssociateData>();
+                bornDatas = new List<PrefabAssociateEditorData>();
                 var jsonPath = GetPrefabJsonDataPath(targetSerPro.objectReferenceValue);
                 if (File.Exists(jsonPath))
                 {
@@ -103,43 +126,59 @@ public class PrefabAssociateEditor : EditorWindow
 
         if (GUILayout.Button("生成数据文件"))
         {
-            using (FileStream fs = File.Create(GetPrefabJsonDataPath(targetObj)))
+            if (bornDatas.Count == 0)
             {
-                using (StreamWriter sw = new StreamWriter(fs))
+                Debug.LogWarning($"预制体[{targetObj.name}]没有数据要生成!");
+            }
+            else
+            {
+                using (FileStream fs = File.Create(GetPrefabJsonDataPath(targetObj)))
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("[");
-                    for (int i = 0; i < bornDatas.Count; i++)
+                    using (StreamWriter sw = new StreamWriter(fs))
                     {
-                        var data1 = bornDatas[i];
-                        if (data1.obj == null)
-                            continue;
-                        sb.Append("{");
-                        sb.Append($"\"name\":\"{data1.obj.name}\",");
-                        var path = AssetDatabase.GetAssetPath(data1.obj);
-                        sb.Append($"\"guid\":\"{AssetDatabase.AssetPathToGUID(path)}\",");
-                        //sb.Append($"\"path\":\"{path}\",");
-                        sb.Append($"\"abName\":\"{AssetDatabase.GetImplicitAssetBundleName(path)}\",");
-                        sb.Append("\"datas\":[");
-                        for (int j = 0; j < data1.datas.Count; j++)
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("[");
+                        for (int i = 0; i < bornDatas.Count; i++)
                         {
-                            var data2 = data1.datas[j];
+                            var data1 = bornDatas[i];
+                            if (data1.obj == null)
+                                continue;
                             sb.Append("{");
-                            sb.Append($"\"name\":\"{data2.name}\",");
-                            sb.Append($"\"tag\":\"{data2.tag}\",");
-                            sb.Append($"\"layer\":\"{data2.layer}\",");
-                            sb.Append($"\"parentPath\":\"{data2.parentPath}\",");
-                            sb.Append($"\"isDisplay\":{data2.isDisplay.ToString().ToLower()},");
-                            sb.Append($"\"positionX\":{data2.position.x},");
-                            sb.Append($"\"positionY\":{data2.position.y},");
-                            sb.Append($"\"positionZ\":{data2.position.z},");
-                            sb.Append($"\"rotationX\":{data2.rotation.x},");
-                            sb.Append($"\"rotationY\":{data2.rotation.y},");
-                            sb.Append($"\"rotationZ\":{data2.rotation.z},");
-                            sb.Append($"\"scaleX\":{data2.scale.x},");
-                            sb.Append($"\"scaleY\":{data2.scale.y},");
-                            sb.Append($"\"scaleZ\":{data2.scale.z}");
-                            if (j == data1.datas.Count - 1)
+                            sb.Append($"\"name\":\"{data1.obj.name}\",");
+                            var path = AssetDatabase.GetAssetPath(data1.obj);
+                            sb.Append($"\"guid\":\"{AssetDatabase.AssetPathToGUID(path)}\",");
+                            //sb.Append($"\"path\":\"{path}\",");
+                            sb.Append($"\"abName\":\"{AssetDatabase.GetImplicitAssetBundleName(path)}\",");
+                            sb.Append("\"datas\":[");
+                            for (int j = 0; j < data1.datas.Count; j++)
+                            {
+                                var data2 = data1.datas[j];
+                                sb.Append("{");
+                                sb.Append($"\"name\":\"{data2.name}\",");
+                                sb.Append($"\"tag\":\"{data2.tag}\",");
+                                sb.Append($"\"layer\":\"{data2.layer}\",");
+                                sb.Append($"\"parentPath\":\"{data2.parentPath}\",");
+                                sb.Append($"\"isDisplay\":{data2.isDisplay.ToString().ToLower()},");
+                                sb.Append($"\"localPositionX\":{data2.localPosition.x},");
+                                sb.Append($"\"localPositionY\":{data2.localPosition.y},");
+                                sb.Append($"\"localPositionZ\":{data2.localPosition.z},");
+                                sb.Append($"\"localEulerAnglesX\":{data2.localEulerAngles.x},");
+                                sb.Append($"\"localEulerAnglesY\":{data2.localEulerAngles.y},");
+                                sb.Append($"\"localEulerAnglesZ\":{data2.localEulerAngles.z},");
+                                sb.Append($"\"localScaleX\":{data2.localScale.x},");
+                                sb.Append($"\"localScaleY\":{data2.localScale.y},");
+                                sb.Append($"\"localScaleZ\":{data2.localScale.z}");
+                                if (j == data1.datas.Count - 1)
+                                {
+                                    sb.Append("}");
+                                }
+                                else
+                                {
+                                    sb.Append("},");
+                                }
+                            }
+                            sb.Append("]");
+                            if (i == bornDatas.Count - 1)
                             {
                                 sb.Append("}");
                             }
@@ -149,21 +188,12 @@ public class PrefabAssociateEditor : EditorWindow
                             }
                         }
                         sb.Append("]");
-                        if (i == bornDatas.Count - 1)
-                        {
-                            sb.Append("}");
-                        }
-                        else
-                        {
-                            sb.Append("},");
-                        }
+                        sw.Write(sb);
                     }
-                    sb.Append("]");
-                    sw.Write(sb);
                 }
-            }
 
-            Debug.Log($"预制体[{targetObj.name}]生成数据文件成功!");
+                Debug.Log($"预制体[{targetObj.name}]生成数据文件成功!");
+            }
         }
         GUILayout.EndHorizontal();
 
@@ -184,17 +214,21 @@ public class PrefabAssociateEditor : EditorWindow
             data1.FindPropertyRelative("obj").objectReferenceValue = EditorGUILayout.ObjectField(obj, typeof(GameObject), false);
             if (GUILayout.Button("添加"))
             {
-                int index = datas.arraySize;
-                datas.InsertArrayElementAtIndex(index);
-                var element = datas.GetArrayElementAtIndex(index);
-                element.FindPropertyRelative("name").stringValue = obj.name;
-                element.FindPropertyRelative("tag").stringValue = obj.tag;
-                element.FindPropertyRelative("layer").stringValue = LayerMask.LayerToName(obj.layer);
-                element.FindPropertyRelative("parentPath").stringValue = "";
-                element.FindPropertyRelative("isDisplay").boolValue = true;
-                element.FindPropertyRelative("position").vector3Value = Vector3.zero;
-                element.FindPropertyRelative("rotation").vector3Value = Vector3.zero;
-                element.FindPropertyRelative("scale").vector3Value = Vector3.one;
+                if (obj != null)
+                {
+                    int index = datas.arraySize;
+                    datas.InsertArrayElementAtIndex(index);
+                    var element = datas.GetArrayElementAtIndex(index);
+                    element.FindPropertyRelative("name").stringValue = obj.name;
+                    element.FindPropertyRelative("tag").stringValue = obj.tag;
+                    element.FindPropertyRelative("layer").stringValue = LayerMask.LayerToName(obj.layer);
+                    element.FindPropertyRelative("parentPath").stringValue = "";
+                    element.FindPropertyRelative("isDisplay").boolValue = true;
+                    element.FindPropertyRelative("localPosition").vector3Value = Vector3.zero;
+                    element.FindPropertyRelative("localEulerAngles").vector3Value = Vector3.zero;
+                    element.FindPropertyRelative("localScale").vector3Value = Vector3.one;
+                    element.FindPropertyRelative("createObj").objectReferenceValue = CreateChildObj(obj, obj.name, obj.tag, LayerMask.LayerToName(obj.layer), "", true, Vector3.zero, Vector3.zero, Vector3.one);
+                }
             }
             if (GUILayout.Button("删除"))
             {
@@ -227,9 +261,9 @@ public class PrefabAssociateEditor : EditorWindow
                 }
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
-                data2.FindPropertyRelative("position").vector3Value = EditorGUILayout.Vector3Field("Position:", data2.FindPropertyRelative("position").vector3Value);
-                data2.FindPropertyRelative("rotation").vector3Value = EditorGUILayout.Vector3Field("Rotation:", data2.FindPropertyRelative("rotation").vector3Value);
-                data2.FindPropertyRelative("scale").vector3Value = EditorGUILayout.Vector3Field("Scale:", data2.FindPropertyRelative("scale").vector3Value);
+                data2.FindPropertyRelative("localPosition").vector3Value = EditorGUILayout.Vector3Field("Position:", data2.FindPropertyRelative("localPosition").vector3Value);
+                data2.FindPropertyRelative("localEulerAngles").vector3Value = EditorGUILayout.Vector3Field("Rotation:", data2.FindPropertyRelative("localEulerAngles").vector3Value);
+                data2.FindPropertyRelative("localScale").vector3Value = EditorGUILayout.Vector3Field("Scale:", data2.FindPropertyRelative("localScale").vector3Value);
                 GUILayout.EndHorizontal();
                 GUILayout.Space(10);
             }
@@ -331,24 +365,34 @@ public class PrefabAssociateEditor : EditorWindow
     /// <param name="jobj"></param>
     private void AddAssociate(JToken jobj)
     {
-        var sp = AddAssociate(AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(jobj["guid"].ToString())));
+        var obj = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(jobj["guid"].ToString()));
+        var sp = AddAssociate(obj);
         var spDatas = sp.FindPropertyRelative("datas");
         var datas = jobj["datas"];
         for (int i = 0; i < datas.Count(); i++)
         {
             var d = datas[i];
+            var name = d["name"].ToString();
+            var tag = d["tag"].ToString();
+            var layer = d["layer"].ToString();
+            var parentPath = d["parentPath"].ToString();
+            var isDisplay = bool.Parse(d["isDisplay"].ToString());
+            var localPosition = new Vector3(float.Parse(d["localPositionX"].ToString()), float.Parse(d["localPositionY"].ToString()), float.Parse(d["localPositionZ"].ToString()));
+            var localEulerAngles = new Vector3(float.Parse(d["localEulerAnglesX"].ToString()), float.Parse(d["localEulerAnglesY"].ToString()), float.Parse(d["localEulerAnglesZ"].ToString()));
+            var localScale = new Vector3(float.Parse(d["localScaleX"].ToString()), float.Parse(d["localScaleY"].ToString()), float.Parse(d["localScaleZ"].ToString()));
 
             int index = spDatas.arraySize;
             spDatas.InsertArrayElementAtIndex(index);
             var element = spDatas.GetArrayElementAtIndex(index);
-            element.FindPropertyRelative("name").stringValue = d["name"].ToString();
-            element.FindPropertyRelative("tag").stringValue = d["tag"].ToString();
-            element.FindPropertyRelative("layer").stringValue = d["layer"].ToString();
-            element.FindPropertyRelative("parentPath").stringValue = d["parentPath"].ToString();
-            element.FindPropertyRelative("isDisplay").boolValue = bool.Parse(d["isDisplay"].ToString());
-            element.FindPropertyRelative("position").vector3Value = new Vector3(float.Parse(d["positionX"].ToString()), float.Parse(d["positionY"].ToString()), float.Parse(d["positionZ"].ToString()));
-            element.FindPropertyRelative("rotation").vector3Value = new Vector3(float.Parse(d["rotationX"].ToString()), float.Parse(d["rotationY"].ToString()), float.Parse(d["rotationZ"].ToString()));
-            element.FindPropertyRelative("scale").vector3Value = new Vector3(float.Parse(d["scaleX"].ToString()), float.Parse(d["scaleY"].ToString()), float.Parse(d["scaleZ"].ToString()));
+            element.FindPropertyRelative("name").stringValue = name;
+            element.FindPropertyRelative("tag").stringValue = tag;
+            element.FindPropertyRelative("layer").stringValue = layer;
+            element.FindPropertyRelative("parentPath").stringValue = parentPath;
+            element.FindPropertyRelative("isDisplay").boolValue = isDisplay;
+            element.FindPropertyRelative("localPosition").vector3Value = localPosition;
+            element.FindPropertyRelative("localEulerAngles").vector3Value = localEulerAngles;
+            element.FindPropertyRelative("localScale").vector3Value = localScale;
+            element.FindPropertyRelative("createObj").objectReferenceValue = CreateChildObj(obj, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale);
         }
     }
 
@@ -363,5 +407,35 @@ public class PrefabAssociateEditor : EditorWindow
         var dir = Path.GetDirectoryName(path);
         var name = Path.GetFileNameWithoutExtension(path);
         return $"{dir}/{name}.json";
+    }
+
+    /// <summary>
+    /// 创建子物体
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="name"></param>
+    /// <param name="tag"></param>
+    /// <param name="layer"></param>
+    /// <param name="parentPath"></param>
+    /// <param name="isDisplay"></param>
+    /// <param name="localPosition"></param>
+    /// <param name="localEulerAngles"></param>
+    /// <param name="localScale"></param>
+    /// <returns></returns>
+    private GameObject CreateChildObj(GameObject source, string name, string tag, string layer, string parentPath, bool isDisplay, Vector3 localPosition, Vector3 localEulerAngles, Vector3 localScale)
+    {
+        GameObject obj;
+        if (string.IsNullOrEmpty(parentPath))
+            obj = PrefabUtility.InstantiatePrefab(source, createObj.transform) as GameObject;
+        else
+            obj = PrefabUtility.InstantiatePrefab(source, createObj.transform.Find(parentPath)) as GameObject;
+        obj.name = name;
+        obj.tag = tag;
+        obj.layer = LayerMask.NameToLayer(layer);
+        obj.SetActive(isDisplay);
+        obj.transform.localPosition = localPosition;
+        obj.transform.localEulerAngles = localEulerAngles;
+        obj.transform.localScale = localScale;
+        return obj;
     }
 }

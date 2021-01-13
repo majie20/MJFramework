@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Game.Event;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Game.Event;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UnityEditor;
 using UnityEngine;
 
-
-public class PrefabJsonData
+public class PrefabAssociateData
 {
     public string name;
     public string guid;
@@ -17,7 +14,6 @@ public class PrefabJsonData
     public List<PrefabCreateData> datas = new List<PrefabCreateData>();
 }
 
-[Serializable]
 public class PrefabCreateData
 {
     public string name;
@@ -25,21 +21,21 @@ public class PrefabCreateData
     public string layer;
     public string parentPath;
     public bool isDisplay;
-    public Vector3 position;
-    public Vector3 rotation;
-    public Vector3 scale;
+    public Vector3 localPosition;
+    public Vector3 localEulerAngles;
+    public Vector3 localScale;
 }
 
 namespace Game.Singleton
 {
     public class PrefabAssociateMgr : Singleton<PrefabAssociateMgr>
     {
-        private Dictionary<string, List<PrefabJsonData>> dataDic;
+        private Dictionary<string, List<PrefabAssociateData>> dataDic;
 
         public override void Init()
         {
             base.Init();
-            dataDic = new Dictionary<string, List<PrefabJsonData>>();
+            dataDic = new Dictionary<string, List<PrefabAssociateData>>();
             EventSystem.Instance.Add<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
         }
 
@@ -62,11 +58,11 @@ namespace Game.Singleton
                         {
                             var reader = new JsonTextReader(sr);
                             var jsonDatas = JToken.ReadFrom(reader);
-                            var pjDatas = new List<PrefabJsonData>();
+                            var pjDatas = new List<PrefabAssociateData>();
                             for (int j = 0; j < jsonDatas.Count(); j++)
                             {
                                 var jsonObj = jsonDatas[j];
-                                var pjData = new PrefabJsonData();
+                                var pjData = new PrefabAssociateData();
                                 pjData.name = jsonObj["name"].ToString();
                                 pjData.guid = jsonObj["guid"].ToString();
                                 pjData.abName = jsonObj["abName"].ToString();
@@ -82,9 +78,9 @@ namespace Game.Singleton
                                     pcData.layer = jsonSubObj["layer"].ToString();
                                     pcData.parentPath = jsonSubObj["parentPath"].ToString();
                                     pcData.isDisplay = bool.Parse(jsonSubObj["isDisplay"].ToString());
-                                    pcData.position = new Vector3(float.Parse(jsonSubObj["positionX"].ToString()), float.Parse(jsonSubObj["positionY"].ToString()), float.Parse(jsonSubObj["positionZ"].ToString()));
-                                    pcData.rotation = new Vector3(float.Parse(jsonSubObj["rotationX"].ToString()), float.Parse(jsonSubObj["rotationY"].ToString()), float.Parse(jsonSubObj["rotationZ"].ToString()));
-                                    pcData.scale = new Vector3(float.Parse(jsonSubObj["scaleX"].ToString()), float.Parse(jsonSubObj["scaleY"].ToString()), float.Parse(jsonSubObj["scaleZ"].ToString()));
+                                    pcData.localPosition = new Vector3(float.Parse(jsonSubObj["localPositionX"].ToString()), float.Parse(jsonSubObj["localPositionY"].ToString()), float.Parse(jsonSubObj["localPositionZ"].ToString()));
+                                    pcData.localEulerAngles = new Vector3(float.Parse(jsonSubObj["localEulerAnglesX"].ToString()), float.Parse(jsonSubObj["localEulerAnglesY"].ToString()), float.Parse(jsonSubObj["localEulerAnglesZ"].ToString()));
+                                    pcData.localScale = new Vector3(float.Parse(jsonSubObj["localScaleX"].ToString()), float.Parse(jsonSubObj["localScaleY"].ToString()), float.Parse(jsonSubObj["localScaleZ"].ToString()));
                                     pjData.datas.Add(pcData);
                                 }
                                 pjDatas.Add(pjData);
@@ -98,7 +94,7 @@ namespace Game.Singleton
             UnityEngine.Object.Instantiate(ABMgr.Instance.GetPrefabByName("Cube"));
         }
 
-        public IEnumerable<PrefabJsonData> GetPrefabJsonDatasByName(string name)
+        public IEnumerable<PrefabAssociateData> GetPrefabJsonDatasByName(string name)
         {
             return dataDic[name];
         }

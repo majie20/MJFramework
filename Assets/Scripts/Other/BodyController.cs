@@ -19,15 +19,13 @@ public class BodyController : MonoBehaviour
                 if (string.IsNullOrEmpty(parentPath))
                     instance = UnityEngine.Object.Instantiate(obj, transform);
                 else
-                {
                     instance = UnityEngine.Object.Instantiate(obj, transform.Find(parentPath));
-                }
                 instance.name = pcdata.name;
                 instance.tag = pcdata.tag;
                 instance.layer = LayerMask.NameToLayer(pcdata.layer);
-                instance.transform.localPosition = pcdata.position;
-                instance.transform.localEulerAngles = pcdata.rotation;
-                instance.transform.localScale = pcdata.scale;
+                instance.transform.localPosition = pcdata.localPosition;
+                instance.transform.localEulerAngles = pcdata.localEulerAngles;
+                instance.transform.localScale = pcdata.localScale;
                 instance.SetActive(pcdata.isDisplay);
             }
         }
