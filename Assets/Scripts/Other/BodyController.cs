@@ -29,5 +29,6 @@ public class BodyController : MonoBehaviour
                 instance.SetActive(pcdata.isDisplay);
             }
         }
+
     }
 }

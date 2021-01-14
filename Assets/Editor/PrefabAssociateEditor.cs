@@ -62,6 +62,15 @@ public class PrefabAssociateEditor : EditorWindow
         UnityEngine.Object.DestroyImmediate(instanceTargetObj);
     }
 
+    private void OnInspectorUpdate()
+    {
+        if (serObj == null)
+        {
+            return;
+        }
+        this.Repaint();
+    }
+
     private void OnGUI()
     {
         if (serObj == null)
@@ -122,6 +131,15 @@ public class PrefabAssociateEditor : EditorWindow
                         }
                     }
                 }
+            }
+        }
+
+        if (GUILayout.Button("生成"))
+        {
+            var trans = instanceTargetObj.GetComponentsInChildren<Transform>();
+            for (int i = 0; i < trans.Length; i++)
+            {
+                Debug.Log(trans[i].name);
             }
         }
 
@@ -229,10 +247,10 @@ public class PrefabAssociateEditor : EditorWindow
                     var localEulerAngles = data.FindPropertyRelative("localEulerAngles").vector3Value;
                     var localScale = data.FindPropertyRelative("localScale").vector3Value;
                     var o = data.FindPropertyRelative("createObj");
-                    //删除这个预制体的所有克隆
+                    //删除这个预制体的克隆
                     UnityEngine.Object.DestroyImmediate(o.objectReferenceValue);
 
-                    o.objectReferenceValue = CreateChildObj(obj, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale);
+                    o.objectReferenceValue = CreateChildObj((GameObject)dataObj, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale);
                 }
             }
 
@@ -280,6 +298,7 @@ public class PrefabAssociateEditor : EditorWindow
                 nameSerPro.stringValue = createObjSerPro.name;
                 tagSerPro.stringValue = createObjSerPro.tag;
                 layerSerPro.stringValue = LayerMask.LayerToName(createObjSerPro.layer);
+                parentPathSerPro.stringValue = GetRoute(createObjSerPro.transform);
                 isDisplaySerPro.boolValue = createObjSerPro.activeInHierarchy;
                 localPositionSerPro.vector3Value = createObjSerPro.transform.localPosition;
                 localEulerAnglesSerPro.vector3Value = createObjSerPro.transform.localEulerAngles;
@@ -487,5 +506,18 @@ public class PrefabAssociateEditor : EditorWindow
         obj.transform.localEulerAngles = localEulerAngles;
         obj.transform.localScale = localScale;
         return obj;
+    }
+
+    public string GetRoute(Transform tran)
+    {
+        var result = tran.name;
+        var parent = tran.parent;
+        while (parent != null && parent != instanceTargetObj.transform)
+        {
+            result = $"{parent.name}/{result}";
+            parent = parent.parent;
+        }
+
+        return result;
     }
 }
