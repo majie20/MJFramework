@@ -45,7 +45,7 @@ public class PrefabAssociateEditor : EditorWindow
     private bool isHint = false;
     private string hintContent = "";
 
-    private GameObject createObj;
+    private GameObject instanceTargetObj;
 
     private void Awake()
     {
@@ -59,7 +59,7 @@ public class PrefabAssociateEditor : EditorWindow
 
     private void OnDestroy()
     {
-        UnityEngine.Object.DestroyImmediate(createObj);
+        UnityEngine.Object.DestroyImmediate(instanceTargetObj);
     }
 
     private void OnGUI()
@@ -101,7 +101,8 @@ public class PrefabAssociateEditor : EditorWindow
         {
             if (targetSerPro.objectReferenceValue != targetObj)
             {
-                createObj = PrefabUtility.InstantiatePrefab(targetSerPro.objectReferenceValue) as GameObject;
+                UnityEngine.Object.DestroyImmediate(instanceTargetObj);
+                instanceTargetObj = PrefabUtility.InstantiatePrefab(targetSerPro.objectReferenceValue) as GameObject;
                 bornDatasSerPro.ClearArray();
                 bornDatas = new List<PrefabAssociateEditorData>();
                 var jsonPath = GetPrefabJsonDataPath(targetSerPro.objectReferenceValue);
@@ -206,12 +207,35 @@ public class PrefabAssociateEditor : EditorWindow
         for (int i = 0; i < bornDatas.Count; i++)
         {
             var data1 = bornDatasSerPro.GetArrayElementAtIndex(i);
-            var obj = (GameObject)data1.FindPropertyRelative("obj").objectReferenceValue;
+            var objSerPro = data1.FindPropertyRelative("obj");
+            var obj = (GameObject)objSerPro.objectReferenceValue;
             var datas = data1.FindPropertyRelative("datas");
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Object:", new GUIStyle { alignment = TextAnchor.LowerLeft });
-            data1.FindPropertyRelative("obj").objectReferenceValue = EditorGUILayout.ObjectField(obj, typeof(GameObject), false);
+            objSerPro.objectReferenceValue = EditorGUILayout.ObjectField(obj, typeof(GameObject), false);
+            var dataObj = objSerPro.objectReferenceValue;
+            if (bornDatas[i].obj != null && dataObj != null && bornDatas[i].obj != dataObj)
+            {
+                for (int j = 0; j < datas.arraySize; j++)
+                {
+                    var data = datas.GetArrayElementAtIndex(j);
+                    var name = data.FindPropertyRelative("name").stringValue;
+                    var tag = data.FindPropertyRelative("tag").stringValue;
+                    var layer = data.FindPropertyRelative("layer").stringValue;
+                    var parentPath = data.FindPropertyRelative("parentPath").stringValue;
+                    var isDisplay = data.FindPropertyRelative("isDisplay").boolValue = true;
+                    var localPosition = data.FindPropertyRelative("localPosition").vector3Value;
+                    var localEulerAngles = data.FindPropertyRelative("localEulerAngles").vector3Value;
+                    var localScale = data.FindPropertyRelative("localScale").vector3Value;
+                    var o = data.FindPropertyRelative("createObj");
+                    //删除这个预制体的所有克隆
+                    UnityEngine.Object.DestroyImmediate(o.objectReferenceValue);
+
+                    o.objectReferenceValue = CreateChildObj(obj, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale);
+                }
+            }
+
             if (GUILayout.Button("添加"))
             {
                 if (obj != null)
@@ -243,17 +267,35 @@ public class PrefabAssociateEditor : EditorWindow
             for (int j = 0; j < datas.arraySize; j++)
             {
                 var data2 = datas.GetArrayElementAtIndex(j);
+                var createObjSerPro = data2.FindPropertyRelative("createObj").objectReferenceValue as GameObject;
+                var nameSerPro = data2.FindPropertyRelative("name");
+                var tagSerPro = data2.FindPropertyRelative("tag");
+                var layerSerPro = data2.FindPropertyRelative("layer");
+                var parentPathSerPro = data2.FindPropertyRelative("parentPath");
+                var isDisplaySerPro = data2.FindPropertyRelative("isDisplay");
+                var localPositionSerPro = data2.FindPropertyRelative("localPosition");
+                var localEulerAnglesSerPro = data2.FindPropertyRelative("localEulerAngles");
+                var localScaleSerPro = data2.FindPropertyRelative("localScale");
+
+                nameSerPro.stringValue = createObjSerPro.name;
+                tagSerPro.stringValue = createObjSerPro.tag;
+                layerSerPro.stringValue = LayerMask.LayerToName(createObjSerPro.layer);
+                isDisplaySerPro.boolValue = createObjSerPro.activeInHierarchy;
+                localPositionSerPro.vector3Value = createObjSerPro.transform.localPosition;
+                localEulerAnglesSerPro.vector3Value = createObjSerPro.transform.localEulerAngles;
+                localScaleSerPro.vector3Value = createObjSerPro.transform.localScale;
+
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Name:", new GUIStyle { alignment = TextAnchor.LowerLeft });
-                data2.FindPropertyRelative("name").stringValue = EditorGUILayout.TextField(data2.FindPropertyRelative("name").stringValue);
+                EditorGUILayout.TextField(nameSerPro.stringValue);
                 GUILayout.Label("Tag:", new GUIStyle { alignment = TextAnchor.LowerLeft });
-                data2.FindPropertyRelative("tag").stringValue = EditorGUILayout.TextField(data2.FindPropertyRelative("tag").stringValue);
+                EditorGUILayout.TextField(tagSerPro.stringValue);
                 GUILayout.Label("Layer:", new GUIStyle { alignment = TextAnchor.LowerLeft });
-                data2.FindPropertyRelative("layer").stringValue = EditorGUILayout.TextField(data2.FindPropertyRelative("layer").stringValue);
+                EditorGUILayout.TextField(layerSerPro.stringValue);
                 GUILayout.Label("ParentPath:", new GUIStyle { alignment = TextAnchor.LowerLeft });
-                data2.FindPropertyRelative("parentPath").stringValue = EditorGUILayout.TextField(data2.FindPropertyRelative("parentPath").stringValue);
+                EditorGUILayout.TextField(parentPathSerPro.stringValue);
                 GUILayout.Label("IsDisplay:", new GUIStyle { alignment = TextAnchor.LowerLeft });
-                data2.FindPropertyRelative("isDisplay").boolValue = EditorGUILayout.Toggle(data2.FindPropertyRelative("isDisplay").boolValue);
+                EditorGUILayout.Toggle(isDisplaySerPro.boolValue);
                 if (GUILayout.Button("X"))
                 {
                     //将元素添加进删除list
@@ -261,9 +303,9 @@ public class PrefabAssociateEditor : EditorWindow
                 }
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
-                data2.FindPropertyRelative("localPosition").vector3Value = EditorGUILayout.Vector3Field("Position:", data2.FindPropertyRelative("localPosition").vector3Value);
-                data2.FindPropertyRelative("localEulerAngles").vector3Value = EditorGUILayout.Vector3Field("Rotation:", data2.FindPropertyRelative("localEulerAngles").vector3Value);
-                data2.FindPropertyRelative("localScale").vector3Value = EditorGUILayout.Vector3Field("Scale:", data2.FindPropertyRelative("localScale").vector3Value);
+                EditorGUILayout.Vector3Field("Position:", localPositionSerPro.vector3Value);
+                EditorGUILayout.Vector3Field("Rotation:", localEulerAnglesSerPro.vector3Value);
+                EditorGUILayout.Vector3Field("Scale:", localScaleSerPro.vector3Value);
                 GUILayout.EndHorizontal();
                 GUILayout.Space(10);
             }
@@ -271,10 +313,24 @@ public class PrefabAssociateEditor : EditorWindow
             //遍历删除list，将其删除掉
             foreach (var j in list2)
             {
+                //删除这个预制体的这项克隆
+                UnityEngine.Object.DestroyImmediate(datas.GetArrayElementAtIndex(j).FindPropertyRelative("createObj").objectReferenceValue);
                 datas.DeleteArrayElementAtIndex(j);
             }
         }
         EditorGUILayout.EndScrollView();  //结束 ScrollView 窗口
+
+        //遍历删除list，将其删除掉
+        foreach (var i in list1)
+        {
+            var datas = bornDatasSerPro.GetArrayElementAtIndex(i).FindPropertyRelative("datas");
+            for (int j = 0; j < datas.arraySize; j++)
+            {
+                //删除这个预制体的所有克隆
+                UnityEngine.Object.DestroyImmediate(datas.GetArrayElementAtIndex(j).FindPropertyRelative("createObj").objectReferenceValue);
+            }
+            bornDatasSerPro.DeleteArrayElementAtIndex(i);
+        }
 
         var eventType = Event.current.type;
         //在Inspector 窗口上创建区域，向区域拖拽资源对象，获取到拖拽到区域的对象
@@ -333,12 +389,6 @@ public class PrefabAssociateEditor : EditorWindow
             }
 
             Event.current.Use();
-        }
-
-        //遍历删除list，将其删除掉
-        foreach (var i in list1)
-        {
-            bornDatasSerPro.DeleteArrayElementAtIndex(i);
         }
 
         serObj.ApplyModifiedProperties();
@@ -426,9 +476,9 @@ public class PrefabAssociateEditor : EditorWindow
     {
         GameObject obj;
         if (string.IsNullOrEmpty(parentPath))
-            obj = PrefabUtility.InstantiatePrefab(source, createObj.transform) as GameObject;
+            obj = PrefabUtility.InstantiatePrefab(source, instanceTargetObj.transform) as GameObject;
         else
-            obj = PrefabUtility.InstantiatePrefab(source, createObj.transform.Find(parentPath)) as GameObject;
+            obj = PrefabUtility.InstantiatePrefab(source, instanceTargetObj.transform.Find(parentPath)) as GameObject;
         obj.name = name;
         obj.tag = tag;
         obj.layer = LayerMask.NameToLayer(layer);
