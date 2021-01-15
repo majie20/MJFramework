@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 75806920
+CRC: 3966548357
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 61f3b1597e6d7c46d418a8f953b7b5da
+    Hash: 1b8ee7e8d39a7b33128305453f0db1b5
   TypeTreeHash:
     serializedVersion: 2
-    Hash: af547c5846b7ac1de0ca9785aa70b4d4
+    Hash: 5f2d57f4d9d8da2c13e4fe9cbc399b8c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -17,6 +17,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 23
   Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
 - Class: 33
   Script: {instanceID: 0}
 - Class: 43
@@ -24,14 +26,29 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: e903585689a898d4685c955a47f28a59, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 128
   Script: {instanceID: 0}
 - Class: 135
   Script: {instanceID: 0}
 - Class: 136
   Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
 Assets:
+- Assets/Prefabs/Button.prefab
 - Assets/Prefabs/PrefabReferenceCollector.prefab
 - Assets/Prefabs/Cylinder.prefab
 - Assets/Prefabs/Capsule.prefab

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3311875842
+CRC: 3712237984
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 76cde7a14e3e3c5dfc50cd4d649fcf8b
+    Hash: 4dc00310fa3b707162c42ca40f0293a3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 07d1623bad1ce19176c2fdfc3e7e164b
+    Hash: 1f44d93d3d43ea1952bb8638fbc91bd0
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,16 +23,27 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: e903585689a898d4685c955a47f28a59, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c737338a2c490e64bbc264143f8eaf71, type: 3}
 - Class: 115
   Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
 Assets:
+- Assets/Model/Image.json
 - Assets/Model/JsonReferenceCollector.prefab
+- Assets/Model/Cube.json
+- Assets/Model/Image.prefab
 - Assets/Model/PrefabReferenceCollector.prefab
 - Assets/Model/Cube.prefab
 Dependencies: []

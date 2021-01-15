@@ -10,11 +10,13 @@ public class GameRoot : MonoBehaviour
 {
     void Awake()
     {
+        
         EventSystem.Instance.Init();
         PrefabAssociateMgr.Instance.Init();
-        PoolMgr.Instance.Init();
-        ABMgr.Instance.Init();
-        StartCoroutine(ABMgr.Instance.LoadAssetBundleManifestFileByIO("./AssetBundleRes/AssetBundleRes"));
+        EventSystem.Instance.Run<AssetBundleLoadComplete>();
+        //PoolMgr.Instance.Init();
+        //ABMgr.Instance.Init();
+        //StartCoroutine(ABMgr.Instance.LoadAssetBundleManifestFileByIO("./AssetBundleRes/AssetBundleRes"));
     }
 
     private void OnEnable()

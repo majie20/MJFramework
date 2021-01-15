@@ -31,10 +31,42 @@ public class PrefabCreateEditorData
     public Vector3 localScale;
 }
 
+public class PrefabCreateJsonData
+{
+    public GameObject obj;
+    public SerializedProperty sp;
+    public int index;
+    public string name;
+    public string tag;
+    public string layer;
+    public string parentPath;
+    public bool isDisplay;
+    public Vector3 localPosition;
+    public Vector3 localEulerAngles;
+    public Vector3 localScale;
+
+    public PrefabCreateJsonData(GameObject obj, SerializedProperty sp, int index, string name, string tag, string layer,
+        string parentPath, bool isDisplay, Vector3 localPosition, Vector3 localEulerAngles, Vector3 localScale)
+    {
+        this.obj = obj;
+        this.sp = sp;
+        this.index = index;
+        this.name = name;
+        this.tag = tag;
+        this.layer = layer;
+        this.parentPath = parentPath;
+        this.isDisplay = isDisplay;
+        this.localPosition = localPosition;
+        this.localEulerAngles = localEulerAngles;
+        this.localScale = localScale;
+    }
+}
+
 public class PrefabAssociateEditor : EditorWindow
 {
     public GameObject targetObj;
     public List<PrefabAssociateEditorData> bornDatas = new List<PrefabAssociateEditorData>();
+    private List<PrefabCreateJsonData> pcJsonDatas;
 
     private SerializedObject serObj;
     private SerializedProperty targetSerPro;
@@ -111,12 +143,18 @@ public class PrefabAssociateEditor : EditorWindow
             if (targetSerPro.objectReferenceValue != targetObj)
             {
                 UnityEngine.Object.DestroyImmediate(instanceTargetObj);
-                instanceTargetObj = PrefabUtility.InstantiatePrefab(targetSerPro.objectReferenceValue) as GameObject;
+                Transform parentTran = null;
+                if (((GameObject)targetSerPro.objectReferenceValue).GetComponent<RectTransform>() != null)
+                {
+                    parentTran = GameObject.FindObjectOfType<Canvas>().transform;
+                }
+                instanceTargetObj = PrefabUtility.InstantiatePrefab(targetSerPro.objectReferenceValue, parentTran) as GameObject;
                 bornDatasSerPro.ClearArray();
                 bornDatas = new List<PrefabAssociateEditorData>();
                 var jsonPath = GetPrefabJsonDataPath(targetSerPro.objectReferenceValue);
                 if (File.Exists(jsonPath))
                 {
+                    pcJsonDatas = new List<PrefabCreateJsonData>();
                     using (FileStream fs = File.OpenRead(jsonPath))
                     {
                         using (var sr = new StreamReader(fs))
@@ -130,16 +168,20 @@ public class PrefabAssociateEditor : EditorWindow
                             }
                         }
                     }
-                }
-            }
-        }
+                    pcJsonDatas.Sort(((d1, d2) =>
+                    {
+                        if (d1.index < d2.index) return -1;
+                        return 1;
+                    }));
 
-        if (GUILayout.Button("生成"))
-        {
-            var trans = instanceTargetObj.GetComponentsInChildren<Transform>();
-            for (int i = 0; i < trans.Length; i++)
-            {
-                Debug.Log(trans[i].name);
+                    for (int i = 0; i < pcJsonDatas.Count; i++)
+                    {
+                        var d = pcJsonDatas[i];
+                        d.sp.objectReferenceValue = CreateChildObj(d.obj, d.name, d.tag, d.layer, d.parentPath, d.isDisplay, d.localPosition, d.localEulerAngles, d.localScale);
+                    }
+
+                    pcJsonDatas = null;
+                }
             }
         }
 
@@ -151,6 +193,8 @@ public class PrefabAssociateEditor : EditorWindow
             }
             else
             {
+                var trans = instanceTargetObj.GetComponentsInChildren<Transform>(true);
+
                 using (FileStream fs = File.Create(GetPrefabJsonDataPath(targetObj)))
                 {
                     using (StreamWriter sw = new StreamWriter(fs))
@@ -166,13 +210,20 @@ public class PrefabAssociateEditor : EditorWindow
                             sb.Append($"\"name\":\"{data1.obj.name}\",");
                             var path = AssetDatabase.GetAssetPath(data1.obj);
                             sb.Append($"\"guid\":\"{AssetDatabase.AssetPathToGUID(path)}\",");
-                            //sb.Append($"\"path\":\"{path}\",");
                             sb.Append($"\"abName\":\"{AssetDatabase.GetImplicitAssetBundleName(path)}\",");
                             sb.Append("\"datas\":[");
                             for (int j = 0; j < data1.datas.Count; j++)
                             {
                                 var data2 = data1.datas[j];
                                 sb.Append("{");
+                                for (int k = 1; k < trans.Length; k++)
+                                {
+                                    if (trans[k] == data2.createObj.transform)
+                                    {
+                                        sb.Append($"\"index\":{k},");
+                                        break;
+                                    }
+                                }
                                 sb.Append($"\"name\":\"{data2.name}\",");
                                 sb.Append($"\"tag\":\"{data2.tag}\",");
                                 sb.Append($"\"layer\":\"{data2.layer}\",");
@@ -258,18 +309,8 @@ public class PrefabAssociateEditor : EditorWindow
             {
                 if (obj != null)
                 {
-                    int index = datas.arraySize;
-                    datas.InsertArrayElementAtIndex(index);
-                    var element = datas.GetArrayElementAtIndex(index);
-                    element.FindPropertyRelative("name").stringValue = obj.name;
-                    element.FindPropertyRelative("tag").stringValue = obj.tag;
-                    element.FindPropertyRelative("layer").stringValue = LayerMask.LayerToName(obj.layer);
-                    element.FindPropertyRelative("parentPath").stringValue = "";
-                    element.FindPropertyRelative("isDisplay").boolValue = true;
-                    element.FindPropertyRelative("localPosition").vector3Value = Vector3.zero;
-                    element.FindPropertyRelative("localEulerAngles").vector3Value = Vector3.zero;
-                    element.FindPropertyRelative("localScale").vector3Value = Vector3.one;
-                    element.FindPropertyRelative("createObj").objectReferenceValue = CreateChildObj(obj, obj.name, obj.tag, LayerMask.LayerToName(obj.layer), "", true, Vector3.zero, Vector3.zero, Vector3.one);
+                    SetPrefabCreateSerializedProperty(datas, obj.name, obj.tag, LayerMask.LayerToName(obj.layer), "",
+                        true, Vector3.zero, Vector3.zero, Vector3.one, obj);
                 }
             }
             if (GUILayout.Button("删除"))
@@ -299,7 +340,7 @@ public class PrefabAssociateEditor : EditorWindow
                 tagSerPro.stringValue = createObjSerPro.tag;
                 layerSerPro.stringValue = LayerMask.LayerToName(createObjSerPro.layer);
                 parentPathSerPro.stringValue = GetRoute(createObjSerPro.transform);
-                isDisplaySerPro.boolValue = createObjSerPro.activeInHierarchy;
+                isDisplaySerPro.boolValue = createObjSerPro.activeSelf;
                 localPositionSerPro.vector3Value = createObjSerPro.transform.localPosition;
                 localEulerAnglesSerPro.vector3Value = createObjSerPro.transform.localEulerAngles;
                 localScaleSerPro.vector3Value = createObjSerPro.transform.localScale;
@@ -441,6 +482,7 @@ public class PrefabAssociateEditor : EditorWindow
         for (int i = 0; i < datas.Count(); i++)
         {
             var d = datas[i];
+            var index = int.Parse(d["index"].ToString());
             var name = d["name"].ToString();
             var tag = d["tag"].ToString();
             var layer = d["layer"].ToString();
@@ -450,18 +492,10 @@ public class PrefabAssociateEditor : EditorWindow
             var localEulerAngles = new Vector3(float.Parse(d["localEulerAnglesX"].ToString()), float.Parse(d["localEulerAnglesY"].ToString()), float.Parse(d["localEulerAnglesZ"].ToString()));
             var localScale = new Vector3(float.Parse(d["localScaleX"].ToString()), float.Parse(d["localScaleY"].ToString()), float.Parse(d["localScaleZ"].ToString()));
 
-            int index = spDatas.arraySize;
-            spDatas.InsertArrayElementAtIndex(index);
-            var element = spDatas.GetArrayElementAtIndex(index);
-            element.FindPropertyRelative("name").stringValue = name;
-            element.FindPropertyRelative("tag").stringValue = tag;
-            element.FindPropertyRelative("layer").stringValue = layer;
-            element.FindPropertyRelative("parentPath").stringValue = parentPath;
-            element.FindPropertyRelative("isDisplay").boolValue = isDisplay;
-            element.FindPropertyRelative("localPosition").vector3Value = localPosition;
-            element.FindPropertyRelative("localEulerAngles").vector3Value = localEulerAngles;
-            element.FindPropertyRelative("localScale").vector3Value = localScale;
-            element.FindPropertyRelative("createObj").objectReferenceValue = CreateChildObj(obj, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale);
+            var e = SetPrefabCreateSerializedProperty(spDatas, name, tag, layer, parentPath, isDisplay,
+                localPosition, localEulerAngles, localScale);
+
+            pcJsonDatas.Add(new PrefabCreateJsonData(obj, e.FindPropertyRelative("createObj"), index, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale));
         }
     }
 
@@ -508,16 +542,45 @@ public class PrefabAssociateEditor : EditorWindow
         return obj;
     }
 
-    public string GetRoute(Transform tran)
+    private string GetRoute(Transform tran)
     {
-        var result = tran.name;
+        var result = "";
         var parent = tran.parent;
         while (parent != null && parent != instanceTargetObj.transform)
         {
-            result = $"{parent.name}/{result}";
+            if (result == "")
+            {
+                result = parent.name;
+            }
+            else
+            {
+                result = $"{parent.name}/{result}";
+            }
             parent = parent.parent;
         }
 
         return result;
+    }
+
+    private SerializedProperty SetPrefabCreateSerializedProperty(SerializedProperty datas, string name, string tag, string layer,
+        string parentPath, bool isDisplay, Vector3 localPosition, Vector3 localEulerAngles, Vector3 localScale, GameObject obj = null)
+    {
+        int index = datas.arraySize;
+        datas.InsertArrayElementAtIndex(index);
+        var element = datas.GetArrayElementAtIndex(index);
+        element.FindPropertyRelative("name").stringValue = name;
+        element.FindPropertyRelative("tag").stringValue = tag;
+        element.FindPropertyRelative("layer").stringValue = layer;
+        element.FindPropertyRelative("parentPath").stringValue = parentPath;
+        element.FindPropertyRelative("isDisplay").boolValue = isDisplay;
+        element.FindPropertyRelative("localPosition").vector3Value = localPosition;
+        element.FindPropertyRelative("localEulerAngles").vector3Value = localEulerAngles;
+        element.FindPropertyRelative("localScale").vector3Value = localScale;
+        if (obj != null)
+        {
+            element.FindPropertyRelative("createObj").objectReferenceValue = CreateChildObj(obj, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale);
+        }
+
+        return element;
     }
 }

@@ -43,4 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e903585689a898d4685c955a47f28a59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: []
+  data:
+  - key: Cube
+    gameObject: {fileID: 4900000, guid: f73e80553294ffe4ca382a878770daf8, type: 3}
+  - key: Image
+    gameObject: {fileID: 4900000, guid: 11378b200b1ee2a42b8cca1dcbba490c, type: 3}

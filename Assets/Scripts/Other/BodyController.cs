@@ -7,28 +7,23 @@ public class BodyController : MonoBehaviour
 {
     void Start()
     {
-        var pjDatas = PrefabAssociateMgr.Instance.GetPrefabJsonDatasByName("Cube");
-        foreach (var pjData in pjDatas)
+        var pcDatas = PrefabAssociateMgr.Instance.GetPrefabJsonDatasByName("Cube");
+        foreach (var pcData in pcDatas)
         {
-            var obj = ABMgr.Instance.GetPrefabByName(pjData.name);
-            for (int i = 0; i < pjData.datas.Count; i++)
-            {
-                GameObject instance;
-                var pcdata = pjData.datas[i];
-                var parentPath = pcdata.parentPath;
-                if (string.IsNullOrEmpty(parentPath))
-                    instance = UnityEngine.Object.Instantiate(obj, transform);
-                else
-                    instance = UnityEngine.Object.Instantiate(obj, transform.Find(parentPath));
-                instance.name = pcdata.name;
-                instance.tag = pcdata.tag;
-                instance.layer = LayerMask.NameToLayer(pcdata.layer);
-                instance.transform.localPosition = pcdata.localPosition;
-                instance.transform.localEulerAngles = pcdata.localEulerAngles;
-                instance.transform.localScale = pcdata.localScale;
-                instance.SetActive(pcdata.isDisplay);
-            }
+            var obj = ABMgr.Instance.GetPrefabByName(PrefabAssociateMgr.Instance.GetPrefabAssociateDataByName(pcData.guid).name);
+            GameObject instance;
+            var parentPath = pcData.parentPath;
+            if (string.IsNullOrEmpty(parentPath))
+                instance = UnityEngine.Object.Instantiate(obj, transform);
+            else
+                instance = UnityEngine.Object.Instantiate(obj, transform.Find(parentPath));
+            instance.name = pcData.name;
+            instance.tag = pcData.tag;
+            instance.layer = LayerMask.NameToLayer(pcData.layer);
+            instance.transform.localPosition = pcData.localPosition;
+            instance.transform.localEulerAngles = pcData.localEulerAngles;
+            instance.transform.localScale = pcData.localScale;
+            instance.SetActive(pcData.isDisplay);
         }
-
     }
 }

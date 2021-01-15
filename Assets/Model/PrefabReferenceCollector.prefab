@@ -47,3 +47,6 @@ MonoBehaviour:
   - key: Cube
     gameObject: {fileID: 4519422901939628329, guid: 5eb5fdde5292284409f09d7cbdd59c86,
       type: 3}
+  - key: Image
+    gameObject: {fileID: 8294265380192839269, guid: 34e78e76b0c0f8a498774cb3e240d1bc,
+      type: 3}
