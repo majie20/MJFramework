@@ -80,7 +80,7 @@ namespace Game.Singleton
                                 var jsonSubObj = jsonSubDatas[k];
                                 pcDatas.Add(new PrefabCreateData
                                 {
-                                    index = int.Parse(jsonSubObj["name"].ToString()),
+                                    index = int.Parse(jsonSubObj["index"].ToString()),
                                     name = jsonSubObj["name"].ToString(),
                                     guid = paData.guid,
                                     tag = jsonSubObj["tag"].ToString(),
@@ -110,7 +110,7 @@ namespace Game.Singleton
                 }
             }
 
-            UnityEngine.Object.Instantiate(ABMgr.Instance.GetPrefabByName("Cube"));
+            EventSystem.Instance.Run<PrefabAssociateDataLoadComplete>();
         }
 
         public IEnumerable<PrefabCreateData> GetPrefabJsonDatasByName(string name)
