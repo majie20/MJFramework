@@ -2,7 +2,7 @@
 using Game.Singleton;
 using UnityEngine;
 
-public class BodyConstructionComponent : MonoBehaviour
+public class BodyManageComponent : MonoBehaviour
 {
     private string originName;
     private Dictionary<GameObject, string> subObjDic;
@@ -10,6 +10,7 @@ public class BodyConstructionComponent : MonoBehaviour
 
     public void Assemble(string name)
     {
+        originName = name;
         subObjs = new List<GameObject>();
         subObjDic = new Dictionary<GameObject, string>();
         var pcDatas = PrefabAssociateMgr.Instance.GetPrefabJsonDatasByName(name);
@@ -29,34 +30,31 @@ public class BodyConstructionComponent : MonoBehaviour
             subObj.transform.localEulerAngles = pcData.localEulerAngles;
             subObj.transform.localScale = pcData.localScale;
             subObj.SetActive(pcData.isDisplay);
-            subObj.GetComponent<BodyConstructionComponent>()?.Assemble(subName);
+            subObj.GetComponent<BodyManageComponent>()?.Assemble(subName);
 
-            if (!subObjDic.ContainsKey(subObj))
-            {
-                subObjDic.Add(subObj, subName);
-            }
-            subObjs.Add(subObj);
+            AddChild(subName, subObj);
         }
     }
 
-    //public void AddChild(string name, GameObject obj)
-    //{
-    //    if (!subObjDic.ContainsKey(obj))
-    //    {
-    //        subObjDic.Add(obj, name);
-    //    }
-    //    subObjs.Add(obj);
-    //}
+    public void AddChild(string name, GameObject obj)
+    {
+        if (!subObjDic.ContainsKey(obj))
+        {
+            subObjDic.Add(obj, name);
+        }
+        subObjs.Add(obj);
+    }
 
     public void Dismemberment()
     {
         for (int i = subObjs.Count - 1; i >= 0; i--)
         {
             var subObj = subObjs[i];
-            subObj.GetComponent<BodyConstructionComponent>()?.Dismemberment();
+            subObj.GetComponent<BodyManageComponent>()?.Dismemberment();
             PoolMgr.Instance.RecycleGameObj(subObjDic[subObj], subObj);
         }
         subObjDic = null;
         subObjs = null;
+        PoolMgr.Instance.RecycleGameObj(originName, gameObject);
     }
 }

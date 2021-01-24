@@ -13,7 +13,9 @@ public class GameRoot : MonoBehaviour
         PrefabAssociateMgr.Instance.Init();
         PoolMgr.Instance.Init();
         ABMgr.Instance.Init();
-        StartCoroutine(ABMgr.Instance.LoadAssetBundleManifestFileByIO("./AssetBundleRes/AssetBundleRes"));
+        StartCoroutine(ABMgr.Instance.LoadAssetBundleManifestByIO("./AssetBundleRes/AssetBundleRes"));
+        //StartCoroutine(ABMgr.Instance.LoadAssetBundleManifestByUWR("http://localhost/AssetBundleRes/AssetBundleRes"));
+        //ABMgr.Instance.LoadAssetBundleManifestByIOAsync("./AssetBundleRes/AssetBundleRes");
     }
 
     private void OnEnable()
@@ -33,18 +35,18 @@ public class GameRoot : MonoBehaviour
             cube = PoolMgr.Instance.GetGameObjByName("Cube");
             cube.transform.SetParent(null);
             cube.SetActive(true);
-            cube.GetComponent<BodyConstructionComponent>()?.Assemble("Cube");
+            cube.GetComponent<BodyManageComponent>()?.Assemble("Cube");
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
-            cube.GetComponent<BodyConstructionComponent>()?.Dismemberment();
-            PoolMgr.Instance.RecycleGameObj("Cube", cube);
+            cube.GetComponent<BodyManageComponent>()?.Dismemberment();
             cube = null;
         }
     }
 
     private void OnPrefabAssociateDataLoadComplete()
     {
-
+        TestComponent component = new TestComponent();
+        PoolMgr.Instance.RecycleComponent(component);
     }
 }
