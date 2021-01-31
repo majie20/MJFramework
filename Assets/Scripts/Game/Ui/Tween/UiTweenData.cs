@@ -1,7 +1,7 @@
 ﻿using DG.Tweening;
 using System;
 
-namespace Ui.Tween
+namespace MGame
 {
     public enum Direction
     {

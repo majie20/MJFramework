@@ -1,10 +1,9 @@
-﻿using Game.Singleton;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Game.Event
+namespace MGame
 {
     public class EventSystem : Singleton<EventSystem>
     {
@@ -28,6 +27,27 @@ namespace Game.Event
             allEventDic = null;
         }
 
+        private EventModel GetEventModel<T1>() where T1 : UnityEventBase, new()
+        {
+            Type type = typeof(T1);
+
+            if (!allEventDic.TryGetValue(type.Name, out EventModel model))
+            {
+                Debug.LogWarning($"{type.Name}此事件没有注册过");
+                return null;
+            }
+
+            if (model == null)
+            {
+                Debug.LogWarning($"{type.Name}此事件为Null");
+                return null;
+            }
+
+            return model;
+        }
+
+        #region 添加
+
         private T1 Add<T1>() where T1 : UnityEventBase, new()
         {
             Type type = typeof(T1);
@@ -37,12 +57,10 @@ namespace Game.Event
                 model.count++;
                 return (T1)model.item;
             }
-            else
-            {
-                T1 t = new T1();
-                allEventDic.Add(type.Name, new EventModel { count = 1, item = t });
-                return t;
-            }
+
+            T1 t = new T1();
+            allEventDic.Add(type.Name, new EventModel { count = 1, item = t });
+            return t;
         }
 
         public void Add<T1>(UnityAction call) where T1 : UnityEvent, new()
@@ -65,28 +83,13 @@ namespace Game.Event
             Add<T1>().AddListener(call);
         }
 
-        public EventModel GetEvent<T1>() where T1 : UnityEventBase, new()
-        {
-            Type type = typeof(T1);
+        #endregion 添加
 
-            if (!allEventDic.TryGetValue(type.Name, out EventModel model))
-            {
-                Debug.LogWarning($"{type.Name}此事件没有注册过");
-                return null;
-            }
-
-            if (model == null)
-            {
-                Debug.LogWarning($"{type.Name}此事件为Null");
-                return null;
-            }
-
-            return model;
-        }
+        #region 删除
 
         private bool Remove<T1>(out T1 t) where T1 : UnityEventBase, new()
         {
-            var model = GetEvent<T1>();
+            var model = GetEventModel<T1>();
             if (model != null && model.count > 0)
             {
                 model.count--;
@@ -109,6 +112,7 @@ namespace Game.Event
                 t.RemoveListener(call);
                 return true;
             }
+
             return false;
         }
 
@@ -119,6 +123,7 @@ namespace Game.Event
                 t.RemoveListener(call);
                 return true;
             }
+
             return false;
         }
 
@@ -129,6 +134,7 @@ namespace Game.Event
                 t.RemoveListener(call);
                 return true;
             }
+
             return false;
         }
 
@@ -139,12 +145,17 @@ namespace Game.Event
                 t.RemoveListener(call);
                 return true;
             }
+
             return false;
         }
 
+        #endregion 删除
+
+        #region 执行
+
         public void Run<T1>() where T1 : UnityEvent, new()
         {
-            var model = GetEvent<T1>();
+            var model = GetEventModel<T1>();
             if (model != null && model.count > 0)
             {
                 ((T1)model.item).Invoke();
@@ -153,7 +164,7 @@ namespace Game.Event
 
         public void Run<T1, T2>(T2 t2) where T1 : UnityEvent<T2>, new()
         {
-            var model = GetEvent<T1>();
+            var model = GetEventModel<T1>();
             if (model != null && model.count > 0)
             {
                 ((T1)model.item).Invoke(t2);
@@ -162,7 +173,7 @@ namespace Game.Event
 
         public void Run<T1, T2, T3>(T2 t2, T3 t3) where T1 : UnityEvent<T2, T3>, new()
         {
-            var model = GetEvent<T1>();
+            var model = GetEventModel<T1>();
             if (model != null && model.count > 0)
             {
                 ((T1)model.item).Invoke(t2, t3);
@@ -171,11 +182,13 @@ namespace Game.Event
 
         public void Run<T1, T2, T3, T4>(T2 t2, T3 t3, T4 t4) where T1 : UnityEvent<T2, T3, T4>, new()
         {
-            var model = GetEvent<T1>();
+            var model = GetEventModel<T1>();
             if (model != null && model.count > 0)
             {
                 ((T1)model.item).Invoke(t2, t3, t4);
             }
         }
+
+        #endregion 执行
     }
 }

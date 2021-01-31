@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Game.Singleton
+namespace MGame
 {
     public class ABMgr : Singleton<ABMgr>
     {

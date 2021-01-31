@@ -1,4 +1,4 @@
-﻿namespace Game.Singleton
+﻿namespace MGame
 {
     public class Singleton<T> where T : Singleton<T>, new()
     {

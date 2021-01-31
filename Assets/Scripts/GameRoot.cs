@@ -1,6 +1,5 @@
-﻿using System;
-using Game.Event;
-using Game.Singleton;
+﻿using Game.Event;
+using MGame;
 using UnityEngine;
 
 public class GameRoot : MonoBehaviour

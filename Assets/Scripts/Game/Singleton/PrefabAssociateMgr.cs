@@ -6,29 +6,29 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-public class PrefabAssociateData
+namespace MGame
 {
-    public string name;
-    public string guid;
-    public string abName;
-}
+    public class PrefabAssociateData
+    {
+        public string name;
+        public string guid;
+        public string abName;
+    }
 
-public class PrefabCreateData
-{
-    public int index;
-    public string name;
-    public string guid;
-    public string tag;
-    public string layer;
-    public string parentPath;
-    public bool isDisplay;
-    public Vector3 localPosition;
-    public Vector3 localEulerAngles;
-    public Vector3 localScale;
-}
+    public class PrefabCreateData
+    {
+        public int index;
+        public string name;
+        public string guid;
+        public string tag;
+        public string layer;
+        public string parentPath;
+        public bool isDisplay;
+        public Vector3 localPosition;
+        public Vector3 localEulerAngles;
+        public Vector3 localScale;
+    }
 
-namespace Game.Singleton
-{
     public class PrefabAssociateMgr : Singleton<PrefabAssociateMgr>
     {
         private Dictionary<string, PrefabAssociateData> PrefabAssociateDic;

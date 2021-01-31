@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ui.Tween
+namespace MGame
 {
     public static class UiTween
     {
