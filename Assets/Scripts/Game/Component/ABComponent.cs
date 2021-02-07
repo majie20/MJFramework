@@ -1,5 +1,4 @@
-﻿using Game.Event;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,25 +7,31 @@ using UnityEngine.Networking;
 
 namespace MGame
 {
-    public class ABMgr : Singleton<ABMgr>
+    public class ABComponent : Component
     {
         private Dictionary<string, ReferenceCollector> prefabCollectors;
         private Dictionary<string, ReferenceCollector> jsonDataCollectors;
 
         private Dictionary<string, string> prefabDic;
 
-        public override void Init()
+        public ABComponent()
         {
-            base.Init();
+        }
 
+        public override Component Init()
+        {
             prefabCollectors = new Dictionary<string, ReferenceCollector>();
             jsonDataCollectors = new Dictionary<string, ReferenceCollector>();
             prefabDic = new Dictionary<string, string>();
+            return this;
         }
 
         public override void Dispose()
         {
             base.Dispose();
+            prefabCollectors = null;
+            jsonDataCollectors = null;
+            prefabDic = null;
         }
 
         public IEnumerable<ReferenceCollector> GetAllPrefabJsonDataCollector()
@@ -51,7 +56,7 @@ namespace MGame
                 yield break;
             }
 
-            AssetBundle ab = (uwr.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
+            AssetBundle ab = (uwr.downloadHandler as DownloadHandlerAssetBundle)?.assetBundle;
 
             yield return ProcessAssetBundleManifest(ab, path, LoadMode.UWR);
         }
@@ -91,10 +96,10 @@ namespace MGame
                 }
             }
 
-            foreach (var key in prefabDic.Keys)
-            {
-                Debug.Log($"{key}----{prefabDic[key]}");
-            }
+            //foreach (var key in prefabDic.Keys)
+            //{
+            //    Debug.Log($"{key}----{prefabDic[key]}");
+            //}
 
             EventSystem.Instance.Run<AssetBundleLoadComplete>();
         }

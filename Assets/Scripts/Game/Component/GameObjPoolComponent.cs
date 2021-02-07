@@ -3,24 +3,31 @@ using UnityEngine;
 
 namespace MGame
 {
-    public class GameObjPool : Singleton<GameObjPool>
+    public class GameObjPoolComponent : Component
     {
         private Dictionary<string, Queue<GameObject>> gameObjDic;
         private Dictionary<string, Transform> parentDic;
         private GameObject body;
 
-        public override void Init()
+        public GameObjPoolComponent()
         {
-            base.Init();
+        }
+
+        public override Component Init()
+        {
             gameObjDic = new Dictionary<string, Queue<GameObject>>();
             parentDic = new Dictionary<string, Transform>();
-            body = new GameObject("GameObjPool");
+#if UNITY_EDITOR
+            body = entity.gameObject;
+#else
+            body = new GameObject("ObjectPool");
+#endif
             body.SetActive(false);
+            return this;
         }
 
         public override void Dispose()
         {
-            base.Dispose();
             gameObjDic = null;
             parentDic = null;
         }
@@ -32,7 +39,7 @@ namespace MGame
                 return gameObjDic[name].Dequeue();
             }
 
-            var obj = UnityEngine.Object.Instantiate(ABMgr.Instance.GetPrefabByName(name));
+            var obj = UnityEngine.Object.Instantiate(Game.Instance.Scene.GetComponent<ABComponent>().GetPrefabByName(name));
 
             return obj;
         }

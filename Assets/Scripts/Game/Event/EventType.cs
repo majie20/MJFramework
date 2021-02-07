@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine.Events;
 
-namespace Game.Event
+namespace MGame
 {
     public class AssetBundleLoadComplete : UnityEvent { }
 

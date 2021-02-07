@@ -3,34 +3,31 @@ using System.Collections.Generic;
 
 namespace MGame
 {
-    public class ComponentPool : Singleton<ComponentPool>
+    public class ComponentPoolComponent : Component
     {
         private Dictionary<Type, Queue<Component>> componentDic;
 
-        public override void Init()
+        public ComponentPoolComponent()
         {
-            base.Init();
+        }
+
+        public override Component Init()
+        {
             componentDic = new Dictionary<Type, Queue<Component>>();
+            return this;
         }
 
         public override void Dispose()
         {
-            base.Dispose();
             componentDic = null;
         }
 
-        public T GetComponent<T>() where T : Component, new()
+        public T FetchComponent<T>() where T : Component
         {
-            Type type = typeof(T);
-            if (componentDic.ContainsKey(type))
-            {
-                return (T)componentDic[type].Dequeue();
-            }
-
-            return new T();
+            return (T)FetchComponent(typeof(T));
         }
 
-        public Component GetComponent(Type type)
+        public Component FetchComponent(Type type)
         {
             if (componentDic.ContainsKey(type))
             {

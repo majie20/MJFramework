@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System;
+using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -10,6 +12,9 @@ namespace MGame
     {
         public static float SCREEN_WIDTH = 1080;
         public static float SCREEN_HEIGHT = 1920;
+
+        private static readonly List<System.Action<object>> calls = new List<Action<object>>();
+        private static readonly ArrayList values = new ArrayList();
 
         public static void UiOpenTween(this MonoBehaviour component, RectTransform tran, System.Action backCall = null)
         {
@@ -41,17 +46,6 @@ namespace MGame
                 return;
             }
             var sequence = DOTween.Sequence();
-            List<System.Action<object>> calls = null;
-            List<object> values = null;
-
-            void Judge()
-            {
-                if (calls == null)
-                {
-                    calls = new List<System.Action<object>>();
-                    values = new List<object>();
-                }
-            }
 
             foreach (var attribute in enumerator)
             {
@@ -118,7 +112,6 @@ namespace MGame
                         }
                         else if (way == UseWay.Close)
                         {
-                            Judge();
                             calls.Add((obj) => { tran.anchoredPosition = (Vector2)obj; });
                             values.Add(tran.anchoredPosition);
                         }
@@ -135,7 +128,6 @@ namespace MGame
                         }
                         else if (way == UseWay.Close)
                         {
-                            Judge();
                             calls.Add((obj) => { tran.localScale = (Vector3)obj; });
                             values.Add(tran.localScale);
                         }
@@ -153,7 +145,6 @@ namespace MGame
                         }
                         else if (way == UseWay.Close)
                         {
-                            Judge();
                             calls.Add((obj) => { tran.eulerAngles = (Vector3)obj; });
                             values.Add(tran.eulerAngles);
                         }
@@ -173,7 +164,6 @@ namespace MGame
                             }
                             else if (way == UseWay.Close)
                             {
-                                Judge();
                                 calls.Add((obj) => { canvasGroup.alpha = (float)obj; });
                                 values.Add(canvasGroup.alpha);
                             }
@@ -193,7 +183,6 @@ namespace MGame
                                 }
                                 else if (way == UseWay.Close)
                                 {
-                                    Judge();
                                     var image = images[i];
                                     calls.Add((obj) =>
                                     {
@@ -218,7 +207,6 @@ namespace MGame
                                 }
                                 else if (way == UseWay.Close)
                                 {
-                                    Judge();
                                     var text = texts[i];
                                     calls.Add((obj) =>
                                     {
@@ -244,6 +232,8 @@ namespace MGame
                     {
                         calls[i](values[i]);
                     }
+                    calls.Clear();
+                    values.Clear();
                 }));
             }
             if (backCall != null)

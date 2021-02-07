@@ -1,5 +1,4 @@
-﻿using Game.Event;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -29,28 +28,33 @@ namespace MGame
         public Vector3 localScale;
     }
 
-    public class PrefabAssociateMgr : Singleton<PrefabAssociateMgr>
+    public class PrefabAssociateComponent : Component
     {
         private Dictionary<string, PrefabAssociateData> PrefabAssociateDic;
         private Dictionary<string, List<PrefabCreateData>> PrefabCreateDic;
 
-        public override void Init()
+        public PrefabAssociateComponent()
         {
-            base.Init();
+        }
+
+        public override Component Init()
+        {
             PrefabAssociateDic = new Dictionary<string, PrefabAssociateData>();
             PrefabCreateDic = new Dictionary<string, List<PrefabCreateData>>();
             EventSystem.Instance.Add<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
+            return this;
         }
 
         public override void Dispose()
         {
-            base.Dispose();
+            PrefabAssociateDic = null;
+            PrefabCreateDic = null;
             EventSystem.Instance.Remove<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
         }
 
         private void OnAssetBundleLoadComplete()
         {
-            var collectors = ABMgr.Instance.GetAllPrefabJsonDataCollector();
+            var collectors = Game.Instance.Scene.GetComponent<ABComponent>().GetAllPrefabJsonDataCollector();
             foreach (var collector in collectors)
             {
                 for (int i = 0; i < collector.data.Count; i++)
@@ -105,6 +109,7 @@ namespace MGame
                             if (d1.index < d2.index) return -1;
                             return 1;
                         }));
+
                         PrefabCreateDic.Add(collector.data[i].key, pcDatas);
                     }
                 }
