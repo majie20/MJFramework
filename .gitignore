@@ -11,4 +11,5 @@ Unity.Hotfix.csproj
 Unity.Model.csproj
 Unity.sln
 Unity.ThirdParty.csproj
-
+Assets/StreamingAssets/build_info
+Assets/StreamingAssets/build_info.meta
