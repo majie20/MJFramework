@@ -11,7 +11,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{05CE8027-6041-1E19-D80A-46B2C58DAE87}</ProjectGuid>
+    <ProjectGuid>{E15BADD2-3A26-309A-AB0F-DC5B08044350}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.ThirdParty</AssemblyName>
@@ -285,46 +285,46 @@
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Assets/Plugins/JsonNet/Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Assets/Plugins/JsonNet/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Assets/Plugins/NPOI/NPOI.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Assets/Plugins/NPOI/NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Assets/Plugins/NPOI/NPOI.OOXML.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Assets/Plugins/NPOI/NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Assets/Plugins/NPOI/NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Assets/Plugins/NPOI/NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Assets/Plugins/NPOI/NPOI.OpenXmlFormats.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.Editor">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/PackageCache/com.unity.analytics@3.3.5/Unity.Analytics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/PackageCache/com.unity.analytics@3.3.5/Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/PackageCache/com.unity.analytics@3.3.5/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.Purchasing">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Assets/Plugins/NPOI/NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="DOTween">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Assets/Scripts/ThirdParty/DOTween/DOTween.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Assets/Scripts/ThirdParty/DOTween/DOTween.dll</HintPath>
     </Reference>
     <Reference Include="DOTweenEditor">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Assets/Scripts/ThirdParty/DOTween/Editor/DOTweenEditor.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Assets/Scripts/ThirdParty/DOTween/Editor/DOTweenEditor.dll</HintPath>
     </Reference>
     <Reference Include="ILRuntim.Mono.Cecil">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/PackageCache/com.ourpalm.ilruntime@1.6.6/Plugins/ILRuntim.Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="ILRuntime.Mono.Cecil.Pdb">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/PackageCache/com.ourpalm.ilruntime@1.6.6/Plugins/ILRuntime.Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Library/PackageCache/com.ourpalm.ilruntime@1.6.6/Plugins/ILRuntim.Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="ILRuntime.Mono.Cecil.Mdb">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/PackageCache/com.ourpalm.ilruntime@1.6.6/Plugins/ILRuntime.Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Library/PackageCache/com.ourpalm.ilruntime@1.6.6/Plugins/ILRuntime.Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="ILRuntime.Mono.Cecil.Pdb">
+      <HintPath>D:/Project/Unity/Project/Unity/Library/PackageCache/com.ourpalm.ilruntime@1.6.6/Plugins/ILRuntime.Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.Editor">
+      <HintPath>D:/Project/Unity/Project/Unity/Library/PackageCache/com.unity.analytics@3.3.5/Unity.Analytics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.Tracker">
+      <HintPath>D:/Project/Unity/Project/Unity/Library/PackageCache/com.unity.analytics@3.3.5/Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.StandardEvents">
+      <HintPath>D:/Project/Unity/Project/Unity/Library/PackageCache/com.unity.analytics@3.3.5/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Purchasing">
+      <HintPath>D:/Project/Unity/Project/Unity/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:/Software/2019.4.5f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -672,13 +672,13 @@
       <HintPath>D:/Software/2019.4.5f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="ILRuntime">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/ScriptAssemblies/ILRuntime.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Library/ScriptAssemblies/ILRuntime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/Project/Unity/Project/UtilsEditor/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/Project/Unity/Project/Unity/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>
