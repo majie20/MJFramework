@@ -6,3 +6,9 @@ Assembly-CSharp.csproj
 Assembly-CSharp-Editor.csproj
 obj
 Temp
+Unity.Editor.csproj
+Unity.Hotfix.csproj
+Unity.Model.csproj
+Unity.sln
+Unity.ThirdParty.csproj
+
