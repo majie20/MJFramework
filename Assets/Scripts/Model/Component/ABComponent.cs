@@ -9,10 +9,17 @@ namespace MGame.Model
 {
     public class ABComponent : Component
     {
+        /// <summary>
+        /// AB包名、收藏家
+        /// </summary>
         private Dictionary<string, ReferenceCollector> prefabCollectors;
+
         private Dictionary<string, ReferenceCollector> jsonDataCollectors;
         private Dictionary<string, ReferenceCollector> textCollectors;
 
+        /// <summary>
+        /// 预制体名、AB包名
+        /// </summary>
         private Dictionary<string, string> prefabDic;
 
         public ABComponent()

@@ -11,8 +11,9 @@
         public override Entity Init()
         {
             base.Init();
-            AddComponent(new PrefabAssociateComponent().Init(this));
             AddComponent(new ABComponent().Init(this));
+            AddComponent(new PrefabAssociateComponent().Init(this));
+            AddComponent(new TextManageComponent().Init(this));
             return this;
         }
 

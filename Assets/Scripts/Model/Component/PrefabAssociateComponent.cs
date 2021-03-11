@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MGame.Model
 {
-    public class PrefabAssociateData
+    public class PrefabPlaceData
     {
         public string name;
         public string guid;
@@ -30,8 +30,14 @@ namespace MGame.Model
 
     public class PrefabAssociateComponent : Component
     {
-        private Dictionary<string, PrefabAssociateData> PrefabAssociateDic;
-        private Dictionary<string, List<PrefabCreateData>> PrefabCreateDic;
+        /// <summary>
+        /// Guid、预制体位置数据（在AB包中的位置）
+        /// </summary>
+        private Dictionary<string, PrefabPlaceData> prefabPlaceDic;
+        /// <summary>
+        /// 预制体名、预制体创建所需子物体的数据
+        /// </summary>
+        private Dictionary<string, List<PrefabCreateData>> prefabCreateDic;
 
         public PrefabAssociateComponent()
         {
@@ -40,17 +46,22 @@ namespace MGame.Model
         public override Component Init()
         {
             base.Init();
-            PrefabAssociateDic = new Dictionary<string, PrefabAssociateData>();
-            PrefabCreateDic = new Dictionary<string, List<PrefabCreateData>>();
+
+            prefabPlaceDic = new Dictionary<string, PrefabPlaceData>();
+            prefabCreateDic = new Dictionary<string, List<PrefabCreateData>>();
+
             Game.Instance.EventSystem.Add<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
+
             return this;
         }
 
         public override void Dispose()
         {
             base.Dispose();
-            PrefabAssociateDic = null;
-            PrefabCreateDic = null;
+
+            prefabPlaceDic = null;
+            prefabCreateDic = null;
+
             Game.Instance.EventSystem.Remove<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
         }
 
@@ -69,15 +80,15 @@ namespace MGame.Model
                         for (int j = 0; j < jsonDatas.Count(); j++)
                         {
                             var jsonObj = jsonDatas[j];
-                            var paData = new PrefabAssociateData
+                            var ppData = new PrefabPlaceData
                             {
                                 name = jsonObj["name"].ToString(),
                                 guid = jsonObj["guid"].ToString(),
                                 abName = jsonObj["abName"].ToString()
                             };
-                            if (!PrefabAssociateDic.ContainsKey(paData.guid))
+                            if (!prefabPlaceDic.ContainsKey(ppData.guid))
                             {
-                                PrefabAssociateDic.Add(paData.guid, paData);
+                                prefabPlaceDic.Add(ppData.guid, ppData);
                             }
 
                             var jsonSubDatas = jsonObj["datas"];
@@ -88,7 +99,7 @@ namespace MGame.Model
                                 {
                                     index = int.Parse(jsonSubObj["index"].ToString()),
                                     name = jsonSubObj["name"].ToString(),
-                                    guid = paData.guid,
+                                    guid = ppData.guid,
                                     tag = jsonSubObj["tag"].ToString(),
                                     layer = jsonSubObj["layer"].ToString(),
                                     parentPath = jsonSubObj["parentPath"].ToString(),
@@ -112,7 +123,7 @@ namespace MGame.Model
                             return 1;
                         }));
 
-                        PrefabCreateDic.Add(collector.data[i].key, pcDatas);
+                        prefabCreateDic.Add(collector.data[i].key, pcDatas);
                     }
                 }
             }
@@ -122,12 +133,12 @@ namespace MGame.Model
 
         public IEnumerable<PrefabCreateData> GetPrefabJsonDatasByName(string name)
         {
-            return PrefabCreateDic[name];
+            return prefabCreateDic[name];
         }
 
-        public PrefabAssociateData GetPrefabAssociateDataByName(string guid)
+        public PrefabPlaceData GetPrefabAssociateDataByName(string guid)
         {
-            return PrefabAssociateDic[guid];
+            return prefabPlaceDic[guid];
         }
     }
 }

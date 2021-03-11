@@ -1,0 +1,26 @@
+ManifestFileVersion: 0
+CRC: 1132150349
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 609fcadf562ec02c123c6258519bda51
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: baedefce1c3a59ef8a9442af500734c4
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: e903585689a898d4685c955a47f28a59, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Res/Text/Hotfix.dll.bytes
+- Assets/Res/Text/TextReferenceCollector.prefab
+- Assets/Res/Text/Hotfix.pdb.bytes
+Dependencies: []

@@ -18,15 +18,15 @@ namespace MGame.Model
         public override void Init()
         {
             base.Init();
-            GameObject = new GameObject("GameRoot");
+            GameObject = Object.FindObjectOfType<Init>().gameObject;
             Object.DontDestroyOnLoad(GameObject);
             Transform = GameObject.transform;
+
+            EventSystem = new EventSystem().Init();
 
             ObjectPool = new ObjectPool().Init() as ObjectPool;
 
             Scene = new Scene().Init() as Scene;
-
-            EventSystem = new EventSystem().Init();
 
             Hotfix = new Hotfix().Init();
         }
@@ -34,18 +34,17 @@ namespace MGame.Model
         public override void Dispose()
         {
             base.Dispose();
+            EventSystem?.Dispose();
+            EventSystem = null;
 
             Scene?.Dispose();
             Scene = null;
 
-            ObjectPool?.Dispose();
-            ObjectPool = null;
-
-            EventSystem?.Dispose();
-            EventSystem = null;
-
             Hotfix?.Dispose();
             Hotfix = null;
+
+            ObjectPool?.Dispose();
+            ObjectPool = null;
         }
     }
 }

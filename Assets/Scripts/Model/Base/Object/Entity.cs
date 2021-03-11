@@ -12,12 +12,12 @@ namespace MGame.Model
 {
     public class Entity
     {
-        private Dictionary<Type, Component> componentDic = new Dictionary<Type, Component>();
+        private Dictionary<Type, Component> componentDic;
 
         public long id { set; get; }
 #if UNITY_EDITOR
-        public GameObject gameObject { set; get; }
-        public Transform transform { set; get; }
+        public GameObject GameObject { set; get; }
+        public Transform Transform { set; get; }
         public Entity parent { set; get; }
 #endif
 
@@ -31,10 +31,10 @@ namespace MGame.Model
 #if UNITY_EDITOR
             if (!this.GetType().IsDefined(typeof(HideInHierarchyAttribute), true))
             {
-                gameObject = new GameObject(GetType().Name);
-                gameObject.transform.SetParent(parent != null ? parent.transform : Game.Instance.Transform);
+                GameObject = new GameObject(GetType().Name);
+                Transform = GameObject.transform;
+                Transform.SetParent(parent != null ? parent.Transform : Game.Instance.Transform);
                 //this.gameObject.AddComponent<ComponentView>().Component = this;
-                transform = gameObject.transform;
             }
 #endif
             return this;
@@ -42,12 +42,16 @@ namespace MGame.Model
 
         public virtual void Dispose()
         {
+            foreach (var value in componentDic.Values)
+            {
+                value.Dispose();
+            }
             componentDic = null;
 #if UNITY_EDITOR
             if (!this.GetType().IsDefined(typeof(HideInHierarchyAttribute), true))
             {
-                transform = null;
-                UnityEngine.GameObject.Destroy(gameObject);
+                Transform = null;
+                UnityEngine.GameObject.Destroy(GameObject);
             }
 #endif
         }

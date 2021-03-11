@@ -5,9 +5,18 @@ namespace MGame.Model
 {
     public class GameObjPoolComponent : Component
     {
+        /// <summary>
+        /// 对象池中的游戏物体
+        /// </summary>
         private Dictionary<string, Queue<GameObject>> gameObjDic;
+        /// <summary>
+        /// 对象池中游戏物体的类别，用于分类游戏物体
+        /// </summary>
         private Dictionary<string, Transform> parentDic;
-        private GameObject body;
+        /// <summary>
+        /// 对象池的树根
+        /// </summary>
+        private GameObject root;
 
         public GameObjPoolComponent()
         {
@@ -19,11 +28,11 @@ namespace MGame.Model
             gameObjDic = new Dictionary<string, Queue<GameObject>>();
             parentDic = new Dictionary<string, Transform>();
 #if UNITY_EDITOR
-            body = entity.gameObject;
+            root = entity.GameObject;
 #else
-            body = new GameObject("ObjectPool");
+            root = new GameObject("ObjectPool");
 #endif
-            body.SetActive(false);
+            root.SetActive(false);
             return this;
         }
 
@@ -60,7 +69,7 @@ namespace MGame.Model
                 queue = new Queue<GameObject>();
                 gameObjDic.Add(sign, queue);
                 parent = new GameObject(sign).transform;
-                parent.SetParent(body.transform);
+                parent.SetParent(root.transform);
                 parentDic.Add(sign, parent);
             }
 

@@ -5,6 +5,9 @@ public class GameRoot : MonoBehaviour
 {
     private GameObject cube;
 
+    private int completeValue = 0;
+    private bool isComplete = false;
+
     private void Awake()
     {
         Game.Instance.Init();
@@ -15,12 +18,14 @@ public class GameRoot : MonoBehaviour
 
     private void OnEnable()
     {
-        //EventSystem.Instance.Add<PrefabAssociateDataLoadComplete>(OnPrefabAssociateDataLoadComplete);
+        Game.Instance.EventSystem.Add<PrefabAssociateDataLoadComplete>(OnPrefabAssociateDataLoadComplete);
+        Game.Instance.EventSystem.Add<TextDataLoadComplete>(OnTextDataLoadComplete);
     }
 
     private void OnDisable()
     {
-        //EventSystem.Instance.Remove<PrefabAssociateDataLoadComplete>(OnPrefabAssociateDataLoadComplete);
+        Game.Instance.EventSystem.Remove<PrefabAssociateDataLoadComplete>(OnPrefabAssociateDataLoadComplete);
+        Game.Instance.EventSystem.Remove<TextDataLoadComplete>(OnTextDataLoadComplete);
     }
 
     private void Update()
@@ -43,5 +48,24 @@ public class GameRoot : MonoBehaviour
     {
         //TestComponent component = new TestComponent();
         //Game.Instance.ObjectPool.RecycleComponent(component);
+        JuageComplete();
+    }
+
+    private void OnTextDataLoadComplete()
+    {
+        JuageComplete();
+    }
+
+    private void JuageComplete()
+    {
+        if (!isComplete)
+        {
+            completeValue++;
+            if (completeValue >= 2)
+            {
+                isComplete = true;
+                Debug.Log($"------完成------");
+            }
+        }
     }
 }

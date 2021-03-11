@@ -44,15 +44,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
+  - key: Button
+    gameObject: {fileID: 8059081952876686554, guid: 7d46a584e0845604296d545945148245,
+      type: 3}
   - key: Capsule
     gameObject: {fileID: 3849385875390267945, guid: 11d543cb405224b43842a5cef96a03a1,
+      type: 3}
+  - key: Cube
+    gameObject: {fileID: 4519422901939628329, guid: 5eb5fdde5292284409f09d7cbdd59c86,
       type: 3}
   - key: Cylinder
     gameObject: {fileID: 7604662774367296269, guid: b59529f938ca86643b77a94b94faf8f9,
       type: 3}
+  - key: Image
+    gameObject: {fileID: 8294265380192839269, guid: 34e78e76b0c0f8a498774cb3e240d1bc,
+      type: 3}
   - key: Sphere
     gameObject: {fileID: 2972403345721537417, guid: 980ccd3e86108ce4cbee1703121f5dca,
-      type: 3}
-  - key: Button
-    gameObject: {fileID: 8059081952876686554, guid: 7d46a584e0845604296d545945148245,
       type: 3}

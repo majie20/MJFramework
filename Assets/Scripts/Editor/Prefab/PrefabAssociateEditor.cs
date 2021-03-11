@@ -31,7 +31,7 @@ public class PrefabCreateEditorData
     public Vector3 localScale;
 }
 
-public class PrefabCreateJsonData
+public class PrefabCreateJsonEditorData
 {
     public GameObject obj;
     public SerializedProperty sp;
@@ -45,7 +45,7 @@ public class PrefabCreateJsonData
     public Vector3 localEulerAngles;
     public Vector3 localScale;
 
-    public PrefabCreateJsonData(GameObject obj, SerializedProperty sp, int index, string name, string tag, string layer,
+    public PrefabCreateJsonEditorData(GameObject obj, SerializedProperty sp, int index, string name, string tag, string layer,
         string parentPath, bool isDisplay, Vector3 localPosition, Vector3 localEulerAngles, Vector3 localScale)
     {
         this.obj = obj;
@@ -65,18 +65,30 @@ public class PrefabCreateJsonData
 public class PrefabAssociateEditor : EditorWindow
 {
     public GameObject targetObj;
-    public List<PrefabAssociateEditorData> bornDatas = new List<PrefabAssociateEditorData>();
-    private List<PrefabCreateJsonData> pcJsonDatas;
+    public List<PrefabAssociateEditorData> paDatas = new List<PrefabAssociateEditorData>();
+
+    /// <summary>
+    /// 放入面板中要操作的游戏物体的json数据，里面记录了子物体的基本信息
+    /// </summary>
+    private List<PrefabCreateJsonEditorData> pcJsonDatas;
 
     private SerializedObject serObj;
     private SerializedProperty targetSerPro;
-    private SerializedProperty bornDatasSerPro;
+    private SerializedProperty paDatasSerPro;
 
+    /// <summary>
+    /// 滑动条位置
+    /// </summary>
     private Vector2 m_ScrollPosition;
 
+    //提示相关
     private bool isHint = false;
+
     private string hintContent = "";
 
+    /// <summary>
+    /// 要操作的游戏物体
+    /// </summary>
     private GameObject instanceTargetObj;
 
     private void Awake()
@@ -86,7 +98,7 @@ public class PrefabAssociateEditor : EditorWindow
         serObj = new SerializedObject(this);
         //获取当前类中可序列话的属性
         targetSerPro = serObj.FindProperty("targetObj");
-        bornDatasSerPro = serObj.FindProperty("bornDatas");
+        paDatasSerPro = serObj.FindProperty("paDatas");
     }
 
     private void OnDestroy()
@@ -149,12 +161,12 @@ public class PrefabAssociateEditor : EditorWindow
                     parentTran = GameObject.FindObjectOfType<Canvas>().transform;
                 }
                 instanceTargetObj = PrefabUtility.InstantiatePrefab(targetSerPro.objectReferenceValue, parentTran) as GameObject;
-                bornDatasSerPro.ClearArray();
-                bornDatas = new List<PrefabAssociateEditorData>();
+                paDatasSerPro.ClearArray();
+                paDatas = new List<PrefabAssociateEditorData>();
                 var jsonPath = GetPrefabJsonDataPath(targetSerPro.objectReferenceValue);
                 if (File.Exists(jsonPath))
                 {
-                    pcJsonDatas = new List<PrefabCreateJsonData>();
+                    pcJsonDatas = new List<PrefabCreateJsonEditorData>();
                     using (FileStream fs = File.OpenRead(jsonPath))
                     {
                         using (var sr = new StreamReader(fs))
@@ -187,7 +199,7 @@ public class PrefabAssociateEditor : EditorWindow
 
         if (GUILayout.Button("生成数据文件"))
         {
-            if (bornDatas.Count == 0)
+            if (paDatas.Count == 0)
             {
                 Debug.LogWarning($"预制体[{targetObj.name}]没有数据要生成!");
             }
@@ -201,9 +213,9 @@ public class PrefabAssociateEditor : EditorWindow
                     {
                         StringBuilder sb = new StringBuilder();
                         sb.Append("[");
-                        for (int i = 0; i < bornDatas.Count; i++)
+                        for (int i = 0; i < paDatas.Count; i++)
                         {
-                            var data1 = bornDatas[i];
+                            var data1 = paDatas[i];
                             if (data1.obj == null)
                                 continue;
                             sb.Append("{");
@@ -248,7 +260,7 @@ public class PrefabAssociateEditor : EditorWindow
                                 }
                             }
                             sb.Append("]");
-                            if (i == bornDatas.Count - 1)
+                            if (i == paDatas.Count - 1)
                             {
                                 sb.Append("}");
                             }
@@ -273,9 +285,9 @@ public class PrefabAssociateEditor : EditorWindow
 
         var list1 = new List<int>();
         m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition);
-        for (int i = 0; i < bornDatas.Count; i++)
+        for (int i = 0; i < paDatas.Count; i++)
         {
-            var data1 = bornDatasSerPro.GetArrayElementAtIndex(i);
+            var data1 = paDatasSerPro.GetArrayElementAtIndex(i);
             var objSerPro = data1.FindPropertyRelative("obj");
             var obj = (GameObject)objSerPro.objectReferenceValue;
             var datas = data1.FindPropertyRelative("datas");
@@ -284,7 +296,7 @@ public class PrefabAssociateEditor : EditorWindow
             GUILayout.Label("Object:", new GUIStyle { alignment = TextAnchor.LowerLeft });
             objSerPro.objectReferenceValue = EditorGUILayout.ObjectField(obj, typeof(GameObject), false);
             var dataObj = objSerPro.objectReferenceValue;
-            if (bornDatas[i].obj != null && dataObj != null && bornDatas[i].obj != dataObj)
+            if (paDatas[i].obj != null && dataObj != null && paDatas[i].obj != dataObj)
             {
                 for (int j = 0; j < datas.arraySize; j++)
                 {
@@ -383,13 +395,13 @@ public class PrefabAssociateEditor : EditorWindow
         //遍历删除list，将其删除掉
         foreach (var i in list1)
         {
-            var datas = bornDatasSerPro.GetArrayElementAtIndex(i).FindPropertyRelative("datas");
+            var datas = paDatasSerPro.GetArrayElementAtIndex(i).FindPropertyRelative("datas");
             for (int j = 0; j < datas.arraySize; j++)
             {
                 //删除这个预制体的所有克隆
                 UnityEngine.Object.DestroyImmediate(datas.GetArrayElementAtIndex(j).FindPropertyRelative("createObj").objectReferenceValue);
             }
-            bornDatasSerPro.DeleteArrayElementAtIndex(i);
+            paDatasSerPro.DeleteArrayElementAtIndex(i);
         }
 
         var eventType = Event.current.type;
@@ -407,9 +419,9 @@ public class PrefabAssociateEditor : EditorWindow
                     if (PrefabUtility.IsPartOfPrefabAsset(o) && o != targetObj)
                     {
                         var b = true;
-                        for (int i = 0; i < bornDatas.Count; i++)
+                        for (int i = 0; i < paDatas.Count; i++)
                         {
-                            if (bornDatas[i].obj == o)
+                            if (paDatas[i].obj == o)
                             {
                                 b = false;
                                 break;
@@ -461,9 +473,9 @@ public class PrefabAssociateEditor : EditorWindow
     /// <param name="obj"></param>
     private SerializedProperty AddAssociate(GameObject obj)
     {
-        int index = bornDatasSerPro.arraySize;
-        bornDatasSerPro.InsertArrayElementAtIndex(index);
-        var element = bornDatasSerPro.GetArrayElementAtIndex(index);
+        int index = paDatasSerPro.arraySize;
+        paDatasSerPro.InsertArrayElementAtIndex(index);
+        var element = paDatasSerPro.GetArrayElementAtIndex(index);
         element.FindPropertyRelative("obj").objectReferenceValue = obj;
         element.FindPropertyRelative("datas").ClearArray();
         return element;
@@ -495,7 +507,7 @@ public class PrefabAssociateEditor : EditorWindow
             var e = SetPrefabCreateSerializedProperty(spDatas, name, tag, layer, parentPath, isDisplay,
                 localPosition, localEulerAngles, localScale);
 
-            pcJsonDatas.Add(new PrefabCreateJsonData(obj, e.FindPropertyRelative("createObj"), index, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale));
+            pcJsonDatas.Add(new PrefabCreateJsonEditorData(obj, e.FindPropertyRelative("createObj"), index, name, tag, layer, parentPath, isDisplay, localPosition, localEulerAngles, localScale));
         }
     }
 

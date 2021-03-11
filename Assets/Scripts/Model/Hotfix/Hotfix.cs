@@ -1,30 +1,63 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 
-public sealed class Hotfix
-{
 #if ILRuntime
-		private ILRuntime.Runtime.Enviorment.AppDomain appDomain;
-		private MemoryStream dllStream;
-		private MemoryStream pdbStream;
+using System.IO;
 #else
-    private Assembly assembly;
+using System;
+using System.Reflection;
 #endif
 
-    public Hotfix Init()
+namespace MGame.Model
+{
+    public sealed class Hotfix
     {
+#if ILRuntime
+        private ILRuntime.Runtime.Enviorment.AppDomain appDomain;
+        private MemoryStream dllStream;
+        private MemoryStream pdbStream;
+#else
+        private Assembly assembly;
+#endif
 
-        return this;
-    }
+        private IStaticMethod start;
 
-    public void Dispose()
-    {
-    }
+        public Hotfix Init()
+        {
+            return this;
+        }
 
-    public void LoadHotfixAssembly()
-    {
+        public void Dispose()
+        {
+        }
 
+        public void LoadHotfixAssembly()
+        {
+            var component = Game.Instance.Scene.GetComponent<TextManageComponent>();
+            byte[] assBytes = component.GetTextAssetByName("Hotfix.dll").bytes;
+            byte[] pdbBytes = component.GetTextAssetByName("Hotfix.pdb").bytes;
+
+#if ILRuntime
+            Debug.Log($"当前使用的是ILRuntime模式");
+            this.appDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
+
+            this.dllStream = new MemoryStream(assBytes);
+            this.pdbStream = new MemoryStream(pdbBytes);
+            this.appDomain.LoadAssembly(this.dllStream, this.pdbStream, new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
+
+#if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
+            //由于Unity的Profiler接口只允许在主线程使用，为了避免出异常，需要告诉ILRuntime主线程的线程ID才能正确将函数运行耗时报告给Profiler
+            appDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
+
+            this.start = new ILStaticMethod(this.appDomain, "ETHotfix.Init", "Start", 0);
+#else
+            Debug.Log($"当前使用的是Mono模式");
+
+            this.assembly = Assembly.Load(assBytes, pdbBytes);
+
+            Type hotfixInit = this.assembly.GetType("ETHotfix.Init");
+            this.start = new MonoStaticMethod(hotfixInit, "Start");
+#endif
+        }
     }
 }

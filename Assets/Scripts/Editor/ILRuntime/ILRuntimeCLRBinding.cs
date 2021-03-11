@@ -23,7 +23,7 @@ public class ILRuntimeCLRBinding
                 //Crossbind Adapter is needed to generate the correct binding code
                 InitILRuntime(domain);
 
-                var path = "Assets/Model/ILBinding";
+                var path = "Assets/Scripts/Model/ILBinding";
                 for (int i = 0; i < path.Length; i++)
                 {
                     if (path[i] == '/')
