@@ -34,6 +34,7 @@ namespace MGame.Model
         /// Guid、预制体位置数据（在AB包中的位置）
         /// </summary>
         private Dictionary<string, PrefabPlaceData> prefabPlaceDic;
+
         /// <summary>
         /// 预制体名、预制体创建所需子物体的数据
         /// </summary>
