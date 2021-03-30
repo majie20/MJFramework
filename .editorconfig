@@ -1,0 +1,15 @@
+# All files
+[*]
+guidelines = 120
+
+# C# or VB files
+[*.{cs,vb}]
+guidelines = 180
+
+[*]
+# Named color format
+guidelines_style = 1px dotted black
+
+[*.{cs,vb}]
+# ARGB color format (red with 25% opacity)
+guidelines_style = 2.5px dotted 40ff0000
