@@ -18,15 +18,16 @@ namespace MGame.Model
         public override void Init()
         {
             base.Init();
+
             GameObject = Object.FindObjectOfType<Init>().gameObject;
             Object.DontDestroyOnLoad(GameObject);
             Transform = GameObject.transform;
 
             EventSystem = new EventSystem().Init();
 
-            ObjectPool = new ObjectPool().Init() as ObjectPool;
+            ObjectPool = new ObjectPool().Init(false) as ObjectPool;
 
-            Scene = new Scene().Init() as Scene;
+            Scene = new Scene().Init(false) as Scene;
 
             Hotfix = new Hotfix().Init();
         }

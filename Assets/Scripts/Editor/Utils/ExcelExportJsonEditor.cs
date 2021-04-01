@@ -5,42 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using UnityEditor;
 using UnityEngine;
 
-public class UtilsEditor : EditorWindow
+public class ExcelExportJsonEditor
 {
-    [MenuItem("Tools/Excel导出(用于导出帧数表)")]
-    public static void ExcelExportJson()
-    {
-        if (Directory.Exists("./Excel"))
-        {
-            foreach (var filePath in Directory.GetFiles("./Excel"))
-            {
-                ExportJson(filePath);
-            }
-        }
-        else
-        {
-            Debug.Log("无");
-        }
-    }
-
-    [MenuItem("Tools/ModelEditorPanel")]
-    public static void OpenModelUtilsPanel()
-    {
-        CreateInstance<ModelEditor>().Show();
-    }
-
-    [MenuItem("Tools/PrefabAssociatePanel")]
-    public static void OpenPrefabAssociatePanel()
-    {
-        CreateInstance<PrefabAssociateEditor>().Show();
-    }
-
     private static List<string> firstRowCells;
 
-    private static void ExportJson(string filePath)
+    public static void ExportJson(string filePath)
     {
         if (Path.GetFileName(filePath).StartsWith("~"))
         {

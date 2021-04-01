@@ -6,6 +6,7 @@ namespace MGame.Model
     public class ComponentPoolComponent : Component
     {
         private Dictionary<Type, Queue<Component>> componentDic;
+        private List<int> list = new List<int> { 1, 2, 3, 4, 5 };
 
         public ComponentPoolComponent()
         {

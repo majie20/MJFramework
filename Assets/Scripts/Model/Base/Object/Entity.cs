@@ -1,59 +1,99 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-#if UNITY_EDITOR
-
 using UnityEngine;
-
-#endif
 
 namespace MGame.Model
 {
     public class Entity
     {
-        private Dictionary<Type, Component> componentDic;
+        protected Dictionary<Type, Component> componentDic;
+
+        protected ComponentView componentView;
 
         public long id { set; get; }
-#if UNITY_EDITOR
-        public GameObject GameObject { set; get; }
-        public Transform Transform { set; get; }
         public Entity parent { set; get; }
-#endif
+        public GameObject gameObject { set; get; }
+        public Transform transform { set; get; }
+        public string sign { set; get; }
 
         public Entity()
         {
         }
 
-        public virtual Entity Init()
+        public virtual Entity Init(bool isAB)
         {
             componentDic = new Dictionary<Type, Component>();
-#if UNITY_EDITOR
-            if (!this.GetType().IsDefined(typeof(HideInHierarchyAttribute), true))
+
+            //if (!this.GetType().IsDefined(typeof(HideInHierarchyAttribute), true))
+            //{
+            //}
+
+            gameObject = Game.Instance.ObjectPool.GetGameObjByName(sign, isAB);
+            transform = gameObject.transform;
+
+            if (isAB)
             {
-                GameObject = new GameObject(GetType().Name);
-                Transform = GameObject.transform;
-                Transform.SetParent(parent != null ? parent.Transform : Game.Instance.Transform);
-                //this.gameObject.AddComponent<ComponentView>().Component = this;
+                Transform t = null;
+                if (parent != null)
+                {
+                    var e = parent;
+                    while (true)
+                    {
+                        if (e.transform != null)
+                        {
+                            t = e.transform;
+                            break;
+                        }
+
+                        if (e.parent == null)
+                        {
+                            break;
+                        }
+
+                        e = e.parent;
+                    }
+                }
+
+                transform.SetParent(t ? t : Game.Instance.Transform);
             }
-#endif
+            else
+            {
+                transform.SetParent(Game.Instance.Transform);
+            }
+
+            var component = gameObject.GetComponent<ComponentView>();
+            if (component == null)
+            {
+                componentView = gameObject.AddComponent<ComponentView>();
+            }
+            else
+            {
+                componentView = component;
+            }
+
             return this;
+        }
+
+        public virtual Entity Init()
+        {
+            return Init(true);
         }
 
         public virtual void Dispose()
         {
-            foreach (var value in componentDic.Values)
+            foreach (var component in GetComponents())
             {
-                value.Dispose();
+                RemoveComponent(component);
             }
             componentDic = null;
-#if UNITY_EDITOR
-            if (!this.GetType().IsDefined(typeof(HideInHierarchyAttribute), true))
+
+            if (gameObject != null)
             {
-                Transform = null;
-                UnityEngine.GameObject.Destroy(GameObject);
+                Game.Instance.ObjectPool.RecycleGameObj(sign, gameObject);
+                transform = null;
+                gameObject = null;
             }
-#endif
         }
 
         #region 添加组件
@@ -66,6 +106,7 @@ namespace MGame.Model
                 return componentDic[type];
             }
 
+            AddToComponentView(component);
             componentDic.Add(type, component);
 
             return component;
@@ -79,6 +120,7 @@ namespace MGame.Model
             }
 
             var component = Game.Instance.ObjectPool.FetchComponent(type);
+            AddToComponentView(component);
             componentDic.Add(type, component);
 
             return component;
@@ -87,6 +129,11 @@ namespace MGame.Model
         public T AddComponent<T>() where T : Component
         {
             return (T)AddComponent(typeof(T));
+        }
+
+        private void AddToComponentView(Component component)
+        {
+            componentView.components.Add(component);
         }
 
         #endregion 添加组件
@@ -138,6 +185,7 @@ namespace MGame.Model
             if (componentDic.ContainsKey(type))
             {
                 var component = componentDic[type];
+                RemoveToComponentView(component);
                 componentDic.Remove(type);
                 component.Dispose();
 
@@ -153,6 +201,7 @@ namespace MGame.Model
             Type type = component.GetType();
             if (componentDic.ContainsKey(type))
             {
+                RemoveToComponentView(component);
                 componentDic.Remove(type);
                 component.Dispose();
 
@@ -161,6 +210,11 @@ namespace MGame.Model
             }
 
             return false;
+        }
+
+        private void RemoveToComponentView(Component component)
+        {
+            componentView.components.Remove(component);
         }
 
         #endregion 删除组件

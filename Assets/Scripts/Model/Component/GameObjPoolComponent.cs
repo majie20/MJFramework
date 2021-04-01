@@ -9,10 +9,12 @@ namespace MGame.Model
         /// 对象池中的游戏物体
         /// </summary>
         private Dictionary<string, Queue<GameObject>> gameObjDic;
+
         /// <summary>
         /// 对象池中游戏物体的类别，用于分类游戏物体
         /// </summary>
         private Dictionary<string, Transform> parentDic;
+
         /// <summary>
         /// 对象池的树根
         /// </summary>
@@ -25,14 +27,12 @@ namespace MGame.Model
         public override Component Init()
         {
             base.Init();
+
             gameObjDic = new Dictionary<string, Queue<GameObject>>();
             parentDic = new Dictionary<string, Transform>();
-#if UNITY_EDITOR
-            root = entity.GameObject;
-#else
-            root = new GameObject("ObjectPool");
-#endif
+            root = entity.gameObject;
             root.SetActive(false);
+
             return this;
         }
 
@@ -43,14 +43,14 @@ namespace MGame.Model
             parentDic = null;
         }
 
-        public GameObject GetGameObjByName(string name)
+        public GameObject GetGameObjByName(string name, bool isAB)
         {
             if (gameObjDic.ContainsKey(name))
             {
                 return gameObjDic[name].Dequeue();
             }
 
-            var obj = UnityEngine.Object.Instantiate(Game.Instance.Scene.GetComponent<ABComponent>().GetPrefabByName(name));
+            var obj = isAB ? UnityEngine.Object.Instantiate(Game.Instance.Scene.GetComponent<ABComponent>().GetPrefabByName(name)) : new GameObject(name);
 
             return obj;
         }
