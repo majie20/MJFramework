@@ -31,7 +31,7 @@ public class ListTypeDrawer : ITypeDrawer
             var index = 0;
             foreach (var o in _list)
             {
-                typeDrawer.DrawAndGetNewValue(type, $"element{index}", o, null);
+                typeDrawer.DrawAndGetNewValue(type, $"Element_{index}", o, null);
                 index++;
             }
 

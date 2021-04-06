@@ -50,7 +50,7 @@ public static class ComponentViewHelper
 
             FieldInfo[] fields = _t.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 
-            EditorGUILayout.LabelField($"{_t.FullName}:", new GUIStyle { fontSize = 15 });
+            EditorGUILayout.LabelField($"{_t.FullName}:", new GUIStyle { fontSize = 12 });
 
             foreach (FieldInfo fieldInfo in fields)
             {

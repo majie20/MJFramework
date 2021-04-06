@@ -7,13 +7,18 @@ using UnityEngine;
 
 namespace MGame.Model
 {
+    /// <summary>
+    /// 预制体位置数据
+    /// </summary>
     public class PrefabPlaceData
     {
         public string name;
         public string guid;
         public string abName;
     }
-
+    /// <summary>
+    /// 预制体创建所需数据
+    /// </summary>
     public class PrefabCreateData
     {
         public int index;
@@ -132,12 +137,12 @@ namespace MGame.Model
             Game.Instance.EventSystem.Run<PrefabAssociateDataLoadComplete>();
         }
 
-        public IEnumerable<PrefabCreateData> GetPrefabJsonDatasByName(string name)
+        public List<PrefabCreateData> GetPrefabCreateDataListByName(string name)
         {
             return prefabCreateDic[name];
         }
 
-        public PrefabPlaceData GetPrefabAssociateDataByName(string guid)
+        public PrefabPlaceData GetPrefabPlaceDataByName(string guid)
         {
             return prefabPlaceDic[guid];
         }
