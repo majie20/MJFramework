@@ -1,10 +1,10 @@
 # All files
 [*]
-guidelines = 120
+guidelines = 100
 
 # C# or VB files
 [*.{cs,vb}]
-guidelines = 180
+guidelines = 150
 
 [*]
 # Named color format
