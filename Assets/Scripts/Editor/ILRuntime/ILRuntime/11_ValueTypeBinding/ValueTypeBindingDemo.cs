@@ -80,9 +80,9 @@ public class ValueTypeBindingDemo : MonoBehaviour
         appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
         //这里做一些ILRuntime的注册，这里我们注册值类型Binder，注释和解注下面的代码来对比性能差别
-        appdomain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
-        appdomain.RegisterValueTypeBinder(typeof(Quaternion), new QuaternionBinder());
-        appdomain.RegisterValueTypeBinder(typeof(Vector2), new Vector2Binder());
+        //appdomain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
+        //appdomain.RegisterValueTypeBinder(typeof(Quaternion), new QuaternionBinder());
+        //appdomain.RegisterValueTypeBinder(typeof(Vector2), new Vector2Binder());
     }
 
     void RunTest()

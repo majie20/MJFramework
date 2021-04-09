@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Init : MonoBehaviour
+namespace MGame.Hotfix
 {
-    // Start is called before the first frame update
-    void Start()
+    public static class Init
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public static void Start()
+        {
+            TestComponent testComponent = new TestComponent();
+            Debug.Log($"------{testComponent.value}------"); // MDEBUG:
+            Debug.Log($"------{testComponent.Vector3}------"); // MDEBUG:
+            Debug.Log($"------{testComponent.GameObject}------"); // MDEBUG:
+            Debug.Log($"------{testComponent.Transform}------"); // MDEBUG:
+        }
     }
 }

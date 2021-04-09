@@ -91,7 +91,7 @@ public class MonoBehaviourDemo : MonoBehaviour
 #endif
         //这里做一些ILRuntime的注册
         appdomain.RegisterCrossBindingAdaptor(new MonoBehaviourAdapter());
-        appdomain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
+        //appdomain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
         //ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
     }
 

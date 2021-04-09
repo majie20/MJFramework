@@ -66,6 +66,9 @@ namespace MGame.Model
                 {
                     isComplete = true;
                     Debug.Log($"------完成------");
+                    Game.Instance.Hotfix.LoadHotfixAssembly();
+
+                    Game.Instance.Hotfix.GotoHotfix();
                 }
             }
         }

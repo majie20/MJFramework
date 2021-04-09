@@ -1,5 +1,7 @@
-﻿#if UNITY_EDITOR
+﻿#if UNITY_EDITOR && ILRuntime
 
+using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -14,6 +16,21 @@ public class ILRuntimeCLRBinding
     {
         if (File.Exists(HotfixFilePath))
         {
+            var path = "Assets/Scripts/Model/ILBinding";
+            for (int i = 0; i < path.Length; i++)
+            {
+                if (path[i] == '/')
+                {
+                    var p = path.Substring(0, i + 1);
+                    if (!Directory.Exists(p))
+                    {
+                        Directory.CreateDirectory(p);
+                    }
+                }
+            }
+
+            //GenerateCLRBinding(path);
+
             //用新的分析热更dll调用引用来生成绑定代码
             ILRuntime.Runtime.Enviorment.AppDomain domain = new ILRuntime.Runtime.Enviorment.AppDomain();
             using (FileStream fs = new FileStream(HotfixFilePath, FileMode.Open, FileAccess.Read))
@@ -21,25 +38,11 @@ public class ILRuntimeCLRBinding
                 domain.LoadAssembly(fs);
 
                 //Crossbind Adapter is needed to generate the correct binding code
-                InitILRuntime(domain);
-
-                var path = "Assets/Scripts/Model/ILBinding";
-                for (int i = 0; i < path.Length; i++)
-                {
-                    if (path[i] == '/')
-                    {
-                        var p = path.Substring(0, i + 1);
-                        if (!Directory.Exists(p))
-                        {
-                            Directory.CreateDirectory(p);
-                        }
-                    }
-                }
-
+                MGame.Model.ILHelper.InitILRuntime(domain);
                 ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(domain, path);
             }
-
             AssetDatabase.Refresh();
+
             Debug.Log("自动分析热更DLL生成CLR绑定成功！");
         }
         else
@@ -48,17 +51,32 @@ public class ILRuntimeCLRBinding
         }
     }
 
-    private static void InitILRuntime(ILRuntime.Runtime.Enviorment.AppDomain domain)
+    /// <summary>
+    /// CLR绑定
+    /// </summary>
+    private static void GenerateCLRBinding(string path)
     {
-        // 注册重定向函数
+        List<Type> types = new List<Type>();
+        types.Add(typeof(int));
+        types.Add(typeof(float));
+        types.Add(typeof(long));
+        types.Add(typeof(object));
+        types.Add(typeof(string));
+        types.Add(typeof(Array));
+        types.Add(typeof(Vector2));
+        types.Add(typeof(Vector3));
+        types.Add(typeof(Quaternion));
+        types.Add(typeof(GameObject));
+        types.Add(typeof(UnityEngine.Object));
+        types.Add(typeof(Transform));
+        types.Add(typeof(RectTransform));
+        types.Add(typeof(Time));
+        types.Add(typeof(Debug));
+        //所有DLL内的类型的真实C#类型都是ILTypeInstance
+        types.Add(typeof(List<ILRuntime.Runtime.Intepreter.ILTypeInstance>));
 
-        // 注册委托
-
-        //这里需要注册所有热更DLL中用到的跨域继承Adapter，否则无法正确抓取引用
-        //domain.RegisterCrossBindingAdaptor(new MonoBehaviourAdapter());
-        //domain.RegisterCrossBindingAdaptor(new CoroutineAdapter());
-        //domain.RegisterCrossBindingAdaptor(new TestClassBaseAdapter());
-        //domain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
+        ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(types, path);
+        AssetDatabase.Refresh();
     }
 }
 

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
 #if ILRuntime
+
 using System.IO;
+
 #else
 using System;
 using System.Reflection;
@@ -28,6 +30,22 @@ namespace MGame.Model
 
         public void Dispose()
         {
+#if ILRuntime
+            dllStream?.Close();
+            pdbStream?.Close();
+            dllStream = null;
+            pdbStream = null;
+#else
+
+#endif
+        }
+
+        public void GotoHotfix()
+        {
+#if ILRuntime
+            ILHelper.InitILRuntime(this.appDomain);
+#endif
+            this.start.Run();
         }
 
         public void LoadHotfixAssembly()
@@ -47,15 +65,17 @@ namespace MGame.Model
 #if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
             //由于Unity的Profiler接口只允许在主线程使用，为了避免出异常，需要告诉ILRuntime主线程的线程ID才能正确将函数运行耗时报告给Profiler
             appDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
+
+            appDomain.DebugService.StartDebugService(56000);
 #endif
 
-            this.start = new ILStaticMethod(this.appDomain, "ETHotfix.Init", "Start", 0);
+            this.start = new ILStaticMethod(this.appDomain, "MGame.Hotfix.Init", "Start", 0);
 #else
             Debug.Log($"当前使用的是Mono模式");
 
             this.assembly = Assembly.Load(assBytes, pdbBytes);
 
-            Type hotfixInit = this.assembly.GetType("ETHotfix.Init");
+            Type hotfixInit = this.assembly.GetType("MGame.Hotfix.Init");
             this.start = new MonoStaticMethod(hotfixInit, "Start");
 #endif
         }
