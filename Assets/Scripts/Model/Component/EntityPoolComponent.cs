@@ -24,12 +24,12 @@ namespace MGame.Model
             entityDic = null;
         }
 
-        public T GetEntity<T>() where T : Entity, new()
+        public T HatchEntity<T>() where T : Entity, new()
         {
-            return (T)GetEntity(typeof(T));
+            return (T)HatchEntity(typeof(T));
         }
 
-        public Entity GetEntity(Type type)
+        public Entity HatchEntity(Type type)
         {
             if (entityDic.ContainsKey(type))
             {

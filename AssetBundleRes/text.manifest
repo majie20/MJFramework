@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3077786839
+CRC: 4287328019
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 872a4f209a5536c0e7b597413d56f0a2
+    Hash: ae5c86023a983ce351fc8f963460e736
   TypeTreeHash:
     serializedVersion: 2
     Hash: baedefce1c3a59ef8a9442af500734c4
@@ -19,6 +19,7 @@ ClassTypes:
   Script: {fileID: 11500000, guid: e903585689a898d4685c955a47f28a59, type: 3}
 - Class: 115
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Res/Text/Hotfix.dll.bytes
 - Assets/Res/Text/TextReferenceCollector.prefab

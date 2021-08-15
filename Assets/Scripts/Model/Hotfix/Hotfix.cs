@@ -15,6 +15,8 @@ namespace MGame.Model
     {
 #if ILRuntime
         private ILRuntime.Runtime.Enviorment.AppDomain appDomain;
+        public ILRuntime.Runtime.Enviorment.AppDomain AppDomain { get; }
+
         private MemoryStream dllStream;
         private MemoryStream pdbStream;
 #else

@@ -11,73 +11,99 @@ namespace MGame.Model
 
         protected ComponentView componentView;
 
-        public long id { set; get; }
-        public Entity parent { set; get; }
-        public GameObject gameObject { set; get; }
-        public Transform transform { set; get; }
-        public string sign { set; get; }
+        private Entity parent;
+
+        public Entity Parent
+        {
+            set
+            {
+                parent = value;
+            }
+            get
+            {
+                return parent;
+            }
+        }
+
+        private GameObject gameObject;
+
+        public GameObject GameObject
+        {
+            set
+            {
+                gameObject = value;
+            }
+            get
+            {
+                return gameObject;
+            }
+        }
+
+        private Transform transform;
+
+        public Transform Transform
+        {
+            set
+            {
+                transform = value;
+            }
+            get
+            {
+                return transform;
+            }
+        }
+
+        private string sign;
+
+        public string Sign
+        {
+            set
+            {
+                sign = value;
+            }
+            get
+            {
+                return sign;
+            }
+        }
 
         public Entity()
         {
         }
 
-        public virtual Entity Init(bool isAB)
+        public virtual void Init()
         {
             componentDic = new Dictionary<Type, Component>();
+        }
 
-            //if (!this.GetType().IsDefined(typeof(HideInHierarchyAttribute), true))
-            //{
-            //}
+        public virtual Entity Init(bool isAB, string sign, Entity parent)
+        {
+            Init();
 
-            gameObject = Game.Instance.ObjectPool.GetGameObjByName(sign, isAB);
-            transform = gameObject.transform;
-
+            GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, isAB);
             if (isAB)
             {
-                Transform t = null;
-                if (parent != null)
-                {
-                    var e = parent;
-                    while (true)
-                    {
-                        if (e.transform != null)
-                        {
-                            t = e.transform;
-                            break;
-                        }
-
-                        if (e.parent == null)
-                        {
-                            break;
-                        }
-
-                        e = e.parent;
-                    }
-                }
-
-                transform.SetParent(t ? t : Game.Instance.Transform);
+                this.Sign = sign;
             }
             else
             {
-                transform.SetParent(Game.Instance.Transform);
+                this.Sign = "OrdinaryGameObject";
+                GameObject.name = sign;
             }
 
-            var component = gameObject.GetComponent<ComponentView>();
-            if (component == null)
-            {
-                componentView = gameObject.AddComponent<ComponentView>();
-            }
-            else
-            {
-                componentView = component;
-            }
+            Transform = GameObject.transform;
+            Transform.SetParent(parent.Transform);
+
+            AddComponentView();
 
             return this;
         }
 
-        public virtual Entity Init()
+        protected void AddComponentView()
         {
-            return Init(true);
+            var component = GameObject.GetComponent<Model.ComponentView>();
+            componentView = component == null ? GameObject.AddComponent<Model.ComponentView>() : component;
+            componentView.isHotfix = false;
         }
 
         public virtual void Dispose()
@@ -88,11 +114,11 @@ namespace MGame.Model
             }
             componentDic = null;
 
-            if (gameObject != null)
+            if (GameObject != null)
             {
-                Game.Instance.ObjectPool.RecycleGameObj(sign, gameObject);
-                transform = null;
-                gameObject = null;
+                Game.Instance.ObjectPool.RecycleGameObj(Sign, GameObject);
+                Transform = null;
+                GameObject = null;
             }
         }
 
@@ -119,7 +145,7 @@ namespace MGame.Model
                 return componentDic[type];
             }
 
-            var component = Game.Instance.ObjectPool.FetchComponent(type);
+            var component = Game.Instance.ObjectPool.HatchComponent(type);
             AddToComponentView(component);
             componentDic.Add(type, component);
 
@@ -133,7 +159,7 @@ namespace MGame.Model
 
         private void AddToComponentView(Component component)
         {
-            componentView.components.Add(component);
+            componentView.dic.Add(component, component.GetType());
         }
 
         #endregion 添加组件
@@ -214,7 +240,7 @@ namespace MGame.Model
 
         private void RemoveToComponentView(Component component)
         {
-            componentView.components.Remove(component);
+            componentView.dic.Remove(component);
         }
 
         #endregion 删除组件

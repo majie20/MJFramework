@@ -24,12 +24,12 @@ namespace MGame.Model
             componentDic = null;
         }
 
-        public T FetchComponent<T>() where T : Component
+        public T HatchComponent<T>() where T : Component
         {
-            return (T)FetchComponent(typeof(T));
+            return (T)HatchComponent(typeof(T));
         }
 
-        public Component FetchComponent(Type type)
+        public Component HatchComponent(Type type)
         {
             if (componentDic.ContainsKey(type))
             {

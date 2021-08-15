@@ -1,19 +1,29 @@
-﻿using UnityEngine;
+﻿using MGame.Model;
+using UnityEngine;
 
 namespace MGame.Hotfix
 {
-    public class TestComponent
+    public class TestComponent : Component
     {
-        public int value = 10101;
-        public GameObject GameObject;
-        public Transform Transform;
-        public Vector3 Vector3;
+        private BodyConstructor bodyConstructor;
 
         public TestComponent()
         {
-            GameObject = new GameObject("aaa");
-            Transform = GameObject.transform;
-            Vector3 = Transform.position;
+        }
+
+        public override Component Init()
+        {
+            base.Init();
+
+            bodyConstructor = Entity.Transform.GetComponent<BodyConstructor>();
+            bodyConstructor.Assemble(Entity.Sign);
+
+            return this;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
         }
     }
 }

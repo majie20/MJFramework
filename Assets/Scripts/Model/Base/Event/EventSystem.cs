@@ -36,13 +36,20 @@ namespace MGame.Model
                 return null;
             }
 
-            if (model == null)
+            return model;
+        }
+
+        public int GetEventModelCount<T1>() where T1 : UnityEventBase, new()
+        {
+            Type type = typeof(T1);
+
+            if (!allEventDic.TryGetValue(type.Name, out EventModel model))
             {
-                Debug.LogWarning($"{type.Name}此事件为Null");
-                return null;
+                Debug.LogWarning($"{type.Name}此事件没有注册过");
+                return 0;
             }
 
-            return model;
+            return model.count;
         }
 
         #region 添加
@@ -89,11 +96,11 @@ namespace MGame.Model
         private bool Remove<T1>(out T1 t) where T1 : UnityEventBase, new()
         {
             var model = GetEventModel<T1>();
-            if (model != null && model.count > 0)
+            if (model != null)
             {
                 model.count--;
                 t = (T1)model.item;
-                if (model.count == 0)
+                if (model.count <= 0)
                 {
                     allEventDic.Remove(typeof(T1).Name);
                 }

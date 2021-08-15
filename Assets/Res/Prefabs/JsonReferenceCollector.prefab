@@ -43,4 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e903585689a898d4685c955a47f28a59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: []
+  data:
+  - key: Cylinder
+    gameObject: {fileID: 4900000, guid: a7fb5a4d8c290e347ba9ba30e4226ee1, type: 3}
+  - key: Cube
+    gameObject: {fileID: 4900000, guid: 83c4b85374d74ce4daa3f9b0efa22ef2, type: 3}

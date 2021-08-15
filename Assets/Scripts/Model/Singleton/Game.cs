@@ -19,15 +19,15 @@ namespace MGame.Model
         {
             base.Init();
 
-            GameObject = Object.FindObjectOfType<Init>().gameObject;
-            Object.DontDestroyOnLoad(GameObject);
+            GameObject = new GameObject("Model");
             Transform = GameObject.transform;
+            Object.DontDestroyOnLoad(GameObject);
 
             EventSystem = new EventSystem().Init();
 
-            ObjectPool = new ObjectPool().Init(false) as ObjectPool;
+            ObjectPool = new ObjectPool().Init("ObjectPool", Transform) as ObjectPool;
 
-            Scene = new Scene().Init(false) as Scene;
+            Scene = new Scene().Init("Scene", Transform) as Scene;
 
             Hotfix = new Hotfix().Init();
         }

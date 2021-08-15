@@ -12,7 +12,7 @@ namespace MGame.Model
         private void Awake()
         {
             Game.Instance.Init();
-            StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>().LoadAssetBundleManifestByIO("./AssetBundleRes/AssetBundleRes"));
+            StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>().LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
             //StartCoroutine(ABMgr.Instance.LoadAssetBundleManifestByUWR("http://localhost/AssetBundleRes/AssetBundleRes"));
             //ABMgr.Instance.LoadAssetBundleManifestByIOAsync("./AssetBundleRes/AssetBundleRes");
         }
@@ -33,8 +33,8 @@ namespace MGame.Model
         {
             //if (Input.GetKeyDown(KeyCode.A))
             //{
-            //    cube = Game.Instance.ObjectPool.GetGameObjByName("Cube");
-            //    cube.transform.SetParent(null);
+            //    cube = Game.Instance.ObjectPool.HatchGameObjByName("Cube");
+            //    cube.Transform.SetParent(null);
             //    cube.SetActive(true);
             //    cube.GetComponent<BodyManageComponent>()?.Assemble("Cube");
             //}

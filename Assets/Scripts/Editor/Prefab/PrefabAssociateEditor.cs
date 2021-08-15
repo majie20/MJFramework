@@ -67,11 +67,6 @@ public class PrefabAssociateEditor : EditorWindow
     public GameObject targetObj;
     public List<PrefabAssociateEditorData> paDatas = new List<PrefabAssociateEditorData>();
 
-    /// <summary>
-    /// 放入面板中要操作的游戏物体的json数据，里面记录了子物体的基本信息
-    /// </summary>
-    private List<PrefabCreateJsonEditorData> pcJsonDatas;
-
     private SerializedObject serObj;
     private SerializedProperty targetSerPro;
     private SerializedProperty paDatasSerPro;
@@ -161,122 +156,11 @@ public class PrefabAssociateEditor : EditorWindow
                     parentTran = GameObject.FindObjectOfType<Canvas>().transform;
                 }
                 instanceTargetObj = PrefabUtility.InstantiatePrefab(targetSerPro.objectReferenceValue, parentTran) as GameObject;
-                paDatasSerPro.ClearArray();
-                paDatas = new List<PrefabAssociateEditorData>();
-                var jsonPath = GetPrefabJsonDataPath(targetSerPro.objectReferenceValue);
-                if (File.Exists(jsonPath))
-                {
-                    pcJsonDatas = new List<PrefabCreateJsonEditorData>();
-                    using (FileStream fs = File.OpenRead(jsonPath))
-                    {
-                        using (var sr = new StreamReader(fs))
-                        {
-                            var reader = new JsonTextReader(sr);
-                            var datas = JToken.ReadFrom(reader);
-
-                            for (int i = 0; i < datas.Count(); i++)
-                            {
-                                AddAssociate(datas[i]);
-                            }
-                        }
-                    }
-                    pcJsonDatas.Sort(((d1, d2) =>
-                    {
-                        if (d1.index < d2.index) return -1;
-                        return 1;
-                    }));
-
-                    for (int i = 0; i < pcJsonDatas.Count; i++)
-                    {
-                        var d = pcJsonDatas[i];
-                        d.sp.objectReferenceValue = CreateChildObj(d.obj, d.name, d.tag, d.layer, d.parentPath, d.isDisplay, d.localPosition, d.localEulerAngles, d.localScale);
-                    }
-
-                    pcJsonDatas = null;
-                }
+                ReadDataFile();
             }
         }
+        GenerateDataFile();
 
-        if (GUILayout.Button("生成数据文件"))
-        {
-            if (paDatas.Count == 0)
-            {
-                Debug.LogWarning($"预制体[{targetObj.name}]没有数据要生成!");
-            }
-            else
-            {
-                var trans = instanceTargetObj.GetComponentsInChildren<Transform>(true);
-
-                using (FileStream fs = File.Create(GetPrefabJsonDataPath(targetObj)))
-                {
-                    using (StreamWriter sw = new StreamWriter(fs))
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        sb.Append("[");
-                        for (int i = 0; i < paDatas.Count; i++)
-                        {
-                            var data1 = paDatas[i];
-                            if (data1.obj == null)
-                                continue;
-                            sb.Append("{");
-                            sb.Append($"\"name\":\"{data1.obj.name}\",");
-                            var path = AssetDatabase.GetAssetPath(data1.obj);
-                            sb.Append($"\"guid\":\"{AssetDatabase.AssetPathToGUID(path)}\",");
-                            sb.Append($"\"abName\":\"{AssetDatabase.GetImplicitAssetBundleName(path)}\",");
-                            sb.Append("\"datas\":[");
-                            for (int j = 0; j < data1.datas.Count; j++)
-                            {
-                                var data2 = data1.datas[j];
-                                sb.Append("{");
-                                for (int k = 1; k < trans.Length; k++)
-                                {
-                                    if (trans[k] == data2.createObj.transform)
-                                    {
-                                        sb.Append($"\"index\":{k},");
-                                        break;
-                                    }
-                                }
-                                sb.Append($"\"name\":\"{data2.name}\",");
-                                sb.Append($"\"tag\":\"{data2.tag}\",");
-                                sb.Append($"\"layer\":\"{data2.layer}\",");
-                                sb.Append($"\"parentPath\":\"{data2.parentPath}\",");
-                                sb.Append($"\"isDisplay\":{data2.isDisplay.ToString().ToLower()},");
-                                sb.Append($"\"localPositionX\":{data2.localPosition.x},");
-                                sb.Append($"\"localPositionY\":{data2.localPosition.y},");
-                                sb.Append($"\"localPositionZ\":{data2.localPosition.z},");
-                                sb.Append($"\"localEulerAnglesX\":{data2.localEulerAngles.x},");
-                                sb.Append($"\"localEulerAnglesY\":{data2.localEulerAngles.y},");
-                                sb.Append($"\"localEulerAnglesZ\":{data2.localEulerAngles.z},");
-                                sb.Append($"\"localScaleX\":{data2.localScale.x},");
-                                sb.Append($"\"localScaleY\":{data2.localScale.y},");
-                                sb.Append($"\"localScaleZ\":{data2.localScale.z}");
-                                if (j == data1.datas.Count - 1)
-                                {
-                                    sb.Append("}");
-                                }
-                                else
-                                {
-                                    sb.Append("},");
-                                }
-                            }
-                            sb.Append("]");
-                            if (i == paDatas.Count - 1)
-                            {
-                                sb.Append("}");
-                            }
-                            else
-                            {
-                                sb.Append("},");
-                            }
-                        }
-                        sb.Append("]");
-                        sw.Write(sb);
-                    }
-                }
-
-                Debug.Log($"预制体[{targetObj.name}]生成数据文件成功!");
-            }
-        }
         GUILayout.EndHorizontal();
 
         GUILayout.Space(10);
@@ -484,13 +368,13 @@ public class PrefabAssociateEditor : EditorWindow
     /// <summary>
     /// 添加元素
     /// </summary>
-    /// <param name="jobj"></param>
-    private void AddAssociate(JToken jobj)
+    /// <param name="jObj"></param>
+    private void AddAssociate(JToken jObj, ref List<PrefabCreateJsonEditorData> pcJsonDatas)
     {
-        var obj = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(jobj["guid"].ToString()));
+        var obj = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(jObj["guid"].ToString()));
         var sp = AddAssociate(obj);
         var spDatas = sp.FindPropertyRelative("datas");
-        var datas = jobj["datas"];
+        var datas = jObj["datas"];
         for (int i = 0; i < datas.Count(); i++)
         {
             var d = datas[i];
@@ -594,5 +478,124 @@ public class PrefabAssociateEditor : EditorWindow
         }
 
         return element;
+    }
+
+    private void GenerateDataFile()
+    {
+        if (GUILayout.Button("生成数据文件"))
+        {
+            if (paDatas.Count == 0)
+            {
+                Debug.LogWarning($"预制体[{targetObj.name}]没有数据要生成!");
+            }
+            else
+            {
+                var trans = instanceTargetObj.GetComponentsInChildren<Transform>(true);
+
+                using (FileStream fs = File.Create(GetPrefabJsonDataPath(targetObj)))
+                {
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("[");
+                        for (int i = 0; i < paDatas.Count; i++)
+                        {
+                            var data1 = paDatas[i];
+                            if (data1.obj == null)
+                                continue;
+                            sb.Append("{");
+                            sb.Append($"\"name\":\"{data1.obj.name}\",");
+                            var path = AssetDatabase.GetAssetPath(data1.obj);
+                            sb.Append($"\"guid\":\"{AssetDatabase.AssetPathToGUID(path)}\",");
+                            sb.Append($"\"abName\":\"{AssetDatabase.GetImplicitAssetBundleName(path)}\",");
+                            sb.Append("\"datas\":[");
+                            for (int j = 0; j < data1.datas.Count; j++)
+                            {
+                                var data2 = data1.datas[j];
+                                sb.Append("{");
+                                for (int k = 1; k < trans.Length; k++)
+                                {
+                                    if (trans[k] == data2.createObj.transform)
+                                    {
+                                        sb.Append($"\"index\":{k},");
+                                        break;
+                                    }
+                                }
+                                sb.Append($"\"name\":\"{data2.name}\",");
+                                sb.Append($"\"tag\":\"{data2.tag}\",");
+                                sb.Append($"\"layer\":\"{data2.layer}\",");
+                                sb.Append($"\"parentPath\":\"{data2.parentPath}\",");
+                                sb.Append($"\"isDisplay\":{data2.isDisplay.ToString().ToLower()},");
+                                sb.Append($"\"localPositionX\":{data2.localPosition.x},");
+                                sb.Append($"\"localPositionY\":{data2.localPosition.y},");
+                                sb.Append($"\"localPositionZ\":{data2.localPosition.z},");
+                                sb.Append($"\"localEulerAnglesX\":{data2.localEulerAngles.x},");
+                                sb.Append($"\"localEulerAnglesY\":{data2.localEulerAngles.y},");
+                                sb.Append($"\"localEulerAnglesZ\":{data2.localEulerAngles.z},");
+                                sb.Append($"\"localScaleX\":{data2.localScale.x},");
+                                sb.Append($"\"localScaleY\":{data2.localScale.y},");
+                                sb.Append($"\"localScaleZ\":{data2.localScale.z}");
+                                if (j == data1.datas.Count - 1)
+                                {
+                                    sb.Append("}");
+                                }
+                                else
+                                {
+                                    sb.Append("},");
+                                }
+                            }
+                            sb.Append("]");
+                            if (i == paDatas.Count - 1)
+                            {
+                                sb.Append("}");
+                            }
+                            else
+                            {
+                                sb.Append("},");
+                            }
+                        }
+                        sb.Append("]");
+                        sw.Write(sb);
+                    }
+                }
+
+                Debug.Log($"预制体[{targetObj.name}]生成数据文件成功!");
+            }
+        }
+    }
+
+    private void ReadDataFile()
+    {
+        paDatasSerPro.ClearArray();
+        paDatas = new List<PrefabAssociateEditorData>();
+        var jsonPath = GetPrefabJsonDataPath(targetSerPro.objectReferenceValue);
+        if (File.Exists(jsonPath))
+        {
+            var pcJsonDatas = new List<PrefabCreateJsonEditorData>();
+            using (FileStream fs = File.OpenRead(jsonPath))
+            {
+                using (var sr = new StreamReader(fs))
+                {
+                    var reader = new JsonTextReader(sr);
+                    var datas = JToken.ReadFrom(reader);
+
+                    for (int i = 0; i < datas.Count(); i++)
+                    {
+                        AddAssociate(datas[i], ref pcJsonDatas);
+                    }
+                }
+            }
+            pcJsonDatas.Sort(((d1, d2) =>
+            {
+                if (d1.index < d2.index) return -1;
+                return 1;
+            }));
+
+            for (int i = 0; i < pcJsonDatas.Count; i++)
+            {
+                var d = pcJsonDatas[i];
+                d.sp.objectReferenceValue = CreateChildObj(d.obj, d.name, d.tag, d.layer, d.parentPath, d.isDisplay, d.localPosition, d.localEulerAngles, d.localScale);
+            }
+        }
     }
 }

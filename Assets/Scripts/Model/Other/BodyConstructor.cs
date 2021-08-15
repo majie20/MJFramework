@@ -7,6 +7,7 @@ namespace MGame.Model
     {
         private string originName;
         private Dictionary<GameObject, string> subObjDic;
+        private List<BodyConstructor> bodyConstructorList;
 
         /// <summary>
         /// 组合
@@ -16,6 +17,7 @@ namespace MGame.Model
         {
             originName = name;
             subObjDic = new Dictionary<GameObject, string>();
+            bodyConstructorList = new List<BodyConstructor>();
             var pcDataList = Game.Instance.Scene.GetComponent<PrefabAssociateComponent>().GetPrefabCreateDataListByName(originName);
             foreach (var pcData in pcDataList)
             {
@@ -30,7 +32,7 @@ namespace MGame.Model
         {
             var parentPath = pcData.parentPath;
             var subName = Game.Instance.Scene.GetComponent<PrefabAssociateComponent>().GetPrefabPlaceDataByName(pcData.guid).name;
-            var subObj = Game.Instance.ObjectPool.GetGameObjByName(subName, true);
+            var subObj = Game.Instance.ObjectPool.HatchGameObjByName(subName, true);
 
             subObj.transform.SetParent(string.IsNullOrEmpty(parentPath) ? transform : transform.Find(parentPath));
             subObj.name = pcData.name;
@@ -40,9 +42,14 @@ namespace MGame.Model
             subObj.transform.localEulerAngles = pcData.localEulerAngles;
             subObj.transform.localScale = pcData.localScale;
             subObj.SetActive(pcData.isDisplay);
-            subObj.GetComponent<BodyConstructor>()?.Assemble(subName);
+            var component = subObj.GetComponent<BodyConstructor>();
+            if (component != null)
+            {
+                bodyConstructorList.Add(component);
+                component.Assemble(subName);
+            }
 
-            AddIn(subName, subObj);
+            subObjDic.Add(subObj, subName);
         }
 
         /// <summary>
@@ -63,12 +70,18 @@ namespace MGame.Model
         /// </summary>
         public void Smash()
         {
+            for (int i = 0; i < bodyConstructorList.Count; i++)
+            {
+                bodyConstructorList[i].Smash();
+            }
+
             foreach (var key in subObjDic.Keys)
             {
                 Separate(key);
             }
 
             subObjDic = null;
+            bodyConstructorList = null;
             Game.Instance.ObjectPool.RecycleGameObj(originName, gameObject);
         }
 
@@ -77,7 +90,6 @@ namespace MGame.Model
         /// </summary>
         public void Separate(GameObject obj)
         {
-            obj.GetComponent<BodyConstructor>()?.Smash();
             Game.Instance.ObjectPool.RecycleGameObj(subObjDic[obj], obj);
         }
 

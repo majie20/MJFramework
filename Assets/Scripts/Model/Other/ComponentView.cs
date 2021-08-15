@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MGame.Model
 {
     public class ComponentView : MonoBehaviour
     {
-        public List<Component> components = new List<Component>();
+        public bool isHotfix { set; get; }
+        public Dictionary<object, Type> dic = new Dictionary<object, Type>();
     }
 }

@@ -6,11 +6,10 @@ namespace MGame.Hotfix
     {
         public static void Start()
         {
-            TestComponent testComponent = new TestComponent();
-            Debug.Log($"------{testComponent.value}------"); // MDEBUG:
-            Debug.Log($"------{testComponent.Vector3}------"); // MDEBUG:
-            Debug.Log($"------{testComponent.GameObject}------"); // MDEBUG:
-            Debug.Log($"------{testComponent.Transform}------"); // MDEBUG:
+            Game.Instance.Init();
+
+            var test = new Entity().Init(true, "Cylinder", Game.Instance.Scene);
+            test.AddComponent<TestComponent>().Init(test);
         }
     }
 }

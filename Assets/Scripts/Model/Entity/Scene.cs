@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MGame.Model
 {
@@ -11,15 +9,15 @@ namespace MGame.Model
         {
         }
 
-        public override Entity Init(bool isAB)
+        public Entity Init(string name, Transform parent)
         {
-            componentDic = new Dictionary<Type, Component>();
+            Init();
 
-            gameObject = new GameObject(GetType().Name);
-            transform = gameObject.transform;
-            transform.SetParent(Game.Instance.Transform);
+            GameObject = new GameObject(name);
+            Transform = GameObject.transform;
+            Transform.SetParent(parent);
 
-            componentView = gameObject.AddComponent<ComponentView>();
+            AddComponentView();
 
             AddComponent(new ABComponent().Init(this));
             AddComponent(new PrefabAssociateComponent().Init(this));
@@ -36,9 +34,9 @@ namespace MGame.Model
             }
             componentDic = null;
 
-            UnityEngine.Object.Destroy(gameObject);
-            transform = null;
-            gameObject = null;
+            UnityEngine.Object.Destroy(GameObject);
+            Transform = null;
+            GameObject = null;
         }
     }
 }

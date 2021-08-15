@@ -13,10 +13,11 @@ public class ComponentViewEditor : Editor
         EditorGUILayout.BeginVertical();
 
         ComponentView componentView = (ComponentView)target;
-        var components = componentView.components;
-        for (int i = 0; i < components.Count; i++)
+        var dic = componentView.dic;
+
+        foreach (var v in dic)
         {
-            ComponentViewHelper.Draw(components[i]);
+            ComponentViewHelper.Draw(v, componentView.isHotfix);
         }
 
         EditorGUILayout.EndVertical();
@@ -42,15 +43,17 @@ public static class ComponentViewHelper
         }
     }
 
-    public static void Draw(MGame.Model.Component obj)
+    public static void Draw(KeyValuePair<object, Type> obj, bool isHotfix)
     {
         try
         {
-            var _t = obj.GetType();
+            EditorGUILayout.LabelField($"{obj.Value.FullName}:", new GUIStyle { fontSize = 12 });
 
-            FieldInfo[] fields = _t.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-
-            EditorGUILayout.LabelField($"{_t.FullName}:", new GUIStyle { fontSize = 12 });
+            if (isHotfix)
+            {
+                return;
+            }
+            FieldInfo[] fields = obj.Value.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 
             foreach (FieldInfo fieldInfo in fields)
             {
@@ -65,7 +68,7 @@ public static class ComponentViewHelper
                     continue;
                 }
 
-                object value = fieldInfo.GetValue(obj);
+                object value = fieldInfo.GetValue(obj.Key);
 
                 for (int i = 0; i < typeDrawers.Count; i++)
                 {

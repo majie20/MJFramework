@@ -2,9 +2,19 @@
 {
     public class Component
     {
-        public long id { set; get; }
+        private Entity entity;
 
-        public Entity entity { set; get; }
+        public Entity Entity
+        {
+            set
+            {
+                entity = value;
+            }
+            get
+            {
+                return entity;
+            }
+        }
 
         public virtual Component Init()
         {
@@ -13,13 +23,13 @@
 
         public virtual Component Init(Entity entity)
         {
-            this.entity = entity;
+            this.Entity = entity;
             return Init();
         }
 
         public virtual void Dispose()
         {
-            entity = null;
+            Entity = null;
         }
     }
 }

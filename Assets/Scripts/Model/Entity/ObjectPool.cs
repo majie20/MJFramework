@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MGame.Model
@@ -11,15 +10,16 @@ namespace MGame.Model
         {
         }
 
-        public override Entity Init(bool isAB)
+        public Entity Init(string name, Transform parent)
         {
-            componentDic = new Dictionary<Type, Component>();
+            Init();
 
-            gameObject = new GameObject(GetType().Name);
-            transform = gameObject.transform;
-            transform.SetParent(Game.Instance.Transform);
+            GameObject = new GameObject(name);
+            Transform = GameObject.transform;
+            Transform.SetParent(parent);
+            GameObject.SetActive(false);
 
-            componentView = gameObject.AddComponent<ComponentView>();
+            AddComponentView();
 
             AddComponent(new ComponentPoolComponent().Init(this));
             AddComponent(new GameObjPoolComponent().Init(this));
@@ -36,21 +36,21 @@ namespace MGame.Model
             }
             componentDic = null;
 
-            UnityEngine.Object.Destroy(gameObject);
-            transform = null;
-            gameObject = null;
+            UnityEngine.Object.Destroy(GameObject);
+            Transform = null;
+            GameObject = null;
         }
 
         #region Entity
 
-        public T GetEntity<T>() where T : Entity, new()
+        public T HatchEntity<T>() where T : Entity, new()
         {
-            return GetComponent<EntityPoolComponent>().GetEntity<T>();
+            return GetComponent<EntityPoolComponent>().HatchEntity<T>();
         }
 
-        public Entity GetEntity(Type type)
+        public Entity HatchEntity(Type type)
         {
-            return GetComponent<EntityPoolComponent>().GetEntity(type);
+            return GetComponent<EntityPoolComponent>().HatchEntity(type);
         }
 
         public void RecycleEntity(Entity entity)
@@ -62,9 +62,9 @@ namespace MGame.Model
 
         #region 游戏物体
 
-        public GameObject GetGameObjByName(string name, bool isAB)
+        public GameObject HatchGameObjByName(string name, bool isAB)
         {
-            return GetComponent<GameObjPoolComponent>().GetGameObjByName(name, isAB);
+            return GetComponent<GameObjPoolComponent>().HatchGameObjByName(name, isAB);
         }
 
         public void RecycleGameObj(string sign, GameObject obj)
@@ -76,14 +76,14 @@ namespace MGame.Model
 
         #region 组件
 
-        public T FetchComponent<T>() where T : Component, new()
+        public T HatchComponent<T>() where T : Component, new()
         {
-            return GetComponent<ComponentPoolComponent>().FetchComponent<T>();
+            return GetComponent<ComponentPoolComponent>().HatchComponent<T>();
         }
 
-        public Component FetchComponent(Type type)
+        public Component HatchComponent(Type type)
         {
-            return GetComponent<ComponentPoolComponent>().FetchComponent(type);
+            return GetComponent<ComponentPoolComponent>().HatchComponent(type);
         }
 
         public void RecycleComponent(Component component)

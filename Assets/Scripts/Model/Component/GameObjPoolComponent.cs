@@ -30,8 +30,7 @@ namespace MGame.Model
 
             gameObjDic = new Dictionary<string, Queue<GameObject>>();
             parentDic = new Dictionary<string, Transform>();
-            root = entity.gameObject;
-            root.SetActive(false);
+            root = Entity.GameObject;
 
             return this;
         }
@@ -43,7 +42,7 @@ namespace MGame.Model
             parentDic = null;
         }
 
-        public GameObject GetGameObjByName(string name, bool isAB)
+        public GameObject HatchGameObjByName(string name, bool isAB)
         {
             if (gameObjDic.ContainsKey(name))
             {
