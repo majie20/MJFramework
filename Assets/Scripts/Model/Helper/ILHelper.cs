@@ -1,7 +1,4 @@
-﻿using ILRuntime.Runtime.Intepreter;
-using System.Collections.Generic;
-
-namespace MGame.Model
+﻿namespace MGame.Model
 {
     public static class ILHelper
     {
@@ -10,15 +7,38 @@ namespace MGame.Model
             // 注册重定向函数
 
             // 注册委托
-            appdomain.DelegateManager.RegisterMethodDelegate<List<object>>();
-            appdomain.DelegateManager.RegisterMethodDelegate<ILTypeInstance>();
+
+            appdomain.DelegateManager.RegisterMethodDelegate<float>();
+
+            appdomain.DelegateManager.RegisterDelegateConvertor<EventDelegateParams>((action) =>
+            {
+                return new EventDelegateParams((a) =>
+                {
+                    ((System.Action<object[]>)action)(a);
+                });
+            });
+            appdomain.DelegateManager.RegisterDelegateConvertor<GameUpdate>((action) =>
+            {
+                return new GameUpdate((a) =>
+                {
+                    ((System.Action<float>)action)(a);
+                });
+            });
+            appdomain.DelegateManager.RegisterDelegateConvertor<GameLateUpdate>((action) =>
+            {
+                return new GameLateUpdate(() => { ((System.Action)action)(); });
+            });
+            appdomain.DelegateManager.RegisterDelegateConvertor<GameApplicationQuit>((action) =>
+            {
+                return new GameApplicationQuit(() => { ((System.Action)action)(); });
+            });
 
             ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
 
             // 注册适配器
 
             //这里需要注册所有热更DLL中用到的跨域继承Adapter，否则无法正确抓取引用
-            //domain.RegisterCrossBindingAdaptor(new MonoBehaviourAdapter());
+            //appdomain.RegisterCrossBindingAdaptor(new EventDelegateParams());
             //domain.RegisterCrossBindingAdaptor(new CoroutineAdapter());
             //domain.RegisterCrossBindingAdaptor(new TestClassBaseAdapter());
             //domain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());

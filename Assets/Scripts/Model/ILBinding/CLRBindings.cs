@@ -23,6 +23,11 @@ namespace ILRuntime.Runtime.Generated
         public static void Initialize(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
             System_Collections_Generic_Dictionary_2_String_ILTypeInstance_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_Object_Action_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_Object_Action_Binding_ValueCollection_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_Object_Action_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
+            System_Action_Binding.Register(app);
+            System_IDisposable_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_ILTypeInstance_Binding.Register(app);
             UnityEngine_Object_Binding.Register(app);
             UnityEngine_GameObject_Binding.Register(app);
@@ -31,7 +36,6 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_IEnumerable_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_IEnumerator_1_ILTypeInstance_Binding.Register(app);
             System_Collections_IEnumerator_Binding.Register(app);
-            System_IDisposable_Binding.Register(app);
             System_Object_Binding.Register(app);
             System_Type_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Type_Binding.Register(app);
@@ -48,10 +52,11 @@ namespace ILRuntime.Runtime.Generated
             MGame_Model_ABComponent_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_ILTypeInstance_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_ILTypeInstance_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
+            MGame_Model_Hotfix_Binding.Register(app);
+            UnityEngine_Debug_Binding.Register(app);
             UnityEngine_Component_Binding.Register(app);
             MGame_Model_BodyConstructor_Binding.Register(app);
             System_Reflection_CustomAttributeExtensions_Binding.Register(app);
-            System_Action_Binding.Register(app);
             DG_Tweening_DOTween_Binding.Register(app);
             System_Collections_Generic_IEnumerable_1_ILRuntime_Runtime_Adapters_AttributeAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_IEnumerator_1_ILRuntime_Runtime_Adapters_AttributeAdapter_Binding_Adapter_Binding.Register(app);

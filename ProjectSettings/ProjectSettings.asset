@@ -713,7 +713,7 @@ PlayerSettings:
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
     1: ILRuntime
-    7: 
+    7: ILRuntime
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

@@ -24,9 +24,27 @@ namespace MGame.Model
 #endif
 
         private IStaticMethod start;
+        private bool isRuning;
+
+        public bool IsRuning
+        {
+            private set
+            {
+                isRuning = value;
+            }
+            get
+            {
+                return isRuning;
+            }
+        }
+
+        public GameUpdate GameUpdate;
+        public GameLateUpdate GameLateUpdate;
+        public GameApplicationQuit GameApplicationQuit;
 
         public Hotfix Init()
         {
+            IsRuning = false;
             return this;
         }
 
@@ -48,6 +66,8 @@ namespace MGame.Model
             ILHelper.InitILRuntime(this.appDomain);
 #endif
             this.start.Run();
+
+            IsRuning = true;
         }
 
         public void LoadHotfixAssembly()

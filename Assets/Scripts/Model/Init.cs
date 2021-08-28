@@ -4,8 +4,6 @@ namespace MGame.Model
 {
     public class Init : MonoBehaviour
     {
-        private GameObject cube;
-
         private int completeValue = 0;
         private bool isComplete = false;
 
@@ -13,8 +11,6 @@ namespace MGame.Model
         {
             Game.Instance.Init();
             StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>().LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
-            //StartCoroutine(ABMgr.Instance.LoadAssetBundleManifestByUWR("http://localhost/AssetBundleRes/AssetBundleRes"));
-            //ABMgr.Instance.LoadAssetBundleManifestByIOAsync("./AssetBundleRes/AssetBundleRes");
         }
 
         private void OnEnable()
@@ -31,24 +27,30 @@ namespace MGame.Model
 
         private void Update()
         {
-            //if (Input.GetKeyDown(KeyCode.A))
-            //{
-            //    cube = Game.Instance.ObjectPool.HatchGameObjByName("Cube");
-            //    cube.Transform.SetParent(null);
-            //    cube.SetActive(true);
-            //    cube.GetComponent<BodyManageComponent>()?.Assemble("Cube");
-            //}
-            //else if (Input.GetKeyDown(KeyCode.S))
-            //{
-            //    cube.GetComponent<BodyManageComponent>()?.Dismemberment();
-            //    cube = null;
-            //}
+            if (Game.Instance.Hotfix.IsRuning)
+            {
+                Game.Instance.Hotfix.GameUpdate(Time.deltaTime);
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (Game.Instance.Hotfix.IsRuning)
+            {
+                Game.Instance.Hotfix.GameLateUpdate();
+            }
+        }
+
+        private void OnApplicationQuit()
+        {
+            if (Game.Instance.Hotfix.IsRuning)
+            {
+                Game.Instance.Hotfix.GameApplicationQuit();
+            }
         }
 
         private void OnPrefabAssociateDataLoadComplete()
         {
-            //TestComponent component = new TestComponent();
-            //Game.Instance.ObjectPool.RecycleComponent(component);
             JuageComplete();
         }
 
@@ -67,7 +69,6 @@ namespace MGame.Model
                     isComplete = true;
                     Debug.Log($"------完成------");
                     Game.Instance.Hotfix.LoadHotfixAssembly();
-
                     Game.Instance.Hotfix.GotoHotfix();
                 }
             }
