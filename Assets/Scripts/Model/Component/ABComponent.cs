@@ -117,7 +117,7 @@ namespace MGame.Model
             //    Debug.Log($"{key}----{prefabDic[key]}");
             //}
 
-            Game.Instance.EventSystem.Run<AssetBundleLoadComplete>();
+            Game.Instance.EventSystem.Invoke<AssetBundleLoadComplete>();
         }
 
         private IEnumerator ProcessAssetBundleToUWR(string path, string name)
@@ -247,7 +247,7 @@ namespace MGame.Model
                 Debug.Log($"{key}----{prefabDic[key]}");
             }
 
-            Game.Instance.EventSystem.Run<AssetBundleLoadComplete>();
+            Game.Instance.EventSystem.Invoke<AssetBundleLoadComplete>();
         }
 
         private async Task ProcessAssetBundleToUWRAsync(string path, string name)

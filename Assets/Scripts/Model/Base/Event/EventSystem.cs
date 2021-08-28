@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MGame.Model
 {
     public sealed class EventSystem
     {
-        public class EventModel
-        {
-            public int count;
-            public UnityEventBase item;
-        }
-
-        private Dictionary<string, EventModel> allEventDic;
+        private Dictionary<string, IEvent> allEventDic;
+        private Dictionary<string, EventDelegateParams> allEventDicParams;
 
         public EventSystem Init()
         {
-            allEventDic = new Dictionary<string, EventModel>();
+            allEventDic = new Dictionary<string, IEvent>();
+            allEventDicParams = new Dictionary<string, EventDelegateParams>();
             return this;
         }
 
@@ -26,175 +21,201 @@ namespace MGame.Model
             allEventDic = null;
         }
 
-        private EventModel GetEventModel<T1>() where T1 : UnityEventBase, new()
+        private T1 AddEventModel<T1>() where T1 : IEvent, new()
         {
             Type type = typeof(T1);
 
-            if (!allEventDic.TryGetValue(type.Name, out EventModel model))
+            if (!allEventDic.TryGetValue(type.FullName, out IEvent e))
             {
-                Debug.LogWarning($"{type.Name}此事件没有注册过");
-                return null;
+                e = new T1();
+                allEventDic.Add(type.FullName, e);
             }
 
-            return model;
+            return (T1)e;
         }
 
-        public int GetEventModelCount<T1>() where T1 : UnityEventBase, new()
+        private T1 GetEventModel<T1>() where T1 : IEvent, new()
         {
             Type type = typeof(T1);
 
-            if (!allEventDic.TryGetValue(type.Name, out EventModel model))
+            if (allEventDic.TryGetValue(type.FullName, out IEvent e))
             {
-                Debug.LogWarning($"{type.Name}此事件没有注册过");
-                return 0;
+                return (T1)e;
             }
 
-            return model.count;
+            Debug.LogWarning($"{type.FullName}此事件没有注册过");
+
+            return default;
         }
 
-        #region 添加
+        #region 订阅
 
-        private T1 Add<T1>() where T1 : UnityEventBase, new()
+        public void AddListener<T1>(Action call, object self) where T1 : EventBase, new()
         {
-            Type type = typeof(T1);
+            AddEventModel<T1>().AddListener(call, self);
+        }
 
-            if (allEventDic.TryGetValue(type.Name, out EventModel model))
+        public void AddListener<T1, T2>(Action<T2> call, object self) where T1 : EventBase<T2>, new()
+        {
+            AddEventModel<T1>().AddListener(call, self);
+        }
+
+        public void AddListener<T1, T2, T3>(Action<T2, T3> call, object self) where T1 : EventBase<T2, T3>, new()
+        {
+            AddEventModel<T1>().AddListener(call, self);
+        }
+
+        public void AddListener<T1, T2, T3, T4>(Action<T2, T3, T4> call, object self) where T1 : EventBase<T2, T3, T4>, new()
+        {
+            AddEventModel<T1>().AddListener(call, self);
+        }
+
+        public void AddListener<T1, T2, T3, T4, T5>(Action<T2, T3, T4, T5> call, object self) where T1 : EventBase<T2, T3, T4, T5>, new()
+        {
+            AddEventModel<T1>().AddListener(call, self);
+        }
+
+        public void AddListener(string sign, EventDelegateParams call)
+        {
+            if (allEventDicParams.ContainsKey(sign))
             {
-                model.count++;
-                return (T1)model.item;
+                allEventDicParams[sign] += call;
+                return;
             }
-
-            T1 t = new T1();
-            allEventDic.Add(type.Name, new EventModel { count = 1, item = t });
-            return t;
+            allEventDicParams.Add(sign, call);
         }
 
-        public void Add<T1>(UnityAction call) where T1 : UnityEvent, new()
+        #endregion 订阅
+
+        #region 移除
+
+        public void RemoveListener<T1>(object self) where T1 : EventBase, new()
         {
-            Add<T1>().AddListener(call);
-        }
-
-        public void Add<T1, T2>(UnityAction<T2> call) where T1 : UnityEvent<T2>, new()
-        {
-            Add<T1>().AddListener(call);
-        }
-
-        public void Add<T1, T2, T3>(UnityAction<T2, T3> call) where T1 : UnityEvent<T2, T3>, new()
-        {
-            Add<T1>().AddListener(call);
-        }
-
-        public void Add<T1, T2, T3, T4>(UnityAction<T2, T3, T4> call) where T1 : UnityEvent<T2, T3, T4>, new()
-        {
-            Add<T1>().AddListener(call);
-        }
-
-        #endregion 添加
-
-        #region 删除
-
-        private bool Remove<T1>(out T1 t) where T1 : UnityEventBase, new()
-        {
-            var model = GetEventModel<T1>();
-            if (model != null)
+            var e = GetEventModel<T1>();
+            if (e != null)
             {
-                model.count--;
-                t = (T1)model.item;
-                if (model.count <= 0)
+                e.RemoveListener(self);
+                if (e.Count == 0)
                 {
-                    allEventDic.Remove(typeof(T1).Name);
+                    allEventDic.Remove(typeof(T1).FullName);
                 }
-                return true;
             }
-
-            t = null;
-            return false;
         }
 
-        public bool Remove<T1>(UnityAction call) where T1 : UnityEvent, new()
+        public void RemoveListener<T1, T2>(object self) where T1 : EventBase<T2>, new()
         {
-            if (Remove<T1>(out T1 t))
+            var e = GetEventModel<T1>();
+            if (e != null)
             {
-                t.RemoveListener(call);
-                return true;
+                e.RemoveListener(self);
+                if (e.Count == 0)
+                {
+                    allEventDic.Remove(typeof(T1).FullName);
+                }
             }
-
-            return false;
         }
 
-        public bool Remove<T1, T2>(UnityAction<T2> call) where T1 : UnityEvent<T2>, new()
+        public void RemoveListener<T1, T2, T3>(object self) where T1 : EventBase<T2, T3>, new()
         {
-            if (Remove<T1>(out T1 t))
+            var e = GetEventModel<T1>();
+            if (e != null)
             {
-                t.RemoveListener(call);
-                return true;
+                e.RemoveListener(self);
+                if (e.Count == 0)
+                {
+                    allEventDic.Remove(typeof(T1).FullName);
+                }
             }
-
-            return false;
         }
 
-        public bool Remove<T1, T2, T3>(UnityAction<T2, T3> call) where T1 : UnityEvent<T2, T3>, new()
+        public void RemoveListener<T1, T2, T3, T4>(object self) where T1 : EventBase<T2, T3, T4>, new()
         {
-            if (Remove<T1>(out T1 t))
+            var e = GetEventModel<T1>();
+            if (e != null)
             {
-                t.RemoveListener(call);
-                return true;
+                e.RemoveListener(self);
+                if (e.Count == 0)
+                {
+                    allEventDic.Remove(typeof(T1).FullName);
+                }
             }
-
-            return false;
         }
 
-        public bool Remove<T1, T2, T3, T4>(UnityAction<T2, T3, T4> call) where T1 : UnityEvent<T2, T3, T4>, new()
+        public void RemoveListener<T1, T2, T3, T4, T5>(object self) where T1 : EventBase<T2, T3, T4, T5>, new()
         {
-            if (Remove<T1>(out T1 t))
+            var e = GetEventModel<T1>();
+            if (e != null)
             {
-                t.RemoveListener(call);
-                return true;
+                e.RemoveListener(self);
+                if (e.Count == 0)
+                {
+                    allEventDic.Remove(typeof(T1).FullName);
+                }
             }
-
-            return false;
         }
 
-        #endregion 删除
-
-        #region 执行
-
-        public void Run<T1>() where T1 : UnityEvent, new()
+        public void RemoveListener(string sign, EventDelegateParams call)
         {
-            var model = GetEventModel<T1>();
-            if (model != null && model.count > 0)
+            if (allEventDicParams.ContainsKey(sign))
             {
-                ((T1)model.item).Invoke();
+                allEventDicParams[sign] -= call;
+                if (allEventDicParams[sign] == null)
+                {
+                    allEventDicParams.Remove(sign);
+                }
             }
         }
 
-        public void Run<T1, T2>(T2 t2) where T1 : UnityEvent<T2>, new()
+        public void RemoveAllListener(string sign)
         {
-            var model = GetEventModel<T1>();
-            if (model != null && model.count > 0)
+            if (allEventDicParams.ContainsKey(sign))
             {
-                ((T1)model.item).Invoke(t2);
+                allEventDicParams.Remove(sign);
             }
         }
 
-        public void Run<T1, T2, T3>(T2 t2, T3 t3) where T1 : UnityEvent<T2, T3>, new()
+        public void RemoveAllListener<T1>() where T1 : IEvent, new()
         {
-            var model = GetEventModel<T1>();
-            if (model != null && model.count > 0)
-            {
-                ((T1)model.item).Invoke(t2, t3);
-            }
+            allEventDic.Remove(typeof(T1).FullName);
         }
 
-        public void Run<T1, T2, T3, T4>(T2 t2, T3 t3, T4 t4) where T1 : UnityEvent<T2, T3, T4>, new()
+        #endregion 移除
+
+        #region 发布
+
+        public void Invoke<T1>() where T1 : EventBase, new()
         {
-            var model = GetEventModel<T1>();
-            if (model != null && model.count > 0)
+            GetEventModel<T1>()?.Invoke();
+        }
+
+        public void Invoke<T1, T2>(T2 t2) where T1 : EventBase<T2>, new()
+        {
+            GetEventModel<T1>()?.Invoke(t2);
+        }
+
+        public void Invoke<T1, T2, T3>(T2 t2, T3 t3) where T1 : EventBase<T2, T3>, new()
+        {
+            GetEventModel<T1>()?.Invoke(t2, t3);
+        }
+
+        public void Invoke<T1, T2, T3, T4>(T2 t2, T3 t3, T4 t4) where T1 : EventBase<T2, T3, T4>, new()
+        {
+            GetEventModel<T1>()?.Invoke(t2, t3, t4);
+        }
+
+        public void Invoke<T1, T2, T3, T4, T5>(T2 t2, T3 t3, T4 t4, T5 t5) where T1 : EventBase<T2, T3, T4, T5>, new()
+        {
+            GetEventModel<T1>()?.Invoke(t2, t3, t4, t5);
+        }
+
+        public void Invoke(string sign, params object[] t1)
+        {
+            if (allEventDicParams.TryGetValue(sign, out EventDelegateParams e))
             {
-                ((T1)model.item).Invoke(t2, t3, t4);
+                e(t1);
             }
         }
 
-        #endregion 执行
+        #endregion 发布
     }
 }

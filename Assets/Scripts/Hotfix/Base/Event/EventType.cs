@@ -1,5 +1,3 @@
-﻿using UnityEngine.Events;
-
-namespace MGame.Hotfix
+﻿namespace MGame.Hotfix
 {
 }

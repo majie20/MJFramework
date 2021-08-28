@@ -16,7 +16,7 @@ namespace MGame.Model
 
             textDataDic = new Dictionary<string, UnityEngine.TextAsset>();
 
-            Game.Instance.EventSystem.Add<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
+            Game.Instance.EventSystem.AddListener<AssetBundleLoadComplete>(OnAssetBundleLoadComplete, this);
             return this;
         }
 
@@ -26,7 +26,7 @@ namespace MGame.Model
 
             textDataDic = null;
 
-            Game.Instance.EventSystem.Remove<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
+            Game.Instance.EventSystem.RemoveListener<AssetBundleLoadComplete>(this);
         }
 
         public UnityEngine.TextAsset GetTextAssetByName(string name)
@@ -50,7 +50,7 @@ namespace MGame.Model
                 }
             }
 
-            Game.Instance.EventSystem.Run<TextDataLoadComplete>();
+            Game.Instance.EventSystem.Invoke<TextDataLoadComplete>();
         }
     }
 }

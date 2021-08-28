@@ -10,6 +10,8 @@ namespace MGame.Hotfix
 
             var test = new Entity().Init(true, "Cylinder", Game.Instance.Scene);
             test.AddComponent<TestComponent>().Init(test);
+
+
         }
     }
 }

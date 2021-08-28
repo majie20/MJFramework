@@ -16,6 +16,7 @@ namespace MGame.Model
         public string guid;
         public string abName;
     }
+
     /// <summary>
     /// 预制体创建所需数据
     /// </summary>
@@ -56,7 +57,7 @@ namespace MGame.Model
             prefabPlaceDic = new Dictionary<string, PrefabPlaceData>();
             prefabCreateDic = new Dictionary<string, List<PrefabCreateData>>();
 
-            Game.Instance.EventSystem.Add<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
+            Game.Instance.EventSystem.AddListener<AssetBundleLoadComplete>(OnAssetBundleLoadComplete, this);
 
             return this;
         }
@@ -68,7 +69,7 @@ namespace MGame.Model
             prefabPlaceDic = null;
             prefabCreateDic = null;
 
-            Game.Instance.EventSystem.Remove<AssetBundleLoadComplete>(OnAssetBundleLoadComplete);
+            Game.Instance.EventSystem.RemoveListener<AssetBundleLoadComplete>(this);
         }
 
         private void OnAssetBundleLoadComplete()
@@ -134,7 +135,7 @@ namespace MGame.Model
                 }
             }
 
-            Game.Instance.EventSystem.Run<PrefabAssociateDataLoadComplete>();
+            Game.Instance.EventSystem.Invoke<PrefabAssociateDataLoadComplete>();
         }
 
         public List<PrefabCreateData> GetPrefabCreateDataListByName(string name)

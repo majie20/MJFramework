@@ -12,6 +12,11 @@ public class Startup
 
     static Startup()
     {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            return;
+        }
+
         for (int i = 0; i < CodeDir.Length; i++)
         {
             if (CodeDir[i] == '/')

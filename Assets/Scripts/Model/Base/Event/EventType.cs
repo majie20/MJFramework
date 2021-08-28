@@ -1,10 +1,8 @@
-﻿using UnityEngine.Events;
-
-namespace MGame.Model
+﻿namespace MGame.Model
 {
-    public class AssetBundleLoadComplete : UnityEvent { }
+    public class AssetBundleLoadComplete : EventBase { }
 
-    public class PrefabAssociateDataLoadComplete : UnityEvent { }
+    public class PrefabAssociateDataLoadComplete : EventBase { }
 
-    public class TextDataLoadComplete : UnityEvent { }
+    public class TextDataLoadComplete : EventBase { }
 }

@@ -19,14 +19,14 @@ namespace MGame.Model
 
         private void OnEnable()
         {
-            Game.Instance.EventSystem.Add<PrefabAssociateDataLoadComplete>(OnPrefabAssociateDataLoadComplete);
-            Game.Instance.EventSystem.Add<TextDataLoadComplete>(OnTextDataLoadComplete);
+            Game.Instance.EventSystem.AddListener<PrefabAssociateDataLoadComplete>(OnPrefabAssociateDataLoadComplete, this);
+            Game.Instance.EventSystem.AddListener<TextDataLoadComplete>(OnTextDataLoadComplete, this);
         }
 
         private void OnDisable()
         {
-            Game.Instance.EventSystem.Remove<PrefabAssociateDataLoadComplete>(OnPrefabAssociateDataLoadComplete);
-            Game.Instance.EventSystem.Remove<TextDataLoadComplete>(OnTextDataLoadComplete);
+            Game.Instance.EventSystem.RemoveListener<PrefabAssociateDataLoadComplete>(this);
+            Game.Instance.EventSystem.RemoveListener<TextDataLoadComplete>(this);
         }
 
         private void Update()
