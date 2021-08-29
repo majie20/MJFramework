@@ -10,6 +10,8 @@ namespace MGame.Hotfix
 
         public EventSystem EventSystem { private set; get; }
 
+        public LifeCycleSystem LifeCycleSystem { private set; get; }
+
         public GameObject GameObject { private set; get; }
         public Transform Transform { private set; get; }
 
@@ -23,6 +25,8 @@ namespace MGame.Hotfix
 
             EventSystem = new EventSystem().Init();
 
+            LifeCycleSystem = new LifeCycleSystem().Init();
+
             ObjectPool = new ObjectPool().Init("ObjectPool", Transform) as ObjectPool;
 
             Scene = new Scene().Init("Scene", Transform) as Scene;
@@ -31,14 +35,18 @@ namespace MGame.Hotfix
         public override void Dispose()
         {
             base.Dispose();
-            EventSystem?.Dispose();
-            EventSystem = null;
 
             Scene?.Dispose();
             Scene = null;
 
             ObjectPool?.Dispose();
             ObjectPool = null;
+
+            LifeCycleSystem?.Dispose();
+            LifeCycleSystem = null;
+
+            EventSystem?.Dispose();
+            EventSystem = null;
         }
     }
 }

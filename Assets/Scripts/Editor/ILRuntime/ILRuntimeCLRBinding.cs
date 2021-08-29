@@ -7,12 +7,12 @@ using UnityEditor;
 using UnityEngine;
 
 [System.Reflection.Obfuscation(Exclude = true)]
-public class ILRuntimeCLRBinding
+public class ILRuntimeCLRBinding : EditorWindow
 {
     private const string HotfixFilePath = "Assets/Res/Text/Hotfix.dll.bytes";
 
-    [MenuItem("ILRuntime/通过自动分析热更DLL生成CLR绑定")]
-    private static void GenerateCLRBindingByAnalysis()
+    [MenuItem("Tools/ILRuntime/通过自动分析热更DLL生成CLR绑定")]
+    public static void GenerateCLRBindingByAnalysis()
     {
         if (File.Exists(HotfixFilePath))
         {
@@ -41,7 +41,6 @@ public class ILRuntimeCLRBinding
                 MGame.Model.ILHelper.InitILRuntime(domain);
                 ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(domain, path);
             }
-            AssetDatabase.Refresh();
 
             Debug.Log("自动分析热更DLL生成CLR绑定成功！");
         }

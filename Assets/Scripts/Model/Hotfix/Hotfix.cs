@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 #if ILRuntime
 
@@ -23,6 +26,8 @@ namespace MGame.Model
         private Assembly assembly;
 #endif
 
+        private List<Type> hotfixTypes;
+
         private IStaticMethod start;
         private bool isRuning;
 
@@ -38,9 +43,9 @@ namespace MGame.Model
             }
         }
 
-        public GameUpdate GameUpdate;
-        public GameLateUpdate GameLateUpdate;
-        public GameApplicationQuit GameApplicationQuit;
+        public Action<float> GameUpdate;
+        public Action GameLateUpdate;
+        public Action GameApplicationQuit;
 
         public Hotfix Init()
         {
@@ -70,6 +75,11 @@ namespace MGame.Model
             IsRuning = true;
         }
 
+        public List<Type> GetHotfixTypes()
+        {
+            return this.hotfixTypes;
+        }
+
         public void LoadHotfixAssembly()
         {
             var component = Game.Instance.Scene.GetComponent<TextManageComponent>();
@@ -92,6 +102,8 @@ namespace MGame.Model
 #endif
 
             this.start = new ILStaticMethod(this.appDomain, "MGame.Hotfix.Init", "Start", 0);
+
+            this.hotfixTypes = this.appDomain.LoadedTypes.Values.Select(x => x.ReflectionType).ToList();
 #else
             Debug.Log($"当前使用的是Mono模式");
 
@@ -99,6 +111,8 @@ namespace MGame.Model
 
             Type hotfixInit = this.assembly.GetType("MGame.Hotfix.Init");
             this.start = new MonoStaticMethod(hotfixInit, "Start");
+
+            this.hotfixTypes = this.assembly.GetTypes().ToList();
 #endif
         }
     }

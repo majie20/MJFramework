@@ -1,4 +1,6 @@
-﻿namespace MGame.Model
+﻿using ILRuntime.Runtime.Intepreter;
+
+namespace MGame.Model
 {
     public static class ILHelper
     {
@@ -9,6 +11,7 @@
             // 注册委托
 
             appdomain.DelegateManager.RegisterMethodDelegate<float>();
+            appdomain.DelegateManager.RegisterMethodDelegate<ILTypeInstance>();
 
             appdomain.DelegateManager.RegisterDelegateConvertor<EventDelegateParams>((action) =>
             {
@@ -17,21 +20,21 @@
                     ((System.Action<object[]>)action)(a);
                 });
             });
-            appdomain.DelegateManager.RegisterDelegateConvertor<GameUpdate>((action) =>
-            {
-                return new GameUpdate((a) =>
-                {
-                    ((System.Action<float>)action)(a);
-                });
-            });
-            appdomain.DelegateManager.RegisterDelegateConvertor<GameLateUpdate>((action) =>
-            {
-                return new GameLateUpdate(() => { ((System.Action)action)(); });
-            });
-            appdomain.DelegateManager.RegisterDelegateConvertor<GameApplicationQuit>((action) =>
-            {
-                return new GameApplicationQuit(() => { ((System.Action)action)(); });
-            });
+            //appdomain.DelegateManager.RegisterDelegateConvertor<GameUpdate>((action) =>
+            //{
+            //    return new GameUpdate((a) =>
+            //    {
+            //        ((System.Action<float>)action)(a);
+            //    });
+            //});
+            //appdomain.DelegateManager.RegisterDelegateConvertor<GameLateUpdate>((action) =>
+            //{
+            //    return new GameLateUpdate(() => { ((System.Action)action)(); });
+            //});
+            //appdomain.DelegateManager.RegisterDelegateConvertor<GameApplicationQuit>((action) =>
+            //{
+            //    return new GameApplicationQuit(() => { ((System.Action)action)(); });
+            //});
 
             ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
 

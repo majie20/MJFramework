@@ -2,7 +2,6 @@
 
 namespace MGame.Hotfix
 {
-    //[HideInHierarchy]
     public class Scene : Entity
     {
         public Scene()

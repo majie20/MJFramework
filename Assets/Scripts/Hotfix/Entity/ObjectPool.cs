@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace MGame.Hotfix
 {
-    //[HideInHierarchy]
     public class ObjectPool : Entity
     {
         public ObjectPool()

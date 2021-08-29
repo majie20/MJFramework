@@ -2,7 +2,6 @@
 
 namespace MGame.Model
 {
-    //[HideInHierarchy]
     public class Scene : Entity
     {
         public Scene()

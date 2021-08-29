@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace MGame.Hotfix
 {
-    public class TestComponent : Component
+    [LifeCycle]
+    public class TestComponent : Component, IAwake, IAwake<string>
     {
         private BodyConstructor bodyConstructor;
 
@@ -24,6 +25,16 @@ namespace MGame.Hotfix
         public override void Dispose()
         {
             base.Dispose();
+        }
+
+        public void Awake()
+        {
+            Debug.Log("Awake"); // MDEBUG:
+        }
+
+        public void Awake(string a)
+        {
+            Debug.Log($"Awake:{a}"); // MDEBUG:
         }
     }
 }

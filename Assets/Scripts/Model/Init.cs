@@ -9,6 +9,7 @@ namespace MGame.Model
 
         private void Awake()
         {
+            GameObject.DontDestroyOnLoad(gameObject);
             Game.Instance.Init();
             StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>().LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
         }

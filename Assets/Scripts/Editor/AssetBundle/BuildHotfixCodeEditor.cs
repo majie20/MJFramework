@@ -36,6 +36,10 @@ public class Startup
             File.Copy(Path.Combine(ScriptAssembliesDir, HotfixPdb), Path.Combine(CodeDir, "Hotfix.pdb.bytes"),
                 true);
             Debug.Log($"复制Hotfix.dll、Hotfix.pdb到Assets/Res/Text，成功！");
+
+#if ILRuntime
+            //AssetBundleBuildEditor.BuildAssetBundle();
+#endif
             AssetDatabase.Refresh();
         }
         else

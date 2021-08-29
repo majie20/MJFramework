@@ -19,9 +19,13 @@ namespace ILRuntime.Runtime.Generated
         public static void Register(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
             BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
+            MethodBase method;
             FieldInfo field;
             Type[] args;
             Type type = typeof(MGame.Model.Hotfix);
+            args = new Type[]{};
+            method = type.GetMethod("GetHotfixTypes", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, GetHotfixTypes_0);
 
             field = type.GetField("GameUpdate", flag);
             app.RegisterCLRFieldGetter(field, get_GameUpdate_0);
@@ -40,6 +44,21 @@ namespace ILRuntime.Runtime.Generated
         }
 
 
+        static StackObject* GetHotfixTypes_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* ptr_of_this_method;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 1);
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
+            MGame.Model.Hotfix instance_of_this_method = (MGame.Model.Hotfix)typeof(MGame.Model.Hotfix).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            __intp.Free(ptr_of_this_method);
+
+            var result_of_this_method = instance_of_this_method.GetHotfixTypes();
+
+            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
+        }
+
 
         static object get_GameUpdate_0(ref object o)
         {
@@ -54,13 +73,13 @@ namespace ILRuntime.Runtime.Generated
 
         static void set_GameUpdate_0(ref object o, object v)
         {
-            ((MGame.Model.Hotfix)o).GameUpdate = (MGame.Model.GameUpdate)v;
+            ((MGame.Model.Hotfix)o).GameUpdate = (System.Action<System.Single>)v;
         }
 
         static StackObject* AssignFromStack_GameUpdate_0(ref object o, ILIntepreter __intp, StackObject* ptr_of_this_method, IList<object> __mStack)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            MGame.Model.GameUpdate @GameUpdate = (MGame.Model.GameUpdate)typeof(MGame.Model.GameUpdate).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Action<System.Single> @GameUpdate = (System.Action<System.Single>)typeof(System.Action<System.Single>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
             ((MGame.Model.Hotfix)o).GameUpdate = @GameUpdate;
             return ptr_of_this_method;
         }
@@ -78,13 +97,13 @@ namespace ILRuntime.Runtime.Generated
 
         static void set_GameLateUpdate_1(ref object o, object v)
         {
-            ((MGame.Model.Hotfix)o).GameLateUpdate = (MGame.Model.GameLateUpdate)v;
+            ((MGame.Model.Hotfix)o).GameLateUpdate = (System.Action)v;
         }
 
         static StackObject* AssignFromStack_GameLateUpdate_1(ref object o, ILIntepreter __intp, StackObject* ptr_of_this_method, IList<object> __mStack)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            MGame.Model.GameLateUpdate @GameLateUpdate = (MGame.Model.GameLateUpdate)typeof(MGame.Model.GameLateUpdate).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Action @GameLateUpdate = (System.Action)typeof(System.Action).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
             ((MGame.Model.Hotfix)o).GameLateUpdate = @GameLateUpdate;
             return ptr_of_this_method;
         }
@@ -102,13 +121,13 @@ namespace ILRuntime.Runtime.Generated
 
         static void set_GameApplicationQuit_2(ref object o, object v)
         {
-            ((MGame.Model.Hotfix)o).GameApplicationQuit = (MGame.Model.GameApplicationQuit)v;
+            ((MGame.Model.Hotfix)o).GameApplicationQuit = (System.Action)v;
         }
 
         static StackObject* AssignFromStack_GameApplicationQuit_2(ref object o, ILIntepreter __intp, StackObject* ptr_of_this_method, IList<object> __mStack)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            MGame.Model.GameApplicationQuit @GameApplicationQuit = (MGame.Model.GameApplicationQuit)typeof(MGame.Model.GameApplicationQuit).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Action @GameApplicationQuit = (System.Action)typeof(System.Action).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
             ((MGame.Model.Hotfix)o).GameApplicationQuit = @GameApplicationQuit;
             return ptr_of_this_method;
         }
