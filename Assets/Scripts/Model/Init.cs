@@ -28,6 +28,7 @@ namespace MGame.Model
 
         private void Update()
         {
+            Game.Instance.LifeCycleSystem.Update(Time.deltaTime);
             if (Game.Instance.Hotfix.IsRuning)
             {
                 Game.Instance.Hotfix.GameUpdate(Time.deltaTime);
@@ -36,6 +37,7 @@ namespace MGame.Model
 
         private void LateUpdate()
         {
+            Game.Instance.LifeCycleSystem.LateUpdate();
             if (Game.Instance.Hotfix.IsRuning)
             {
                 Game.Instance.Hotfix.GameLateUpdate();

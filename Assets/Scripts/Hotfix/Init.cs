@@ -16,16 +16,19 @@ namespace MGame.Hotfix
             var component = test.AddComponent<TestComponent>().Init(test);
             Game.Instance.LifeCycleSystem.Awake(component);
             Game.Instance.LifeCycleSystem.Awake(component, "majie");
+            Game.Instance.LifeCycleSystem.Add(component);
         }
 
         private static void OnUpdate(float tick)
         {
             //Debug.Log($"OnUpdate:{tick}"); // MDEBUG:
+            Game.Instance.LifeCycleSystem.Update(tick);
         }
 
         private static void OnLateUpdate()
         {
             //Debug.Log("OnLateUpdate"); // MDEBUG:
+            Game.Instance.LifeCycleSystem.LateUpdate();
         }
 
         private static void OnApplicationQuit()

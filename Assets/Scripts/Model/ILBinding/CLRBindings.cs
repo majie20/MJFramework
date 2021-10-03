@@ -45,11 +45,11 @@ namespace ILRuntime.Runtime.Generated
             MGame_Model_Hotfix_Binding.Register(app);
             System_Collections_Generic_List_1_Type_Binding.Register(app);
             System_Collections_Generic_List_1_Type_Binding_Enumerator_Binding.Register(app);
-            System_Reflection_CustomAttributeExtensions_Binding.Register(app);
-            UnityEngine_Debug_Binding.Register(app);
+            System_Reflection_MemberInfo_Binding.Register(app);
             System_Activator_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_Type_Queue_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Queue_1_ILTypeInstance_Binding.Register(app);
+            System_Collections_Generic_Queue_1_ILTypeInstance_Binding_Enumerator_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_Type_Queue_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Queue_1_GameObject_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Transform_Binding.Register(app);
             System_Collections_Generic_Queue_1_GameObject_Binding.Register(app);
@@ -59,6 +59,7 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_Type_ILTypeInstance_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
             UnityEngine_Component_Binding.Register(app);
             MGame_Model_BodyConstructor_Binding.Register(app);
+            UnityEngine_Debug_Binding.Register(app);
             System_String_Binding.Register(app);
             System_Threading_Monitor_Binding.Register(app);
             System_Threading_Thread_Binding.Register(app);

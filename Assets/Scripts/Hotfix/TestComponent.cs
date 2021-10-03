@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MGame.Hotfix
 {
     [LifeCycle]
-    public class TestComponent : Component, IAwake, IAwake<string>
+    public class TestComponent : Component, IAwake, IAwake<string>, IUpdateSystem
     {
         private BodyConstructor bodyConstructor;
 
@@ -35,6 +35,11 @@ namespace MGame.Hotfix
         public void Awake(string a)
         {
             Debug.Log($"Awake:{a}"); // MDEBUG:
+        }
+
+        public void OnUpdate(float tick)
+        {
+            //Debug.Log($"Awake:{tick}"); // MDEBUG:
         }
     }
 }
