@@ -10,7 +10,7 @@ namespace MGame.Model
 
         public EventSystem EventSystem { private set; get; }
 
-        public LifeCycleSystem LifeCycleSystem { private set; get; }
+        public LifecycleSystem LifecycleSystem { private set; get; }
 
         public Hotfix Hotfix { private set; get; }
 
@@ -27,7 +27,7 @@ namespace MGame.Model
 
             EventSystem = new EventSystem().Init();
 
-            LifeCycleSystem = new LifeCycleSystem().Init();
+            LifecycleSystem = new LifecycleSystem().Init();
 
             ObjectPool = new ObjectPool().Init("ObjectPool", Transform) as ObjectPool;
 
@@ -49,8 +49,8 @@ namespace MGame.Model
             ObjectPool?.Dispose();
             ObjectPool = null;
 
-            LifeCycleSystem?.Dispose();
-            LifeCycleSystem = null;
+            LifecycleSystem?.Dispose();
+            LifecycleSystem = null;
 
             EventSystem?.Dispose();
             EventSystem = null;

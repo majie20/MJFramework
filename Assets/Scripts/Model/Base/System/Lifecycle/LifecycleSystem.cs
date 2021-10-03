@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MGame.Model
 {
-    public class LifeCycleSystem
+    public class LifecycleSystem
     {
         private readonly Dictionary<Type, IAwakeSystem> awakeSystems = new Dictionary<Type, IAwakeSystem>();
         private readonly Dictionary<Type, IUpdateSystem> updateSystems = new Dictionary<Type, IUpdateSystem>();
@@ -16,7 +16,7 @@ namespace MGame.Model
         private Queue<Component> updates = new Queue<Component>();
         private Queue<Component> lateUpdates = new Queue<Component>();
 
-        public LifeCycleSystem Init()
+        public LifecycleSystem Init()
         {
             types.Clear();
             var assembly = typeof(Init).Assembly;

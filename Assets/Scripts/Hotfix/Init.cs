@@ -14,21 +14,21 @@ namespace MGame.Hotfix
 
             var test = new Entity().Init(true, "Cylinder", Game.Instance.Scene);
             var component = test.AddComponent<TestComponent>().Init(test);
-            Game.Instance.LifeCycleSystem.Awake(component);
-            Game.Instance.LifeCycleSystem.Awake(component, "majie");
-            Game.Instance.LifeCycleSystem.Add(component);
+            Game.Instance.LifecycleSystem.Awake(component);
+            Game.Instance.LifecycleSystem.Awake(component, "majie");
+            Game.Instance.LifecycleSystem.Add(component);
         }
 
         private static void OnUpdate(float tick)
         {
             //Debug.Log($"OnUpdate:{tick}"); // MDEBUG:
-            Game.Instance.LifeCycleSystem.Update(tick);
+            Game.Instance.LifecycleSystem.Update(tick);
         }
 
         private static void OnLateUpdate()
         {
             //Debug.Log("OnLateUpdate"); // MDEBUG:
-            Game.Instance.LifeCycleSystem.LateUpdate();
+            Game.Instance.LifecycleSystem.LateUpdate();
         }
 
         private static void OnApplicationQuit()
