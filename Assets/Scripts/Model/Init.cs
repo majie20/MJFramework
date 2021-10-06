@@ -4,26 +4,22 @@ namespace MGame.Model
 {
     public class Init : MonoBehaviour
     {
-        private int completeValue = 0;
-        private bool isComplete = false;
-
         private void Awake()
         {
             GameObject.DontDestroyOnLoad(gameObject);
             Game.Instance.Init();
-            StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>().LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
         }
 
         private void OnEnable()
         {
-            Game.Instance.EventSystem.AddListener<PrefabAssociateDataLoadComplete>(OnPrefabAssociateDataLoadComplete, this);
-            Game.Instance.EventSystem.AddListener<TextDataLoadComplete>(OnTextDataLoadComplete, this);
+            Game.Instance.EventSystem.AddListener2(EventType.GameLoadComplete, 0, OnGameLoadComplete);
+
+            StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>().LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
         }
 
         private void OnDisable()
         {
-            Game.Instance.EventSystem.RemoveListener<PrefabAssociateDataLoadComplete>(this);
-            Game.Instance.EventSystem.RemoveListener<TextDataLoadComplete>(this);
+            Game.Instance.EventSystem.RemoveListener2(EventType.GameLoadComplete, OnGameLoadComplete);
         }
 
         private void Update()
@@ -52,29 +48,12 @@ namespace MGame.Model
             }
         }
 
-        private void OnPrefabAssociateDataLoadComplete()
+        private void OnGameLoadComplete(object[] args)
         {
-            JuageComplete();
-        }
-
-        private void OnTextDataLoadComplete()
-        {
-            JuageComplete();
-        }
-
-        private void JuageComplete()
-        {
-            if (!isComplete)
-            {
-                completeValue++;
-                if (completeValue >= 2)
-                {
-                    isComplete = true;
-                    Debug.Log($"------完成------");
-                    Game.Instance.Hotfix.LoadHotfixAssembly();
-                    Game.Instance.Hotfix.GotoHotfix();
-                }
-            }
+            Game.Instance.EventSystem.RemoveListener2(EventType.GameLoadComplete, OnGameLoadComplete);
+            Debug.Log($"------完成------{args.Length}");
+            Game.Instance.Hotfix.LoadHotfixAssembly();
+            Game.Instance.Hotfix.GotoHotfix();
         }
     }
 }

@@ -1,9 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MGame.Hotfix
 {
     public delegate void EventDelegateParams(object[] args);
+
+    public class EventGroup
+    {
+        private EventDelegateParams call;
+        private Dictionary<string, object> paramdic;
+        private List<string> signList;
+        private string sign;
+
+        public EventDelegateParams Call => call;
+
+        public EventGroup(string sign, int paramNum)
+        {
+            this.sign = sign;
+            paramdic = new Dictionary<string, object>(paramNum);
+            signList = new List<string>(EventType.EventTypeGroupDic[this.sign].Length);
+        }
+
+        public void AddListener(EventDelegateParams call)
+        {
+            this.call += call;
+        }
+
+        public void RemoveListener(EventDelegateParams call)
+        {
+            this.call -= call;
+        }
+
+        public void Invoke(string subSign, object param)
+        {
+            var group = EventType.EventTypeGroupDic[this.sign];
+            if (group.Contains(subSign) && !signList.Contains(subSign))
+            {
+                signList.Add(subSign);
+            }
+
+            if (param != null)
+            {
+                if (paramdic.ContainsKey(subSign))
+                {
+                    paramdic[subSign] = param;
+                }
+                else
+                {
+                    paramdic.Add(subSign, param);
+                }
+            }
+
+            if (signList.Count >= group.Length)
+            {
+                this.call(paramdic.Values.ToArray());
+                paramdic.Clear();
+                signList.Clear();
+            }
+        }
+    }
 
     public interface IEvent
     {

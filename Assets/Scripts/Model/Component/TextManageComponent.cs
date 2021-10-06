@@ -50,7 +50,7 @@ namespace MGame.Model
                 }
             }
 
-            Game.Instance.EventSystem.Invoke<TextDataLoadComplete>();
+            Game.Instance.EventSystem.Invoke2(EventType.GameLoadComplete, EventType.TextDataLoadComplete);
         }
     }
 }

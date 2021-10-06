@@ -7,12 +7,17 @@ namespace MGame.Model
     public sealed class EventSystem
     {
         private Dictionary<string, IEvent> allEventDic;
-        private Dictionary<string, EventDelegateParams> allEventDicParams;
+        private Dictionary<string, EventDelegateParams> allEventParamsDic;
+        private Dictionary<string, EventGroup> allEventGroupDic;
 
         public EventSystem Init()
         {
+            EventType.Init();
+
             allEventDic = new Dictionary<string, IEvent>();
-            allEventDicParams = new Dictionary<string, EventDelegateParams>();
+            allEventParamsDic = new Dictionary<string, EventDelegateParams>();
+            allEventGroupDic = new Dictionary<string, EventGroup>();
+
             return this;
         }
 
@@ -77,12 +82,22 @@ namespace MGame.Model
 
         public void AddListener(string sign, EventDelegateParams call)
         {
-            if (allEventDicParams.ContainsKey(sign))
+            if (allEventParamsDic.ContainsKey(sign))
             {
-                allEventDicParams[sign] += call;
+                allEventParamsDic[sign] += call;
                 return;
             }
-            allEventDicParams.Add(sign, call);
+            allEventParamsDic.Add(sign, call);
+        }
+
+        public void AddListener2(string sign, int paramNum, EventDelegateParams call)
+        {
+            if (!allEventGroupDic.ContainsKey(sign))
+            {
+                allEventGroupDic.Add(sign, new EventGroup(sign, paramNum));
+            }
+
+            allEventGroupDic[sign].AddListener(call);
         }
 
         #endregion 订阅
@@ -156,27 +171,41 @@ namespace MGame.Model
 
         public void RemoveListener(string sign, EventDelegateParams call)
         {
-            if (allEventDicParams.ContainsKey(sign))
+            if (allEventParamsDic.ContainsKey(sign))
             {
-                allEventDicParams[sign] -= call;
-                if (allEventDicParams[sign] == null)
+                allEventParamsDic[sign] -= call;
+                if (allEventParamsDic[sign] == null)
                 {
-                    allEventDicParams.Remove(sign);
+                    allEventParamsDic.Remove(sign);
                 }
             }
         }
 
-        public void RemoveAllListener(string sign)
+        public void RemoveListener2(string sign, EventDelegateParams call)
         {
-            if (allEventDicParams.ContainsKey(sign))
+            if (allEventGroupDic.ContainsKey(sign))
             {
-                allEventDicParams.Remove(sign);
+                allEventGroupDic[sign].RemoveListener(call);
+                if (allEventGroupDic[sign].Call == null)
+                {
+                    allEventGroupDic.Remove(sign);
+                }
             }
         }
 
         public void RemoveAllListener<T1>() where T1 : IEvent, new()
         {
             allEventDic.Remove(typeof(T1).FullName);
+        }
+
+        public void RemoveAllListener(string sign)
+        {
+            allEventParamsDic.Remove(sign);
+        }
+
+        public void RemoveAllListener2(string sign)
+        {
+            allEventGroupDic.Remove(sign);
         }
 
         #endregion 移除
@@ -210,9 +239,21 @@ namespace MGame.Model
 
         public void Invoke(string sign, params object[] t1)
         {
-            if (allEventDicParams.TryGetValue(sign, out EventDelegateParams e))
+            if (allEventParamsDic.TryGetValue(sign, out EventDelegateParams e))
             {
                 e(t1);
+            }
+        }
+
+        public void Invoke2(string sign, string subSign, object t1 = null)
+        {
+            if (allEventGroupDic.ContainsKey(sign))
+            {
+                allEventGroupDic[sign].Invoke(subSign, t1);
+            }
+            else
+            {
+                Debug.LogWarning($"{sign}此事件组没有注册过");
             }
         }
 

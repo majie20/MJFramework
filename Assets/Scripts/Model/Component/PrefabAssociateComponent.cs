@@ -135,7 +135,7 @@ namespace MGame.Model
                 }
             }
 
-            Game.Instance.EventSystem.Invoke<PrefabAssociateDataLoadComplete>();
+            Game.Instance.EventSystem.Invoke2(EventType.GameLoadComplete, EventType.PrefabAssociateDataLoadComplete);
         }
 
         public List<PrefabCreateData> GetPrefabCreateDataListByName(string name)

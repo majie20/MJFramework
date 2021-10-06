@@ -24,6 +24,12 @@ namespace ILRuntime.Runtime.Generated
         {
             System_Object_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_ILTypeInstance_Binding.Register(app);
+            System_String_Binding.Register(app);
+            UnityEngine_Debug_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_String_String_Array_Binding.Register(app);
+            System_Linq_Enumerable_Binding.Register(app);
+            System_Collections_Generic_List_1_String_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_String_Object_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Action_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Action_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Action_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
@@ -39,7 +45,6 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_IEnumerator_Binding.Register(app);
             System_Type_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Type_Binding.Register(app);
-            System_Linq_Enumerable_Binding.Register(app);
             MGame_Model_Singleton_1_Game_Binding.Register(app);
             MGame_Model_Game_Binding.Register(app);
             MGame_Model_Hotfix_Binding.Register(app);
@@ -59,8 +64,6 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_Type_ILTypeInstance_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
             UnityEngine_Component_Binding.Register(app);
             MGame_Model_BodyConstructor_Binding.Register(app);
-            UnityEngine_Debug_Binding.Register(app);
-            System_String_Binding.Register(app);
             System_Threading_Monitor_Binding.Register(app);
             System_Threading_Thread_Binding.Register(app);
         }
