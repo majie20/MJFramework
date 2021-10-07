@@ -30,6 +30,7 @@ namespace ILRuntime.Runtime.Generated
             System_Linq_Enumerable_Binding.Register(app);
             System_Collections_Generic_List_1_String_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Object_Binding.Register(app);
+            System_Collections_ArrayList_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Action_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Action_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Action_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
