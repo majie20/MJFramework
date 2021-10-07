@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,7 +55,15 @@ namespace MGame.Hotfix
 
             if (signList.Count >= group.Length)
             {
-                this.call(paramdic.Values.ToArray());
+                var paramList = new ArrayList(paramdic.Count);
+                for (int i = 0; i < group.Length; i++)
+                {
+                    if (paramdic.ContainsKey(group[i]))
+                    {
+                        paramList.Add(paramdic[group[i]]);
+                    }
+                }
+                this.call(paramList.ToArray());
                 paramdic.Clear();
                 signList.Clear();
             }
