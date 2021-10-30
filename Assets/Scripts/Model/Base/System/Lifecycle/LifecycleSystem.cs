@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 namespace MGame.Model
 {
-    public class LifecycleSystem
+    public class LifecycleSystem : IDisposable
     {
-        private readonly Dictionary<Type, IAwakeSystem> awakeSystems = new Dictionary<Type, IAwakeSystem>();
-        private readonly Dictionary<Type, IUpdateSystem> updateSystems = new Dictionary<Type, IUpdateSystem>();
-        private readonly Dictionary<Type, ILateUpdateSystem> lateUpdateSystems = new Dictionary<Type, ILateUpdateSystem>();
-        private readonly Dictionary<Type, IStartSystem> startSystems = new Dictionary<Type, IStartSystem>();
-        private readonly Dictionary<Type, IDestroySystem> destroySystems = new Dictionary<Type, IDestroySystem>();
+        private readonly HashSet<Type> awakeSystems = new HashSet<Type>();
+        private readonly HashSet<Type> updateSystems = new HashSet<Type>();
+        private readonly HashSet<Type> lateUpdateSystems = new HashSet<Type>();
+        private readonly HashSet<Type> startSystems = new HashSet<Type>();
+        private readonly HashSet<Type> destroySystems = new HashSet<Type>();
         private Dictionary<Type, List<Type>> types = new Dictionary<Type, List<Type>>();
 
         private Queue<Component> starts = new Queue<Component>();
         private Queue<Component> updates = new Queue<Component>();
         private Queue<Component> lateUpdates = new Queue<Component>();
 
-        public LifecycleSystem Init()
+        public LifecycleSystem()
         {
             types.Clear();
             var assembly = typeof(Init).Assembly;
@@ -55,28 +55,26 @@ namespace MGame.Model
 
                     if (obj is IAwakeSystem awakeSystem)
                     {
-                        awakeSystems.Add(v, awakeSystem);
+                        awakeSystems.Add(v);
                     }
                     if (obj is IUpdateSystem updateSystem)
                     {
-                        updateSystems.Add(v, updateSystem);
+                        updateSystems.Add(v);
                     }
                     if (obj is ILateUpdateSystem lateUpdateSystem)
                     {
-                        lateUpdateSystems.Add(v, lateUpdateSystem);
+                        lateUpdateSystems.Add(v);
                     }
                     if (obj is IStartSystem startSystem)
                     {
-                        startSystems.Add(v, startSystem);
+                        startSystems.Add(v);
                     }
                     if (obj is IDestroySystem destroySystem)
                     {
-                        destroySystems.Add(v, destroySystem);
+                        destroySystems.Add(v);
                     }
                 }
             }
-
-            return this;
         }
 
         public void Dispose()
@@ -87,15 +85,15 @@ namespace MGame.Model
         {
             Type type = component.GetType();
 
-            if (this.startSystems.ContainsKey(type))
+            if (this.startSystems.Contains(type))
             {
                 this.starts.Enqueue(component);
             }
-            if (this.updateSystems.ContainsKey(type))
+            if (this.updateSystems.Contains(type))
             {
                 this.updates.Enqueue(component);
             }
-            if (this.lateUpdateSystems.ContainsKey(type))
+            if (this.lateUpdateSystems.Contains(type))
             {
                 this.lateUpdates.Enqueue(component);
             }
@@ -106,9 +104,9 @@ namespace MGame.Model
             while (this.starts.Count > 0)
             {
                 var component = this.starts.Dequeue();
-                if (startSystems.TryGetValue(component.GetType(), out IStartSystem iStartSystem))
+                if (startSystems.Contains(component.GetType()))
                 {
-                    iStartSystem?.Start();
+                    (component as IStartSystem)?.Start();
                 }
             }
         }
@@ -118,9 +116,9 @@ namespace MGame.Model
             this.Start();
             foreach (var component in updates)
             {
-                if (updateSystems.TryGetValue(component.GetType(), out IUpdateSystem iUpdateSystem))
+                if (updateSystems.Contains(component.GetType()))
                 {
-                    iUpdateSystem?.OnUpdate(tick);
+                    (component as IUpdateSystem)?.OnUpdate(tick);
                 }
             }
         }
@@ -129,9 +127,9 @@ namespace MGame.Model
         {
             foreach (var component in lateUpdates)
             {
-                if (lateUpdateSystems.TryGetValue(component.GetType(), out ILateUpdateSystem iLateUpdateSystem))
+                if (lateUpdateSystems.Contains(component.GetType()))
                 {
-                    iLateUpdateSystem?.OnLateUpdate();
+                    (component as ILateUpdateSystem)?.OnLateUpdate();
                 }
             }
         }
@@ -140,9 +138,9 @@ namespace MGame.Model
 
         public void Awake(Component component)
         {
-            if (awakeSystems.TryGetValue(component.GetType(), out IAwakeSystem iAwakeSystem))
+            if (awakeSystems.Contains(component.GetType()))
             {
-                IAwake iAwake = iAwakeSystem as IAwake;
+                IAwake iAwake = component as IAwake;
 
                 iAwake?.Awake();
             }
@@ -150,9 +148,9 @@ namespace MGame.Model
 
         public void Awake<A>(Component component, A a)
         {
-            if (awakeSystems.TryGetValue(component.GetType(), out IAwakeSystem iAwakeSystem))
+            if (awakeSystems.Contains(component.GetType()))
             {
-                IAwake<A> iAwake = iAwakeSystem as IAwake<A>;
+                IAwake<A> iAwake = component as IAwake<A>;
 
                 iAwake?.Awake(a);
             }
@@ -160,9 +158,9 @@ namespace MGame.Model
 
         public void Awake<A, B>(Component component, A a, B b)
         {
-            if (awakeSystems.TryGetValue(component.GetType(), out IAwakeSystem iAwakeSystem))
+            if (awakeSystems.Contains(component.GetType()))
             {
-                IAwake<A, B> iAwake = iAwakeSystem as IAwake<A, B>;
+                IAwake<A, B> iAwake = component as IAwake<A, B>;
 
                 iAwake?.Awake(a, b);
             }
@@ -170,9 +168,9 @@ namespace MGame.Model
 
         public void Awake<A, B, C>(Component component, A a, B b, C c)
         {
-            if (awakeSystems.TryGetValue(component.GetType(), out IAwakeSystem iAwakeSystem))
+            if (awakeSystems.Contains(component.GetType()))
             {
-                IAwake<A, B, C> iAwake = iAwakeSystem as IAwake<A, B, C>;
+                IAwake<A, B, C> iAwake = component as IAwake<A, B, C>;
 
                 iAwake?.Awake(a, b, c);
             }
@@ -184,9 +182,9 @@ namespace MGame.Model
 
         public void Destroy(Component component)
         {
-            if (destroySystems.TryGetValue(component.GetType(), out IDestroySystem iDestroySystem))
+            if (destroySystems.Contains(component.GetType()))
             {
-                IDestroy iAwake = iDestroySystem as IDestroy;
+                IDestroy iAwake = component as IDestroy;
 
                 iAwake?.Destroy();
             }
@@ -194,9 +192,9 @@ namespace MGame.Model
 
         public void Destroy<A>(Component component, A a)
         {
-            if (destroySystems.TryGetValue(component.GetType(), out IDestroySystem iDestroySystem))
+            if (destroySystems.Contains(component.GetType()))
             {
-                IDestroy<A> iAwake = iDestroySystem as IDestroy<A>;
+                IDestroy<A> iAwake = component as IDestroy<A>;
 
                 iAwake?.Destroy(a);
             }
@@ -204,9 +202,9 @@ namespace MGame.Model
 
         public void Destroy<A, B>(Component component, A a, B b)
         {
-            if (destroySystems.TryGetValue(component.GetType(), out IDestroySystem iDestroySystem))
+            if (destroySystems.Contains(component.GetType()))
             {
-                IDestroy<A, B> iAwake = iDestroySystem as IDestroy<A, B>;
+                IDestroy<A, B> iAwake = component as IDestroy<A, B>;
 
                 iAwake?.Destroy(a, b);
             }
@@ -214,9 +212,9 @@ namespace MGame.Model
 
         public void Destroy<A, B, C>(Component component, A a, B b, C c)
         {
-            if (destroySystems.TryGetValue(component.GetType(), out IDestroySystem iDestroySystem))
+            if (destroySystems.Contains(component.GetType()))
             {
-                IDestroy<A, B, C> iAwake = iDestroySystem as IDestroy<A, B, C>;
+                IDestroy<A, B, C> iAwake = component as IDestroy<A, B, C>;
 
                 iAwake?.Destroy(a, b, c);
             }

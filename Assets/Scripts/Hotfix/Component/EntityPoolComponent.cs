@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MGame.Hotfix
 {
-    public class EntityPoolComponent : Component
+    [LifeCycle]
+    public class EntityPoolComponent : Component, IAwake
     {
-        private Dictionary<Type, Queue<Entity>> entityDic;
+        private Queue<Entity> entityDic;
 
-        public EntityPoolComponent()
+        public void Awake()
         {
-        }
-
-        public override Component Init()
-        {
-            base.Init();
-            entityDic = new Dictionary<Type, Queue<Entity>>();
-            return this;
+            entityDic = new Queue<Entity>(50);
         }
 
         public override void Dispose()
@@ -24,38 +18,21 @@ namespace MGame.Hotfix
             entityDic = null;
         }
 
-        public T HatchEntity<T>() where T : Entity, new()
+        public Entity HatchEntity()
         {
-            return (T)HatchEntity(typeof(T));
-        }
-
-        public Entity HatchEntity(Type type)
-        {
-            if (entityDic.ContainsKey(type))
+            if (entityDic.Count > 0)
             {
-                return entityDic[type].Dequeue();
+                return entityDic.Dequeue();
             }
 
-            var component = (Entity)Activator.CreateInstance(type);
+            var component = new Entity();
 
             return component;
         }
 
         public void RecycleEntity(Entity entity)
         {
-            var type = entity.GetType();
-            Queue<Entity> queue;
-            if (entityDic.ContainsKey(type))
-            {
-                queue = entityDic[type];
-            }
-            else
-            {
-                queue = new Queue<Entity>();
-                entityDic.Add(type, queue);
-            }
-
-            queue.Enqueue(entity);
+            entityDic.Enqueue(entity);
         }
     }
 }

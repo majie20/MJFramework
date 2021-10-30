@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MGame.Model
 {
-    public class Entity
+    public class Entity : IDisposable
     {
         protected Dictionary<Type, Component> componentDic;
 
@@ -69,48 +69,14 @@ namespace MGame.Model
 
         public Entity()
         {
-        }
-
-        public virtual void Init()
-        {
             componentDic = new Dictionary<Type, Component>();
-        }
-
-        public virtual Entity Init(bool isAB, string sign, Entity parent)
-        {
-            Init();
-
-            GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, isAB);
-            if (isAB)
-            {
-                this.Sign = sign;
-            }
-            else
-            {
-                this.Sign = "OrdinaryGameObject";
-                GameObject.name = sign;
-            }
-
-            Transform = GameObject.transform;
-            Transform.SetParent(parent.Transform);
-
-            AddComponentView();
-
-            return this;
-        }
-
-        protected void AddComponentView()
-        {
-            var component = GameObject.GetComponent<Model.ComponentView>();
-            componentView = component == null ? GameObject.AddComponent<Model.ComponentView>() : component;
-            componentView.isHotfix = false;
         }
 
         public virtual void Dispose()
         {
-            foreach (var component in GetComponents())
+            foreach (var component in this.GetComponents())
             {
-                RemoveComponent(component);
+                this.RemoveComponent(component);
             }
             componentDic = null;
 
@@ -120,6 +86,18 @@ namespace MGame.Model
                 Transform = null;
                 GameObject = null;
             }
+        }
+
+        public void AddComponentView()
+        {
+            var component = GameObject.GetComponent<Model.ComponentView>();
+            componentView = component == null ? GameObject.AddComponent<Model.ComponentView>() : component;
+            componentView.isHotfix = false;
+        }
+
+        private void AddToComponentView(Component component)
+        {
+            componentView.dic.Add(component, component.GetType());
         }
 
         #region 添加组件
@@ -155,11 +133,6 @@ namespace MGame.Model
         public T AddComponent<T>() where T : Component
         {
             return (T)AddComponent(typeof(T));
-        }
-
-        private void AddToComponentView(Component component)
-        {
-            componentView.dic.Add(component, component.GetType());
         }
 
         #endregion 添加组件

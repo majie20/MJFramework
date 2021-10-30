@@ -12,12 +12,20 @@ namespace MGame.Model
 
             appdomain.DelegateManager.RegisterMethodDelegate<float>();
             appdomain.DelegateManager.RegisterMethodDelegate<ILTypeInstance>();
+            appdomain.DelegateManager.RegisterMethodDelegate<System.String>();
 
             appdomain.DelegateManager.RegisterDelegateConvertor<EventDelegateParams>((action) =>
             {
                 return new EventDelegateParams((a) =>
                 {
                     ((System.Action<object[]>)action)(a);
+                });
+            });
+            appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction>((action) =>
+            {
+                return new UnityEngine.Events.UnityAction(() =>
+                {
+                    ((System.Action)action)();
                 });
             });
             //appdomain.DelegateManager.RegisterDelegateConvertor<GameUpdate>((action) =>
@@ -39,6 +47,8 @@ namespace MGame.Model
             ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
 
             // 注册适配器
+
+            appdomain.RegisterCrossBindingAdaptor(new IDisposableAdapter());
 
             //这里需要注册所有热更DLL中用到的跨域继承Adapter，否则无法正确抓取引用
             //appdomain.RegisterCrossBindingAdaptor(new EventDelegateParams());

@@ -34,7 +34,8 @@ namespace MGame.Model
         public Vector3 localScale;
     }
 
-    public class PrefabAssociateComponent : Component
+    [LifeCycle]
+    public class PrefabAssociateComponent : Component, IAwake
     {
         /// <summary>
         /// Guid、预制体位置数据（在AB包中的位置）
@@ -46,20 +47,12 @@ namespace MGame.Model
         /// </summary>
         private Dictionary<string, List<PrefabCreateData>> prefabCreateDic;
 
-        public PrefabAssociateComponent()
+        public void Awake()
         {
-        }
-
-        public override Component Init()
-        {
-            base.Init();
-
             prefabPlaceDic = new Dictionary<string, PrefabPlaceData>();
             prefabCreateDic = new Dictionary<string, List<PrefabCreateData>>();
 
             Game.Instance.EventSystem.AddListener<AssetBundleLoadComplete>(OnAssetBundleLoadComplete, this);
-
-            return this;
         }
 
         public override void Dispose()

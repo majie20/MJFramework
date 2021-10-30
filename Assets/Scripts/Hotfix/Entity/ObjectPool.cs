@@ -7,24 +7,16 @@ namespace MGame.Hotfix
     {
         public ObjectPool()
         {
-        }
-
-        public Entity Init(string name, Transform parent)
-        {
-            Init();
-
-            GameObject = new GameObject(name);
+            GameObject = new GameObject("ObjectPool");
             Transform = GameObject.transform;
-            Transform.SetParent(parent);
+            Transform.SetParent(Game.Instance.Transform);
             GameObject.SetActive(false);
 
             AddComponentView();
 
-            AddComponent(new ComponentPoolComponent().Init(this));
-            AddComponent(new GameObjPoolComponent().Init(this));
-            AddComponent(new EntityPoolComponent().Init(this));
-
-            return this;
+            ObjectHelper.CreateComponent<ComponentPoolComponent>(this, false);
+            ObjectHelper.CreateComponent<GameObjPoolComponent>(this, false);
+            ObjectHelper.CreateComponent<EntityPoolComponent>(this, false);
         }
 
         public override void Dispose()
@@ -42,14 +34,9 @@ namespace MGame.Hotfix
 
         #region Entity
 
-        public T HatchEntity<T>() where T : Entity, new()
+        public Entity HatchEntity()
         {
-            return GetComponent<EntityPoolComponent>().HatchEntity<T>();
-        }
-
-        public Entity HatchEntity(Type type)
-        {
-            return GetComponent<EntityPoolComponent>().HatchEntity(type);
+            return GetComponent<EntityPoolComponent>().HatchEntity();
         }
 
         public void RecycleEntity(Entity entity)
@@ -75,7 +62,7 @@ namespace MGame.Hotfix
 
         #region 组件
 
-        public T HatchComponent<T>() where T : Component, new()
+        public T HatchComponent<T>() where T : Component
         {
             return GetComponent<ComponentPoolComponent>().HatchComponent<T>();
         }

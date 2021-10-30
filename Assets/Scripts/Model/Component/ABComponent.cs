@@ -7,7 +7,8 @@ using UnityEngine.Networking;
 
 namespace MGame.Model
 {
-    public class ABComponent : Component
+    [LifeCycle]
+    public class ABComponent : Component, IAwake
     {
         /// <summary>
         /// AB包名、收藏家
@@ -22,18 +23,12 @@ namespace MGame.Model
         /// </summary>
         private Dictionary<string, string> prefabDic;
 
-        public ABComponent()
+        public void Awake()
         {
-        }
-
-        public override Component Init()
-        {
-            base.Init();
             prefabCollectors = new Dictionary<string, ReferenceCollector>();
             jsonDataCollectors = new Dictionary<string, ReferenceCollector>();
             textCollectors = new Dictionary<string, ReferenceCollector>();
             prefabDic = new Dictionary<string, string>();
-            return this;
         }
 
         public override void Dispose()

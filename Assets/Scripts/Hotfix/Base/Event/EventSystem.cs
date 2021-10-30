@@ -4,26 +4,24 @@ using UnityEngine;
 
 namespace MGame.Hotfix
 {
-    public sealed class EventSystem
+    public sealed class EventSystem : IDisposable
     {
         private Dictionary<string, IEvent> allEventDic;
         private Dictionary<string, EventDelegateParams> allEventParamsDic;
         private Dictionary<string, EventGroup> allEventGroupDic;
 
-        public EventSystem Init()
+        public EventSystem()
         {
-            EventType.Init();
-
             allEventDic = new Dictionary<string, IEvent>();
             allEventParamsDic = new Dictionary<string, EventDelegateParams>();
             allEventGroupDic = new Dictionary<string, EventGroup>();
-
-            return this;
         }
 
         public void Dispose()
         {
             allEventDic = null;
+            allEventParamsDic = null;
+            allEventGroupDic = null;
         }
 
         private T1 AddEventModel<T1>() where T1 : IEvent, new()

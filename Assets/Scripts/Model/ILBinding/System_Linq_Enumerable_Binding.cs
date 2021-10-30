@@ -49,12 +49,12 @@ namespace ILRuntime.Runtime.Generated
                     }
                 }
             }
-            args = new Type[]{typeof(ILRuntime.Runtime.Intepreter.ILTypeInstance)};
+            args = new Type[]{typeof(MGame.Model.IDisposableAdapter.Adapter)};
             if (genericMethods.TryGetValue("ToArray", out lst))
             {
                 foreach(var m in lst)
                 {
-                    if(m.MatchGenericParameters(args, typeof(ILRuntime.Runtime.Intepreter.ILTypeInstance[]), typeof(System.Collections.Generic.IEnumerable<ILRuntime.Runtime.Intepreter.ILTypeInstance>)))
+                    if(m.MatchGenericParameters(args, typeof(MGame.Model.IDisposableAdapter.Adapter[]), typeof(System.Collections.Generic.IEnumerable<MGame.Model.IDisposableAdapter.Adapter>)))
                     {
                         method = m.MakeGenericMethod(args);
                         app.RegisterCLRMethodRedirection(method, ToArray_1);
@@ -97,11 +97,11 @@ namespace ILRuntime.Runtime.Generated
             StackObject* __ret = ILIntepreter.Minus(__esp, 1);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            System.Collections.Generic.IEnumerable<ILRuntime.Runtime.Intepreter.ILTypeInstance> @source = (System.Collections.Generic.IEnumerable<ILRuntime.Runtime.Intepreter.ILTypeInstance>)typeof(System.Collections.Generic.IEnumerable<ILRuntime.Runtime.Intepreter.ILTypeInstance>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Collections.Generic.IEnumerable<MGame.Model.IDisposableAdapter.Adapter> @source = (System.Collections.Generic.IEnumerable<MGame.Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.IEnumerable<MGame.Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
             __intp.Free(ptr_of_this_method);
 
 
-            var result_of_this_method = System.Linq.Enumerable.ToArray<ILRuntime.Runtime.Intepreter.ILTypeInstance>(@source);
+            var result_of_this_method = System.Linq.Enumerable.ToArray<MGame.Model.IDisposableAdapter.Adapter>(@source);
 
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }

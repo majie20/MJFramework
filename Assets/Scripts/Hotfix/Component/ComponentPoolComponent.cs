@@ -3,19 +3,14 @@ using System.Collections.Generic;
 
 namespace MGame.Hotfix
 {
-    public class ComponentPoolComponent : Component
+    [LifeCycle]
+    public class ComponentPoolComponent : Component, IAwake
     {
         private Dictionary<Type, Queue<Component>> componentDic;
 
-        public ComponentPoolComponent()
+        public void Awake()
         {
-        }
-
-        public override Component Init()
-        {
-            base.Init();
             componentDic = new Dictionary<Type, Queue<Component>>();
-            return this;
         }
 
         public override void Dispose()

@@ -10,16 +10,30 @@ namespace MGame.Model
             Game.Instance.Init();
         }
 
-        private void OnEnable()
+        private async void OnEnable()
         {
             Game.Instance.EventSystem.AddListener2(EventType.GameLoadComplete, 0, OnGameLoadComplete);
 
-            StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>().LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
+            StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>()
+                .LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
+
+            //netsh http add urlacl url = http://192.168.31.141:8082/ user=everyone
+            //netsh http add urlacl url = http://+:8082/ user=everyone
+            //netsh http show urlacl
+            //netsh http delete urlacl url = http://+:8082/
+            //netsh http delete urlacl url = http://192.168.31.141:8082/
+
+            //var ips = HttpHelper.GetAddressIPs();
+
+            //for (int i = 0; i < ips.Length; i++)
+            //{
+            //    Debug.Log(ips[i]); // MDEBUG:
+            //}
         }
 
         private void OnDisable()
         {
-            Game.Instance.EventSystem.RemoveListener2(EventType.GameLoadComplete, OnGameLoadComplete);
+            //Game.Instance.EventSystem.RemoveListener2(EventType.GameLoadComplete, OnGameLoadComplete);
         }
 
         private void Update()
@@ -29,6 +43,11 @@ namespace MGame.Model
             {
                 Game.Instance.Hotfix.GameUpdate(Time.deltaTime);
             }
+
+            //if (Input.GetKeyDown(KeyCode.A))
+            //{
+            //    Game.Instance.Hotfix.GotoHotfix();
+            //}
         }
 
         private void LateUpdate()
@@ -46,6 +65,7 @@ namespace MGame.Model
             {
                 Game.Instance.Hotfix.GameApplicationQuit();
             }
+            Game.Instance.Dispose();
         }
 
         private void OnGameLoadComplete(object[] args)

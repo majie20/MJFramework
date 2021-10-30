@@ -11,7 +11,20 @@ public class StaticLinkedList<T> : IEnumerable<T>
     }
 
     private Element[] elements;
-    private int length;
+    private int totalLength;
+    private int effectiveLength;
+
+    public int Length
+    {
+        private set
+        {
+            effectiveLength = value;
+        }
+        get
+        {
+            return effectiveLength;
+        }
+    }
 
     public StaticLinkedList(int length)
     {
@@ -20,7 +33,7 @@ public class StaticLinkedList<T> : IEnumerable<T>
             length = 10;
         }
 
-        this.length = length;
+        this.totalLength = length;
         this.elements = new Element[length];
         for (int i = 2; i < length - 1; i++)
         {
@@ -32,18 +45,18 @@ public class StaticLinkedList<T> : IEnumerable<T>
         this.elements[length - 1].cur = 1;
     }
 
-    public int Length()
-    {
-        var cur = this.elements[1].cur;
-        var i = 0;
-        while (cur != 0)
-        {
-            i++;
-            cur = this.elements[cur].cur;
-        }
+    //public int Length()
+    //{
+    //    var cur = this.elements[1].cur;
+    //    var i = 0;
+    //    while (cur != 0)
+    //    {
+    //        i++;
+    //        cur = this.elements[cur].cur;
+    //    }
 
-        return i;
-    }
+    //    return i;
+    //}
 
     public int Add(T t)
     {
@@ -57,6 +70,8 @@ public class StaticLinkedList<T> : IEnumerable<T>
         this.elements[cur].cur = this.elements[1].cur;
         this.elements[1].cur = cur;
         this.elements[cur].element = t;
+
+        Length += 1;
 
         return cur;
     }
@@ -81,6 +96,8 @@ public class StaticLinkedList<T> : IEnumerable<T>
                 this.elements[cur].cur = this.elements[0].cur;
                 this.elements[0].cur = cur;
 
+                Length -= 1;
+
                 return element;
             }
 
@@ -93,8 +110,8 @@ public class StaticLinkedList<T> : IEnumerable<T>
 
     private void Expansion()
     {
-        this.length *= 2;
-        var elements = new Element[this.length];
+        this.totalLength *= 2;
+        var elements = new Element[this.totalLength];
         var length = this.elements.Length;
 
         for (int i = 1; i < length; i++)
@@ -102,13 +119,13 @@ public class StaticLinkedList<T> : IEnumerable<T>
             elements[i] = this.elements[i];
         }
 
-        for (int i = length; i < this.length - 1; i++)
+        for (int i = length; i < this.totalLength - 1; i++)
         {
             elements[i].cur = i + 1;
         }
 
         elements[0].cur = length;
-        elements[this.length - 1].cur = 1;
+        elements[this.totalLength - 1].cur = 1;
         this.elements = elements;
     }
 

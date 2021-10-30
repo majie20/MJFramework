@@ -6,23 +6,16 @@ namespace MGame.Model
     {
         public Scene()
         {
-        }
-
-        public Entity Init(string name, Transform parent)
-        {
-            Init();
-
-            GameObject = new GameObject(name);
+            GameObject = new GameObject("Scene");
             Transform = GameObject.transform;
-            Transform.SetParent(parent);
+            Transform.SetParent(Game.Instance.Transform);
 
-            AddComponentView();
+            this.AddComponentView();
 
-            AddComponent(new ABComponent().Init(this));
-            AddComponent(new PrefabAssociateComponent().Init(this));
-            AddComponent(new TextManageComponent().Init(this));
-
-            return this;
+            ObjectHelper.CreateComponent<ABComponent>(this, false);
+            ObjectHelper.CreateComponent<PrefabAssociateComponent>(this, false);
+            ObjectHelper.CreateComponent<TextManageComponent>(this, false);
+            //ObjectHelper.CreateComponent<NetComponent>(this, false);
         }
 
         public override void Dispose()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MGame.Hotfix
 {
@@ -17,25 +18,21 @@ namespace MGame.Hotfix
 
         public override void Init()
         {
-            base.Init();
-
             GameObject = new GameObject("Hotfix");
             Transform = GameObject.transform;
-            Object.DontDestroyOnLoad(GameObject);
+            GameObject.DontDestroyOnLoad(GameObject);
 
-            EventSystem = new EventSystem().Init();
+            EventSystem = new EventSystem();
 
-            LifecycleSystem = new LifecycleSystem().Init();
+            LifecycleSystem = new LifecycleSystem();
 
-            ObjectPool = new ObjectPool().Init("ObjectPool", Transform) as ObjectPool;
+            ObjectPool = new ObjectPool();
 
-            Scene = new Scene().Init("Scene", Transform) as Scene;
+            Scene = new Scene();
         }
 
         public override void Dispose()
         {
-            base.Dispose();
-
             Scene?.Dispose();
             Scene = null;
 

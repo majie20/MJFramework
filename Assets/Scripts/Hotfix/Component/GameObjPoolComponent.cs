@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace MGame.Hotfix
 {
-    public class GameObjPoolComponent : Component
+    [LifeCycle]
+    public class GameObjPoolComponent : Component, IAwake
     {
         /// <summary>
         /// 对象池中的游戏物体
@@ -20,19 +21,11 @@ namespace MGame.Hotfix
         /// </summary>
         private GameObject root;
 
-        public GameObjPoolComponent()
+        public void Awake()
         {
-        }
-
-        public override Component Init()
-        {
-            base.Init();
-
             gameObjDic = new Dictionary<string, Queue<GameObject>>();
             parentDic = new Dictionary<string, Transform>();
             root = Entity.GameObject;
-
-            return this;
         }
 
         public override void Dispose()

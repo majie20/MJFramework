@@ -12,11 +12,11 @@ namespace MGame.Hotfix
             Model.Game.Instance.Hotfix.GameLateUpdate = OnLateUpdate;
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
-            var test = new Entity().Init(true, "Cylinder", Game.Instance.Scene);
-            var component = test.AddComponent<TestComponent>().Init(test);
-            Game.Instance.LifecycleSystem.Awake(component);
-            Game.Instance.LifecycleSystem.Awake(component, "majie");
-            Game.Instance.LifecycleSystem.Add(component);
+            ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, "Cylinder", true), "majie");
+
+
+            //var test1 = Game.Instance.ObjectPool.HatchEntity().Init(true, "NetTest", Game.Instance.Scene);
+            //ObjectHelper.CreateComponent<NetTestComponent>(test1);
         }
 
         private static void OnUpdate(float tick)
@@ -33,6 +33,7 @@ namespace MGame.Hotfix
 
         private static void OnApplicationQuit()
         {
+            Game.Instance.Dispose();
             //Debug.Log("OnApplicationQuit"); // MDEBUG:
         }
     }

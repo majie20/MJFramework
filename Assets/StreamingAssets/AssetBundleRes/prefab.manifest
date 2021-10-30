@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3129969410
+CRC: 1432375450
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5ddeebf5f9452f2f6de64e4591b5ed66
+    Hash: 13479d421d9d4fa0a85d96d56bfa97ce
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7e2a499c357c24a7576869f83b39e515
+    Hash: 27a4b7ea5845e4dc5efa0dd095295baf
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -30,13 +30,31 @@ ClassTypes:
 - Class: 65
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: e903585689a898d4685c955a47f28a59, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c737338a2c490e64bbc264143f8eaf71, type: 3}
 - Class: 115
@@ -51,14 +69,15 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 222
   Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Res/Prefabs/JsonReferenceCollector.prefab
 - Assets/Res/Prefabs/Cube.json
-- Assets/Res/Prefabs/Button.prefab
-- Assets/Res/Prefabs/Image.prefab
+- Assets/Res/Prefabs/NetTest.prefab
 - Assets/Res/Prefabs/PrefabReferenceCollector.prefab
 - Assets/Res/Prefabs/Cylinder.prefab
 - Assets/Res/Prefabs/Capsule.prefab

@@ -18,7 +18,9 @@ public class AssetBundleBuildEditor : EditorWindow
             Directory.CreateDirectory(path);
         }
 
+        AssetDatabase.Refresh();
         BuildPipeline.BuildAssetBundles(path, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
+        AssetDatabase.Refresh();
         Debug.Log($"完成AssetBundle打包，文件夹{path}");
     }
 }

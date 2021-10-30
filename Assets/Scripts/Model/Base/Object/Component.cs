@@ -1,6 +1,8 @@
-﻿namespace MGame.Model
+﻿using System;
+
+namespace MGame.Model
 {
-    public class Component
+    public class Component : IDisposable
     {
         private Entity entity;
 
@@ -16,15 +18,8 @@
             }
         }
 
-        public virtual Component Init()
+        public Component()
         {
-            return this;
-        }
-
-        public virtual Component Init(Entity entity)
-        {
-            this.Entity = entity;
-            return Init();
         }
 
         public virtual void Dispose()

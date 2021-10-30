@@ -6,19 +6,11 @@ namespace MGame.Hotfix
     {
         public Scene()
         {
-        }
-
-        public Entity Init(string name, Transform parent)
-        {
-            Init();
-
-            GameObject = new GameObject(name);
+            GameObject = new GameObject("Scene");
             Transform = GameObject.transform;
-            Transform.SetParent(parent);
+            Transform.SetParent(Game.Instance.Transform);
 
             AddComponentView();
-
-            return this;
         }
 
         public override void Dispose()

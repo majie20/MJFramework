@@ -558,7 +558,7 @@ public class PrefabAssociateEditor : EditorWindow
                         sw.Write(sb);
                     }
                 }
-
+                AssetDatabase.Refresh();
                 Debug.Log($"预制体[{targetObj.name}]生成数据文件成功!");
             }
         }

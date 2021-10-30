@@ -2,22 +2,16 @@
 
 namespace MGame.Model
 {
-    public class TextManageComponent : Component
+    [LifeCycle]
+    public class TextManageComponent : Component, IAwake
     {
         private Dictionary<string, UnityEngine.TextAsset> textDataDic;
 
-        public TextManageComponent()
+        public void Awake()
         {
-        }
-
-        public override Component Init()
-        {
-            base.Init();
-
             textDataDic = new Dictionary<string, UnityEngine.TextAsset>();
 
             Game.Instance.EventSystem.AddListener<AssetBundleLoadComplete>(OnAssetBundleLoadComplete, this);
-            return this;
         }
 
         public override void Dispose()

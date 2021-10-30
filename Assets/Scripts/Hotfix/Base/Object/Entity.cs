@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MGame.Hotfix
 {
-    public class Entity
+    public class Entity : IDisposable
     {
         protected Dictionary<Type, Component> componentDic;
 
@@ -69,37 +69,10 @@ namespace MGame.Hotfix
 
         public Entity()
         {
-        }
-
-        public virtual void Init()
-        {
             componentDic = new Dictionary<Type, Component>();
         }
 
-        public virtual Entity Init(bool isAB, string sign, Entity parent)
-        {
-            Init();
-
-            GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, isAB);
-            if (isAB)
-            {
-                this.Sign = sign;
-            }
-            else
-            {
-                this.Sign = "OrdinaryGameObject";
-                GameObject.name = sign;
-            }
-
-            Transform = GameObject.transform;
-            Transform.SetParent(parent.Transform);
-
-            AddComponentView();
-
-            return this;
-        }
-
-        protected void AddComponentView()
+        public void AddComponentView()
         {
             var component = GameObject.GetComponent<Model.ComponentView>();
             componentView = component == null ? GameObject.AddComponent<Model.ComponentView>() : component;

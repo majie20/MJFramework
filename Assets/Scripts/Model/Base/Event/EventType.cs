@@ -3,6 +3,7 @@
 namespace MGame.Model
 {
     public class AssetBundleLoadComplete : EventBase { }
+    public class NetTestSend : EventBase<string> { }
 
     public class EventType
     {

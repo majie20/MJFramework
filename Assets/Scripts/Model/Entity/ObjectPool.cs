@@ -7,24 +7,16 @@ namespace MGame.Model
     {
         public ObjectPool()
         {
-        }
-
-        public Entity Init(string name, Transform parent)
-        {
-            Init();
-
-            GameObject = new GameObject(name);
+            GameObject = new GameObject("ObjectPool");
             Transform = GameObject.transform;
-            Transform.SetParent(parent);
+            Transform.SetParent(Game.Instance.Transform);
             GameObject.SetActive(false);
 
-            AddComponentView();
+            this.AddComponentView();
 
-            AddComponent(new ComponentPoolComponent().Init(this));
-            AddComponent(new GameObjPoolComponent().Init(this));
-            AddComponent(new EntityPoolComponent().Init(this));
-
-            return this;
+            ObjectHelper.CreateComponent<ComponentPoolComponent>(this, false);
+            ObjectHelper.CreateComponent<GameObjPoolComponent>(this, false);
+            ObjectHelper.CreateComponent<EntityPoolComponent>(this, false);
         }
 
         public override void Dispose()
@@ -42,19 +34,14 @@ namespace MGame.Model
 
         #region Entity
 
-        public T HatchEntity<T>() where T : Entity, new()
+        public Entity HatchEntity()
         {
-            return GetComponent<EntityPoolComponent>().HatchEntity<T>();
-        }
-
-        public Entity HatchEntity(Type type)
-        {
-            return GetComponent<EntityPoolComponent>().HatchEntity(type);
+            return this.GetComponent<EntityPoolComponent>().HatchEntity();
         }
 
         public void RecycleEntity(Entity entity)
         {
-            GetComponent<EntityPoolComponent>().RecycleEntity(entity);
+            this.GetComponent<EntityPoolComponent>().RecycleEntity(entity);
         }
 
         #endregion Entity
@@ -63,12 +50,12 @@ namespace MGame.Model
 
         public GameObject HatchGameObjByName(string name, bool isAB)
         {
-            return GetComponent<GameObjPoolComponent>().HatchGameObjByName(name, isAB);
+            return this.GetComponent<GameObjPoolComponent>().HatchGameObjByName(name, isAB);
         }
 
         public void RecycleGameObj(string sign, GameObject obj)
         {
-            GetComponent<GameObjPoolComponent>().RecycleGameObj(sign, obj);
+            this.GetComponent<GameObjPoolComponent>().RecycleGameObj(sign, obj);
         }
 
         #endregion 游戏物体
@@ -77,17 +64,17 @@ namespace MGame.Model
 
         public T HatchComponent<T>() where T : Component, new()
         {
-            return GetComponent<ComponentPoolComponent>().HatchComponent<T>();
+            return this.GetComponent<ComponentPoolComponent>().HatchComponent<T>();
         }
 
         public Component HatchComponent(Type type)
         {
-            return GetComponent<ComponentPoolComponent>().HatchComponent(type);
+            return this.GetComponent<ComponentPoolComponent>().HatchComponent(type);
         }
 
         public void RecycleComponent(Component component)
         {
-            GetComponent<ComponentPoolComponent>().RecycleComponent(component);
+            this.GetComponent<ComponentPoolComponent>().RecycleComponent(component);
         }
 
         #endregion 组件
