@@ -1,0 +1,55 @@
+package ProtoCmd;
+
+
+// �ɾ�����
+enum AchievementType
+{
+	AchievementType_None				= 0;	// ��
+	AchievementType_FB					= 1;	// ��ͨ����
+	AchievementType_FBBOSS				= 2;	// ����BOSS
+	AchievementType_KillMonster			= 3;	// ɱ������
+	AchievementType_Star				= 4;	// �ؿ��Ǽ�
+	AchievementType_Strengthen			= 5;	// װ��ǿ��
+	AchievementType_ArenaCredits		= 6;	// ����������
+	AchievementType_Sprite				= 7;	// �ػ�����
+	AchievementType_Friend				= 8;	// ����
+	AchievementType_Level				= 9;	// ����ȼ�
+	AchievementType_DeathTower			= 10;	// ������
+	AchievementType_WorldBoss			= 11;	// ����BOSS
+	AchievementType_Fight				= 12;	// ս����
+	AchievementType_ActivityFB			= 13;	// �FB
+	AchievementType_EquipQuality		= 14;	// װ��Ʒ��
+	AchievementType_Gemstone			= 15;	// ��ʯ
+	AchievementType_Rune				= 16;	// ����
+	AchievementType_RuneLink			= 17;	// ���Ĺ���
+	AchievementType_ArenaWin			= 18;	// �������ۻ�ʤ��
+	AchievementType_WinStreak			= 19;	// ��������ʤ
+	AchievementType_LoseStreak			= 20;	// ����������
+	AchievementType_SkillNum			= 21;	// ��������
+	AchievementType_Wing				= 22;	// ��ó��
+	AchievementType_SpreadEdgeCount		= 23;	// �Ա߸���
+	AchievementType_OrangeEdgeCount		= 24;	// �ȱ�����
+	AchievementType_BattleFiled			= 25;	// ս���ۼ�ʤ������
+	AchievementType_JoinGuild			= 26;	// �������
+}
+
+// �ɾ�״̬
+enum AchievementStatus
+{
+	AchievementStatus_NotActive	= 0;	// ��δ��������������ȡ
+	AchievementStatus_Active	= 1;	// ����ȡ
+	AchievementStatus_Taken		= 2;	// ����ȡ
+}
+	
+// �ɾͽ�������
+enum AchievementRewardType
+{
+	AchievementRewardType_None			= 0;	// ��
+	AchievementRewardType_Money			= 1;	// ���
+	AchievementRewardType_Diamond		= 2;	// ��ʯ
+	AchievementRewardType_Honor			= 3;	// ������
+	AchievementRewardType_Pet			= 6;	// ����
+}	
+
+
+

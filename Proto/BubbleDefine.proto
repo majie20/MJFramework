@@ -1,0 +1,29 @@
+package ProtoCmd;
+
+
+// 新手引导条件类型（用在SysCondition表中）
+enum NewBieGuideElementSubtype
+{
+	None								= -1;	// 无
+	DeblockingLevel					= 1003;	// 
+	DeblockingCourse				 	= 1001;	// 
+	DeblockingSafari					= 1006;	// 
+	AccomplishGuidance					= 1007;	// 
+	GetRole							= 6001;	// 
+	RoleKillMonster					= 2018;	// 
+	WallSafariFinishNum					= 2001;	// 
+	RoleOnwCombat						= 2000;	// 
+	PassStoryInstance					= 2006; //通过故事关卡  参数1=StoryInstance表的StoryInstanceID
+	PassMapInstance						= 2007; //通过日常关卡  参数1=难度[0/1/2/3...]  参数2=MapInstance表的InstanceID
+	FirstCombat						= 2022;	// 
+	CombatState						= 2500;	// 
+	EntranceScene						= 4001;	// 
+	EntranceUI						= 4002;	// 
+	RoleExpLevel						= 6005;	// 
+	RoleExpLevelMax					= 6006;	// 
+	ExtractNum						= 7002;	// 
+	FinishLottery					 = 7003;	// 抽卡完成
+	FirstSign							= 7007;	// 
+	SignNum							= 6012;	// 
+
+}

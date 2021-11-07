@@ -1,0 +1,52 @@
+package ProtoCmd;
+import "AchievementDefine.proto";
+
+// ����ɵĳɾ�����
+message FinishAchievementData
+{
+	optional uint32 id							= 1;	// �ɾ�id
+	optional uint32	time						= 2;	// ��ɵ�ʱ��
+}
+
+// ������ɵĳɾ�����
+message DoingAchievementData
+{
+	optional uint32 id							= 1;										// �ɾ�id
+	optional uint32 type						= 2;										// �ɾ����� AchievementType
+	optional uint32 value						= 3;										// ֵ
+	optional uint32 condition					= 4;										// ����
+	optional AchievementStatus status			= 5[default=AchievementStatus_NotActive];	// ״̬
+	optional AchievementRewardType reward_type	= 6[default=AchievementRewardType_None];	// ��������
+	optional uint32 reward_value				= 7;					
+}
+
+// ˢ�³ɾ��б�	_S
+message RefreshAchievementListClientCmd
+{
+	repeated FinishAchievementData finish_list			= 1;	// ����ɵĳɾ�
+	repeated DoingAchievementData doing_list			= 2;	// ������ɵĳɾ�
+}
+
+// ����������ɵĳɾ����� _S
+message UpdateDoingAchievementDataClientCmd
+{
+	optional DoingAchievementData data			= 1;	// ������ɵĳɾ�
+}
+
+// ������ɵĳɾ�	_S
+message AddFinishAchievementClientCmd
+{
+	optional FinishAchievementData data			= 1;	// ����ɵĳɾ�
+}
+
+// ��ȡ�ɾͽ��� _C
+message TakenAchievementRewardClientCmd
+{
+	optional uint32 id							= 1;	// �ɾ�id
+}
+
+// ��ȡ�ɾͽ������ؽ�� _S
+message ResultTakenAchievementRewardClientCmd
+{
+	optional uint32 ret							= 1;	// ���ش����루0��ʾû�д���
+}

@@ -1,0 +1,42 @@
+package ProtoCmd;
+import "ActivityDefine.proto";
+
+
+// ˢ�����еĻ�б� _S
+message RefreshAllActivityListClientCmd
+{
+	repeated ActivityData activity_list	= 1;	// ���еĻ�б�
+}
+
+// ���»Ԫ�� _S
+message UpdateActivityElementClientCmd
+{
+	optional ActivityElement element		= 1;	// �Ԫ��
+}
+
+// ��ȡ����� _C
+message TakeActivityRewardClientCmd
+{
+	optional uint32 element_id				= 1;	// Ԫ��id
+}
+
+// ɾ����б� _S
+message DelActivityListClientCmd
+{
+	repeated uint32 activity_id			= 1;	// �ID�б�
+}
+
+// �֪ͨ _CS
+message NotifyActivityClientCmd
+{
+	optional uint32 activity_id			= 1;	// �ID
+}
+
+// ���»��ǰֵ��Ԫ��״̬ _S
+message UpdateActivityCurValueClientCmd
+{
+	optional uint32 activity_id				= 1;	// �ID
+	optional uint32 cur_value				= 2;	// ��ǰֵ
+
+	repeated ActivityElementStatus status	= 3;	// ״̬�б�
+}

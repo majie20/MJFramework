@@ -1,0 +1,174 @@
+package ProtoCmd;
+
+// ���ҳ����
+enum ActivityPageType
+{
+	ActivityPageType_type1	= 1;
+	ActivityPageType_type2	= 2;
+	ActivityPageType_type3	= 3;
+	ActivityPageType_type4	= 4;
+}
+
+// �����
+enum ActivityType
+{
+	ActivityType_Login						= 1;	// ��¼
+	ActivityType_AccumulLogin				= 2;	// �ۼƵ�¼����
+	ActivityType_RechargeDiamond			= 3;	// ��ֵ�����ʯ��
+	ActivityType_DiamondCost				= 4;	// ��ʯ����
+	ActivityType_MoneyGain					= 5;	// ��һ��
+	ActivityType_MoneyCost					= 6;	// �������
+	ActivityType_FB							= 7;	// ͨ�ظ���
+	ActivityType_FightRankList				= 8;	// ս�����а�
+	ActivityType_Level						= 9;	// ��ɫ�ȼ�
+	ActivityType_Fight						= 10;	// ս��
+	ActivityType_Online						= 11;	// ����ʱ��
+	ActivityType_RechargeOneDay				= 12;	// �����ۼƳ�ֵ
+	ActivityType_AccumulRecharge			= 13;	// �ۼƳ�ֵ����
+	ActivityType_TreasureChest				= 14;	// ����Ů��ʮ����
+	ActivityType_ArenaRankList				= 15;	// ����������
+	ActivityType_SacrificeRankList			= 16;	// ��������
+	ActivityType_Mall						= 17;	// �̳�
+	ActivityType_DoubleRewardFB				= 18;	// ˫����������
+	ActivityType_Notice						= 19;	// ����
+	ActivityType_DailyRechargeRankList		= 20;	// �ճ�ֵ���а�
+	ActivityType_DailyDiamondCostRankList	= 21;	// ����ʯ�������а�
+
+	ActivityType_Login1						= 22;	// ��¼1
+	ActivityType_AccumulLogin1				= 23;	// �ۼƵ�¼����1
+	ActivityType_AccumulLogin2				= 24;	// �ۼƵ�¼����2
+	ActivityType_RechargeDiamond1			= 25;	// ��ֵ�����ʯ��1
+	ActivityType_DiamondCost1				= 26;	// ��ʯ����1
+	ActivityType_MoneyGain1					= 27;	// ��һ��1
+	ActivityType_MoneyCost1					= 28;	// �������1
+	ActivityType_AccumulRecharge1			= 29;	// �ۼƳ�ֵ����1
+
+	ActivityType_AdvanceTreasureChest		= 30;	// ���Ů��ʮ����
+	ActivityType_Vip						= 31;	// VIP���
+	ActivityType_WingRankList				= 32;	// ������а�
+	ActivityType_OrangeEdgeRankList			= 33;	// �ȱ����а�
+	ActivityType_WishDiamondCostRankList	= 34;	// ��Ը��ʯ�������а�
+	ActivityType_RechargeDiamond2			= 35;	// ��ֵ�����ʯ2
+	ActivityType_RechargeDiamond3			= 36;	// ��ֵ�����ʯ3
+	ActivityType_RechargeDiamond4			= 37;	// ��ֵ�����ʯ4
+	ActivityType_RechargeDiamond5			= 38;	// ��ֵ�����ʯ5
+	ActivityType_RechargeDiamond6			= 39;	// ��ֵ�����ʯ6
+
+	ActivityType_Questionnaire1				= 40;	// �����ʾ�1
+	ActivityType_Questionnaire2				= 41;	// �����ʾ�2
+	ActivityType_Questionnaire3				= 42;	// �����ʾ�3
+	ActivityType_Questionnaire4				= 43;	// �����ʾ�4
+	ActivityType_Questionnaire5				= 44;	// �����ʾ�5
+	ActivityType_Questionnaire6				= 45;	// �����ʾ�6
+	ActivityType_Questionnaire7				= 46;	// �����ʾ�7
+	ActivityType_Questionnaire8				= 47;	// �����ʾ�8
+	ActivityType_Questionnaire9				= 48;	// �����ʾ�9
+	ActivityType_Questionnaire10			= 49;	// �����ʾ�10
+
+	ActivityType_AdvanceTreasureChest1		= 50;	// ����Ů��ʮ����
+}
+
+// ���������
+enum ActivityObjectType
+{
+	ActivityObjectType_None			= 0;	// ��
+	ActivityObjectType_Vip			= 1;	// VIP�ȼ�
+	ActivityObjectType_Online		= 2;	// ����ʱ������λ�����ӣ�
+	ActivityObjectType_Fight		= 3;	// ս��
+	ActivityObjectType_Level		= 4;	// ��ɫ�ȼ�
+	ActivityObjectType_Offline		= 5;	// ����ʱ�䣨��λ���죩
+	ActivityObjectType_RegisterBefor= 6;	// ע��ʱ�䣨�� YYYY-MM-DD hh:mm:ss ֮ǰ��
+	ActivityObjectType_RegisterAfter= 7;	// ע��ʱ�䣨�� YYYY-MM-DD hh:mm:ss ֮��
+}
+
+// ���������
+enum ActivityRewardType
+{
+	ActivityRewardType_None				= 0;	// ��
+	ActivityRewardType_Money			= 1;	// ���
+	ActivityRewardType_Exp				= 2;	// ����
+	ActivityRewardType_Credits			= 3;	// ���������֣������㣩
+	ActivityRewardType_Item				= 4;	// ��Ʒ
+	ActivityRewardType_Sprite			= 5;	// ����
+	ActivityRewardType_Rune				= 6;	// ����
+	ActivityRewardType_Physical			= 7;	// ����
+	ActivityRewardType_Contrib			= 8;	// ���Ź���
+	ActivityRewardType_Soul				= 9;	// �޻�ֵ
+	ActivityRewardType_Prestige			= 10;	// ����
+	ActivityRewardType_Diamond			= 11;	// ��ʯ
+	
+	ActivityRewardType_VipExp			= 12;	// VIP����
+	ActivityRewardType_MonthCard		= 13;	// �¿�
+	ActivityRewardType_QuarterCard		= 14;	// ����
+	ActivityRewardType_YearCard			= 15;	// �꿨���������
+}
+
+// ���������
+message ActivityRewardData
+{
+	optional uint32 type			= 1;	// ��������ͣ�ActivityRewardType��
+	optional uint32 value			= 2;	// ���������ǰ׺
+	optional uint32 value_type		= 3;	// ��Ʒ�����ޡ����ĵ�baseid
+}
+
+// �״̬
+enum ActivityStatus
+{
+	ActivityStatus_NotActive		= 0;	// δ�ﵽ��������ȡ
+	ActivityStatus_Active			= 1;	// ����ȡ
+	ActivityStatus_Taken			= 2;	// ����ȡ
+}
+
+// �Ԫ��
+message ActivityElement
+{
+	optional uint32 activity_id			= 1;	// �ID
+	optional uint32 element_id			= 2;	// Ԫ��ID
+	optional uint32 type				= 3;	// ����ͣ�ActivityType��
+	optional uint32 cur_value			= 4;	// ��ǰֵ����type == ActivityType_FB��
+	optional uint32 target_value		= 5;	// Ŀ��ֵ
+	optional string	desc				= 6;	// ����
+	optional uint32	status				= 7;	// Ԫ��״̬��ActivityStatus��
+	optional uint32 count_down			= 8;	// ����ʱ����λ���룩����typeΪActivityType_Online��
+	optional bool is_count_down			= 9;	// �Ƿ��е���ʱ
+	
+	repeated ActivityRewardData reward	= 10;	// �����б�
+	optional uint32 return_percent		= 11;	// �����ٷֱ�
+	optional uint32 lowest_value		= 12;	// ���ֵ
+}
+
+// ���������
+message DoubleRewardActivity
+{
+	optional uint32 pos_id				= 1;	// λ��ID
+	optional uint32 bei_shu				= 2;	// ����
+	optional string desc				= 3;	// ����
+}
+
+// �
+message ActivityData
+{
+	optional uint32	activity_id			= 1;	// �ID
+	optional bool notify				= 2;	// �Ƿ�֪ͨ
+	optional uint32 type				= 3;	// ����ͣ�ActivityType��
+	optional string title				= 4;	// ����
+	optional string desc				= 5;	// ����
+	optional string start_time			= 6;	// ��ʼʱ�䣨YYYY-MM-DD hh:mm:ss��
+	optional string end_time			= 7;	// ����ʱ�䣨YYYY-MM-DD hh:mm:ss��
+	
+	repeated ActivityElement elements	= 8;	// Ԫ���б�
+	repeated DoubleRewardActivity double_reward_fb	= 9;	// �����FB�б�
+	
+	optional uint32 start_time_sec		= 10;	// ��ʼʱ���
+	optional uint32 end_time_sec		= 11;	// ����ʱ���
+	optional uint32 cur_value			= 12;	// ��ǰֵ����type != ActivityType_FB��
+}
+
+// �Ԫ�ص�״̬
+message ActivityElementStatus
+{
+	optional uint32 element_id			= 1;
+	optional uint32 status				= 2;	// Ԫ��״̬��ActivityStatus��
+}
+
+
