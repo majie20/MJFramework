@@ -12,9 +12,12 @@ namespace Model
 
             this.AddComponentView();
 
-            ObjectHelper.CreateComponent<ABComponent>(this, false);
+            ObjectHelper.CreateComponent<AssetsComponent>(this, false);
             ObjectHelper.CreateComponent<PrefabAssociateComponent>(this, false);
             ObjectHelper.CreateComponent<TextManageComponent>(this, false);
+            ObjectHelper.CreateComponent<HttpComponent>(this, false);
+            ObjectHelper.CreateComponent<HotComponent>(this, false);
+
             //ObjectHelper.CreateComponent<NetComponent>(this, false);
         }
 

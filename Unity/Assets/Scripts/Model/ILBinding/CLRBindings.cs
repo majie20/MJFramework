@@ -60,21 +60,15 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_String_Transform_Binding.Register(app);
             System_Collections_Generic_Queue_1_GameObject_Binding.Register(app);
             Model_Entity_Binding.Register(app);
-            Model_ABComponent_Binding.Register(app);
+            Model_AssetsComponent_Binding.Register(app);
             UnityEngine_Transform_Binding.Register(app);
-            ReferenceCollector_Binding.Register(app);
-            UnityEngine_UI_Button_Binding.Register(app);
-            UnityEngine_Events_UnityEvent_Binding.Register(app);
-            Model_EventSystem_Binding.Register(app);
-            UnityEngine_Component_Binding.Register(app);
-            Model_NetComponent_Binding.Register(app);
-            System_Net_IPEndPoint_Binding.Register(app);
-            UnityEngine_UI_Text_Binding.Register(app);
-            UnityEngine_UI_LayoutRebuilder_Binding.Register(app);
-            UnityEngine_UI_InputField_Binding.Register(app);
-            Model_BodyConstructor_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
+            System_Runtime_CompilerServices_AsyncVoidMethodBuilder_Binding.Register(app);
+            ReferenceCollector_Binding.Register(app);
+            Model_EventSystem_Binding.Register(app);
+            UnityEngine_Component_Binding.Register(app);
+            Model_BodyConstructor_Binding.Register(app);
             System_Threading_Monitor_Binding.Register(app);
             System_Threading_Thread_Binding.Register(app);
         }

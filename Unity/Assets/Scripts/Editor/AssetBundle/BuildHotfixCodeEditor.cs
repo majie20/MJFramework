@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Model;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,17 +18,7 @@ public class Startup
             return;
         }
 
-        for (int i = 0; i < CodeDir.Length; i++)
-        {
-            if (CodeDir[i] == '/')
-            {
-                var p = CodeDir.Substring(0, i + 1);
-                if (!Directory.Exists(p))
-                {
-                    Directory.CreateDirectory(p);
-                }
-            }
-        }
+        FileHelper.CreateDir(CodeDir);
 
         if (File.Exists($"{ScriptAssembliesDir}/{HotfixDll}") && File.Exists($"{ScriptAssembliesDir}/{HotfixDll}"))
         {

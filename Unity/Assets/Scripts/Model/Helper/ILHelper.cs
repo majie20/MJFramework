@@ -44,11 +44,10 @@ namespace Model
             //    return new GameApplicationQuit(() => { ((System.Action)action)(); });
             //});
 
-            ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
-
             // 注册适配器
 
             appdomain.RegisterCrossBindingAdaptor(new IDisposableAdapter());
+            appdomain.RegisterCrossBindingAdaptor(new IAsyncStateMachineClassInheritanceAdaptor());
 
             LitJson.JsonMapper.RegisterILRuntimeCLRRedirection(appdomain);
 
@@ -57,6 +56,13 @@ namespace Model
             //domain.RegisterCrossBindingAdaptor(new CoroutineAdapter());
             //domain.RegisterCrossBindingAdaptor(new TestClassBaseAdapter());
             //domain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
+        }
+
+        public static void InitILRuntimePlay(ILRuntime.Runtime.Enviorment.AppDomain appdomain)
+        {
+            InitILRuntime(appdomain);
+
+            ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
         }
     }
 }

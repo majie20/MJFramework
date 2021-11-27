@@ -67,7 +67,7 @@ namespace Model
         public void GotoHotfix()
         {
 #if ILRuntime
-            ILHelper.InitILRuntime(this.appDomain);
+            ILHelper.InitILRuntimePlay(this.appDomain);
 #endif
             this.start.Run();
 

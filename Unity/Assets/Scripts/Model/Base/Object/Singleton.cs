@@ -1,4 +1,6 @@
-﻿namespace Model
+﻿using System;
+
+namespace Model
 {
     public class Singleton<T> where T : Singleton<T>, new()
     {

@@ -10,12 +10,13 @@ namespace Model
             Game.Instance.Init();
         }
 
-        private async void OnEnable()
+        private void OnEnable()
         {
             Game.Instance.EventSystem.AddListener2(EventType.GameLoadComplete, 0, OnGameLoadComplete);
 
-            StartCoroutine(Game.Instance.Scene.GetComponent<ABComponent>()
-                .LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
+            //StartCoroutine(Game.Instance.Scene.GetComponent<AssetsComponent>()
+            //    .LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
+            Game.Instance.Scene.GetComponent<HotComponent>().Start();
 
             //netsh http add urlacl url = http://192.168.31.141:8082/ user=everyone
             //netsh http add urlacl url = http://+:8082/ user=everyone
@@ -31,31 +32,6 @@ namespace Model
             //}
 
 
-            //Proto.Net
-
-            //正在安装:
-
-            //System.Buffers.4.5.1
-            //System.Numerics.Vectors.4.5.0
-            //System.Runtime.CompilerServices.Unsafe.4.5.3
-            //System.Memory.4.5.4
-            //System.Collections.Immutable.1.7.1
-            //protobuf - net.Core.3.0.101
-            //protobuf - net.3.0.101
-
-            //Proto.Google
-
-            //正在安装:
-
-            //System.Buffers.4.4.0
-            //System.Numerics.Vectors.4.4.0
-            //System.Runtime.CompilerServices.Unsafe.4.5.2
-            //System.Memory.4.5.3
-            //Google.Protobuf.3.19.1
-
-
-
-
         }
 
         private void OnDisable()
@@ -63,7 +39,7 @@ namespace Model
             //Game.Instance.EventSystem.RemoveListener2(EventType.GameLoadComplete, OnGameLoadComplete);
         }
 
-        private void Update()
+        private async void Update()
         {
             Game.Instance.LifecycleSystem.Update(Time.deltaTime);
             if (Game.Instance.Hotfix.IsRuning)
@@ -71,10 +47,10 @@ namespace Model
                 Game.Instance.Hotfix.GameUpdate(Time.deltaTime);
             }
 
-            //if (Input.GetKeyDown(KeyCode.A))
-            //{
-            //    Game.Instance.Hotfix.GotoHotfix();
-            //}
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                //Game.Instance.Hotfix.GotoHotfix();
+            }
         }
 
         private void LateUpdate()

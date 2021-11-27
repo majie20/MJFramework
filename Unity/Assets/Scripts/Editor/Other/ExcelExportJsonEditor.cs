@@ -57,7 +57,7 @@ public class ExcelExportJsonEditor : EditorWindow
 
             var rootPath = "./Assets/StreamingAssets/TXT";
             if (!Directory.Exists(rootPath)) Directory.CreateDirectory(rootPath);
-            else FileHelper.DelectDir(rootPath);
+            else Model.FileHelper.DelectDir(rootPath);
 
             for (int i = 0; i < wk.NumberOfSheets; i++)
             {
