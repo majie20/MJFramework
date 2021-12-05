@@ -92,8 +92,8 @@ namespace Model
             yield return abr;
 
             var manifest = abr.asset as AssetBundleManifest;
-            var anNames = manifest.GetAllAssetBundles();
-            foreach (var name in anNames)
+            var abNames = manifest.GetAllAssetBundles();
+            foreach (var name in abNames)
             {
                 switch (mode)
                 {
@@ -225,8 +225,8 @@ namespace Model
                 await Task.Delay(50);
 
             var manifest = abr.asset as AssetBundleManifest;
-            var anNames = manifest.GetAllAssetBundles();
-            foreach (var name in anNames)
+            var abNames = manifest.GetAllAssetBundles();
+            foreach (var name in abNames)
             {
                 switch (mode)
                 {

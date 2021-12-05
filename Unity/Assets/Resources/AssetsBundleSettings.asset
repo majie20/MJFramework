@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7383fcb2148c8bc4c8e2ffb15535a41e, type: 3}
   m_Name: AssetsBundleSettings
   m_EditorClassIdentifier: 
-  fileDirABList:
-  - ABName: Text
-    Extension: .bytes,.json,
-    Dir: {fileID: 102900000, guid: f3bbc0323313dc84292ab70a1795ff8f, type: 3}
-  - ABName: Prefabs
-    Extension: .prefab
-    Dir: {fileID: 102900000, guid: 33f4967b2ca26a840ab3235d24ca1852, type: 3}
+  ABExtension: .aa
+  ZipExtension: .mm
+  ZipPassword: majie
+  EncryptPassword: 111111111111111111111111
+  AssetBundleSavePath: E:/Unity/Project/StandardProject/Unity/Assets/StreamingAssets/AssetBundleRes
+  ZipAssetBundleSavePath: E:/Unity/Project/StandardProject/Unity/AssetBundleRes/Output

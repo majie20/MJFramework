@@ -21,7 +21,6 @@ E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\HttpServ
 E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\HttpServerTest.dll
 E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\ref\HttpServerTest.dll
 E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\HttpServerTest.pdb
-E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.csproj.AssemblyReference.cache
 E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.GeneratedMSBuildEditorConfig.editorconfig
 E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.AssemblyInfoInputs.cache
 E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.AssemblyInfo.cs
@@ -30,3 +29,8 @@ E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServ
 E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\ref\HttpServerTest.dll
 E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.pdb
 E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.genruntimeconfig.cache
+E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\Newtonsoft.Json.dll
+E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.csproj.CopyComplete
+E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\ICSharpCode.SharpZipLib.dll
+E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\Google.Protobuf.dll
+E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.csproj.AssemblyReference.cache

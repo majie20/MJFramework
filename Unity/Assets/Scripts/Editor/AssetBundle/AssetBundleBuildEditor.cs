@@ -1,54 +1,104 @@
-﻿using System;
+﻿using Model;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
 public class AssetBundleBuildEditor : EditorWindow
 {
-    private const string AB_PATH = "./Assets/StreamingAssets/AssetBundleRes";
-
-    //private const string AB_PATH = "./AssetBundleRes/AssetBundleRes";
-    private const string AB_ZIP_PATH = "./AssetBundleRes/Output";
-
-    private const string ZIP_NAME = "AssetBundleRes";
-    private const string ZIP_PASSWORD = "majie";
+    private static string AssetsBundleConfigSettingsPath = "Assets/Scripts/Editor/AssetBundle/AssetsBundleConfigSettings.asset";
+    private static string AssetsBundleSettingsPath = "Assets/Resources/AssetsBundleSettings.asset";
 
     [MenuItem("Tools/AssetBundle/Build AssetBundle")]
     public static void BuildAssetBundle()
     {
-        if (Directory.Exists(AB_PATH))
+        AssetsBundleConfigSettings cSettings = AssetDatabase.LoadAssetAtPath<AssetsBundleConfigSettings>(AssetsBundleConfigSettingsPath);
+        AssetsBundleSettings settings = AssetDatabase.LoadAssetAtPath<AssetsBundleSettings>(AssetsBundleSettingsPath);
+        if (Directory.Exists(settings.AssetBundleSavePath))
         {
-            Model.FileHelper.DelectDir(AB_PATH);
+            Model.FileHelper.DelectDir(settings.AssetBundleSavePath);
         }
         else
         {
-            Directory.CreateDirectory(AB_PATH);
+            Directory.CreateDirectory(settings.AssetBundleSavePath);
         }
 
         AssetDatabase.Refresh();
 
-        AssetsBundleSettings settings = AssetDatabase.LoadAssetAtPath<AssetsBundleSettings>("Assets/Resources/AssetsBundleSettings.asset");
         List<AssetBundleBuild> buildList = new List<AssetBundleBuild>();
 
-        for (int i = 0; i < settings.fileDirABList.Count; i++)
+        for (int i = 0; i < cSettings.FileDirABList.Count; i++)
         {
-            var config = settings.fileDirABList[i];
+            var config = cSettings.FileDirABList[i];
             var pathList = new List<string>();
-            Add(pathList, AssetDatabase.GetAssetPath(config.Dir), config);
+            for (int j = 0; j < config.DirList.Count; j++)
+            {
+                AddResourcePath(pathList, AssetDatabase.GetAssetPath(config.DirList[j]), config);
+            }
 
             AssetBundleBuild build = new AssetBundleBuild();
-            build.assetBundleName = config.ABName;
+            build.assetBundleName = $"{config.ABName}{settings.ABExtension}";
             build.assetNames = pathList.ToArray();
             buildList.Add(build);
         }
 
-        BuildPipeline.BuildAssetBundles(AB_PATH, buildList.ToArray(), BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
+        BuildPipeline.BuildAssetBundles(settings.AssetBundleSavePath, buildList.ToArray(), BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
         AssetDatabase.Refresh();
-        Debug.Log($"完成AssetBundle打包，文件夹{AB_PATH}");
+        Encrypt(settings);
+        AssetDatabase.Refresh();
+
+        Debug.Log($"完成AssetBundle打包，文件夹{settings.AssetBundleSavePath}");
     }
 
-    private static void Add(List<string> pathList, string path, FileDirABName config)
+    private static void Encrypt(AssetsBundleSettings settings)
+    {
+        List<ABConfig> configs = new List<ABConfig>();
+        MD5 md5 = MD5.Create();
+        DirectoryInfo dir = new DirectoryInfo(settings.AssetBundleSavePath);
+        FileSystemInfo[] fileInfo = dir.GetFileSystemInfos();  //返回目录中所有文件和子目录
+        for (int i = 0; i < fileInfo.Length; i++)
+        {
+            var info = fileInfo[i];
+            if (!(info is DirectoryInfo) && info.Extension == settings.ABExtension)
+            {
+                byte[] buffer;
+                using (FileStream stream = File.OpenRead(info.FullName))
+                {
+                    buffer = new byte[stream.Length];
+
+                    stream.Read(buffer, 0, buffer.Length);
+                }
+                using (FileStream stream = File.Create(info.FullName))
+                {
+                    buffer = AESHelper.Encrypt(buffer, settings.EncryptPassword);
+
+                    configs.Add(new ABConfig { ABName = $"{Path.GetFileNameWithoutExtension(info.FullName)}{settings.ZipExtension}", Size = buffer.Length, CRC = Convert.ToBase64String(md5.ComputeHash(buffer)) });
+
+                    stream.Write(buffer, 0, buffer.Length);
+                }
+            }
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.Append("[");
+        for (int i = 0; i < configs.Count; i++)
+        {
+            builder.Append(JsonConvert.SerializeObject(configs[i]));
+            if (i < configs.Count - 1)
+            {
+                builder.Append(",");
+            }
+        }
+        builder.Append("]");
+
+        FileHelper.SaveFileByStream($"{settings.AssetBundleSavePath}/{HotConfig.AB_CONFIG_NAME}.json", Encoding.UTF8.GetBytes(builder.ToString()));
+    }
+
+    private static void AddResourcePath(List<string> pathList, string path, FileDirABName config)
     {
         DirectoryInfo dir = new DirectoryInfo(path);
         FileSystemInfo[] fileInfo = dir.GetFileSystemInfos();  //返回目录中所有文件和子目录
@@ -57,7 +107,7 @@ public class AssetBundleBuildEditor : EditorWindow
             //判断是否文件夹
             if (info is DirectoryInfo)
             {
-                Add(pathList, info.FullName, config);
+                AddResourcePath(pathList, info.FullName, config);
             }
             else
             {
@@ -65,10 +115,7 @@ public class AssetBundleBuildEditor : EditorWindow
                 {
                     if (string.IsNullOrEmpty(config.Extension) || config.Extension.Contains(info.Extension))
                     {
-                        string mp = info.FullName;
-                        mp = mp.Substring(mp.IndexOf("Assets", StringComparison.Ordinal));
-                        mp = mp.Replace('\\', '/');
-                        pathList.Add(mp);
+                        pathList.Add(FileHelper.AbsoluteSwitchRelativelyPath(info.FullName));
                     }
                 }
             }
@@ -78,20 +125,33 @@ public class AssetBundleBuildEditor : EditorWindow
     [MenuItem("Tools/AssetBundle/Zip AssetBundle")]
     public static void ZipAssetBundle()
     {
-        //if (Directory.Exists(AB_ZIP_PATH))
-        //{
-        //    Model.FileHelper.DelectDir(AB_ZIP_PATH);
-        //}
-        //else
-        //{
-        //    Directory.CreateDirectory(AB_ZIP_PATH);
-        //}
+        AssetsBundleSettings settings = AssetDatabase.LoadAssetAtPath<AssetsBundleSettings>(AssetsBundleSettingsPath);
 
-        //ZipWrapper.Zip(new[] { AB_PATH }, $"{AB_ZIP_PATH}/{ZIP_NAME}.ma", ZIP_PASSWORD);
+        if (Directory.Exists(settings.ZipAssetBundleSavePath))
+        {
+            Model.FileHelper.DelectDir(settings.ZipAssetBundleSavePath);
+        }
+        else
+        {
+            Directory.CreateDirectory(settings.ZipAssetBundleSavePath);
+        }
 
-        //Debug.Log($"完成AssetBundle包的压缩，文件{AB_ZIP_PATH}/{ZIP_NAME}.ma");
+        DirectoryInfo dir = new DirectoryInfo(settings.AssetBundleSavePath);
+        FileSystemInfo[] fileInfo = dir.GetFileSystemInfos();  //返回目录中所有文件和子目录
+        foreach (FileSystemInfo info in fileInfo)
+        {
+            if (!(info is DirectoryInfo) && info.Extension == settings.ABExtension)
+            {
+                ZipWrapper.Zip(new[] { info.FullName }, $"{settings.ZipAssetBundleSavePath}/{Path.GetFileNameWithoutExtension(info.FullName)}{settings.ZipExtension}", settings.ZipPassword);
+                Debug.Log($"完成AssetBundle包的压缩，文件{settings.ZipAssetBundleSavePath}/{Path.GetFileNameWithoutExtension(info.FullName)}{settings.ZipExtension}");
+            }
+        }
 
-        //EditorUtility.RevealInFinder($"{AB_ZIP_PATH}");
+        FileHelper.SaveFileByStream($"{settings.ZipAssetBundleSavePath}/{HotConfig.AB_CONFIG_NAME}.json", FileHelper.LoadFileByStream($"{settings.AssetBundleSavePath}/{HotConfig.AB_CONFIG_NAME}.json"));
+
+        //ZipWrapper.Zip(new[] { $"{settings.AssetBundleSavePath}/{HotConfig.AB_CONFIG_NAME}.json" }, $"{settings.ZipAssetBundleSavePath}/{HotConfig.AB_CONFIG_NAME}{settings.ZipExtension}", settings.ZipPassword);
+
+        EditorUtility.RevealInFinder($"{settings.ZipAssetBundleSavePath}");
     }
 
     [MenuItem("Tools/AssetBundle/Build And Zip AssetBundle")]

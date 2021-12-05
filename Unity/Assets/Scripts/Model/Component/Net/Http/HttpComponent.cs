@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -102,6 +101,43 @@ namespace Model
             var response = await RequestAsync(client, url, method, httpMethod, bytes);
 
             await call(response);
+
+            Recycle(client);
+        }
+
+        public byte[] ToBytes(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        {
+            HttpClient client = Hatch();
+
+            var response = RequestAsync(client, url, method, httpMethod, bytes).Result;
+
+            var buffer = response.Content.ReadAsByteArrayAsync().Result;
+
+            Recycle(client);
+
+            return buffer;
+        }
+
+        public string ToString(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        {
+            HttpClient client = Hatch();
+
+            var response = RequestAsync(client, url, method, httpMethod, bytes).Result;
+
+            var str = response.Content.ReadAsStringAsync().Result;
+
+            Recycle(client);
+
+            return str;
+        }
+
+        public void ToStream(Uri url, string method, HttpMethod httpMethod, Action<HttpResponseMessage> call, byte[] bytes = null)
+        {
+            HttpClient client = Hatch();
+
+            var response = RequestAsync(client, url, method, httpMethod, bytes).Result;
+
+            call(response);
 
             Recycle(client);
         }

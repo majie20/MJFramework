@@ -4,6 +4,7 @@ namespace Model
 {
     public class AssetBundleLoadComplete : EventBase { }
     public class NetTestSend : EventBase<string> { }
+    public class HotProgressRefresh : EventBase<int> { }
 
     public class EventType
     {

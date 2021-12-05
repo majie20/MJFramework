@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Net", "Proto.Net\Prot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Google", "Proto.Google\Proto.Google.csproj", "{DEE53E86-B2EA-402F-AAA1-145398F3E381}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpServerTest", "HttpServerTest\HttpServerTest.csproj", "{6743759C-8347-4672-BE85-73C5D5C7C84E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpServerTest", "HttpServerTest\HttpServerTest.csproj", "{6743759C-8347-4672-BE85-73C5D5C7C84E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

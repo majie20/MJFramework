@@ -1,3 +1,4 @@
+ab.proto
 test.proto
 AchievementCommand.proto
 AchievementDefine.proto

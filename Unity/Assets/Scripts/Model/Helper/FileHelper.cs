@@ -73,7 +73,7 @@ namespace Model
         /// <param name="path">文件地址</param>
         /// <param name="call">带结果的回调</param>
         /// <returns></returns>
-        public static IEnumerator LoadFileByUnityWebRequest(string path, FilePos pos, Action<DownloadHandler> call)
+        public static IEnumerator LoadFileByUnityWebRequest(string path, FilePos pos, Action<byte[]> call)
         {
             path = JoinPath(path, pos, LoadMode.UnityWebRequest);
             using (UnityWebRequest uwr = UnityWebRequest.Get(path))
@@ -85,7 +85,7 @@ namespace Model
                     yield break;
                 }
 
-                call(uwr.downloadHandler);
+                call(uwr.downloadHandler.data);
             }
         }
 
@@ -93,9 +93,8 @@ namespace Model
         ///// 加载文件，UnityWebRequest异步
         ///// </summary>
         ///// <param name="path">文件地址</param>
-        public static async Task<byte[]> LoadFileByUnityWebRequestAsync(string path, FilePos pos)
+        public static async Task<byte[]> LoadFileByUnityWebRequestAsync(string path)
         {
-            path = JoinPath(path, pos, LoadMode.UnityWebRequest);
             using (UnityWebRequest req = UnityWebRequest.Get(path))
             {
                 req.SendWebRequest();
@@ -122,9 +121,8 @@ namespace Model
         /// </summary>
         /// <param name="path">文件地址</param>
         /// <returns></returns>
-        public static async Task<byte[]> LoadFileByStreamAsync(string path, FilePos pos)
+        public static async Task<byte[]> LoadFileByStreamAsync(string path)
         {
-            path = JoinPath(path, pos, LoadMode.Stream);
             using (FileStream fileStream = File.OpenRead(path))
             {
                 var buffer = new byte[fileStream.Length];
@@ -134,6 +132,65 @@ namespace Model
                 return buffer;
             }
         }
+
+        /// <summary>
+        /// 加载文件，（不适用于大文件）
+        /// </summary>
+        /// <param name="path">文件地址</param>
+        /// <returns></returns>
+        public static byte[] LoadFileByStream(string path)
+        {
+            using (FileStream fileStream = File.OpenRead(path))
+            {
+                var buffer = new byte[fileStream.Length];
+
+                fileStream.Read(buffer, 0, buffer.Length);
+
+                return buffer;
+            }
+        }
+
+        /// <summary>
+        /// 保存文件(覆盖)，流异步（不适用于大文件）
+        /// </summary>
+        /// <param name="path">文件地址</param>
+        /// <returns></returns>
+        public static async Task SaveFileByStreamAsync(string path, byte[] buffer)
+        {
+            using (FileStream fileStream = File.Create(path))
+            {
+                await fileStream.WriteAsync(buffer, 0, buffer.Length);
+            }
+        }
+
+        /// <summary>
+        /// 保存文件(覆盖),（不适用于大文件）
+        /// </summary>
+        /// <param name="path">文件地址</param>
+        /// <returns></returns>
+        public static void SaveFileByStream(string path, byte[] buffer)
+        {
+            using (FileStream fileStream = File.Create(path))
+            {
+                fileStream.Write(buffer, 0, buffer.Length);
+            }
+        }
+
+#if UNITY_EDITOR
+
+        /// <summary>
+        /// 绝对路径转换成相对路径,仅适用于编辑器
+        /// </summary>
+        /// <param name="path">文件地址</param>
+        /// <returns></returns>
+        public static string AbsoluteSwitchRelativelyPath(string path)
+        {
+            path = path.Substring(path.IndexOf("Assets", StringComparison.Ordinal));
+            path = path.Replace('\\', '/');
+            return path;
+        }
+
+#endif
 
         public static string JoinPath(string path, FilePos pos, LoadMode mode)
         {

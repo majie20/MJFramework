@@ -8,5 +8,6 @@ public class HttpConfig
     //方法
     public static string HOT_GET_NAME = "Hot/GetName";
     public static string HOT_GET_TEXTURE = "Hot/GetTexture";
-    public static string HOT_GET_AB_PACK = "Hot/GetTextureABPack";
+    public static string HOT_GET_AB_PACK = "Hot/GetABPack";
+    public static string HOT_VERIFY_AB_PACK = "Hot/VerifyABPack";
 }

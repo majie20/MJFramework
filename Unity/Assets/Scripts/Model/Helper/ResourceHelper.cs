@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Model
 {
@@ -10,7 +9,7 @@ namespace Model
         /// 创建一个Sprie
         /// </summary>
         /// <param name="path">图片地址</param>
-        public static async Task<Sprite> CreateSprite(string path, FileHelper.FilePos pos, FileHelper.LoadMode mode)
+        public static async Task<Sprite> CreateSprite(string path, FileHelper.LoadMode mode)
         {
             // 创建Texture
             Texture2D texture = new Texture2D(256, 256);
@@ -20,13 +19,13 @@ namespace Model
             {
                 case FileHelper.LoadMode.Stream:
                     {
-                        buffer = await FileHelper.LoadFileByStreamAsync(path, pos);
+                        buffer = await FileHelper.LoadFileByStreamAsync(path);
                     }
                     break;
 
                 case FileHelper.LoadMode.UnityWebRequest:
                     {
-                        buffer = await FileHelper.LoadFileByUnityWebRequestAsync(path, pos);
+                        buffer = await FileHelper.LoadFileByUnityWebRequestAsync(path);
                     }
                     break;
             }

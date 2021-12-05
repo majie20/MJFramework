@@ -56,6 +56,8 @@ namespace Model
             //domain.RegisterCrossBindingAdaptor(new CoroutineAdapter());
             //domain.RegisterCrossBindingAdaptor(new TestClassBaseAdapter());
             //domain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
+
+            ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
         }
 
         public static void InitILRuntimePlay(ILRuntime.Runtime.Enviorment.AppDomain appdomain)
