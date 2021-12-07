@@ -52,11 +52,11 @@ namespace ILRuntime.Runtime.Generated
             StackObject* __ret = ILIntepreter.Minus(__esp, 2);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            Model.IDisposableAdapter.Adapter @item = (Model.IDisposableAdapter.Adapter)typeof(Model.IDisposableAdapter.Adapter).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            Model.IDisposableAdapter.Adapter @item = (Model.IDisposableAdapter.Adapter)typeof(Model.IDisposableAdapter.Adapter).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 2);
-            System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             instance_of_this_method.Enqueue(@item);
@@ -71,7 +71,7 @@ namespace ILRuntime.Runtime.Generated
             StackObject* __ret = ILIntepreter.Minus(__esp, 1);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             var result_of_this_method = instance_of_this_method.Dequeue();
@@ -91,7 +91,7 @@ namespace ILRuntime.Runtime.Generated
             StackObject* __ret = ILIntepreter.Minus(__esp, 1);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             var result_of_this_method = instance_of_this_method.Count;
@@ -108,7 +108,7 @@ namespace ILRuntime.Runtime.Generated
             StackObject* __ret = ILIntepreter.Minus(__esp, 1);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+            System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>)typeof(System.Collections.Generic.Queue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             var result_of_this_method = instance_of_this_method.GetEnumerator();
