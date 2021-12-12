@@ -85,21 +85,46 @@ namespace Model
             Debug.Log($"------{num}------"); // MDEBUG:
         }
 
-        public async void Start()
+        public void Run(bool isHot)
+        {
+            if (isHot)
+            {
+                Hot();
+            }
+            else
+            {
+                Normal();
+            }
+        }
+
+        public async void Normal()
+        {
+            var configPath = FileHelper.JoinPath($"{HotConfig.AB_SAVE_RELATIVELY_PATH}{HotConfig.AB_CONFIG_NAME}.json", FileHelper.FilePos.StreamingAssetsPath, FileHelper.LoadMode.UnityWebRequest);
+            Debug.LogWarning("正在加载资源配置"); // MDEBUG:
+            byte[] bytes = await FileHelper.LoadFileByUnityWebRequestAsync(configPath);
+            string configStr = Encoding.UTF8.GetString(bytes);
+            AbConfigs = JsonConvert.DeserializeObject<List<ABConfig>>(configStr);
+
+            await Game.Instance.Scene.GetComponent<AssetsComponent>().Run(false);
+        }
+
+        public async void Hot()
         {
             isStart = true;
             var httpComponent = Game.Instance.Scene.GetComponent<HttpComponent>();
-            var assetsPath = FileHelper.JoinPath(HotConfig.AB_SAVE_RELATIVELY_PATH, FileHelper.FilePos.persistentDataPath, FileHelper.LoadMode.Stream);
+            var assetsPath = FileHelper.JoinPath(HotConfig.AB_SAVE_RELATIVELY_PATH, FileHelper.FilePos.PersistentDataPath, FileHelper.LoadMode.Stream);
             FileHelper.CreateDir(assetsPath);
 
+            Debug.LogWarning("正在加载资源配置"); // MDEBUG:
             string configStr = null;
-            var configPath = FileHelper.JoinPath($"{HotConfig.AB_SAVE_RELATIVELY_PATH}{HotConfig.AB_CONFIG_NAME}.json", FileHelper.FilePos.persistentDataPath, FileHelper.LoadMode.Stream);
+            var configPath = FileHelper.JoinPath($"{HotConfig.AB_SAVE_RELATIVELY_PATH}{HotConfig.AB_CONFIG_NAME}.json", FileHelper.FilePos.PersistentDataPath, FileHelper.LoadMode.Stream);
             if (File.Exists(configPath))
             {
                 byte[] bytes = await FileHelper.LoadFileByStreamAsync(configPath);
                 configStr = Encoding.UTF8.GetString(bytes);
             }
 
+            Debug.LogWarning("正在检查资源更新"); // MDEBUG:
             List<ABConfig> oldAbConfigs = configStr == null ? null : JsonConvert.DeserializeObject<List<ABConfig>>(configStr);
             configStr = await httpComponent.ToStringAsync(HttpConfig.TestURL1, HttpConfig.HOT_VERIFY_AB_PACK, HttpMethod.Post, string.IsNullOrEmpty(configStr) ? null : Encoding.UTF8.GetBytes(configStr));
             List<ABConfig> newAbConfigs = JsonConvert.DeserializeObject<List<ABConfig>>(configStr);
@@ -132,14 +157,13 @@ namespace Model
 
             new Thread(() => FileHelper.SaveFileByStream(configPath, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(oldAbConfigs)))).Start();
 
-            var outputPath = FileHelper.JoinPath(HotConfig.AB_SAVE_RELATIVELY_PATH, FileHelper.FilePos.persistentDataPath, FileHelper.LoadMode.Stream);
-
+            Debug.LogWarning("正在下载更新资源"); // MDEBUG:
             var eventSystem = Game.Instance.EventSystem;
             for (int i = 0; i < newAbConfigs.Count; i++)
             {
                 var abPackPath = FileHelper.JoinPath(
                     $"{HotConfig.AB_SAVE_RELATIVELY_PATH}{newAbConfigs[i].ABName}",
-                    FileHelper.FilePos.persistentDataPath,
+                    FileHelper.FilePos.PersistentDataPath,
                     FileHelper.LoadMode.Stream);
                 byte[] bytes = Encoding.UTF8.GetBytes(newAbConfigs[i].ABName);
                 new Thread(() =>
@@ -178,9 +202,6 @@ namespace Model
                                 }
                             }
                         }, bytes);
-
-                    ZipWrapper.UnzipFile(abPackPath, outputPath, Settings.ZipPassword);
-                    File.Delete(abPackPath);
                 }).Start();
             }
 
@@ -188,9 +209,27 @@ namespace Model
             {
                 await Task.Delay(100);
             }
+            Debug.LogWarning("资源更新完毕"); // MDEBUG:
 
-            Debug.Log($"------完成------"); // MDEBUG:
-            //await Game.Instance.Scene.GetComponent<AssetsComponent>().LoadAssetBundleManifestByUWRAsync(FileHelper.JoinPath("Assets/AssetBundleRes/AssetBundleRes", FileHelper.FilePos.persistentDataPath, FileHelper.LoadMode.Stream));
+            Debug.LogWarning("正在解压资源"); // MDEBUG:
+            var outputPath = FileHelper.JoinPath(HotConfig.AB_SAVE_RELATIVELY_PATH, FileHelper.FilePos.PersistentDataPath, FileHelper.LoadMode.Stream);
+            Task[] tasks = new Task[newAbConfigs.Count];
+            for (int i = 0; i < newAbConfigs.Count; i++)
+            {
+                var abPackPath = FileHelper.JoinPath(
+                    $"{HotConfig.AB_SAVE_RELATIVELY_PATH}{newAbConfigs[i].ABName}",
+                    FileHelper.FilePos.PersistentDataPath,
+                    FileHelper.LoadMode.Stream);
+
+                tasks[i] = new Task(() =>
+                {
+                    ZipWrapper.UnzipFile(abPackPath, outputPath, Settings.ZipPassword);
+                    File.Delete(abPackPath);
+                });
+            }
+            await Task.WhenAll(tasks);
+
+            await Game.Instance.Scene.GetComponent<AssetsComponent>().Run(true);
         }
 
         public override void Dispose()

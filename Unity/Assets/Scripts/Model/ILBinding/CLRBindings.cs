@@ -24,24 +24,23 @@ namespace ILRuntime.Runtime.Generated
         {
             System_Object_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_ILTypeInstance_Binding.Register(app);
+            System_Linq_Enumerable_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_UInt32_ILTypeInstance_Binding.Register(app);
             System_String_Binding.Register(app);
             UnityEngine_Debug_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_String_String_Array_Binding.Register(app);
-            System_Linq_Enumerable_Binding.Register(app);
-            System_Collections_Generic_List_1_String_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_String_Object_Binding.Register(app);
-            System_Collections_ArrayList_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_Object_Action_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_Object_Action_Binding_ValueCollection_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_Object_Action_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_UInt32_UInt32_Array_Binding.Register(app);
+            System_Collections_Generic_List_1_UInt32_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_UInt32_Object_Binding.Register(app);
+            System_Collections_Generic_List_1_Action_Binding.Register(app);
+            System_Collections_Generic_List_1_Object_Binding.Register(app);
             System_Action_Binding.Register(app);
-            System_IDisposable_Binding.Register(app);
             UnityEngine_GameObject_Binding.Register(app);
             UnityEngine_Object_Binding.Register(app);
             Model_ComponentView_Binding.Register(app);
             System_Collections_Generic_IEnumerable_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_IEnumerator_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_IEnumerator_Binding.Register(app);
+            System_IDisposable_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Type_Binding.Register(app);
             System_Type_Binding.Register(app);
@@ -67,8 +66,6 @@ namespace ILRuntime.Runtime.Generated
             System_Runtime_CompilerServices_AsyncVoidMethodBuilder_Binding.Register(app);
             ReferenceCollector_Binding.Register(app);
             Model_EventSystem_Binding.Register(app);
-            UnityEngine_Component_Binding.Register(app);
-            Model_BodyConstructor_Binding.Register(app);
             System_Threading_Monitor_Binding.Register(app);
             System_Threading_Thread_Binding.Register(app);
         }

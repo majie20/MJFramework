@@ -13,7 +13,7 @@ namespace Hotfix
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
             //ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, "Cylinder", true), "majie");
-            ObjectHelper.CreateComponent<NetTestComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, "NetTest", true));
+            //ObjectHelper.CreateComponent<NetTestComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, "NetTest", true));
 
 
             //var test1 = Game.Instance.ObjectPool.HatchEntity().Init(true, "NetTest", Game.Instance.Scene);

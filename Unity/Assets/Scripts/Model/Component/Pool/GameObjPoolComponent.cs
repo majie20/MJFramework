@@ -42,7 +42,7 @@ namespace Model
                 return gameObjDic[name].Dequeue();
             }
 
-            var obj = isAB ? UnityEngine.Object.Instantiate(Game.Instance.Scene.GetComponent<AssetsComponent>().GetPrefabByName(name)) : new GameObject(name);
+            var obj = isAB ? UnityEngine.Object.Instantiate(Game.Instance.Scene.GetComponent<AssetsComponent>().Load<GameObject>(name)) : new GameObject(name);
 
             return obj;
         }

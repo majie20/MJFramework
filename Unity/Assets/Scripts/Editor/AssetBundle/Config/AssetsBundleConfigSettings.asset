@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73207d76626fcf148a4a7528dce04fe6, type: 3}
+  m_Name: AssetsBundleConfigSettings
+  m_EditorClassIdentifier: 
+  FileDirABList:
+  - ABName: Text
+    Extension: .bytes,.json
+    DirList:
+    - {fileID: 102900000, guid: 0d9577da6f9acbb47bb74aec6a78ca87, type: 3}
+    - {fileID: 102900000, guid: 33f4967b2ca26a840ab3235d24ca1852, type: 3}
+  - ABName: Prefab
+    Extension: .prefab
+    DirList:
+    - {fileID: 102900000, guid: 33f4967b2ca26a840ab3235d24ca1852, type: 3}
+  - ABName: Config
+    Extension: 
+    DirList:
+    - {fileID: 102900000, guid: 11b04dc613d629e4980b00dc402d12ca, type: 3}

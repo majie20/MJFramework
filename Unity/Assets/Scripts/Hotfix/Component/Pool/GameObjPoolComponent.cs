@@ -42,7 +42,7 @@ namespace Hotfix
                 return gameObjDic[name].Dequeue();
             }
 
-            var obj = isAB ? UnityEngine.Object.Instantiate(Model.Game.Instance.Scene.GetComponent<Model.AssetsComponent>().GetPrefabByName(name)) : new GameObject(name);
+            var obj = isAB ? UnityEngine.Object.Instantiate(Model.Game.Instance.Scene.GetComponent<Model.AssetsComponent>().Load<GameObject>(name)) : new GameObject(name);
 
             return obj;
         }

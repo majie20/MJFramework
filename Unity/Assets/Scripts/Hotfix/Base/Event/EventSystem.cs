@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Hotfix
@@ -7,14 +8,16 @@ namespace Hotfix
     public sealed class EventSystem : IDisposable
     {
         private Dictionary<string, IEvent> allEventDic;
-        private Dictionary<string, EventDelegateParams> allEventParamsDic;
-        private Dictionary<string, EventGroup> allEventGroupDic;
+        private Dictionary<uint, EventDelegateParams> allEventParamsDic;
+        private Dictionary<uint, EventGroup> allEventGroupDic;
 
         public EventSystem()
         {
+            EventType.Init();
+
             allEventDic = new Dictionary<string, IEvent>();
-            allEventParamsDic = new Dictionary<string, EventDelegateParams>();
-            allEventGroupDic = new Dictionary<string, EventGroup>();
+            allEventParamsDic = new Dictionary<uint, EventDelegateParams>();
+            allEventGroupDic = new Dictionary<uint, EventGroup>();
         }
 
         public void Dispose()
@@ -51,6 +54,39 @@ namespace Hotfix
             return default;
         }
 
+        public void Clear()
+        {
+            var signList = allEventDic.Keys.ToArray();
+            for (int i = 0; i < signList.Length; i++)
+            {
+                var sign = signList[i];
+                if (allEventDic[sign].Count() == 0)
+                {
+                    allEventDic.Remove(sign);
+                }
+            }
+
+            var signList1 = allEventParamsDic.Keys.ToArray();
+            for (int i = 0; i < signList1.Length; i++)
+            {
+                var sign = signList1[i];
+                if (allEventParamsDic[sign] == null)
+                {
+                    allEventParamsDic.Remove(sign);
+                }
+            }
+
+            signList1 = allEventGroupDic.Keys.ToArray();
+            for (int i = 0; i < signList1.Length; i++)
+            {
+                var sign = signList1[i];
+                if (allEventGroupDic[sign].Call == null)
+                {
+                    allEventGroupDic.Remove(sign);
+                }
+            }
+        }
+
         #region 订阅
 
         public void AddListener<T1>(Action call, object self) where T1 : EventBase, new()
@@ -78,7 +114,7 @@ namespace Hotfix
             AddEventModel<T1>().AddListener(call, self);
         }
 
-        public void AddListener(string sign, EventDelegateParams call)
+        public void AddListener(uint sign, EventDelegateParams call)
         {
             if (allEventParamsDic.ContainsKey(sign))
             {
@@ -88,7 +124,7 @@ namespace Hotfix
             allEventParamsDic.Add(sign, call);
         }
 
-        public void AddListener2(string sign, int paramNum, EventDelegateParams call)
+        public void AddListenerMult(uint sign, int paramNum, EventDelegateParams call)
         {
             if (!allEventGroupDic.ContainsKey(sign))
             {
@@ -108,10 +144,6 @@ namespace Hotfix
             if (e != null)
             {
                 e.RemoveListener(self);
-                if (e.Count == 0)
-                {
-                    allEventDic.Remove(typeof(T1).FullName);
-                }
             }
         }
 
@@ -121,10 +153,6 @@ namespace Hotfix
             if (e != null)
             {
                 e.RemoveListener(self);
-                if (e.Count == 0)
-                {
-                    allEventDic.Remove(typeof(T1).FullName);
-                }
             }
         }
 
@@ -134,10 +162,6 @@ namespace Hotfix
             if (e != null)
             {
                 e.RemoveListener(self);
-                if (e.Count == 0)
-                {
-                    allEventDic.Remove(typeof(T1).FullName);
-                }
             }
         }
 
@@ -147,10 +171,6 @@ namespace Hotfix
             if (e != null)
             {
                 e.RemoveListener(self);
-                if (e.Count == 0)
-                {
-                    allEventDic.Remove(typeof(T1).FullName);
-                }
             }
         }
 
@@ -160,50 +180,48 @@ namespace Hotfix
             if (e != null)
             {
                 e.RemoveListener(self);
-                if (e.Count == 0)
-                {
-                    allEventDic.Remove(typeof(T1).FullName);
-                }
             }
         }
 
-        public void RemoveListener(string sign, EventDelegateParams call)
+        public void RemoveListener(uint sign, EventDelegateParams call)
         {
             if (allEventParamsDic.ContainsKey(sign))
             {
                 allEventParamsDic[sign] -= call;
-                if (allEventParamsDic[sign] == null)
-                {
-                    allEventParamsDic.Remove(sign);
-                }
             }
         }
 
-        public void RemoveListener2(string sign, EventDelegateParams call)
+        public void RemoveListenerMult(uint sign, EventDelegateParams call)
         {
             if (allEventGroupDic.ContainsKey(sign))
             {
                 allEventGroupDic[sign].RemoveListener(call);
-                if (allEventGroupDic[sign].Call == null)
-                {
-                    allEventGroupDic.Remove(sign);
-                }
             }
         }
 
         public void RemoveAllListener<T1>() where T1 : IEvent, new()
         {
-            allEventDic.Remove(typeof(T1).FullName);
+            var e = GetEventModel<T1>();
+            if (e != null)
+            {
+                e.RemoveAllListener();
+            }
         }
 
-        public void RemoveAllListener(string sign)
+        public void RemoveAllListener(uint sign)
         {
-            allEventParamsDic.Remove(sign);
+            if (allEventParamsDic.ContainsKey(sign))
+            {
+                allEventParamsDic[sign] = null;
+            }
         }
 
-        public void RemoveAllListener2(string sign)
+        public void RemoveAllListenerMult(uint sign)
         {
-            allEventGroupDic.Remove(sign);
+            if (allEventGroupDic.ContainsKey(sign))
+            {
+                allEventGroupDic[sign].RemoveAllListener();
+            }
         }
 
         #endregion 移除
@@ -235,7 +253,7 @@ namespace Hotfix
             GetEventModel<T1>()?.Invoke(t2, t3, t4, t5);
         }
 
-        public void Invoke(string sign, params object[] t1)
+        public void Invoke(uint sign, params object[] t1)
         {
             if (allEventParamsDic.TryGetValue(sign, out EventDelegateParams e))
             {
@@ -243,7 +261,7 @@ namespace Hotfix
             }
         }
 
-        public void Invoke2(string sign, string subSign, object t1 = null)
+        public void InvokeMult(uint sign, uint subSign, object t1 = null)
         {
             if (allEventGroupDic.ContainsKey(sign))
             {

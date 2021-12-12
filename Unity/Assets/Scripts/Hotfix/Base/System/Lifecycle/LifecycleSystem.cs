@@ -11,9 +11,9 @@ namespace Hotfix
         private readonly HashSet<Type> startSystems = new HashSet<Type>();
         private readonly HashSet<Type> destroySystems = new HashSet<Type>();
 
-        private Queue<Component> starts = new Queue<Component>();
-        private Queue<Component> updates = new Queue<Component>();
-        private Queue<Component> lateUpdates = new Queue<Component>();
+        private ArrayQueue<Component> starts = new ArrayQueue<Component>(20);
+        private ArrayQueue<Component> updates = new ArrayQueue<Component>(20);
+        private ArrayQueue<Component> lateUpdates = new ArrayQueue<Component>(20);
 
         public LifecycleSystem()
         {
@@ -78,7 +78,7 @@ namespace Hotfix
 
         public void Start()
         {
-            while (this.starts.Count > 0)
+            while (this.starts.GetSize() > 0)
             {
                 var component = this.starts.Dequeue();
                 if (startSystems.Contains(component.GetType()))
@@ -91,8 +91,9 @@ namespace Hotfix
         public void Update(float tick)
         {
             this.Start();
-            foreach (var component in updates)
+            for (int i = 0; i < this.updates.GetSize(); i++)
             {
+                var component = this.updates.Peek(i);
                 if (updateSystems.Contains(component.GetType()))
                 {
                     (component as IUpdateSystem)?.OnUpdate(tick);
@@ -102,9 +103,10 @@ namespace Hotfix
 
         public void LateUpdate()
         {
-            foreach (var component in lateUpdates)
+            for (int i = 0; i < this.lateUpdates.GetSize(); i++)
             {
-                if (lateUpdateSystems.Contains(component.GetType()))
+                var component = this.lateUpdates.Peek(i);
+                if (updateSystems.Contains(component.GetType()))
                 {
                     (component as ILateUpdateSystem)?.OnLateUpdate();
                 }

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bc2d56e5d89444a94ace5a04377301, type: 3}
+  m_Name: AssetsCiteMatchConfigSettings
+  m_EditorClassIdentifier: 
+  PathList:
+  - Assets/Res/Prefabs/hhh/GameObject
+  - Assets/Res/Prefabs/Capsule
+  - Assets/Res/Prefabs/Cube
+  - Assets/Res/Prefabs/Cylinder
+  - Assets/Res/Prefabs/GameObject
+  - Assets/Res/Prefabs/NetTest
+  - Assets/Res/Prefabs/Sphere
+  - Assets/Res/Text/Hotfix.dll
+  - Assets/Res/Text/Hotfix.pdb
+  AssetsList:
+  - {fileID: 2935239384807764712, guid: 6b0747d6ef9d34749b8c82d64169c49a, type: 3}
+  - {fileID: 3849385875390267945, guid: 11d543cb405224b43842a5cef96a03a1, type: 3}
+  - {fileID: 4519422901939628329, guid: 5eb5fdde5292284409f09d7cbdd59c86, type: 3}
+  - {fileID: 7604662774367296269, guid: b59529f938ca86643b77a94b94faf8f9, type: 3}
+  - {fileID: 2935239384807764712, guid: 53715fe761a447e48b05197ccf28366c, type: 3}
+  - {fileID: 3965089911251746951, guid: 4affeaa77da2308488898ccbeff25752, type: 3}
+  - {fileID: 2972403345721537417, guid: 980ccd3e86108ce4cbee1703121f5dca, type: 3}
+  - {fileID: 4900000, guid: ae8e86f35d7a8584dab0348232aaaacf, type: 3}
+  - {fileID: 4900000, guid: 81263b0e2ea3ecb448ea59b60077f9a7, type: 3}

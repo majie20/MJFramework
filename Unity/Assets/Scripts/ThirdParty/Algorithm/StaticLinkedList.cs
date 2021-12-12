@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,8 +12,8 @@ public class StaticLinkedList<T> : IEnumerable<T>
     }
 
     private Element[] elements;
-    private int totalLength;
-    private int effectiveLength;
+    private int totalLength;//总长度
+    private int effectiveLength;//有效长度
 
     public int Length
     {
@@ -40,23 +41,11 @@ public class StaticLinkedList<T> : IEnumerable<T>
             this.elements[i].cur = i + 1;
         }
 
+        //0代表未使用的链表，1代表已使用的链表
         this.elements[0].cur = 2;
         this.elements[1].cur = 0;
         this.elements[length - 1].cur = 1;
     }
-
-    //public int Length()
-    //{
-    //    var cur = this.elements[1].cur;
-    //    var i = 0;
-    //    while (cur != 0)
-    //    {
-    //        i++;
-    //        cur = this.elements[cur].cur;
-    //    }
-
-    //    return i;
-    //}
 
     public int Add(T t)
     {
@@ -80,7 +69,7 @@ public class StaticLinkedList<T> : IEnumerable<T>
     {
         if (index < 2 || index >= this.elements.Length)
         {
-            Debug.Log("数组索引溢出或该索引禁止访问"); // MDEBUG:
+            Debug.LogError("数组索引溢出或该索引禁止访问"); // MDEBUG:
             return default;
         }
 
@@ -102,7 +91,7 @@ public class StaticLinkedList<T> : IEnumerable<T>
             }
 
             lastCur = cur;
-            cur = this.elements[cur].cur;
+            cur = this.elements[lastCur].cur;
         }
 
         return default;
@@ -111,22 +100,22 @@ public class StaticLinkedList<T> : IEnumerable<T>
     private void Expansion()
     {
         this.totalLength *= 2;
-        var elements = new Element[this.totalLength];
+        var tempElements = new Element[this.totalLength];
         var length = this.elements.Length;
 
         for (int i = 1; i < length; i++)
         {
-            elements[i] = this.elements[i];
+            tempElements[i] = this.elements[i];
         }
 
         for (int i = length; i < this.totalLength - 1; i++)
         {
-            elements[i].cur = i + 1;
+            tempElements[i].cur = i + 1;
         }
 
-        elements[0].cur = length;
-        elements[this.totalLength - 1].cur = 1;
-        this.elements = elements;
+        tempElements[0].cur = length;
+        tempElements[this.totalLength - 1].cur = 1;
+        this.elements = tempElements;
     }
 
     public IEnumerator<T> GetEnumerator()

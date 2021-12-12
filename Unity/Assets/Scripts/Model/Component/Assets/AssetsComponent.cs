@@ -1,325 +1,99 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Model
 {
     [LifeCycle]
     public class AssetsComponent : Component, IAwake
     {
-        /// <summary>
-        /// AB包名、收藏家
-        /// </summary>
-        private Dictionary<string, ReferenceCollector> prefabCollectors;
+        private Dictionary<string, AssetBundle> assetBundleDic;
 
-        private Dictionary<string, ReferenceCollector> jsonDataCollectors;
-        private Dictionary<string, ReferenceCollector> textCollectors;
-
-        /// <summary>
-        /// 预制体名、AB包名
-        /// </summary>
-        private Dictionary<string, string> prefabDic;
+        private Dictionary<string, Object> assetsCiteMatchConfigDic;
 
         public void Awake()
         {
-            prefabCollectors = new Dictionary<string, ReferenceCollector>();
-            jsonDataCollectors = new Dictionary<string, ReferenceCollector>();
-            textCollectors = new Dictionary<string, ReferenceCollector>();
-            prefabDic = new Dictionary<string, string>();
+            assetBundleDic = new Dictionary<string, AssetBundle>();
+            assetsCiteMatchConfigDic = new Dictionary<string, Object>();
         }
 
         public override void Dispose()
         {
-            prefabCollectors = null;
-            jsonDataCollectors = null;
-            textCollectors = null;
-            prefabDic = null;
+            assetBundleDic = null;
+            assetsCiteMatchConfigDic = null;
             Entity = null;
         }
 
-        public IEnumerable<ReferenceCollector> GetAllPrefabJsonDataCollector()
+        public T Load<T>(string sign) where T : UnityEngine.Object
         {
-            return jsonDataCollectors.Values;
-        }
-
-        public IEnumerable<ReferenceCollector> GetAllTextDataCollector()
-        {
-            return textCollectors.Values;
-        }
-
-        public GameObject GetPrefabByName(string name)
-        {
-            return prefabCollectors[prefabDic[name]].Get<GameObject>(name);
-        }
-
-        #region 协程
-
-        public IEnumerator LoadAssetBundleManifestByUWR(string path)
-        {
-            UnityWebRequest uwr = UnityWebRequestAssetBundle.GetAssetBundle(path);
-            yield return uwr.SendWebRequest();
-            if (uwr.isNetworkError || uwr.isHttpError)
+            if (assetsCiteMatchConfigDic.ContainsKey(sign))
             {
-                Debug.LogWarning($"路径[{path}]的AB包获取失败----{uwr.error}");
-                yield break;
+                return (T)assetsCiteMatchConfigDic[sign];
             }
 
-            AssetBundle ab = (uwr.downloadHandler as DownloadHandlerAssetBundle)?.assetBundle;
-
-            yield return ProcessAssetBundleManifest(ab, path, FileHelper.LoadMode.UnityWebRequest);
+            return default;
         }
 
-        public IEnumerator LoadAssetBundleManifestByIO(string path)
+        public Object Load(string sign)
         {
-            if (!File.Exists(path))
+            if (assetsCiteMatchConfigDic.ContainsKey(sign))
             {
-                Debug.LogWarning($"路径[{path}]的AB包获取失败------");
-                yield break;
+                return assetsCiteMatchConfigDic[sign];
             }
 
-            var abcr = AssetBundle.LoadFromFileAsync(path);
-            yield return abcr;
-
-            yield return ProcessAssetBundleManifest(abcr.assetBundle, path, FileHelper.LoadMode.Stream);
+            return default;
         }
 
-        private IEnumerator ProcessAssetBundleManifest(AssetBundle ab, string path, FileHelper.LoadMode mode)
+        public void Unload(string name, bool unloadAllLoadedObjects)
         {
-            var abr = ab.LoadAssetAsync<AssetBundleManifest>("AssetBundleManifest");
-            yield return abr;
+            var ab = assetBundleDic[name];
+            assetBundleDic.Remove(name);
+            ab.Unload(unloadAllLoadedObjects);
+        }
 
-            var manifest = abr.asset as AssetBundleManifest;
-            var abNames = manifest.GetAllAssetBundles();
-            foreach (var name in abNames)
+        public async Task Run(bool isHot)
+        {
+            Debug.LogWarning("正在加载资源"); // MDEBUG:
+            HotComponent component = Game.Instance.Scene.GetComponent<HotComponent>();
+
+            for (int i = 0; i < component.AbConfigs.Count; i++)
             {
-                switch (mode)
+                var abName = component.AbConfigs[i].ABName;
+                var abPackPath = FileHelper.JoinPath(
+                    $"{HotConfig.AB_SAVE_RELATIVELY_PATH}{Path.GetFileNameWithoutExtension(abName)}{component.Settings.ABExtension}",
+                    isHot ? FileHelper.FilePos.PersistentDataPath : FileHelper.FilePos.StreamingAssetsPath,
+                    FileHelper.LoadMode.UnityWebRequest);
+                var buffer = await FileHelper.LoadFileByUnityWebRequestAsync(abPackPath);
+                buffer = AESHelper.Decrypt(buffer, component.Settings.EncryptPassword);
+                var abcr = AssetBundle.LoadFromMemoryAsync(buffer);
+                while (!abcr.isDone)
                 {
-                    case FileHelper.LoadMode.UnityWebRequest:
-                        yield return ProcessAssetBundleToUWR(path, name);
-                        break;
-
-                    case FileHelper.LoadMode.Stream:
-                        yield return ProcessAssetBundleToIO(path, name);
-                        break;
+                    await Task.Delay(50);
                 }
+
+                assetBundleDic.Add(Regex.Replace(abName, FileConfig.FILE_EXTENSION_PATTERN, ""), abcr.assetBundle);
             }
 
-            //foreach (var key in prefabDic.Keys)
-            //{
-            //    Debug.Log($"{key}----{prefabDic[key]}");
-            //}
-
-            Game.Instance.EventSystem.Invoke<AssetBundleLoadComplete>();
-        }
-
-        private IEnumerator ProcessAssetBundleToUWR(string path, string name)
-        {
-            var p = $"{Path.GetDirectoryName(path)}/{name}";
-
-            UnityWebRequest uwr = UnityWebRequest.Get(p);
-            yield return uwr.SendWebRequest();
-            if (uwr.isNetworkError || uwr.isHttpError)
-            {
-                Debug.LogWarning($"路径[{p}]的AB包获取失败----{uwr.error}");
-                yield break;
-            }
-
-            var abcr = AssetBundle.LoadFromMemoryAsync(uwr.downloadHandler.data);
-            yield return abcr;
-
-            yield return CollectPrefab(abcr, name);
-        }
-
-        private IEnumerator ProcessAssetBundleToIO(string path, string name)
-        {
-            var p = $"{Path.GetDirectoryName(path)}/{name}";
-
-            if (!File.Exists(p))
-            {
-                Debug.LogWarning($"路径[{p}]的AB包获取失败------");
-                yield break;
-            }
-
-            var abcr = AssetBundle.LoadFromFileAsync(p);
-            yield return abcr;
-
-            yield return CollectPrefab(abcr, name);
-        }
-
-        private IEnumerator CollectPrefab(AssetBundleCreateRequest abcr, string name)
-        {
-            var abr1 = abcr.assetBundle.LoadAssetAsync<GameObject>("PrefabReferenceCollector");
-            yield return abr1;
-
-            if (abr1.asset is GameObject obj1)
-            {
-                var collector = obj1.GetComponent<ReferenceCollector>();
-                for (int i = 0; i < collector.data.Count; i++)
-                {
-                    if (!prefabDic.ContainsKey(collector.data[i].key))
-                    {
-                        prefabDic.Add(collector.data[i].key, name);
-                    }
-                }
-                prefabCollectors.Add(name, collector);
-            }
-
-            var abr2 = abcr.assetBundle.LoadAssetAsync<GameObject>("JsonReferenceCollector");
-            yield return abr2;
-
-            if (abr2.asset is GameObject obj2)
-            {
-                jsonDataCollectors.Add(name, obj2.GetComponent<ReferenceCollector>());
-            }
-
-            var abr3 = abcr.assetBundle.LoadAssetAsync<GameObject>("TextReferenceCollector");
-            yield return abr3;
-
-            if (abr3.asset is GameObject obj3)
-            {
-                textCollectors.Add(name, obj3.GetComponent<ReferenceCollector>());
-            }
-        }
-
-        #endregion 协程
-
-        #region 异步
-
-        public async Task LoadAssetBundleManifestByUWRAsync(string path)
-        {
-            if (!File.Exists(path))
-            {
-                Debug.LogWarning($"路径[{path}]的AB包获取失败------");
-                return;
-            }
-
-            AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(path);
-            while (!abcr.isDone)
-                await Task.Delay(50);
-
-            await ProcessAssetBundleManifestAsync(abcr, path, FileHelper.LoadMode.Stream);
-        }
-
-        public async Task LoadAssetBundleManifestByIOAsync(string path)
-        {
-            if (!File.Exists(path))
-            {
-                Debug.LogWarning($"路径[{path}]的AB包获取失败------");
-                return;
-            }
-
-            AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(path);
-            while (!abcr.isDone)
-                await Task.Delay(50);
-
-            await ProcessAssetBundleManifestAsync(abcr, path, FileHelper.LoadMode.Stream);
-        }
-
-        private async Task ProcessAssetBundleManifestAsync(AssetBundleCreateRequest abcr, string path, FileHelper.LoadMode mode)
-        {
-            var abr = abcr.assetBundle.LoadAssetAsync<AssetBundleManifest>("AssetBundleManifest");
+            var abr = assetBundleDic["config"]
+                .LoadAssetAsync<AssetsCiteMatchConfigSettings>("AssetsCiteMatchConfigSettings");
             while (!abr.isDone)
-                await Task.Delay(50);
-
-            var manifest = abr.asset as AssetBundleManifest;
-            var abNames = manifest.GetAllAssetBundles();
-            foreach (var name in abNames)
             {
-                switch (mode)
-                {
-                    case FileHelper.LoadMode.UnityWebRequest:
-                        await ProcessAssetBundleToUWRAsync(path, name);
-                        break;
+                await Task.Delay(50);
+            }
 
-                    case FileHelper.LoadMode.Stream:
-                        await ProcessAssetBundleToIOAsync(path, name);
-                        break;
+            if (abr.asset is AssetsCiteMatchConfigSettings settings)
+            {
+                var pathList = settings.PathList;
+                var assetsList = settings.AssetsList;
+                for (int i = 0; i < pathList.Count; i++)
+                {
+                    assetsCiteMatchConfigDic.Add(pathList[i], assetsList[i]);
                 }
             }
 
-            //foreach (var key in prefabDic.Keys)
-            //{
-            //    Debug.Log($"{key}----{prefabDic[key]}");
-            //}
-
-            Game.Instance.EventSystem.Invoke<AssetBundleLoadComplete>();
+            Game.Instance.EventSystem.Invoke(EventType.GameLoadComplete);
         }
-
-        private async Task ProcessAssetBundleToUWRAsync(string path, string name)
-        {
-            var p = $"{Path.GetDirectoryName(path)}/{name}";
-
-            if (!File.Exists(p))
-            {
-                Debug.LogWarning($"路径[{p}]的AB包获取失败------");
-                return;
-            }
-
-            var abcr = AssetBundle.LoadFromFileAsync(p);
-            while (!abcr.isDone)
-                await Task.Delay(50);
-
-            await CollectPrefabAsync(abcr, name);
-        }
-
-        private async Task ProcessAssetBundleToIOAsync(string path, string name)
-        {
-            var p = $"{Path.GetDirectoryName(path)}/{name}";
-
-            if (!File.Exists(p))
-            {
-                Debug.LogWarning($"路径[{p}]的AB包获取失败------");
-                return;
-            }
-
-            var abcr = AssetBundle.LoadFromFileAsync(p);
-            while (!abcr.isDone)
-                await Task.Delay(50);
-
-            await CollectPrefabAsync(abcr, name);
-        }
-
-        private async Task CollectPrefabAsync(AssetBundleCreateRequest abcr, string name)
-        {
-            var abr1 = abcr.assetBundle.LoadAssetAsync<GameObject>("PrefabReferenceCollector");
-            while (!abr1.isDone)
-                await Task.Delay(50);
-
-            if (abr1.asset is GameObject obj1)
-            {
-                var collector = obj1.GetComponent<ReferenceCollector>();
-                for (int i = 0; i < collector.data.Count; i++)
-                {
-                    if (!prefabDic.ContainsKey(collector.data[i].key))
-                    {
-                        prefabDic.Add(collector.data[i].key, name);
-                    }
-                }
-                prefabCollectors.Add(name, collector);
-            }
-
-            var abr2 = abcr.assetBundle.LoadAssetAsync<GameObject>("JsonReferenceCollector");
-            while (!abr2.isDone)
-                await Task.Delay(50);
-
-            if (abr2.asset is GameObject obj2)
-            {
-                jsonDataCollectors.Add(name, obj2.GetComponent<ReferenceCollector>());
-            }
-
-            var abr3 = abcr.assetBundle.LoadAssetAsync<GameObject>("TextReferenceCollector");
-            while (!abr3.isDone)
-                await Task.Delay(50);
-
-            if (abr3.asset is GameObject obj3)
-            {
-                textCollectors.Add(name, obj3.GetComponent<ReferenceCollector>());
-            }
-        }
-
-        #endregion 异步
     }
 }

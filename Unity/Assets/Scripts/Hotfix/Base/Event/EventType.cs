@@ -4,11 +4,19 @@ namespace Hotfix
 {
     public class EventType
     {
-        public static Dictionary<string, string[]> EventTypeGroupDic;
+        private static uint GameMain = 100000;
+
+        public static Dictionary<uint, uint[]> EventTypeGroupDic;
+
+        public static uint Add(ref uint value)
+        {
+            value++;
+            return value;
+        }
 
         public static void Init()
         {
-            EventTypeGroupDic = new Dictionary<string, string[]>();
+            EventTypeGroupDic = new Dictionary<uint, uint[]>();
         }
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class AssetBundleBuildEditor : EditorWindow
 {
-    private static string AssetsBundleConfigSettingsPath = "Assets/Scripts/Editor/AssetBundle/AssetsBundleConfigSettings.asset";
+    private static string AssetsBundleConfigSettingsPath = "Assets/Scripts/Editor/AssetBundle/Config/AssetsBundleConfigSettings.asset";
     private static string AssetsBundleSettingsPath = "Assets/Resources/AssetsBundleSettings.asset";
 
     [MenuItem("Tools/AssetBundle/Build AssetBundle")]

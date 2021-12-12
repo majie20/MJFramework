@@ -1,0 +1,15 @@
+ManifestFileVersion: 0
+CRC: 1452401408
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: text.aa
+      Dependencies: {}
+    Info_1:
+      Name: prefab.aa
+      Dependencies: {}
+    Info_2:
+      Name: config.aa
+      Dependencies:
+        Dependency_0: text.aa
+        Dependency_1: prefab.aa

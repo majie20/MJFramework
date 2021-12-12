@@ -12,26 +12,12 @@ namespace Model
 
         private void OnEnable()
         {
-            Game.Instance.EventSystem.AddListener2(EventType.GameLoadComplete, 0, OnGameLoadComplete);
+            Game.Instance.EventSystem.AddListener(EventType.GameLoadComplete, OnGameLoadComplete);
+        }
 
-            //StartCoroutine(Game.Instance.Scene.GetComponent<AssetsComponent>()
-            //    .LoadAssetBundleManifestByUWR($"{Application.streamingAssetsPath}/AssetBundleRes/AssetBundleRes"));
-            Game.Instance.Scene.GetComponent<HotComponent>().Start();
-
-            //netsh http add urlacl url = http://192.168.31.141:8082/ user=everyone
-            //netsh http add urlacl url = http://+:8082/ user=everyone
-            //netsh http show urlacl
-            //netsh http delete urlacl url = http://+:8082/
-            //netsh http delete urlacl url = http://192.168.31.141:8082/
-
-            //var ips = HttpHelper.GetAddressIPs();
-
-            //for (int i = 0; i < ips.Length; i++)
-            //{
-            //    Debug.Log(ips[i]); // MDEBUG:
-            //}
-
-
+        private void Start()
+        {
+            Game.Instance.Scene.GetComponent<HotComponent>().Run(false);
         }
 
         private void OnDisable()
@@ -73,7 +59,7 @@ namespace Model
 
         private void OnGameLoadComplete(object[] args)
         {
-            Game.Instance.EventSystem.RemoveListener2(EventType.GameLoadComplete, OnGameLoadComplete);
+            Game.Instance.EventSystem.RemoveListenerMult(EventType.GameLoadComplete, OnGameLoadComplete);
             Debug.Log($"------完成------{args.Length}");
             Game.Instance.Hotfix.LoadHotfixAssembly();
             Game.Instance.Hotfix.GotoHotfix();

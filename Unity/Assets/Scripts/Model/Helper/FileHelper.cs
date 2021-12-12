@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using Debug = UnityEngine.Debug;
 
 namespace Model
 {
@@ -18,9 +17,9 @@ namespace Model
 
         public enum FilePos
         {
-            dataPath,
-            streamingAssetsPath,
-            persistentDataPath
+            DataPath,
+            StreamingAssetsPath,
+            PersistentDataPath
         }
 
         /// <summary>
@@ -109,10 +108,8 @@ namespace Model
                     Debug.LogWarning($"路径[{path}]的文件获取失败----{req.error}");
                     return null;
                 }
-                else
-                {
-                    return req.downloadHandler.data;
-                }
+
+                return req.downloadHandler.data;
             }
         }
 
@@ -194,7 +191,7 @@ namespace Model
 
         public static string JoinPath(string path, FilePos pos, LoadMode mode)
         {
-            if (pos == FilePos.dataPath)
+            if (pos == FilePos.DataPath)
             {
 #if UNITY_EDITOR_WIN
                 switch (mode)
@@ -218,7 +215,7 @@ namespace Model
                 return null;
 #endif
             }
-            else if (pos == FilePos.streamingAssetsPath)
+            else if (pos == FilePos.StreamingAssetsPath)
             {
 #if UNITY_EDITOR_WIN
                 switch (mode)
@@ -249,7 +246,7 @@ namespace Model
                 }
 #endif
             }
-            else if (pos == FilePos.persistentDataPath)
+            else if (pos == FilePos.PersistentDataPath)
             {
 #if UNITY_EDITOR_WIN
                 switch (mode)

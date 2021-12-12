@@ -2,22 +2,35 @@
 
 namespace Model
 {
-    public class AssetBundleLoadComplete : EventBase { }
-    public class NetTestSend : EventBase<string> { }
-    public class HotProgressRefresh : EventBase<int> { }
+    public class AssetBundleLoadComplete : EventBase
+    { }
+
+    public class NetTestSend : EventBase<string>
+    { }
+
+    public class HotProgressRefresh : EventBase<int>
+    { }
 
     public class EventType
     {
-        public static Dictionary<string, string[]> EventTypeGroupDic;
+        private static uint GameMain = 100000;
 
-        public static string GameLoadComplete = "GameLoadComplete";
-        public static string PrefabAssociateDataLoadComplete = "PrefabAssociateDataLoadComplete";
-        public static string TextDataLoadComplete = "TextDataLoadComplete";
+        public static Dictionary<uint, uint[]> EventTypeGroupDic;
+
+        public static uint GameLoadComplete = Add(ref GameMain);
+        public static uint PrefabAssociateDataLoadComplete = Add(ref GameMain);
+        public static uint TextDataLoadComplete = Add(ref GameMain);
+
+        public static uint Add(ref uint value)
+        {
+            value++;
+            return value;
+        }
 
         public static void Init()
         {
-            EventTypeGroupDic = new Dictionary<string, string[]>();
-            EventTypeGroupDic.Add(GameLoadComplete, new[] { PrefabAssociateDataLoadComplete, TextDataLoadComplete });
+            EventTypeGroupDic = new Dictionary<uint, uint[]>();
+            //EventTypeGroupDic.Add(GameLoadComplete, new[] { PrefabAssociateDataLoadComplete, TextDataLoadComplete });
         }
     }
 }

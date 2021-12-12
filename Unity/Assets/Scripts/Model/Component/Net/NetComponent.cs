@@ -67,7 +67,7 @@ namespace Model
 
             if (fileName != null)
             {
-                using (FileStream fileStream = File.Create(FileHelper.JoinPath(fileName, FileHelper.FilePos.persistentDataPath, FileHelper.LoadMode.Stream)))
+                using (FileStream fileStream = File.Create(FileHelper.JoinPath(fileName, FileHelper.FilePos.PersistentDataPath, FileHelper.LoadMode.Stream)))
                 {
                     using (BufferedStream bufferedStream = new BufferedStream(fileStream))
                     {

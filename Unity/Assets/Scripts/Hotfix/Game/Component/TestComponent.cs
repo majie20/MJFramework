@@ -6,7 +6,7 @@ namespace Hotfix
     [LifeCycle]
     public class TestComponent : Component, IAwake<string>, IUpdateSystem
     {
-        private BodyConstructor bodyConstructor;
+        //private BodyConstructor bodyConstructor;
 
         public override void Dispose()
         {
@@ -15,8 +15,8 @@ namespace Hotfix
 
         public void Awake(string a)
         {
-            bodyConstructor = Entity.Transform.GetComponent<BodyConstructor>();
-            bodyConstructor.Assemble(Entity.Sign);
+            //bodyConstructor = Entity.Transform.GetComponent<BodyConstructor>();
+            //bodyConstructor.Assemble(Entity.Sign);
             Debug.Log($"Awake:{a}"); // MDEBUG:
         }
 

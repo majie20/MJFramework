@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,17 +9,17 @@ namespace Hotfix
     public class EventGroup
     {
         private EventDelegateParams call;
-        private Dictionary<string, object> paramdic;
-        private List<string> signList;
-        private string sign;
+        private Dictionary<uint, object> paramdic;
+        private List<uint> signList;
+        private uint sign;
 
         public EventDelegateParams Call => call;
 
-        public EventGroup(string sign, int paramNum)
+        public EventGroup(uint sign, int paramNum)
         {
             this.sign = sign;
-            paramdic = new Dictionary<string, object>(paramNum);
-            signList = new List<string>(EventType.EventTypeGroupDic[this.sign].Length);
+            paramdic = new Dictionary<uint, object>(paramNum);
+            signList = new List<uint>(EventType.EventTypeGroupDic[this.sign].Length);
         }
 
         public void AddListener(EventDelegateParams call)
@@ -33,7 +32,12 @@ namespace Hotfix
             this.call -= call;
         }
 
-        public void Invoke(string subSign, object param)
+        public void RemoveAllListener()
+        {
+            this.call = null;
+        }
+
+        public void Invoke(uint subSign, object param)
         {
             var group = EventType.EventTypeGroupDic[this.sign];
             if (group.Contains(subSign) && !signList.Contains(subSign))
@@ -55,15 +59,15 @@ namespace Hotfix
 
             if (signList.Count >= group.Length)
             {
-                var paramList = new ArrayList(paramdic.Count);
+                object[] paramList = new object[paramdic.Count];
                 for (int i = 0; i < group.Length; i++)
                 {
                     if (paramdic.ContainsKey(group[i]))
                     {
-                        paramList.Add(paramdic[group[i]]);
+                        paramList[i] = paramdic[group[i]];
                     }
                 }
-                this.call(paramList.ToArray());
+                this.call(paramList);
                 paramdic.Clear();
                 signList.Clear();
             }
@@ -72,129 +76,229 @@ namespace Hotfix
 
     public interface IEvent
     {
+        int Count();
+
+        void RemoveListener(object self);
+
+        void RemoveAllListener();
     }
 
     public class EventBase : IEvent
     {
-        private Dictionary<object, Action> callDic = new Dictionary<object, Action>();
+        private List<object> objects = new List<object>();
+        private List<Action> calls = new List<Action>();
 
-        public int Count => callDic.Count;
+        public int Count()
+        {
+            return calls.Count;
+        }
 
         public void AddListener(Action call, object self)
         {
-            callDic.Add(self, call);
+            objects.Add(self);
+            calls.Add(call);
         }
 
         public void RemoveListener(object self)
         {
-            callDic.Remove(self);
+            for (int i = 0; i < objects.Count; i++)
+            {
+                if (objects[i] == self)
+                {
+                    objects.RemoveAt(i);
+                    calls.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        public void RemoveAllListener()
+        {
+            objects.Clear();
+            calls.Clear();
         }
 
         public void Invoke()
         {
-            foreach (var v in callDic.Values)
+            for (int i = 0; i < calls.Count; i++)
             {
-                v();
+                calls[i]();
             }
         }
     }
 
     public class EventBase<T1> : IEvent
     {
-        private Dictionary<object, Action<T1>> callDic = new Dictionary<object, Action<T1>>();
+        private List<object> objects = new List<object>();
+        private List<Action<T1>> calls = new List<Action<T1>>();
 
-        public int Count => callDic.Count;
+        public int Count()
+        {
+            return calls.Count;
+        }
 
         public void AddListener(Action<T1> call, object self)
         {
-            callDic.Add(self, call);
+            objects.Add(self);
+            calls.Add(call);
         }
 
         public void RemoveListener(object self)
         {
-            callDic.Remove(self);
+            for (int i = 0; i < objects.Count; i++)
+            {
+                if (objects[i] == self)
+                {
+                    objects.RemoveAt(i);
+                    calls.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        public void RemoveAllListener()
+        {
+            objects.Clear();
+            calls.Clear();
         }
 
         public void Invoke(T1 t1)
         {
-            foreach (var v in callDic.Values)
+            for (int i = 0; i < calls.Count; i++)
             {
-                v(t1);
+                calls[i](t1);
             }
         }
     }
 
     public class EventBase<T1, T2> : IEvent
     {
-        private Dictionary<object, Action<T1, T2>> callDic = new Dictionary<object, Action<T1, T2>>();
+        private List<object> objects = new List<object>();
+        private List<Action<T1, T2>> calls = new List<Action<T1, T2>>();
 
-        public int Count => callDic.Count;
+        public int Count()
+        {
+            return calls.Count;
+        }
 
         public void AddListener(Action<T1, T2> call, object self)
         {
-            callDic.Add(self, call);
+            objects.Add(self);
+            calls.Add(call);
         }
 
         public void RemoveListener(object self)
         {
-            callDic.Remove(self);
+            for (int i = 0; i < objects.Count; i++)
+            {
+                if (objects[i] == self)
+                {
+                    objects.RemoveAt(i);
+                    calls.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        public void RemoveAllListener()
+        {
+            objects.Clear();
+            calls.Clear();
         }
 
         public void Invoke(T1 t1, T2 t2)
         {
-            foreach (var v in callDic.Values)
+            for (int i = 0; i < calls.Count; i++)
             {
-                v(t1, t2);
+                calls[i](t1, t2);
             }
         }
     }
 
     public class EventBase<T1, T2, T3> : IEvent
     {
-        private Dictionary<object, Action<T1, T2, T3>> callDic = new Dictionary<object, Action<T1, T2, T3>>();
+        private List<object> objects = new List<object>();
+        private List<Action<T1, T2, T3>> calls = new List<Action<T1, T2, T3>>();
 
-        public int Count => callDic.Count;
+        public int Count()
+        {
+            return calls.Count;
+        }
 
         public void AddListener(Action<T1, T2, T3> call, object self)
         {
-            callDic.Add(self, call);
+            objects.Add(self);
+            calls.Add(call);
         }
 
         public void RemoveListener(object self)
         {
-            callDic.Remove(self);
+            for (int i = 0; i < objects.Count; i++)
+            {
+                if (objects[i] == self)
+                {
+                    objects.RemoveAt(i);
+                    calls.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        public void RemoveAllListener()
+        {
+            objects.Clear();
+            calls.Clear();
         }
 
         public void Invoke(T1 t1, T2 t2, T3 t3)
         {
-            foreach (var v in callDic.Values)
+            for (int i = 0; i < calls.Count; i++)
             {
-                v(t1, t2, t3);
+                calls[i](t1, t2, t3);
             }
         }
     }
 
     public class EventBase<T1, T2, T3, T4> : IEvent
     {
-        private Dictionary<object, Action<T1, T2, T3, T4>> callDic = new Dictionary<object, Action<T1, T2, T3, T4>>();
+        private List<object> objects = new List<object>();
+        private List<Action<T1, T2, T3, T4>> calls = new List<Action<T1, T2, T3, T4>>();
 
-        public int Count => callDic.Count;
+        public int Count()
+        {
+            return calls.Count;
+        }
 
         public void AddListener(Action<T1, T2, T3, T4> call, object self)
         {
-            callDic.Add(self, call);
+            objects.Add(self);
+            calls.Add(call);
         }
 
         public void RemoveListener(object self)
         {
-            callDic.Remove(self);
+            for (int i = 0; i < objects.Count; i++)
+            {
+                if (objects[i] == self)
+                {
+                    objects.RemoveAt(i);
+                    calls.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        public void RemoveAllListener()
+        {
+            objects.Clear();
+            calls.Clear();
         }
 
         public void Invoke(T1 t1, T2 t2, T3 t3, T4 t4)
         {
-            foreach (var v in callDic.Values)
+            for (int i = 0; i < calls.Count; i++)
             {
-                v(t1, t2, t3, t4);
+                calls[i](t1, t2, t3, t4);
             }
         }
     }
