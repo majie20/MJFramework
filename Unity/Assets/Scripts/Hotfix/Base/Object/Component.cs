@@ -4,6 +4,20 @@ namespace Hotfix
 {
     public class Component : IDisposable
     {
+        private long guid;
+
+        public long Guid
+        {
+            private set
+            {
+                guid = value;
+            }
+            get
+            {
+                return guid;
+            }
+        }
+
         private Entity entity;
 
         public Entity Entity
@@ -20,6 +34,7 @@ namespace Hotfix
 
         public Component()
         {
+            Guid = Model.GuidHelper.GuidToLongID();
         }
 
         public virtual void Dispose()

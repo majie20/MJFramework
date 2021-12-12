@@ -8,23 +8,26 @@ namespace Model
     public sealed class EventSystem : IDisposable
     {
         private Dictionary<string, IEvent> allEventDic;
-        private Dictionary<uint, EventDelegateParams> allEventParamsDic;
         private Dictionary<uint, EventGroup> allEventGroupDic;
+        private Dictionary<uint, object> allEventParamsUintDic;
+        private Dictionary<string, object> allEventParamsStrDic;
 
         public EventSystem()
         {
             EventType.Init();
 
             allEventDic = new Dictionary<string, IEvent>();
-            allEventParamsDic = new Dictionary<uint, EventDelegateParams>();
             allEventGroupDic = new Dictionary<uint, EventGroup>();
+            allEventParamsUintDic = new Dictionary<uint, object>();
+            allEventParamsStrDic = new Dictionary<string, object>();
         }
 
         public void Dispose()
         {
             allEventDic = null;
-            allEventParamsDic = null;
             allEventGroupDic = null;
+            allEventParamsUintDic = null;
+            allEventParamsStrDic = null;
         }
 
         private T1 AddEventModel<T1>() where T1 : IEvent, new()
@@ -66,17 +69,7 @@ namespace Model
                 }
             }
 
-            var signList1 = allEventParamsDic.Keys.ToArray();
-            for (int i = 0; i < signList1.Length; i++)
-            {
-                var sign = signList1[i];
-                if (allEventParamsDic[sign] == null)
-                {
-                    allEventParamsDic.Remove(sign);
-                }
-            }
-
-            signList1 = allEventGroupDic.Keys.ToArray();
+            var signList1 = allEventGroupDic.Keys.ToArray();
             for (int i = 0; i < signList1.Length; i++)
             {
                 var sign = signList1[i];
@@ -114,14 +107,122 @@ namespace Model
             AddEventModel<T1>().AddListener(call, self);
         }
 
-        public void AddListener(uint sign, EventDelegateParams call)
+        public void AddListener(uint sign, Action call)
         {
-            if (allEventParamsDic.ContainsKey(sign))
+            if (allEventParamsUintDic.ContainsKey(sign))
             {
-                allEventParamsDic[sign] += call;
+                Action e = allEventParamsUintDic[sign] as Action;
+                e += call;
                 return;
             }
-            allEventParamsDic.Add(sign, call);
+            allEventParamsUintDic.Add(sign, new Action(call));
+        }
+
+        public void AddListener<T1>(uint sign, Action<T1> call)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1> e = allEventParamsUintDic[sign] as Action<T1>;
+                e += call;
+                return;
+            }
+
+            allEventParamsUintDic.Add(sign, new Action<T1>(call));
+        }
+
+        public void AddListener<T1, T2>(uint sign, Action<T1, T2> call)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2> e = allEventParamsUintDic[sign] as Action<T1, T2>;
+                e += call;
+                return;
+            }
+
+            allEventParamsUintDic.Add(sign, new Action<T1, T2>(call));
+        }
+
+        public void AddListener<T1, T2, T3>(uint sign, Action<T1, T2, T3> call)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3> e = allEventParamsUintDic[sign] as Action<T1, T2, T3>;
+                e += call;
+                return;
+            }
+
+            allEventParamsUintDic.Add(sign, new Action<T1, T2, T3>(call));
+        }
+
+        public void AddListener<T1, T2, T3, T4>(uint sign, Action<T1, T2, T3, T4> call)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3, T4> e = allEventParamsUintDic[sign] as Action<T1, T2, T3, T4>;
+                e += call;
+                return;
+            }
+
+            allEventParamsUintDic.Add(sign, new Action<T1, T2, T3, T4>(call));
+        }
+
+        public void AddListener(string sign, Action call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action e = allEventParamsStrDic[sign] as Action;
+                e += call;
+                return;
+            }
+            allEventParamsStrDic.Add(sign, new Action(call));
+        }
+
+        public void AddListener<T1>(string sign, Action<T1> call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1> e = allEventParamsStrDic[sign] as Action<T1>;
+                e += call;
+                return;
+            }
+
+            allEventParamsStrDic.Add(sign, new Action<T1>(call));
+        }
+
+        public void AddListener<T1, T2>(string sign, Action<T1, T2> call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2> e = allEventParamsStrDic[sign] as Action<T1, T2>;
+                e += call;
+                return;
+            }
+
+            allEventParamsStrDic.Add(sign, new Action<T1, T2>(call));
+        }
+
+        public void AddListener<T1, T2, T3>(string sign, Action<T1, T2, T3> call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3> e = allEventParamsStrDic[sign] as Action<T1, T2, T3>;
+                e += call;
+                return;
+            }
+
+            allEventParamsStrDic.Add(sign, new Action<T1, T2, T3>(call));
+        }
+
+        public void AddListener<T1, T2, T3, T4>(string sign, Action<T1, T2, T3, T4> call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3, T4> e = allEventParamsStrDic[sign] as Action<T1, T2, T3, T4>;
+                e += call;
+                return;
+            }
+
+            allEventParamsStrDic.Add(sign, new Action<T1, T2, T3, T4>(call));
         }
 
         public void AddListenerMult(uint sign, int paramNum, EventDelegateParams call)
@@ -183,11 +284,133 @@ namespace Model
             }
         }
 
-        public void RemoveListener(uint sign, EventDelegateParams call)
+        public void RemoveListener(uint sign, Action call)
         {
-            if (allEventParamsDic.ContainsKey(sign))
+            if (allEventParamsUintDic.ContainsKey(sign))
             {
-                allEventParamsDic[sign] -= call;
+                Action e = allEventParamsUintDic[sign] as Action;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsUintDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener<T1>(uint sign, Action<T1> call)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1> e = allEventParamsUintDic[sign] as Action<T1>;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsUintDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener<T1, T2>(uint sign, Action<T1, T2> call)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2> e = allEventParamsUintDic[sign] as Action<T1, T2>;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsUintDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener<T1, T2, T3>(uint sign, Action<T1, T2, T3> call)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3> e = allEventParamsUintDic[sign] as Action<T1, T2, T3>;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsUintDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener<T1, T2, T3, T4>(uint sign, Action<T1, T2, T3, T4> call)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3, T4> e = allEventParamsUintDic[sign] as Action<T1, T2, T3, T4>;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsUintDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener(string sign, Action call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action e = allEventParamsStrDic[sign] as Action;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsStrDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener<T1>(string sign, Action<T1> call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1> e = allEventParamsStrDic[sign] as Action<T1>;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsStrDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener<T1, T2>(string sign, Action<T1, T2> call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2> e = allEventParamsStrDic[sign] as Action<T1, T2>;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsStrDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener<T1, T2, T3>(string sign, Action<T1, T2, T3> call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3> e = allEventParamsStrDic[sign] as Action<T1, T2, T3>;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsStrDic.Remove(sign);
+                }
+            }
+        }
+
+        public void RemoveListener<T1, T2, T3, T4>(string sign, Action<T1, T2, T3, T4> call)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3, T4> e = allEventParamsStrDic[sign] as Action<T1, T2, T3, T4>;
+                e -= call;
+                if (e == null)
+                {
+                    allEventParamsStrDic.Remove(sign);
+                }
             }
         }
 
@@ -208,12 +431,14 @@ namespace Model
             }
         }
 
-        public void RemoveAllListener(uint sign)
+        public void RemoveAllListenerUint(uint sign)
         {
-            if (allEventParamsDic.ContainsKey(sign))
-            {
-                allEventParamsDic[sign] = null;
-            }
+            allEventParamsUintDic.Remove(sign);
+        }
+
+        public void RemoveAllListenerStr(string sign)
+        {
+            allEventParamsStrDic.Remove(sign);
         }
 
         public void RemoveAllListenerMult(uint sign)
@@ -253,11 +478,93 @@ namespace Model
             GetEventModel<T1>()?.Invoke(t2, t3, t4, t5);
         }
 
-        public void Invoke(uint sign, params object[] t1)
+        public void Invoke(uint sign)
         {
-            if (allEventParamsDic.TryGetValue(sign, out EventDelegateParams e))
+            if (allEventParamsUintDic.ContainsKey(sign))
             {
+                Action e = allEventParamsUintDic[sign] as Action;
+                e();
+            }
+        }
+
+        public void Invoke<T1>(uint sign, T1 t1)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1> e = allEventParamsUintDic[sign] as Action<T1>;
                 e(t1);
+            }
+        }
+
+        public void Invoke<T1, T2>(uint sign, T1 t1, T2 t2)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2> e = allEventParamsUintDic[sign] as Action<T1, T2>;
+                e(t1, t2);
+            }
+        }
+
+        public void Invoke<T1, T2, T3>(uint sign, T1 t1, T2 t2, T3 t3)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3> e = allEventParamsUintDic[sign] as Action<T1, T2, T3>;
+                e(t1, t2, t3);
+            }
+        }
+
+        public void Invoke<T1, T2, T3, T4>(uint sign, T1 t1, T2 t2, T3 t3, T4 t4)
+        {
+            if (allEventParamsUintDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3, T4> e = allEventParamsUintDic[sign] as Action<T1, T2, T3, T4>;
+                e(t1, t2, t3, t4);
+            }
+        }
+
+        public void Invoke(string sign)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action e = allEventParamsStrDic[sign] as Action;
+                e();
+            }
+        }
+
+        public void Invoke<T1>(string sign, T1 t1)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1> e = allEventParamsStrDic[sign] as Action<T1>;
+                e(t1);
+            }
+        }
+
+        public void Invoke<T1, T2>(string sign, T1 t1, T2 t2)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2> e = allEventParamsStrDic[sign] as Action<T1, T2>;
+                e(t1, t2);
+            }
+        }
+
+        public void Invoke<T1, T2, T3>(string sign, T1 t1, T2 t2, T3 t3)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3> e = allEventParamsStrDic[sign] as Action<T1, T2, T3>;
+                e(t1, t2, t3);
+            }
+        }
+
+        public void Invoke<T1, T2, T3, T4>(string sign, T1 t1, T2 t2, T3 t3, T4 t4)
+        {
+            if (allEventParamsStrDic.ContainsKey(sign))
+            {
+                Action<T1, T2, T3, T4> e = allEventParamsStrDic[sign] as Action<T1, T2, T3, T4>;
+                e(t1, t2, t3, t4);
             }
         }
 

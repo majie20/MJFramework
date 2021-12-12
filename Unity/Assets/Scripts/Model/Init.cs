@@ -4,6 +4,7 @@ namespace Model
 {
     public class Init : MonoBehaviour
     {
+        private int aa = 0;
         private void Awake()
         {
             GameObject.DontDestroyOnLoad(gameObject);
@@ -12,12 +13,13 @@ namespace Model
 
         private void OnEnable()
         {
-            Game.Instance.EventSystem.AddListener(EventType.GameLoadComplete, OnGameLoadComplete);
+            Game.Instance.EventSystem.AddListener<int>(EventType.GameLoadComplete, OnGameLoadComplete);
         }
 
         private void Start()
         {
             Game.Instance.Scene.GetComponent<HotComponent>().Run(false);
+
         }
 
         private void OnDisable()
@@ -25,7 +27,7 @@ namespace Model
             //Game.Instance.EventSystem.RemoveListener2(EventType.GameLoadComplete, OnGameLoadComplete);
         }
 
-        private async void Update()
+        private void Update()
         {
             Game.Instance.LifecycleSystem.Update(Time.deltaTime);
             if (Game.Instance.Hotfix.IsRuning)
@@ -57,10 +59,10 @@ namespace Model
             Game.Instance.Dispose();
         }
 
-        private void OnGameLoadComplete(object[] args)
+        private void OnGameLoadComplete(int a)
         {
-            Game.Instance.EventSystem.RemoveListenerMult(EventType.GameLoadComplete, OnGameLoadComplete);
-            Debug.Log($"------完成------{args.Length}");
+            Game.Instance.EventSystem.RemoveListener<int>(EventType.GameLoadComplete, OnGameLoadComplete);
+            Debug.Log($"------完成------{a}");
             Game.Instance.Hotfix.LoadHotfixAssembly();
             Game.Instance.Hotfix.GotoHotfix();
         }

@@ -26,14 +26,16 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_String_ILTypeInstance_Binding.Register(app);
             System_Linq_Enumerable_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_UInt32_ILTypeInstance_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_UInt32_Object_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_String_Object_Binding.Register(app);
+            System_Action_Binding.Register(app);
             System_String_Binding.Register(app);
             UnityEngine_Debug_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_UInt32_UInt32_Array_Binding.Register(app);
             System_Collections_Generic_List_1_UInt32_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_UInt32_Object_Binding.Register(app);
             System_Collections_Generic_List_1_Action_Binding.Register(app);
             System_Collections_Generic_List_1_Object_Binding.Register(app);
-            System_Action_Binding.Register(app);
+            Model_GuidHelper_Binding.Register(app);
             UnityEngine_GameObject_Binding.Register(app);
             UnityEngine_Object_Binding.Register(app);
             Model_ComponentView_Binding.Register(app);
@@ -45,8 +47,7 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_Object_Type_Binding.Register(app);
             System_Type_Binding.Register(app);
             System_Collections_Generic_HashSet_1_Type_Binding.Register(app);
-            System_Collections_Generic_Queue_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
-            System_Collections_Generic_Queue_1_Model_IDisposableAdapter_Binding_Adapter_Binding_Enumerator_Binding.Register(app);
+            ArrayQueue_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             Model_Singleton_1_Game_Binding.Register(app);
             Model_Game_Binding.Register(app);
             Model_Hotfix_Binding.Register(app);
@@ -55,6 +56,7 @@ namespace ILRuntime.Runtime.Generated
             System_Reflection_MemberInfo_Binding.Register(app);
             System_Activator_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Queue_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
+            System_Collections_Generic_Queue_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Queue_1_GameObject_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Transform_Binding.Register(app);
             System_Collections_Generic_Queue_1_GameObject_Binding.Register(app);

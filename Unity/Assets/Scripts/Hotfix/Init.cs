@@ -12,7 +12,7 @@ namespace Hotfix
             Model.Game.Instance.Hotfix.GameLateUpdate = OnLateUpdate;
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
-            //ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, "Cylinder", true), "majie");
+            ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, "Assets/Res/Prefabs/Sphere", true), "majie");
             //ObjectHelper.CreateComponent<NetTestComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, "NetTest", true));
 
 

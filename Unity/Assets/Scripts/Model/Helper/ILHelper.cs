@@ -1,4 +1,5 @@
-﻿using ILRuntime.Runtime.Intepreter;
+﻿using System;
+using ILRuntime.Runtime.Intepreter;
 
 namespace Model
 {
@@ -28,6 +29,14 @@ namespace Model
                     ((System.Action)action)();
                 });
             });
+            //appdomain.DelegateManager.RegisterDelegateConvertor<Model.EventDelegateParams<System.String>>((act) =>
+            //{
+            //    return new Model.EventDelegateParams<System.String>((t) =>
+            //    {
+            //        ((Action<System.String>)act)(t);
+            //    });
+            //});
+
             //appdomain.DelegateManager.RegisterDelegateConvertor<GameUpdate>((action) =>
             //{
             //    return new GameUpdate((a) =>
@@ -56,13 +65,6 @@ namespace Model
             //domain.RegisterCrossBindingAdaptor(new CoroutineAdapter());
             //domain.RegisterCrossBindingAdaptor(new TestClassBaseAdapter());
             //domain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
-
-            ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
-        }
-
-        public static void InitILRuntimePlay(ILRuntime.Runtime.Enviorment.AppDomain appdomain)
-        {
-            InitILRuntime(appdomain);
 
             ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
         }

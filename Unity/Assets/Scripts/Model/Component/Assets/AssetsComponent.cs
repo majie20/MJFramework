@@ -93,7 +93,7 @@ namespace Model
                 }
             }
 
-            Game.Instance.EventSystem.Invoke(EventType.GameLoadComplete);
+            Game.Instance.EventSystem.Invoke(EventType.GameLoadComplete, 1000);
         }
     }
 }
