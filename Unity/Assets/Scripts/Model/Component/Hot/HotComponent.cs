@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Model
@@ -205,15 +205,13 @@ namespace Model
                 }).Start();
             }
 
-            while (CurDownloadNum < SumSize && this.isStart)
-            {
-                await Task.Delay(100);
-            }
+            await UniTask.WaitWhile(() => CurDownloadNum < SumSize && this.isStart);
+
             Debug.LogWarning("资源更新完毕"); // MDEBUG:
 
             Debug.LogWarning("正在解压资源"); // MDEBUG:
             var outputPath = FileHelper.JoinPath(HotConfig.AB_SAVE_RELATIVELY_PATH, FileHelper.FilePos.PersistentDataPath, FileHelper.LoadMode.Stream);
-            Task[] tasks = new Task[newAbConfigs.Count];
+            UniTask[] tasks = new UniTask[newAbConfigs.Count];
             for (int i = 0; i < newAbConfigs.Count; i++)
             {
                 var abPackPath = FileHelper.JoinPath(
@@ -221,13 +219,13 @@ namespace Model
                     FileHelper.FilePos.PersistentDataPath,
                     FileHelper.LoadMode.Stream);
 
-                tasks[i] = new Task(() =>
-                {
-                    ZipWrapper.UnzipFile(abPackPath, outputPath, Settings.ZipPassword);
-                    File.Delete(abPackPath);
-                });
+                tasks[i] = UniTask.RunOnThreadPool(() =>
+               {
+                   ZipWrapper.UnzipFile(abPackPath, outputPath, Settings.ZipPassword);
+                   File.Delete(abPackPath);
+               });
             }
-            await Task.WhenAll(tasks);
+            await UniTask.WhenAll(tasks);
 
             await Game.Instance.Scene.GetComponent<AssetsComponent>().Run(true);
         }

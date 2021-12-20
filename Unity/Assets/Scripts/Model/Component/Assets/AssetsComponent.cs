@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Model
@@ -53,7 +54,7 @@ namespace Model
             ab.Unload(unloadAllLoadedObjects);
         }
 
-        public async Task Run(bool isHot)
+        public async UniTask Run(bool isHot)
         {
             Debug.LogWarning("正在加载资源"); // MDEBUG:
             HotComponent component = Game.Instance.Scene.GetComponent<HotComponent>();
@@ -68,20 +69,14 @@ namespace Model
                 var buffer = await FileHelper.LoadFileByUnityWebRequestAsync(abPackPath);
                 buffer = AESHelper.Decrypt(buffer, component.Settings.EncryptPassword);
                 var abcr = AssetBundle.LoadFromMemoryAsync(buffer);
-                while (!abcr.isDone)
-                {
-                    await Task.Delay(50);
-                }
+                await UniTask.WaitUntil(() => abcr.isDone);
 
                 assetBundleDic.Add(Regex.Replace(abName, FileConfig.FILE_EXTENSION_PATTERN, ""), abcr.assetBundle);
             }
 
             var abr = assetBundleDic["config"]
                 .LoadAssetAsync<AssetsCiteMatchConfigSettings>("AssetsCiteMatchConfigSettings");
-            while (!abr.isDone)
-            {
-                await Task.Delay(50);
-            }
+            await UniTask.WaitUntil(() => abr.isDone);
 
             if (abr.asset is AssetsCiteMatchConfigSettings settings)
             {

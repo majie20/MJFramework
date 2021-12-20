@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.IO;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -66,42 +65,15 @@ namespace Model
             }
         }
 
-        /// <summary>
-        /// 加载文件，UnityWebRequest协程
-        /// </summary>
-        /// <param name="path">文件地址</param>
-        /// <param name="call">带结果的回调</param>
-        /// <returns></returns>
-        public static IEnumerator LoadFileByUnityWebRequest(string path, FilePos pos, Action<byte[]> call)
-        {
-            path = JoinPath(path, pos, LoadMode.UnityWebRequest);
-            using (UnityWebRequest uwr = UnityWebRequest.Get(path))
-            {
-                yield return uwr.SendWebRequest();
-                if (uwr.isNetworkError || uwr.isHttpError)
-                {
-                    Debug.LogWarning($"路径[{path}]的文件获取失败----{uwr.error}");
-                    yield break;
-                }
-
-                call(uwr.downloadHandler.data);
-            }
-        }
-
         ///// <summary>
         ///// 加载文件，UnityWebRequest异步
         ///// </summary>
         ///// <param name="path">文件地址</param>
-        public static async Task<byte[]> LoadFileByUnityWebRequestAsync(string path)
+        public static async UniTask<byte[]> LoadFileByUnityWebRequestAsync(string path)
         {
             using (UnityWebRequest req = UnityWebRequest.Get(path))
             {
-                req.SendWebRequest();
-
-                while (!req.isDone)
-                {
-                    await Task.Delay(50);
-                }
+                await req.SendWebRequest();
 
                 if (req.isHttpError || req.isNetworkError)
                 {
@@ -118,7 +90,7 @@ namespace Model
         /// </summary>
         /// <param name="path">文件地址</param>
         /// <returns></returns>
-        public static async Task<byte[]> LoadFileByStreamAsync(string path)
+        public static async UniTask<byte[]> LoadFileByStreamAsync(string path)
         {
             using (FileStream fileStream = File.OpenRead(path))
             {
@@ -152,7 +124,7 @@ namespace Model
         /// </summary>
         /// <param name="path">文件地址</param>
         /// <returns></returns>
-        public static async Task SaveFileByStreamAsync(string path, byte[] buffer)
+        public static async UniTask SaveFileByStreamAsync(string path, byte[] buffer)
         {
             using (FileStream fileStream = File.Create(path))
             {

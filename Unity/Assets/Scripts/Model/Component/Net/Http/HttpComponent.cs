@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Model
@@ -52,7 +53,7 @@ namespace Model
             unusedClients.Enqueue(client);
         }
 
-        private async Task<HttpResponseMessage> RequestAsync(HttpClient client, Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        private async UniTask<HttpResponseMessage> RequestAsync(HttpClient client, Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
         {
             HttpRequestMessage message = new HttpRequestMessage(httpMethod, new Uri(url, method));
             if (bytes != null)
@@ -68,7 +69,7 @@ namespace Model
             return response;
         }
 
-        public async Task<byte[]> ToBytesAsync(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        public async UniTask<byte[]> ToBytesAsync(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
@@ -81,7 +82,7 @@ namespace Model
             return buffer;
         }
 
-        public async Task<string> ToStringAsync(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        public async UniTask<string> ToStringAsync(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
@@ -94,7 +95,7 @@ namespace Model
             return str;
         }
 
-        public async Task ToStreamAsync(Uri url, string method, HttpMethod httpMethod, Func<HttpResponseMessage, Task> call, byte[] bytes = null)
+        public async UniTask ToStreamAsync(Uri url, string method, HttpMethod httpMethod, Func<HttpResponseMessage, UniTask> call, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
@@ -109,7 +110,7 @@ namespace Model
         {
             HttpClient client = Hatch();
 
-            var response = RequestAsync(client, url, method, httpMethod, bytes).Result;
+            var response = RequestAsync(client, url, method, httpMethod, bytes).GetAwaiter().GetResult();
 
             var buffer = response.Content.ReadAsByteArrayAsync().Result;
 
@@ -122,7 +123,7 @@ namespace Model
         {
             HttpClient client = Hatch();
 
-            var response = RequestAsync(client, url, method, httpMethod, bytes).Result;
+            var response = RequestAsync(client, url, method, httpMethod, bytes).GetAwaiter().GetResult();
 
             var str = response.Content.ReadAsStringAsync().Result;
 
@@ -135,7 +136,7 @@ namespace Model
         {
             HttpClient client = Hatch();
 
-            var response = RequestAsync(client, url, method, httpMethod, bytes).Result;
+            var response = RequestAsync(client, url, method, httpMethod, bytes).GetAwaiter().GetResult();
 
             call(response);
 

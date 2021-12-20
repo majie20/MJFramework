@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Model
@@ -9,7 +9,7 @@ namespace Model
         /// 创建一个Sprie
         /// </summary>
         /// <param name="path">图片地址</param>
-        public static async Task<Sprite> CreateSprite(string path, FileHelper.LoadMode mode)
+        public static async UniTask<Sprite> CreateSprite(string path, FileHelper.LoadMode mode)
         {
             // 创建Texture
             Texture2D texture = new Texture2D(256, 256);
