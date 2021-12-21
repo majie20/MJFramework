@@ -88,6 +88,20 @@ namespace Model
                 }
             }
 
+            var abAtlas = assetBundleDic["config"]
+                .LoadAssetAsync<AssetsAtlasSettings>("AssetsAtlasSettings");
+            await UniTask.WaitUntil(() => abAtlas.isDone);
+            if (abAtlas.asset is AssetsAtlasSettings atlasInfo)
+            {
+                var nameList = atlasInfo.atlasNameList;
+                var objAtlas = atlasInfo.atlasList;
+                for (int i = 0; i < objAtlas.Count; i++)
+                {
+                    assetsCiteMatchConfigDic.Add(nameList[i], objAtlas[i]);
+                }
+            }
+
+
             Game.Instance.EventSystem.Invoke(EventType.GameLoadComplete, 1000);
         }
     }

@@ -5,6 +5,7 @@ using UnityEditor;
 using System.IO;
 using UnityEngine.U2D;
 using UnityEditor.U2D;
+using Model;
 
 public class ImageAtlas
 {
@@ -22,11 +23,23 @@ public class ImageAtlas
             FileInfo[] files = directory.GetFiles();
             for(int i = 0; i < files.Length; i++)
             {
-                SpriteAtlas spriteAtlas = new SpriteAtlas();
+                string path = FileHelper.AbsoluteSwitchRelativelyPath(files[i].FullName).Replace(".meta", "");
+
+                if (files[i].Name.Contains("Common"))
+                {
+                    DirectoryInfo childDirectory = new DirectoryInfo(path);
+                    FileInfo[] childFiles = childDirectory.GetFiles();
+                    for (int j = 0; j < childFiles.Length; j++)
+                    {
+                        string commonName = childFiles[j].Name.Replace(".meta", "");
+                        string commonAtlasPath = folderPath + "/" + commonName + ".spriteatlas";
+                        CreateAtlas(commonAtlasPath, FileHelper.AbsoluteSwitchRelativelyPath(childFiles[j].FullName).Replace(".meta", ""));             
+                    }
+                    continue;
+                }
                 string name = files[i].Name.Replace(".meta", "");
-                AssetDatabase.CreateAsset(spriteAtlas, folderPath + "/" + name + ".spriteatlas");
-                Object obj = AssetDatabase.LoadAssetAtPath(imagePath + "/" + name, typeof(Object));
-                spriteAtlas.Add(new[] { obj });
+                string atlasPath = folderPath + "/" + name + ".spriteatlas";
+                CreateAtlas(atlasPath, imagePath + "/" + name);
             }
         }
         AssetDatabase.SaveAssets();
@@ -39,5 +52,13 @@ public class ImageAtlas
             Directory.Delete(folderPath, true);
         }
         AssetDatabase.CreateFolder("Assets", "ImageAtlas");
+    }
+
+    public static void CreateAtlas(string atlasPath, string imagePath)
+    {
+        SpriteAtlas spriteAtlas = new SpriteAtlas();
+        AssetDatabase.CreateAsset(spriteAtlas, atlasPath);
+        Object obj = AssetDatabase.LoadAssetAtPath(imagePath, typeof(Object));
+        spriteAtlas.Add(new[] { obj });      
     }
 }
