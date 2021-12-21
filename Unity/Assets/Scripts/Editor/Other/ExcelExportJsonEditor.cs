@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class ExcelExportJsonEditor : EditorWindow
 {
-    [MenuItem("Tools/UtilsEditor/Excel导出(用于导出帧数表)")]
+    //[MenuItem("Tools/UtilsEditor/Excel导出(用于导出帧数表)")]
     public static void ExcelExportJson()
     {
         if (Directory.Exists("./Excel"))

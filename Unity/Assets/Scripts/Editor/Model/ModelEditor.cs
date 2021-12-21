@@ -45,7 +45,7 @@ using UnityEngine;
 
 public class ModelEditor : EditorWindow
 {
-    [MenuItem("Tools/UtilsEditor/ModelEditorPanel")]
+    //[MenuItem("Tools/UtilsEditor/ModelEditorPanel")]
     public static void OpenModelUtilsPanel()
     {
         CreateInstance<ModelEditor>().Show();

@@ -16,5 +16,5 @@ MonoBehaviour:
   ZipExtension: .mm
   ZipPassword: majie
   EncryptPassword: 111111111111111111111111
-  AssetBundleSavePath: E:/Unity/Project/StandardProject/Unity/Assets/StreamingAssets/Assets
-  ZipAssetBundleSavePath: E:/Unity/Project/StandardProject/Unity/AssetBundleRes/Output
+  AssetBundleSavePath: ./../Unity/Assets/StreamingAssets/Assets
+  ZipAssetBundleSavePath: ./../Unity/AssetBundleRes/Output

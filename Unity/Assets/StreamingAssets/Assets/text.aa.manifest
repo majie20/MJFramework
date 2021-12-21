@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1280227909
+CRC: 3435223894
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 95691dfd2db8b01f92c347d5d7ccd06a
+    Hash: d0b75e893368f518904d51078226dceb
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -11,7 +11,6 @@ HashAppended: 0
 ClassTypes:
 - Class: 49
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Res/Prefabs/Cube.json
 - Assets/Res/Text/Hotfix.dll.bytes

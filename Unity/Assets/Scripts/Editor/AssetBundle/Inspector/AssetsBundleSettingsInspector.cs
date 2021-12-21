@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Model;
+using UnityEditor;
 using UnityEngine;
 
 //自定义ReferenceCollector类在界面中的显示与功能
@@ -26,7 +27,7 @@ public class AssetsBundleSettingsInspector : Editor
         m_target.AssetBundleSavePath = EditorGUILayout.TextField(m_target.AssetBundleSavePath);
         if (GUILayout.Button("选择"))
         {
-            m_target.AssetBundleSavePath = EditorUtility.OpenFolderPanel("选择文件夹", "", "");
+            m_target.AssetBundleSavePath = $"./../{FileHelper.RelativePath(EditorConfig.PROJECT_PATH, EditorUtility.OpenFolderPanel("选择文件夹", "", ""))}";
         }
         GUILayout.EndHorizontal();
 
@@ -37,7 +38,7 @@ public class AssetsBundleSettingsInspector : Editor
         m_target.ZipAssetBundleSavePath = EditorGUILayout.TextField(m_target.ZipAssetBundleSavePath);
         if (GUILayout.Button("选择"))
         {
-            m_target.ZipAssetBundleSavePath = EditorUtility.OpenFolderPanel("选择文件夹", "", "");
+            m_target.ZipAssetBundleSavePath = $"./../{FileHelper.RelativePath(EditorConfig.PROJECT_PATH, EditorUtility.OpenFolderPanel("选择文件夹", "", ""))}";
         }
         GUILayout.EndHorizontal();
 
