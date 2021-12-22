@@ -14,16 +14,20 @@ namespace Model
 
         private Dictionary<string, Object> assetsCiteMatchConfigDic;
 
+        private Dictionary<string, string> assetsAtlasDic;
+
         public void Awake()
         {
             assetBundleDic = new Dictionary<string, AssetBundle>();
             assetsCiteMatchConfigDic = new Dictionary<string, Object>();
+            assetsAtlasDic = new Dictionary<string, string>();
         }
 
         public override void Dispose()
         {
             assetBundleDic = null;
             assetsCiteMatchConfigDic = null;
+            assetsAtlasDic = null;
             Entity = null;
         }
 
@@ -52,6 +56,15 @@ namespace Model
             var ab = assetBundleDic[name];
             assetBundleDic.Remove(name);
             ab.Unload(unloadAllLoadedObjects);
+        }
+
+        public string LoadAtlasPath(string name)
+        {
+            if (assetsAtlasDic.ContainsKey(name))
+            {
+                return assetsAtlasDic[name];
+            }
+            return default;
         }
 
         public async UniTask Run(bool isHot)
@@ -89,19 +102,17 @@ namespace Model
             }
 
             var abAtlas = assetBundleDic["config"]
-                .LoadAssetAsync<AssetsAtlasSettings>("AssetsAtlasSettings");
+                .LoadAssetAsync<AssestSpriteSettings>("AssestSpriteSettings");
             await UniTask.WaitUntil(() => abAtlas.isDone);
-            if (abAtlas.asset is AssetsAtlasSettings atlasInfo)
+            if (abAtlas.asset is AssestSpriteSettings atlasInfo)
             {
                 var nameList = atlasInfo.atlasNameList;
-                var objAtlas = atlasInfo.atlasList;
-                for (int i = 0; i < objAtlas.Count; i++)
+                var atlasPathList = atlasInfo.atlasPathList;
+                for (int i = 0; i < nameList.Count; i++)
                 {
-                    assetsCiteMatchConfigDic.Add(nameList[i], objAtlas[i]);
+                    assetsAtlasDic.Add(nameList[i], atlasPathList[i]);
                 }
             }
-
-
             Game.Instance.EventSystem.Invoke(EventType.GameLoadComplete, 1000);
         }
     }

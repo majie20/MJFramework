@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3465285024
+CRC: 1311272823
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 32fb43f6af964c035775c0875a5070a3
+    Hash: 9a6416b94d2012d232b6f2d4a7c31333
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d3d6616375cfc239455a94469b80ab17
+    Hash: 1da737fe9047d8c8ebf11228210c7bda
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -27,6 +27,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
@@ -51,8 +53,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -69,6 +69,7 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Res/Prefabs/hhh/GameObject.prefab
 - Assets/Res/Prefabs/NetTest.prefab

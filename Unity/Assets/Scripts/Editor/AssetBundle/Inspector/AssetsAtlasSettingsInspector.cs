@@ -6,14 +6,15 @@ using UnityEngine;
 using UnityEngine.U2D;
 
 
-[CustomEditor(typeof(AssetsAtlasSettings))]
+[CustomEditor(typeof(AssestSpriteSettings))]
 public class AssetsAtlasSettingsInspector : Editor
 {
-    private AssetsAtlasSettings m_target;
+    private AssestSpriteSettings m_target;
+    private bool atlasPathData;
 
     private void OnEnable()
     {
-        this.m_target = (AssetsAtlasSettings)target;
+        this.m_target = (AssestSpriteSettings)target;
     }
 
     public override void OnInspectorGUI()
@@ -30,14 +31,22 @@ public class AssetsAtlasSettingsInspector : Editor
             Export();
         }
         GUI.enabled = false;
-        this.DrawDefaultInspector();       
+
+        this.DrawDefaultInspector();
+
+        atlasPathData = EditorGUILayout.Foldout(atlasPathData, "图集路径");
+        if (atlasPathData)
+        {
+
+        }
+
     }
     private void Export()
     {
         m_target.atlasNameList.Clear();
-        m_target.atlasList.Clear();
+        m_target.atlasPathList.Clear();
         m_target.imageNameList.Clear();
-        m_target.atlasCommonList.Clear();
+        m_target.atlasCommonPathList.Clear();
         string filePath = AssetDatabase.GetAssetPath(m_target.atlasFile);
         DirectoryInfo directoryInfo = new DirectoryInfo(filePath);
         FileInfo[] fileInfo = directoryInfo.GetFiles();
@@ -53,7 +62,7 @@ public class AssetsAtlasSettingsInspector : Editor
             Object atlasObj = AssetDatabase.LoadAssetAtPath(atlasPath, typeof(Object));
 
             m_target.atlasNameList.Add(name);
-            m_target.atlasList.Add(atlasObj);
+            m_target.atlasPathList.Add(atlasPath.Replace(fileInfo[i].Extension, ""));
      
             if (name.Contains("Common"))
             {
@@ -63,7 +72,7 @@ public class AssetsAtlasSettingsInspector : Editor
                 for(int j = 0; j < spriteAtlas.spriteCount; j++)
                 {
                     m_target.imageNameList.Add(sprites[j].name.Replace("(Clone)", ""));
-                    m_target.atlasCommonList.Add(atlasObj);
+                    m_target.atlasCommonPathList.Add(atlasPath.Replace(fileInfo[i].Extension, ""));
                 }
             }
         }

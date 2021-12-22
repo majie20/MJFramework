@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Model
 {
     public class Init : MonoBehaviour
     {
         private int aa = 0;
+        public Button button;
+
         private void Awake()
         {
             GameObject.DontDestroyOnLoad(gameObject);
@@ -65,6 +68,13 @@ namespace Model
             Debug.Log($"------完成------{a}");
             Game.Instance.Hotfix.LoadHotfixAssembly();
             Game.Instance.Hotfix.GotoHotfix();
+        }
+
+        public void d()
+        {
+            UIBaseComponent uIBaseComponent = new UIBaseComponent();
+            Sprite cc =  uIBaseComponent.GetSprite("1691", "1");
+            button.GetComponent<Image>().sprite = cc;
         }
     }
 }
