@@ -14,20 +14,17 @@ namespace Model
 
         private Dictionary<string, Object> assetsCiteMatchConfigDic;
 
-        private Dictionary<string, string> assetsAtlasDic;
 
         public void Awake()
         {
             assetBundleDic = new Dictionary<string, AssetBundle>();
             assetsCiteMatchConfigDic = new Dictionary<string, Object>();
-            assetsAtlasDic = new Dictionary<string, string>();
         }
 
         public override void Dispose()
         {
             assetBundleDic = null;
             assetsCiteMatchConfigDic = null;
-            assetsAtlasDic = null;
             Entity = null;
         }
 
@@ -56,15 +53,6 @@ namespace Model
             var ab = assetBundleDic[name];
             assetBundleDic.Remove(name);
             ab.Unload(unloadAllLoadedObjects);
-        }
-
-        public string LoadAtlasPath(string name)
-        {
-            if (assetsAtlasDic.ContainsKey(name))
-            {
-                return assetsAtlasDic[name];
-            }
-            return default;
         }
 
         public async UniTask Run(bool isHot)
@@ -98,19 +86,6 @@ namespace Model
                 for (int i = 0; i < pathList.Count; i++)
                 {
                     assetsCiteMatchConfigDic.Add(pathList[i], assetsList[i]);
-                }
-            }
-
-            var abAtlas = assetBundleDic["config"]
-                .LoadAssetAsync<AssestSpriteSettings>("AssestSpriteSettings");
-            await UniTask.WaitUntil(() => abAtlas.isDone);
-            if (abAtlas.asset is AssestSpriteSettings atlasInfo)
-            {
-                var nameList = atlasInfo.atlasNameList;
-                var atlasPathList = atlasInfo.atlasPathList;
-                for (int i = 0; i < nameList.Count; i++)
-                {
-                    assetsAtlasDic.Add(nameList[i], atlasPathList[i]);
                 }
             }
             Game.Instance.EventSystem.Invoke(EventType.GameLoadComplete, 1000);

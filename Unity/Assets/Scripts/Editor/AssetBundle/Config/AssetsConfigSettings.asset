@@ -19,4 +19,10 @@ MonoBehaviour:
   - Extension: 
     DirList:
     - {fileID: 102900000, guid: 0d9577da6f9acbb47bb74aec6a78ca87, type: 3}
+  - Extension: 
+    DirList:
+    - {fileID: 102900000, guid: 11b04dc613d629e4980b00dc402d12ca, type: 3}
+  - Extension: .spriteatlas
+    DirList:
+    - {fileID: 102900000, guid: 148e7fc1e68b7ad4f95381bc80c2ec53, type: 3}
   Settings: {fileID: 11400000, guid: 499ff2cb4ba223245a904c71d2d545d3, type: 2}

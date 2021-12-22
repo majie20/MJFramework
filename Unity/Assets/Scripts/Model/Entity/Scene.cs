@@ -15,7 +15,6 @@ namespace Model
             ObjectHelper.CreateComponent<AssetsComponent>(this, false);
             ObjectHelper.CreateComponent<HttpComponent>(this, false);
             ObjectHelper.CreateComponent<HotComponent>(this, false);
-
             //ObjectHelper.CreateComponent<NetComponent>(this, false);
         }
 
