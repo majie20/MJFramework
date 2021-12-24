@@ -22,6 +22,12 @@ MonoBehaviour:
   - Assets/Res/Prefabs/Sphere
   - Assets/Res/Text/Hotfix.dll
   - Assets/Res/Text/Hotfix.pdb
+  - Assets/Res/Config/AssestSpriteSettings
+  - Assets/Res/Config/AssetsCiteMatchConfigSettings
+  - Assets/ImageAtlas/1
+  - Assets/ImageAtlas/2
+  - Assets/ImageAtlas/Common1
+  - Assets/ImageAtlas/Common2
   AssetsList:
   - {fileID: 2935239384807764712, guid: 6b0747d6ef9d34749b8c82d64169c49a, type: 3}
   - {fileID: 3849385875390267945, guid: 11d543cb405224b43842a5cef96a03a1, type: 3}
@@ -32,3 +38,9 @@ MonoBehaviour:
   - {fileID: 2972403345721537417, guid: 980ccd3e86108ce4cbee1703121f5dca, type: 3}
   - {fileID: 4900000, guid: ae8e86f35d7a8584dab0348232aaaacf, type: 3}
   - {fileID: 4900000, guid: 81263b0e2ea3ecb448ea59b60077f9a7, type: 3}
+  - {fileID: 11400000, guid: 108f4252d5024d641a06f7ad36eb4337, type: 2}
+  - {fileID: 11400000}
+  - {fileID: 4343727234628468602, guid: e5d95b003e5b95f4abc4e8d6a973244a, type: 2}
+  - {fileID: 4343727234628468602, guid: cedbb02e84ba74f4da0de5aac7f05710, type: 2}
+  - {fileID: 4343727234628468602, guid: 79985dfe71d6be74d8175763556f6135, type: 2}
+  - {fileID: 4343727234628468602, guid: fc5796f851f3b9b4e8e420821d383947, type: 2}

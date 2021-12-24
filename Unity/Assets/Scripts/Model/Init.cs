@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Model
 {
     public class Init : MonoBehaviour
     {
         private int aa = 0;
+        public Button button;
+
         private void Awake()
         {
             GameObject.DontDestroyOnLoad(gameObject);
@@ -19,7 +22,6 @@ namespace Model
         private void Start()
         {
             Game.Instance.Scene.GetComponent<HotComponent>().Run(false);
-
         }
 
         private void OnDisable()
@@ -63,8 +65,15 @@ namespace Model
         {
             Game.Instance.EventSystem.RemoveListener<int>(EventType.GameLoadComplete, OnGameLoadComplete);
             Debug.Log($"------完成------{a}");
+            ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
             Game.Instance.Hotfix.LoadHotfixAssembly();
-            Game.Instance.Hotfix.GotoHotfix();
+            Game.Instance.Hotfix.GotoHotfix();        
+        }
+
+        public void d()
+        {
+            Sprite cc =  Game.Instance.Scene.GetComponent<SpriteComponent>().LoadSprite("1691", "1");
+            button.GetComponent<Image>().sprite = cc;
         }
     }
 }
