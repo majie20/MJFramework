@@ -10,7 +10,6 @@ namespace Model
         private readonly HashSet<Type> lateUpdateSystems = new HashSet<Type>();
         private readonly HashSet<Type> startSystems = new HashSet<Type>();
         private readonly HashSet<Type> destroySystems = new HashSet<Type>();
-        private Dictionary<Type, List<Type>> types = new Dictionary<Type, List<Type>>();
 
         private ArrayQueue<Component> starts = new ArrayQueue<Component>(50);
         private ArrayQueue<Component> updates = new ArrayQueue<Component>(50);
@@ -18,28 +17,7 @@ namespace Model
 
         public LifecycleSystem()
         {
-            types.Clear();
-            var assembly = typeof(Init).Assembly;
-
-            foreach (var v in assembly.GetTypes())
-            {
-                object[] objects = v.GetCustomAttributes(typeof(BaseAttribute), false);
-                if (objects.Length != 0)
-                {
-                    for (int i = 0; i < objects.Length; i++)
-                    {
-                        Type type = ((BaseAttribute)objects[i]).AttributeType;
-                        if (!types.ContainsKey(type))
-                        {
-                            types.Add(type, new List<Type>());
-                        }
-                        if (!types[type].Contains(v))
-                        {
-                            types[type].Add(v);
-                        }
-                    }
-                }
-            }
+            var types = Game.Instance.TypeSystem.TypeDic;
 
             awakeSystems.Clear();
             updateSystems.Clear();

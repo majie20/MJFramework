@@ -65,6 +65,31 @@ public class StaticLinkedList<T> : IEnumerable<T>
         return cur;
     }
 
+    public bool Remove(T t)
+    {
+        var lastCur = 1;
+        var cur = this.elements[lastCur].cur;
+        while (cur != 0)
+        {
+            if (this.elements[cur].Equals(t))
+            {
+                this.elements[cur].element = default;
+                this.elements[lastCur].cur = this.elements[cur].cur;
+                this.elements[cur].cur = this.elements[0].cur;
+                this.elements[0].cur = cur;
+
+                Length -= 1;
+
+                return true;
+            }
+
+            lastCur = cur;
+            cur = this.elements[lastCur].cur;
+        }
+
+        return false;
+    }
+
     public T Remove(int index)
     {
         if (index < 2 || index >= this.elements.Length)
@@ -97,6 +122,20 @@ public class StaticLinkedList<T> : IEnumerable<T>
         return default;
     }
 
+    public bool Contains(T t)
+    {
+        var temp = this.elements[1];
+        while (temp.cur != 0)
+        {
+            temp = this.elements[temp.cur];
+            if (temp.element.Equals(t))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void Expansion()
     {
         this.totalLength *= 2;
@@ -116,6 +155,25 @@ public class StaticLinkedList<T> : IEnumerable<T>
         tempElements[0].cur = length;
         tempElements[this.totalLength - 1].cur = 1;
         this.elements = tempElements;
+    }
+
+    public T this[int i]
+    {
+        get
+        {
+            var temp = elements[1];
+            for (int j = 0; j < i; j++)
+            {
+                if (temp.cur == 0)
+                {
+                    return default;
+                }
+
+                temp = elements[temp.cur];
+            }
+
+            return elements[temp.cur].element;
+        }
     }
 
     public IEnumerator<T> GetEnumerator()

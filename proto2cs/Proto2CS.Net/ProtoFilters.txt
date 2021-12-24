@@ -1,9 +1,1 @@
-test.proto
-AchievementCommand.proto
-AchievementDefine.proto
-ActivityCommand.proto
-ActivityDefine.proto
-BubbleDefine.proto
-test_battle.proto
-test_common.proto
-test_person.proto
+ab.proto

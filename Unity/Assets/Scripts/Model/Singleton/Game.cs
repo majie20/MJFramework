@@ -14,6 +14,8 @@ namespace Model
 
         public Hotfix Hotfix { private set; get; }
 
+        public TypeSystem TypeSystem { private set; get; }
+
         public GameObject GameObject { private set; get; }
         public Transform Transform { private set; get; }
 
@@ -22,6 +24,8 @@ namespace Model
             GameObject = new GameObject("Model");
             Transform = GameObject.transform;
             Object.DontDestroyOnLoad(GameObject);
+
+            TypeSystem = new TypeSystem();
 
             EventSystem = new EventSystem();
 
@@ -50,6 +54,9 @@ namespace Model
 
             EventSystem?.Dispose();
             EventSystem = null;
+
+            TypeSystem?.Dispose();
+            TypeSystem = null;
         }
     }
 }

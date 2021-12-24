@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Model
 {
@@ -116,6 +117,23 @@ namespace Model
             entity.AddComponentView();
 
             return entity;
+        }
+
+        public static UIBaseComponent OpenUIView<A>(Type type, A a)
+        {
+            var component = Game.Instance.Scene.GetComponent<UIManagerComponent>().OpenUIView(type);
+            if (component == null)
+            {
+                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+            }
+            else
+            {
+                IOpen<A> iOpen = component as IOpen<A>;
+
+                iOpen?.Open(a);
+            }
+
+            return component;
         }
     }
 }

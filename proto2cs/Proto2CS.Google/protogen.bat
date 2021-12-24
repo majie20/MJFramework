@@ -3,7 +3,7 @@
 SET _PROJECT_PATH=..\..\
 SET _PROTO_PATH=..\..\Proto
 SET _PROTO2CS_PATH=.\CSFile
-SET _UNITY_CSPD_PATH=%_PROJECT_PATH%\Unity\Assets\Scripts\Model\Protobuf\
+SET _UNITY_CSPD_PATH=%_PROJECT_PATH%\Unity\Assets\Scripts\Hotfix\Protobuf\
 SET _SERVER_CSPD_PATH=%_PROJECT_PATH%\Server\HttpServerTest\Protobuf\
 
 del %_PROTO2CS_PATH%\*.cs
