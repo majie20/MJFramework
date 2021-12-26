@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
-namespace Hotfix
+namespace Model
 {
     [LifeCycle]
     public class UIManagerComponent : Component, IAwake
     {
-        private static int SORT_ORDER_SPACING = 10000;
+        private static int SORT_ORDER_INIT = 0;
+        private static int SORT_ORDER_SPACING = 1000;
         public static string UIROOT_PATH = "Assets/Res/Prefabs/UIRoot";
 
         private Dictionary<Type, UIBaseComponent> uiComponentDic;
@@ -48,10 +50,11 @@ namespace Hotfix
             uiComponentDic = new Dictionary<Type, UIBaseComponent>(20);
             uiStack = new Stack<Type>(15);
             tempUIStack = new Stack<Type>(15);
-            sortOrder = 0;
+            sortOrder = SORT_ORDER_INIT;
 
-            ReferenceCollector rc = this.Entity.GameObject.GetComponent<ReferenceCollector>();
-            UICamera = rc.Get<GameObject>("UICamera").GetComponent<Camera>();
+            UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+            var canvas = this.Entity.Transform.GetComponent<Canvas>();
+            canvas.worldCamera = UICamera;
 
             UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
         }
@@ -69,7 +72,11 @@ namespace Hotfix
         {
             if (!uiComponentDic.ContainsKey(type))
             {
-                var component = ObjectHelper.CreateComponent(type, ObjectHelper.CreatEntity(this.Entity, attr.PrefabPath, true), true) as UIBaseComponent;
+                var component = ObjectHelper.CreateComponent(type, ObjectHelper.CreatEntity(this.Entity, null, attr.PrefabPath, true), true) as UIBaseComponent;
+                RectTransform rect = component.Entity.Transform.GetComponent<RectTransform>();
+                Debug.Log(rect.rect); // MDEBUG:
+                Debug.Log(rect.sizeDelta); // MDEBUG:
+                rect.sizeDelta = Vector2.zero;
                 uiComponentDic.Add(type, component);
             }
 
@@ -78,8 +85,8 @@ namespace Hotfix
 
         private void PushView(Type type)
         {
-            sortOrder += SORT_ORDER_SPACING;
             uiComponentDic[type].Canvas.sortingOrder = sortOrder;
+            sortOrder += SORT_ORDER_SPACING;
             uiStack.Push(type);
         }
 
@@ -91,10 +98,9 @@ namespace Hotfix
 
         public UIBaseComponent OpenUIView(Type type, bool isCloseBack)
         {
-            var attrs = type.GetCustomAttributes(typeof(UIBaseDataAttribute), false);
-            if (attrs.Length > 0)
+            var attr = type.GetCustomAttribute<UIBaseDataAttribute>();
+            if (attr != null)
             {
-                var attr = attrs[0] as UIBaseDataAttribute;
                 CloseUIView(type, attr, isCloseBack);
                 if (attr.UIViewType != UIViewType.Tips && attr.UIViewType != UIViewType.None)
                 {
@@ -114,7 +120,7 @@ namespace Hotfix
 
         public void CloseUIView(Type type, bool isCloseBack)
         {
-            CloseUIView(type, type.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute, isCloseBack);
+            CloseUIView(type, type.GetCustomAttribute<UIBaseDataAttribute>(), isCloseBack);
         }
 
         public void CloseUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack)
@@ -131,7 +137,7 @@ namespace Hotfix
                             PopView();
                             break;
                         }
-                        var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                        var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
                         CloseUIView(tempType, tempAttr, false);
                     }
                 }
@@ -148,7 +154,7 @@ namespace Hotfix
                                 PopView();
                                 while (true)
                                 {
-                                    var tempAttr2 = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                                    var tempAttr2 = tempType.GetCustomAttribute<UIBaseDataAttribute>();
                                     if (tempAttr2.UIViewType == UIViewType.Normal)
                                     {
                                         break;
@@ -163,7 +169,7 @@ namespace Hotfix
                                 }
                                 break;
                             }
-                            var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
                             if (tempAttr.UIViewType == UIViewType.Normal)
                             {
                                 break;
@@ -188,7 +194,7 @@ namespace Hotfix
                                 PopView();
                                 break;
                             }
-                            var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
                             if (tempAttr.UIViewType == UIViewType.Normal)
                             {
                                 break;
@@ -212,7 +218,7 @@ namespace Hotfix
                             }
                             break;
                         }
-                        var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                        var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
                         if (tempAttr.UIViewType == UIViewType.Tips)
                         {
                             CloseUIView(tempType, tempAttr, false);

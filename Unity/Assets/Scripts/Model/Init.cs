@@ -40,7 +40,7 @@ namespace Model
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                Game.Instance.Hotfix.GotoHotfix();
+                //Game.Instance.Hotfix.GotoHotfix();
             }
         }
 
@@ -65,13 +65,12 @@ namespace Model
         private void OnGameLoadComplete(int a)
         {
             Debug.Log($"------完成------{a}");
-            Debug.Log(typeof(UIBlackMaskComponent).GetCustomAttribute<UIBaseDataAttribute>()); // MDEBUG:
             Game.Instance.EventSystem.RemoveListener<int>(EventType.GameLoadComplete, OnGameLoadComplete);
-            ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, UIManagerComponent.UIROOT_PATH, true), false);
+            ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, null, UIManagerComponent.UIROOT_PATH, true), false);
             ObjectHelper.OpenUIView<NetTestComponent>();
             ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
             Game.Instance.Hotfix.LoadHotfixAssembly();
-            //Game.Instance.Hotfix.GotoHotfix();
+            Game.Instance.Hotfix.GotoHotfix();
         }
     }
 }

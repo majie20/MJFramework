@@ -105,15 +105,15 @@ namespace Model
             return (T)CreateComponent(typeof(T), entity, a, b, c, isFromPool);
         }
 
-        public static Entity CreatEntity(Entity parent, string sign = "OrdinaryGameObject", bool isFromAB = false)
+        public static Entity CreatEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
             entity.GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, isFromAB);
             entity.Sign = sign;
 
             entity.Transform = entity.GameObject.transform;
-            entity.Transform.SetParent(parent.Transform);
-            entity.SetParent(parent);
+            entity.Transform.SetParent(parent == null ? eParent.Transform : parent);
+            entity.SetParent(eParent);
 
             entity.AddComponentView();
 

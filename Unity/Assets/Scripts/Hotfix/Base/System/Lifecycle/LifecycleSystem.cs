@@ -9,7 +9,6 @@ namespace Hotfix
         private readonly HashSet<Type> updateSystems = new HashSet<Type>();
         private readonly HashSet<Type> lateUpdateSystems = new HashSet<Type>();
         private readonly HashSet<Type> startSystems = new HashSet<Type>();
-        private readonly HashSet<Type> destroySystems = new HashSet<Type>();
 
         private ArrayQueue<Component> starts = new ArrayQueue<Component>(20);
         private ArrayQueue<Component> updates = new ArrayQueue<Component>(20);
@@ -21,7 +20,6 @@ namespace Hotfix
             updateSystems.Clear();
             lateUpdateSystems.Clear();
             startSystems.Clear();
-            destroySystems.Clear();
 
             foreach (var v in Model.Game.Instance.Hotfix.GetHotfixTypes())
             {
@@ -45,10 +43,6 @@ namespace Hotfix
                     if (obj is IStartSystem startSystem)
                     {
                         startSystems.Add(v);
-                    }
-                    if (obj is IDestroySystem destroySystem)
-                    {
-                        destroySystems.Add(v);
                     }
                 }
             }
@@ -156,49 +150,5 @@ namespace Hotfix
         }
 
         #endregion Awake
-
-        #region Destroy
-
-        public void Destroy(Component component)
-        {
-            if (destroySystems.Contains(component.GetType()))
-            {
-                IDestroy iAwake = component as IDestroy;
-
-                iAwake?.Destroy();
-            }
-        }
-
-        public void Destroy<A>(Component component, A a)
-        {
-            if (destroySystems.Contains(component.GetType()))
-            {
-                IDestroy<A> iAwake = component as IDestroy<A>;
-
-                iAwake?.Destroy(a);
-            }
-        }
-
-        public void Destroy<A, B>(Component component, A a, B b)
-        {
-            if (destroySystems.Contains(component.GetType()))
-            {
-                IDestroy<A, B> iAwake = component as IDestroy<A, B>;
-
-                iAwake?.Destroy(a, b);
-            }
-        }
-
-        public void Destroy<A, B, C>(Component component, A a, B b, C c)
-        {
-            if (destroySystems.Contains(component.GetType()))
-            {
-                IDestroy<A, B, C> iAwake = component as IDestroy<A, B, C>;
-
-                iAwake?.Destroy(a, b, c);
-            }
-        }
-
-        #endregion Destroy
     }
 }

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
-namespace Model
+namespace Hotfix
 {
     [LifeCycle]
     public class UIManagerComponent : Component, IAwake
     {
-        private static int SORT_ORDER_SPACING = 10000;
+        private static int SORT_ORDER_INIT = 10000;
+        private static int SORT_ORDER_SPACING = 1000;
         public static string UIROOT_PATH = "Assets/Res/Prefabs/UIRoot";
 
         private Dictionary<Type, UIBaseComponent> uiComponentDic;
@@ -49,10 +49,11 @@ namespace Model
             uiComponentDic = new Dictionary<Type, UIBaseComponent>(20);
             uiStack = new Stack<Type>(15);
             tempUIStack = new Stack<Type>(15);
-            sortOrder = 0;
+            sortOrder = SORT_ORDER_INIT;
 
-            ReferenceCollector rc = this.Entity.GameObject.GetComponent<ReferenceCollector>();
-            UICamera = rc.Get<GameObject>("UICamera").GetComponent<Camera>();
+            UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
+            var canvas = this.Entity.Transform.GetComponent<Canvas>();
+            canvas.worldCamera = UICamera;
 
             UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
         }
@@ -70,7 +71,7 @@ namespace Model
         {
             if (!uiComponentDic.ContainsKey(type))
             {
-                var component = ObjectHelper.CreateComponent(type, ObjectHelper.CreatEntity(this.Entity, attr.PrefabPath, true), true) as UIBaseComponent;
+                var component = ObjectHelper.CreateComponent(type, ObjectHelper.CreatEntity(this.Entity, null, attr.PrefabPath, true), true) as UIBaseComponent;
                 uiComponentDic.Add(type, component);
             }
 
@@ -79,8 +80,8 @@ namespace Model
 
         private void PushView(Type type)
         {
-            sortOrder += SORT_ORDER_SPACING;
             uiComponentDic[type].Canvas.sortingOrder = sortOrder;
+            sortOrder += SORT_ORDER_SPACING;
             uiStack.Push(type);
         }
 
@@ -92,9 +93,10 @@ namespace Model
 
         public UIBaseComponent OpenUIView(Type type, bool isCloseBack)
         {
-            var attr = type.GetCustomAttribute<UIBaseDataAttribute>();
-            if (attr != null)
+            var attrs = type.GetCustomAttributes(typeof(UIBaseDataAttribute), false);
+            if (attrs.Length > 0)
             {
+                var attr = attrs[0] as UIBaseDataAttribute;
                 CloseUIView(type, attr, isCloseBack);
                 if (attr.UIViewType != UIViewType.Tips && attr.UIViewType != UIViewType.None)
                 {
@@ -109,12 +111,12 @@ namespace Model
                 return newView;
             }
 
-            return default;
+            return null;
         }
 
         public void CloseUIView(Type type, bool isCloseBack)
         {
-            CloseUIView(type, type.GetCustomAttribute<UIBaseDataAttribute>(), isCloseBack);
+            CloseUIView(type, type.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute, isCloseBack);
         }
 
         public void CloseUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack)
@@ -131,7 +133,7 @@ namespace Model
                             PopView();
                             break;
                         }
-                        var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
+                        var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                         CloseUIView(tempType, tempAttr, false);
                     }
                 }
@@ -148,7 +150,7 @@ namespace Model
                                 PopView();
                                 while (true)
                                 {
-                                    var tempAttr2 = tempType.GetCustomAttribute<UIBaseDataAttribute>();
+                                    var tempAttr2 = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                                     if (tempAttr2.UIViewType == UIViewType.Normal)
                                     {
                                         break;
@@ -163,7 +165,7 @@ namespace Model
                                 }
                                 break;
                             }
-                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
+                            var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                             if (tempAttr.UIViewType == UIViewType.Normal)
                             {
                                 break;
@@ -188,7 +190,7 @@ namespace Model
                                 PopView();
                                 break;
                             }
-                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
+                            var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                             if (tempAttr.UIViewType == UIViewType.Normal)
                             {
                                 break;
@@ -212,7 +214,7 @@ namespace Model
                             }
                             break;
                         }
-                        var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
+                        var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                         if (tempAttr.UIViewType == UIViewType.Tips)
                         {
                             CloseUIView(tempType, tempAttr, false);

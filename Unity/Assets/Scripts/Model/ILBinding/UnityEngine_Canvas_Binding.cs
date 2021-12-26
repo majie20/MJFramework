@@ -25,9 +25,12 @@ namespace ILRuntime.Runtime.Generated
             args = new Type[]{typeof(System.Boolean)};
             method = type.GetMethod("set_overrideSorting", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, set_overrideSorting_0);
+            args = new Type[]{typeof(UnityEngine.Camera)};
+            method = type.GetMethod("set_worldCamera", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, set_worldCamera_1);
             args = new Type[]{typeof(System.Int32)};
             method = type.GetMethod("set_sortingOrder", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, set_sortingOrder_1);
+            app.RegisterCLRMethodRedirection(method, set_sortingOrder_2);
 
 
         }
@@ -51,7 +54,26 @@ namespace ILRuntime.Runtime.Generated
             return __ret;
         }
 
-        static StackObject* set_sortingOrder_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* set_worldCamera_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* ptr_of_this_method;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 2);
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
+            UnityEngine.Camera @value = (UnityEngine.Camera)typeof(UnityEngine.Camera).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            __intp.Free(ptr_of_this_method);
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 2);
+            UnityEngine.Canvas instance_of_this_method = (UnityEngine.Canvas)typeof(UnityEngine.Canvas).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            __intp.Free(ptr_of_this_method);
+
+            instance_of_this_method.worldCamera = value;
+
+            return __ret;
+        }
+
+        static StackObject* set_sortingOrder_2(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
