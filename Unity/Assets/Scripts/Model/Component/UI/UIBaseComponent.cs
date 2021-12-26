@@ -1,26 +1,104 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Model
 {
-    [LifeCycle]
-    [UIBaseData(Type = UIViewType.Normal, PrefabPath = "")]
+    //[LifeCycle]
     public class UIBaseComponent : Component, IAwake
     {
-
         private LifecycleHandle lifecycleHandle;
+        private Canvas canvas;
 
+        public Canvas Canvas
+        {
+            private set
+            {
+                canvas = value;
+            }
+            get
+            {
+                return canvas;
+            }
+        }
+
+        private CanvasGroup canvasGroup;
+
+        public CanvasGroup CanvasGroup
+        {
+            private set
+            {
+                canvasGroup = value;
+            }
+            get
+            {
+                return canvasGroup;
+            }
+        }
+
+        private GraphicRaycaster graphicRaycaster;
+
+        public GraphicRaycaster GraphicRaycaster
+        {
+            private set
+            {
+                graphicRaycaster = value;
+            }
+            get
+            {
+                return graphicRaycaster;
+            }
+        }
 
         public virtual void Awake()
         {
+            AddComponent();
+
+            lifecycleHandle.EnableEventSign = $"UILifecycleEnable{this.Guid}";
+            lifecycleHandle.DisableEventSign = $"UILifecycleDisable{this.Guid}";
+            lifecycleHandle.DestroyEventSign = $"UILifecycleDestroy{this.Guid}";
+        }
+
+        public override void Dispose()
+        {
+            Entity = null;
+
+            lifecycleHandle.EnableEventSign = null;
+            lifecycleHandle.DisableEventSign = null;
+            lifecycleHandle.DestroyEventSign = null;
+        }
+
+        protected virtual void AddComponent()
+        {
+            Canvas = this.Entity.Transform.GetComponent<Canvas>();
+            if (Canvas == null)
+            {
+                Canvas = this.Entity.GameObject.AddComponent<Canvas>();
+            }
+
+            Canvas.overrideSorting = true;
+
+            GraphicRaycaster = this.Entity.Transform.GetComponent<GraphicRaycaster>();
+            if (GraphicRaycaster == null)
+            {
+                GraphicRaycaster = this.Entity.GameObject.AddComponent<GraphicRaycaster>();
+            }
+
+            CanvasGroup = this.Entity.Transform.GetComponent<CanvasGroup>();
+            if (CanvasGroup == null)
+            {
+                CanvasGroup = this.Entity.GameObject.AddComponent<CanvasGroup>();
+            }
+
             lifecycleHandle = this.Entity.Transform.GetComponent<LifecycleHandle>();
             if (lifecycleHandle == null)
             {
                 lifecycleHandle = this.Entity.GameObject.AddComponent<LifecycleHandle>();
             }
+        }
 
-            lifecycleHandle.EnableEventSign = $"UILifecycleEnable{this.Guid}";
-            lifecycleHandle.DisableEventSign = $"UILifecycleDisable{this.Guid}";
-            lifecycleHandle.DestroyEventSign = $"UILifecycleDestroy{this.Guid}";
+        public virtual void Open()
+        {
+            OnOpen();
         }
 
         public virtual void OnOpen()
@@ -28,6 +106,11 @@ namespace Model
             Game.Instance.EventSystem.AddListener(lifecycleHandle.EnableEventSign, OnUIEnable);
             Game.Instance.EventSystem.AddListener(lifecycleHandle.DisableEventSign, OnUIDisable);
             Game.Instance.EventSystem.AddListener(lifecycleHandle.DestroyEventSign, OnUIDestroy);
+        }
+
+        public virtual void Close()
+        {
+            OnClose();
         }
 
         public virtual void OnClose()
@@ -39,17 +122,14 @@ namespace Model
 
         protected virtual void OnUIEnable()
         {
-
         }
 
         protected virtual void OnUIDisable()
         {
-
         }
 
         protected virtual void OnUIDestroy()
         {
-
         }
     }
 }

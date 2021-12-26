@@ -57,6 +57,7 @@ namespace Model
 
             appdomain.RegisterCrossBindingAdaptor(new IDisposableAdapter());
             appdomain.RegisterCrossBindingAdaptor(new IAsyncStateMachineClassInheritanceAdaptor());
+            appdomain.RegisterCrossBindingAdaptor(new IExtensibleAdapter());
 
             LitJson.JsonMapper.RegisterILRuntimeCLRRedirection(appdomain);
 

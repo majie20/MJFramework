@@ -39,7 +39,6 @@ namespace Hotfix
 
         public virtual void Dispose()
         {
-            Entity.RemoveComponent(this);
             Entity = null;
         }
     }

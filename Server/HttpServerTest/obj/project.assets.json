@@ -20,6 +20,27 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "protobuf-net/3.0.101": {
+        "type": "package",
+        "dependencies": {
+          "protobuf-net.Core": "3.0.101"
+        },
+        "compile": {
+          "lib/net5.0/protobuf-net.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/protobuf-net.dll": {}
+        }
+      },
+      "protobuf-net.Core/3.0.101": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/protobuf-net.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/protobuf-net.Core.dll": {}
+        }
+      },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
@@ -82,6 +103,50 @@
         "packageIcon.png"
       ]
     },
+    "protobuf-net/3.0.101": {
+      "sha512": "mLm8VGfGylp9q+rbJDp3uw0BOeNzfGENecVz/EYGlzq3ss7tfajGXHCMoZm/GxJ9vSn9pcK22UXWZnQ5GJQMjA==",
+      "type": "package",
+      "path": "protobuf-net/3.0.101",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/protobuf-net.dll",
+        "lib/net461/protobuf-net.xml",
+        "lib/net5.0/protobuf-net.dll",
+        "lib/net5.0/protobuf-net.xml",
+        "lib/netcoreapp3.1/protobuf-net.dll",
+        "lib/netcoreapp3.1/protobuf-net.xml",
+        "lib/netstandard2.0/protobuf-net.dll",
+        "lib/netstandard2.0/protobuf-net.xml",
+        "lib/netstandard2.1/protobuf-net.dll",
+        "lib/netstandard2.1/protobuf-net.xml",
+        "protobuf-net.3.0.101.nupkg.sha512",
+        "protobuf-net.nuspec",
+        "protobuf-net.png"
+      ]
+    },
+    "protobuf-net.Core/3.0.101": {
+      "sha512": "gf9QIF0RlctfjmOjbE6eOyMulkNEsH7tHncjKj/4BTu9tkuTyrH3fv5I+35GnolJqKJ6fh9kYaezvNRL3t75+Q==",
+      "type": "package",
+      "path": "protobuf-net.core/3.0.101",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/protobuf-net.Core.dll",
+        "lib/net461/protobuf-net.Core.xml",
+        "lib/net5.0/protobuf-net.Core.dll",
+        "lib/net5.0/protobuf-net.Core.xml",
+        "lib/netcoreapp3.1/protobuf-net.Core.dll",
+        "lib/netcoreapp3.1/protobuf-net.Core.xml",
+        "lib/netstandard2.0/protobuf-net.Core.dll",
+        "lib/netstandard2.0/protobuf-net.Core.xml",
+        "lib/netstandard2.1/protobuf-net.Core.dll",
+        "lib/netstandard2.1/protobuf-net.Core.xml",
+        "protobuf-net.core.3.0.101.nupkg.sha512",
+        "protobuf-net.core.nuspec",
+        "protobuf-net.png"
+      ]
+    },
     "SharpZipLib/1.3.3": {
       "sha512": "N8+hwhsKZm25tDJfWpBSW7EGhH/R7EMuiX+KJ4C4u+fCWVc1lJ5zg1u3S1RPPVYgTqhx/C3hxrqUpi6RwK5+Tg==",
       "type": "package",
@@ -108,7 +173,8 @@
     "net5.0": [
       "Google.Protobuf >= 3.19.1",
       "Newtonsoft.Json >= 13.0.1",
-      "SharpZipLib >= 1.3.3"
+      "SharpZipLib >= 1.3.3",
+      "protobuf-net >= 3.0.101"
     ]
   },
   "packageFolders": {
@@ -166,6 +232,10 @@
           "SharpZipLib": {
             "target": "Package",
             "version": "[1.3.3, )"
+          },
+          "protobuf-net": {
+            "target": "Package",
+            "version": "[3.0.101, )"
           }
         },
         "imports": [

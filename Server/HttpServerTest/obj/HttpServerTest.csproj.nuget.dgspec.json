@@ -55,6 +55,10 @@
             "SharpZipLib": {
               "target": "Package",
               "version": "[1.3.3, )"
+            },
+            "protobuf-net": {
+              "target": "Package",
+              "version": "[3.0.101, )"
             }
           },
           "imports": [

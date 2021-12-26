@@ -39,7 +39,7 @@ namespace Model
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                //Game.Instance.Hotfix.GotoHotfix();
+                Game.Instance.Hotfix.GotoHotfix();
             }
         }
 
@@ -63,17 +63,13 @@ namespace Model
 
         private void OnGameLoadComplete(int a)
         {
-            Game.Instance.EventSystem.RemoveListener<int>(EventType.GameLoadComplete, OnGameLoadComplete);
             Debug.Log($"------完成------{a}");
+            Game.Instance.EventSystem.RemoveListener<int>(EventType.GameLoadComplete, OnGameLoadComplete);
+            ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, UIManagerComponent.UIROOT_PATH, true), false);
+            ObjectHelper.OpenUIView<NetTestComponent>();
             ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
             Game.Instance.Hotfix.LoadHotfixAssembly();
-            Game.Instance.Hotfix.GotoHotfix();        
-        }
-
-        public void d()
-        {
-            Sprite cc =  Game.Instance.Scene.GetComponent<SpriteComponent>().LoadSprite("1691", "1");
-            button.GetComponent<Image>().sprite = cc;
+            //Game.Instance.Hotfix.GotoHotfix();
         }
     }
 }

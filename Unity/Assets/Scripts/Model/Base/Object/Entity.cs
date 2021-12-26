@@ -8,7 +8,7 @@ namespace Model
     public class Entity : IDisposable
     {
         protected Dictionary<Type, Component> componentDic;
-
+        protected Dictionary<string, Entity> childDic;
         protected ComponentView componentView;
 
         private Entity parent;
@@ -70,17 +70,22 @@ namespace Model
         public Entity()
         {
             componentDic = new Dictionary<Type, Component>();
+            childDic = new Dictionary<string, Entity>();
         }
 
         public virtual void Dispose()
         {
+            foreach (var child in childDic.Values)
+            {
+                child.Dispose();
+            }
             foreach (var component in this.GetComponents())
             {
-                RemoveComponent(component);
                 component.Dispose();
             }
             componentDic = null;
             componentView = null;
+            childDic = null;
 
             if (GameObject != null)
             {
@@ -100,6 +105,27 @@ namespace Model
         private void AddToComponentView(Component component)
         {
             componentView.dic.Add(component, component.GetType());
+        }
+
+        public void SetParent(Entity entity)
+        {
+            Parent = entity;
+            entity.AddChild(this);
+        }
+
+        public void AddChild(Entity child)
+        {
+            childDic.Add(child.Sign, child);
+        }
+
+        public Entity GetChild(string sign)
+        {
+            if (childDic.ContainsKey(sign))
+            {
+                return childDic[sign];
+            }
+
+            return null;
         }
 
         #region 添加组件

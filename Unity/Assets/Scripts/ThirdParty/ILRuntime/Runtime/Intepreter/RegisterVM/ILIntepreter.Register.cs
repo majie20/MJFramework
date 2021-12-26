@@ -3372,31 +3372,7 @@ namespace ILRuntime.Runtime.Intepreter
                                                 var ilMethod = mi as ILMethod;
                                                 if (ilMethod != null)
                                                 {
-                                                    if (ins != null)
-                                                    {
-                                                        dele = ((ILTypeInstance)ins).GetDelegateAdapter(ilMethod);
-                                                        if (dele == null)
-                                                        {
-                                                            var invokeMethod =
-                                                                cm.DeclearingType.GetMethod("Invoke",
-                                                                    mi.ParameterCount);
-                                                            if (invokeMethod == null && ilMethod.IsExtend)
-                                                            {
-                                                                invokeMethod = cm.DeclearingType.GetMethod("Invoke", mi.ParameterCount - 1);
-                                                            }
-                                                            dele = domain.DelegateManager.FindDelegateAdapter(
-                                                                (ILTypeInstance)ins, ilMethod, invokeMethod);
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        if (ilMethod.DelegateAdapter == null)
-                                                        {
-                                                            var invokeMethod = cm.DeclearingType.GetMethod("Invoke", mi.ParameterCount);
-                                                            ilMethod.DelegateAdapter = domain.DelegateManager.FindDelegateAdapter(null, ilMethod, invokeMethod);
-                                                        }
-                                                        dele = ilMethod.DelegateAdapter;
-                                                    }
+                                                    dele = domain.DelegateManager.FindDelegateAdapter((CLRType)cm.DeclearingType, (ILTypeInstance)ins, ilMethod);
                                                 }
                                                 else
                                                 {
@@ -5087,10 +5063,6 @@ namespace ILRuntime.Runtime.Intepreter
                     }
                     catch (Exception ex)
                     {
-                        if (unhandledException)
-                        {
-                            throw ex;
-                        }
                         if (ehs != null)
                         {
                             int addr = (int)(ip - ptr);
@@ -5157,10 +5129,14 @@ namespace ILRuntime.Runtime.Intepreter
                             {
                                 unhandledException = false;
                                 finallyEndAddress = -1;
-                                lastCaughtEx = new ILRuntimeException(ex.Message, this, method, ex);
+                                lastCaughtEx = ex is ILRuntimeException ? ex : new ILRuntimeException(ex.Message, this, method, ex);
                                 ip = ptr + eh.HandlerStart;
                                 continue;
                             }
+                        }
+                        if (unhandledException)
+                        {
+                            throw ex;
                         }
 
                         unhandledException = true;

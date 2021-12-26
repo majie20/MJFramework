@@ -113,15 +113,33 @@ namespace Model
 
             entity.Transform = entity.GameObject.transform;
             entity.Transform.SetParent(parent.Transform);
+            entity.SetParent(parent);
 
             entity.AddComponentView();
 
             return entity;
         }
 
-        public static UIBaseComponent OpenUIView<A>(Type type, A a)
+        public static UIBaseComponent OpenUIView(Type type, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetComponent<UIManagerComponent>().OpenUIView(type);
+            var component = Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            if (component == null)
+            {
+                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+            }
+            else
+            {
+                IOpen iOpen = component as IOpen;
+
+                iOpen?.Open();
+            }
+
+            return component;
+        }
+
+        public static UIBaseComponent OpenUIView<A>(Type type, A a, bool isCloseBack = false)
+        {
+            var component = Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -134,6 +152,70 @@ namespace Model
             }
 
             return component;
+        }
+
+        public static UIBaseComponent OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
+        {
+            var component = Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            if (component == null)
+            {
+                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+            }
+            else
+            {
+                IOpen<A, B> iOpen = component as IOpen<A, B>;
+
+                iOpen?.Open(a, b);
+            }
+
+            return component;
+        }
+
+        public static UIBaseComponent OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
+        {
+            var component = Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            if (component == null)
+            {
+                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+            }
+            else
+            {
+                IOpen<A, B, C> iOpen = component as IOpen<A, B, C>;
+
+                iOpen?.Open(a, b, c);
+            }
+
+            return component;
+        }
+
+        public static T OpenUIView<T>(bool isCloseBack = false) where T : UIBaseComponent
+        {
+            return (T)OpenUIView(typeof(T), isCloseBack);
+        }
+
+        public static T OpenUIView<T, A>(A a, bool isCloseBack = false) where T : UIBaseComponent
+        {
+            return (T)OpenUIView(typeof(T), a, isCloseBack);
+        }
+
+        public static T OpenUIView<T, A, B>(A a, B b, bool isCloseBack = false) where T : UIBaseComponent
+        {
+            return (T)OpenUIView(typeof(T), a, b, isCloseBack);
+        }
+
+        public static T OpenUIView<T, A, B, C>(A a, B b, C c, bool isCloseBack = false) where T : UIBaseComponent
+        {
+            return (T)OpenUIView(typeof(T), a, b, c, isCloseBack);
+        }
+
+        public static void CloseUIView(Type type, bool isCloseBack = false)
+        {
+            Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().CloseUIView(type, isCloseBack);
+        }
+
+        public static void CloseUIView<T>(bool isCloseBack = false)
+        {
+            CloseUIView(typeof(T), isCloseBack);
         }
     }
 }

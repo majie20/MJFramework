@@ -15,12 +15,17 @@ namespace Hotfix
 
         public override void Dispose()
         {
+            foreach (var child in childDic.Values)
+            {
+                child.Dispose();
+            }
             foreach (var value in componentDic.Values)
             {
                 value.Dispose();
             }
             componentDic = null;
             componentView = null;
+            childDic = null;
 
             UnityEngine.Object.Destroy(GameObject);
             Transform = null;

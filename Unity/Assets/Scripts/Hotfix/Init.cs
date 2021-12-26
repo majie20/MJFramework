@@ -12,30 +12,24 @@ namespace Hotfix
             Model.Game.Instance.Hotfix.GameLateUpdate = OnLateUpdate;
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
-            ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, "Assets/Res/Prefabs/Sphere", true), "majie");
-            //ObjectHelper.CreateComponent<NetTestComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, "NetTest", true));
-
-
-            //var test1 = Game.Instance.ObjectPool.HatchEntity().Init(true, "NetTest", Game.Instance.Scene);
-            //ObjectHelper.CreateComponent<NetTestComponent>(test1);
+            ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, UIManagerComponent.UIROOT_PATH, true), false);
+            //Debug.Log(ObjectHelper.CreatEntity(Game.Instance.Scene, "Assets/Res/Prefabs/Sphere", true)); // MDEBUG:
+            //ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, "Assets/Res/Prefabs/Sphere", true), "majie");
         }
 
         private static void OnUpdate(float tick)
         {
-            //Debug.Log($"OnUpdate:{tick}"); // MDEBUG:
-            Game.Instance.LifecycleSystem.Update(tick);
+            //Game.Instance.LifecycleSystem.Update(tick);
         }
 
         private static void OnLateUpdate()
         {
-            //Debug.Log("OnLateUpdate"); // MDEBUG:
-            Game.Instance.LifecycleSystem.LateUpdate();
+            //Game.Instance.LifecycleSystem.LateUpdate();
         }
 
         private static void OnApplicationQuit()
         {
             Game.Instance.Dispose();
-            //Debug.Log("OnApplicationQuit"); // MDEBUG:
         }
     }
 }

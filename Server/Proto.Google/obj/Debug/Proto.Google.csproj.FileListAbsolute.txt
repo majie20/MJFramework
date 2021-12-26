@@ -33,18 +33,6 @@ E:\Unity\Project\StandardProject\Server\ConsoleApp1\Proto.Google\obj\Debug\Proto
 E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\Proto.exe.config
 E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\Proto.exe
 E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\Proto.pdb
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Data.Common.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Diagnostics.StackTrace.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Diagnostics.Tracing.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Globalization.Extensions.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.IO.Compression.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Net.Http.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Net.Sockets.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Runtime.Serialization.Primitives.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Security.Cryptography.Algorithms.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Security.SecureString.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Threading.Overlapped.dll
-E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Xml.XPath.XDocument.dll
 E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\Google.Protobuf.dll
 E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Buffers.dll
 E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Memory.dll
@@ -57,7 +45,6 @@ E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Memory.xml
 E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Numerics.Vectors.xml
 E:\Unity\Project\StandardProject\Server\Proto.Google\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 E:\Unity\Project\StandardProject\Server\Proto.Google\obj\Debug\Proto.Google.csproj.AssemblyReference.cache
-E:\Unity\Project\StandardProject\Server\Proto.Google\obj\Debug\Proto.exe.config
 E:\Unity\Project\StandardProject\Server\Proto.Google\obj\Debug\Proto.Google.csproj.CoreCompileInputs.cache
 E:\Unity\Project\StandardProject\Server\Proto.Google\obj\Debug\Proto.Google.csproj.CopyComplete
 E:\Unity\Project\StandardProject\Server\Proto.Google\obj\Debug\Proto.exe

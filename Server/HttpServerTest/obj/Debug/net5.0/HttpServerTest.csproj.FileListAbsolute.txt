@@ -34,3 +34,5 @@ E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServ
 E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\ICSharpCode.SharpZipLib.dll
 E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\Google.Protobuf.dll
 E:\Unity\Project\StandardProject\Server\HttpServerTest\obj\Debug\net5.0\HttpServerTest.csproj.AssemblyReference.cache
+E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\protobuf-net.dll
+E:\Unity\Project\StandardProject\Server\HttpServerTest\bin\Debug\net5.0\protobuf-net.Core.dll

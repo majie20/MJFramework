@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3605317631
+CRC: 3783590875
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a5bc6dde9687910f991adcd715faafc8
+    Hash: d993a382fda595ecf8f5c9f15ef6e4f2
   TypeTreeHash:
     serializedVersion: 2
     Hash: cd59cd558fbd99749a10488185d6f8e8
@@ -30,5 +30,5 @@ Assets:
 - Assets/Res/Config/AssestSpriteSettings.asset
 - Assets/Res/Config/AssetsCiteMatchConfigSettings.asset
 Dependencies:
-- D:/git/Unity/./../Unity/Assets/StreamingAssets/Assets/prefab.aa
-- D:/git/Unity/./../Unity/Assets/StreamingAssets/Assets/text.aa
+- E:/Unity/Project/StandardProject/Unity/./../Unity/Assets/StreamingAssets/Assets/prefab.aa
+- E:/Unity/Project/StandardProject/Unity/./../Unity/Assets/StreamingAssets/Assets/text.aa

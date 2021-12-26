@@ -8,7 +8,7 @@ namespace Hotfix
     public class Entity : IDisposable
     {
         protected Dictionary<Type, Component> componentDic;
-
+        protected Dictionary<string, Entity> childDic;
         protected Model.ComponentView componentView;
 
         private Entity parent;
@@ -70,24 +70,22 @@ namespace Hotfix
         public Entity()
         {
             componentDic = new Dictionary<Type, Component>();
-        }
-
-        public void AddComponentView()
-        {
-            var component = GameObject.GetComponent<Model.ComponentView>();
-            componentView = component == null ? GameObject.AddComponent<Model.ComponentView>() : component;
-            componentView.isHotfix = true;
+            childDic = new Dictionary<string, Entity>();
         }
 
         public virtual void Dispose()
         {
-            foreach (var component in GetComponents())
+            foreach (var child in childDic.Values)
             {
-                RemoveComponent(component);
+                child.Dispose();
+            }
+            foreach (var component in this.GetComponents())
+            {
                 component.Dispose();
             }
             componentDic = null;
             componentView = null;
+            childDic = null;
 
             if (GameObject != null)
             {
@@ -95,6 +93,39 @@ namespace Hotfix
                 Transform = null;
                 GameObject = null;
             }
+        }
+
+        public void AddComponentView()
+        {
+            var component = GameObject.GetComponent<Model.ComponentView>();
+            componentView = component == null ? GameObject.AddComponent<Model.ComponentView>() : component;
+            componentView.isHotfix = false;
+        }
+
+        private void AddToComponentView(Component component)
+        {
+            componentView.dic.Add(component, component.GetType());
+        }
+
+        public void SetParent(Entity entity)
+        {
+            Parent = entity;
+            entity.AddChild(this);
+        }
+
+        public void AddChild(Entity child)
+        {
+            childDic.Add(child.Sign, child);
+        }
+
+        public Entity GetChild(string sign)
+        {
+            if (childDic.ContainsKey(sign))
+            {
+                return childDic[sign];
+            }
+
+            return null;
         }
 
         #region 添加组件
@@ -121,11 +152,6 @@ namespace Hotfix
         public T AddComponent<T>() where T : Component
         {
             return (T)AddComponent(typeof(T));
-        }
-
-        private void AddToComponentView(Component component)
-        {
-            componentView.dic.Add(component, component.GetType());
         }
 
         #endregion 添加组件
