@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Reflection;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Model
@@ -64,6 +65,7 @@ namespace Model
         private void OnGameLoadComplete(int a)
         {
             Debug.Log($"------完成------{a}");
+            Debug.Log(typeof(UIBlackMaskComponent).GetCustomAttribute<UIBaseDataAttribute>()); // MDEBUG:
             Game.Instance.EventSystem.RemoveListener<int>(EventType.GameLoadComplete, OnGameLoadComplete);
             ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, UIManagerComponent.UIROOT_PATH, true), false);
             ObjectHelper.OpenUIView<NetTestComponent>();

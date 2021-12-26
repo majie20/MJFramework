@@ -5,8 +5,8 @@ namespace Hotfix
     [AttributeUsage(AttributeTargets.Class)]
     public class UIBaseDataAttribute : BaseAttribute
     {
-        public Model.UIViewType UIViewType;
+        public UIViewType UIViewType;
         public string PrefabPath;
-        public Model.UIMaskMode UIMaskMode;
+        public UIMaskMode UIMaskMode;
     }
 }

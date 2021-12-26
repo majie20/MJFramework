@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace Hotfix
 {
     [LifeCycle]
-    [UIBaseData(UIViewType = Model.UIViewType.None, PrefabPath = "Assets/Res/Prefabs/UIBlackMask", UIMaskMode = Model.UIMaskMode.None)]
+    [UIBaseData(UIViewType = UIViewType.None, PrefabPath = "Assets/Res/Prefabs/UIBlackMask", UIMaskMode = UIMaskMode.None)]
     public class UIBlackMaskComponent : UIBaseComponent, IOpen
     {
         private Button btnSelf;
@@ -43,29 +43,29 @@ namespace Hotfix
         {
         }
 
-        public void SetMaskMode(Model.UIMaskMode mode)
+        public void SetMaskMode(UIMaskMode mode)
         {
-            if (mode == Model.UIMaskMode.Transparent)
+            if (mode == UIMaskMode.Transparent)
             {
                 SetMaskMode(0, false, true);
             }
-            else if (mode == Model.UIMaskMode.TransparentClick)
+            else if (mode == UIMaskMode.TransparentClick)
             {
                 SetMaskMode(0, true, true);
             }
-            else if (mode == Model.UIMaskMode.TransparentPenetrate)
+            else if (mode == UIMaskMode.TransparentPenetrate)
             {
                 SetMaskMode(0, false, false);
             }
-            else if (mode == Model.UIMaskMode.BlackTransparent)
+            else if (mode == UIMaskMode.BlackTransparent)
             {
                 SetMaskMode(1, false, true);
             }
-            else if (mode == Model.UIMaskMode.BlackTransparentClick)
+            else if (mode == UIMaskMode.BlackTransparentClick)
             {
                 SetMaskMode(1, true, true);
             }
-            else if (mode == Model.UIMaskMode.BlackTransparentPenetrate)
+            else if (mode == UIMaskMode.BlackTransparentPenetrate)
             {
                 SetMaskMode(1, false, false);
             }

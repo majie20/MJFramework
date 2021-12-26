@@ -75,7 +75,6 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Events_UnityEvent_Binding.Register(app);
             UnityEngine_CanvasGroup_Binding.Register(app);
             System_Collections_Generic_Stack_1_Type_Binding.Register(app);
-            System_Reflection_CustomAttributeExtensions_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
             System_Runtime_CompilerServices_AsyncVoidMethodBuilder_Binding.Register(app);

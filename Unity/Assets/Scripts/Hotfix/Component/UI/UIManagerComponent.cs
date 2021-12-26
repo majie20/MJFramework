@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
 namespace Hotfix
@@ -54,7 +53,7 @@ namespace Hotfix
             ReferenceCollector rc = this.Entity.GameObject.GetComponent<ReferenceCollector>();
             UICamera = rc.Get<GameObject>("UICamera").GetComponent<Camera>();
 
-            //UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
+            UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
         }
 
         public override void Dispose()
@@ -92,11 +91,12 @@ namespace Hotfix
 
         public UIBaseComponent OpenUIView(Type type, bool isCloseBack)
         {
-            var attr = type.GetCustomAttribute<UIBaseDataAttribute>();
-            if (attr != null)
+            var attrs = type.GetCustomAttributes(typeof(UIBaseDataAttribute), false);
+            if (attrs.Length > 0)
             {
+                var attr = attrs[0] as UIBaseDataAttribute;
                 CloseUIView(type, attr, isCloseBack);
-                if (attr.UIViewType != Model.UIViewType.Tips && attr.UIViewType != Model.UIViewType.None)
+                if (attr.UIViewType != UIViewType.Tips && attr.UIViewType != UIViewType.None)
                 {
                     var tempType = typeof(UIBlackMaskComponent);
                     CloseUIView(tempType, isCloseBack);
@@ -109,19 +109,19 @@ namespace Hotfix
                 return newView;
             }
 
-            return default;
+            return null;
         }
 
         public void CloseUIView(Type type, bool isCloseBack)
         {
-            CloseUIView(type, type.GetCustomAttribute<UIBaseDataAttribute>(), isCloseBack);
+            CloseUIView(type, type.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute, isCloseBack);
         }
 
         public void CloseUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack)
         {
             if (attr != null && uiStack.Contains(type))
             {
-                if (attr.UIViewType == Model.UIViewType.Normal)
+                if (attr.UIViewType == UIViewType.Normal)
                 {
                     while (true)
                     {
@@ -131,11 +131,11 @@ namespace Hotfix
                             PopView();
                             break;
                         }
-                        var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
+                        var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                         CloseUIView(tempType, tempAttr, false);
                     }
                 }
-                else if (attr.UIViewType == Model.UIViewType.Pop)
+                else if (attr.UIViewType == UIViewType.Pop)
                 {
                     if (isCloseBack)
                     {
@@ -148,8 +148,8 @@ namespace Hotfix
                                 PopView();
                                 while (true)
                                 {
-                                    var tempAttr2 = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                                    if (tempAttr2.UIViewType == Model.UIViewType.Normal)
+                                    var tempAttr2 = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                                    if (tempAttr2.UIViewType == UIViewType.Normal)
                                     {
                                         break;
                                     }
@@ -163,12 +163,12 @@ namespace Hotfix
                                 }
                                 break;
                             }
-                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                            if (tempAttr.UIViewType == Model.UIViewType.Normal)
+                            var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                            if (tempAttr.UIViewType == UIViewType.Normal)
                             {
                                 break;
                             }
-                            if (tempAttr.UIViewType == Model.UIViewType.Tips)
+                            if (tempAttr.UIViewType == UIViewType.Tips)
                             {
                                 CloseUIView(tempType, tempAttr, false);
                             }
@@ -188,8 +188,8 @@ namespace Hotfix
                                 PopView();
                                 break;
                             }
-                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                            if (tempAttr.UIViewType == Model.UIViewType.Normal)
+                            var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                            if (tempAttr.UIViewType == UIViewType.Normal)
                             {
                                 break;
                             }
@@ -197,7 +197,7 @@ namespace Hotfix
                         }
                     }
                 }
-                else if (attr.UIViewType == Model.UIViewType.Tips || attr.UIViewType == Model.UIViewType.None)
+                else if (attr.UIViewType == UIViewType.Tips || attr.UIViewType == UIViewType.None)
                 {
                     tempUIStack.Clear();
                     while (true)
@@ -212,8 +212,8 @@ namespace Hotfix
                             }
                             break;
                         }
-                        var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                        if (tempAttr.UIViewType == Model.UIViewType.Tips)
+                        var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                        if (tempAttr.UIViewType == UIViewType.Tips)
                         {
                             CloseUIView(tempType, tempAttr, false);
                         }

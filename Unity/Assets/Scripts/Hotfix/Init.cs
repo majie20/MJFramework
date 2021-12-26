@@ -13,18 +13,17 @@ namespace Hotfix
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
             ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, UIManagerComponent.UIROOT_PATH, true), false);
-            //Debug.Log(ObjectHelper.CreatEntity(Game.Instance.Scene, "Assets/Res/Prefabs/Sphere", true)); // MDEBUG:
-            //ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, "Assets/Res/Prefabs/Sphere", true), "majie");
+            ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, "Assets/Res/Prefabs/Sphere", true), "majie");
         }
 
         private static void OnUpdate(float tick)
         {
-            //Game.Instance.LifecycleSystem.Update(tick);
+            Game.Instance.LifecycleSystem.Update(tick);
         }
 
         private static void OnLateUpdate()
         {
-            //Game.Instance.LifecycleSystem.LateUpdate();
+            Game.Instance.LifecycleSystem.LateUpdate();
         }
 
         private static void OnApplicationQuit()
