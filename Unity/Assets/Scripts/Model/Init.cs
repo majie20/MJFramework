@@ -7,7 +7,6 @@ namespace Model
     public class Init : MonoBehaviour
     {
         private int aa = 0;
-        public Button button;
 
         private void Awake()
         {

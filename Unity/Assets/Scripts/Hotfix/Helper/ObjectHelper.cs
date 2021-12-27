@@ -108,11 +108,10 @@ namespace Hotfix
         public static Entity CreatEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
-            entity.GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, isFromAB);
+            entity.GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, parent == null ? eParent.Transform : parent, isFromAB);
             entity.Sign = sign;
 
             entity.Transform = entity.GameObject.transform;
-            entity.Transform.SetParent(parent == null ? eParent.Transform : parent);
             entity.SetParent(eParent);
 
             entity.AddComponentView();
@@ -123,14 +122,10 @@ namespace Hotfix
         public static Entity CreatEntity2(Entity eParent, GameObject obj = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
-            entity.GameObject = sign != GameObjPoolComponent.None_GameObject ? Game.Instance.ObjectPool.HatchGameObjByName(sign, isFromAB) : obj;
+            entity.GameObject = sign != GameObjPoolComponent.None_GameObject ? Game.Instance.ObjectPool.HatchGameObjByName(sign, eParent.Transform, isFromAB) : obj;
             entity.Sign = sign;
 
             entity.Transform = entity.GameObject.transform;
-            if (sign != GameObjPoolComponent.None_GameObject)
-            {
-                entity.Transform.SetParent(eParent.Transform);
-            }
             entity.SetParent(eParent);
 
             entity.AddComponentView();

@@ -54,9 +54,9 @@ namespace Hotfix
 
         #region 游戏物体
 
-        public GameObject HatchGameObjByName(string name, bool isAB)
+        public GameObject HatchGameObjByName(string name, Transform parent, bool isAB)
         {
-            return GetComponent<GameObjPoolComponent>().HatchGameObjByName(name, isAB);
+            return GetComponent<GameObjPoolComponent>().HatchGameObjByName(name, parent, isAB);
         }
 
         public void RecycleGameObj(string sign, GameObject obj)

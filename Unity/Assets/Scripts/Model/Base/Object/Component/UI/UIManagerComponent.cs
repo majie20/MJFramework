@@ -56,10 +56,6 @@ namespace Model
             var canvas = this.Entity.Transform.GetComponent<Canvas>();
             canvas.worldCamera = UICamera;
 
-            var transform = this.Entity.Transform;
-            transform.localEulerAngles = Vector3.zero;
-            transform.localPosition = Vector3.zero;
-
             UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
         }
 
@@ -80,7 +76,7 @@ namespace Model
                 RectTransform rect = component.Entity.Transform.GetComponent<RectTransform>();
                 rect.localPosition = Vector3.zero;
                 rect.localScale = Vector3.one;
-                rect.localEulerAngles = Vector3.zero;
+                rect.localRotation = Quaternion.identity;
                 uiComponentDic.Add(type, component);
             }
 

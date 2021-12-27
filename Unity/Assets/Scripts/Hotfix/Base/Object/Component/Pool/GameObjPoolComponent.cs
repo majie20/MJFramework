@@ -37,14 +37,14 @@ namespace Hotfix
             Entity = null;
         }
 
-        public GameObject HatchGameObjByName(string name, bool isAB)
+        public GameObject HatchGameObjByName(string name, Transform parent, bool isAB)
         {
             if (gameObjDic.ContainsKey(name))
             {
                 return gameObjDic[name].Dequeue();
             }
 
-            var obj = isAB ? UnityEngine.Object.Instantiate(Model.Game.Instance.Scene.GetComponent<Model.AssetsComponent>().Load<GameObject>(name)) : new GameObject(name);
+            var obj = isAB ? UnityEngine.Object.Instantiate(Model.Game.Instance.Scene.GetComponent<Model.AssetsComponent>().Load<GameObject>(name), Vector3.zero, Quaternion.identity, parent) : new GameObject(name);
 
             return obj;
         }

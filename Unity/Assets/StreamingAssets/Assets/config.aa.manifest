@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2888531646
+CRC: 3847309231
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: fbbbf4ab3de4860a8b9ab48ae0d80ccf
+    Hash: 3efedd148fe254d27422347235ae52ac
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9d01d6a9a03f0c3646785c9a15a835e6
+    Hash: cd59cd558fbd99749a10488185d6f8e8
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,9 +25,10 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 687078895
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Res/Config/AssestSpriteSettings.asset
 - Assets/Res/Config/AssetsCiteMatchConfigSettings.asset
 Dependencies:
-- F:/Unity/Project/HotFramework/Unity/./../Unity/Assets/StreamingAssets/Assets/text.aa
-- F:/Unity/Project/HotFramework/Unity/./../Unity/Assets/StreamingAssets/Assets/prefab.aa
+- E:/Unity/Project/StandardProject/Unity/./../Unity/Assets/StreamingAssets/Assets/prefab.aa
+- E:/Unity/Project/StandardProject/Unity/./../Unity/Assets/StreamingAssets/Assets/text.aa

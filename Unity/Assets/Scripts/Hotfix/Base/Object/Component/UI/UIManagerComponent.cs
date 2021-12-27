@@ -72,6 +72,10 @@ namespace Hotfix
             if (!uiComponentDic.ContainsKey(type))
             {
                 var component = ObjectHelper.CreateComponent(type, ObjectHelper.CreatEntity(this.Entity, null, attr.PrefabPath, true), true) as UIBaseComponent;
+                RectTransform rect = component.Entity.Transform.GetComponent<RectTransform>();
+                rect.localPosition = Vector3.zero;
+                rect.localScale = Vector3.one;
+                rect.localRotation = Quaternion.identity;
                 uiComponentDic.Add(type, component);
             }
 

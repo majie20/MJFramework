@@ -36,6 +36,8 @@ namespace ILRuntime.Runtime.Generated
             Model_Game_Binding.Register(app);
             Model_Entity_Binding.Register(app);
             Model_AssetsComponent_Binding.Register(app);
+            UnityEngine_Vector3_Binding.Register(app);
+            UnityEngine_Quaternion_Binding.Register(app);
             UnityEngine_Object_Binding.Register(app);
             UnityEngine_Transform_Binding.Register(app);
             System_String_Binding.Register(app);

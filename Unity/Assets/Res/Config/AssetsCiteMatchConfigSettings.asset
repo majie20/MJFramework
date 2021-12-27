@@ -19,7 +19,6 @@ MonoBehaviour:
   - Assets/Res/Prefabs/Cylinder
   - Assets/Res/Prefabs/GameObject
   - Assets/Res/Prefabs/NetTest
-  - Assets/Res/Prefabs/Scene
   - Assets/Res/Prefabs/Sphere
   - Assets/Res/Prefabs/UIBlackMask
   - Assets/Res/Prefabs/UIRoot
@@ -38,10 +37,9 @@ MonoBehaviour:
   - {fileID: 7604662774367296269, guid: b59529f938ca86643b77a94b94faf8f9, type: 3}
   - {fileID: 2935239384807764712, guid: 53715fe761a447e48b05197ccf28366c, type: 3}
   - {fileID: 3996678568743119346, guid: bdc220d407fbe4b4eb6ed86e4e326cd2, type: 3}
-  - {fileID: 5390487461637779792, guid: 99874bd0b257c04429c6678494ecaee8, type: 3}
   - {fileID: 2972403345721537417, guid: 980ccd3e86108ce4cbee1703121f5dca, type: 3}
   - {fileID: 4864871590779903478, guid: 0a97a80fcd64ea24f891f139b22beee1, type: 3}
-  - {fileID: 7430956125858382866, guid: 17561ff5e2202594f933fdb912d8cbaa, type: 3}
+  - {fileID: 7430956125858382866, guid: 0cc05f028c35ddf4fa66f7b5a3ed2917, type: 3}
   - {fileID: 4900000, guid: ae8e86f35d7a8584dab0348232aaaacf, type: 3}
   - {fileID: 4900000, guid: 81263b0e2ea3ecb448ea59b60077f9a7, type: 3}
   - {fileID: 11400000, guid: 108f4252d5024d641a06f7ad36eb4337, type: 2}

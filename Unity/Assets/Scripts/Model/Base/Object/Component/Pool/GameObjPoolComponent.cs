@@ -8,6 +8,7 @@ namespace Model
     {
         public static string Ordinary_GameObject = "OrdinaryGameObject";
         public static string None_GameObject = "NoneGameObject";
+
         /// <summary>
         /// 对象池中的游戏物体
         /// </summary>
