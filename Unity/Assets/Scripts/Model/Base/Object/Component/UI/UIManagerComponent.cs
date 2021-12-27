@@ -10,7 +10,7 @@ namespace Model
     {
         private static int SORT_ORDER_INIT = 0;
         private static int SORT_ORDER_SPACING = 1000;
-        public static string UIROOT_PATH = "Assets/Res/Prefabs/UIRoot";
+        public static string GAME_OBJECT_NAME = "2DRoot";
 
         private Dictionary<Type, UIBaseComponent> uiComponentDic;
         private Stack<Type> uiStack;
@@ -56,6 +56,10 @@ namespace Model
             var canvas = this.Entity.Transform.GetComponent<Canvas>();
             canvas.worldCamera = UICamera;
 
+            var transform = this.Entity.Transform;
+            transform.localEulerAngles = Vector3.zero;
+            transform.localPosition = Vector3.zero;
+
             UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
         }
 
@@ -74,9 +78,9 @@ namespace Model
             {
                 var component = ObjectHelper.CreateComponent(type, ObjectHelper.CreatEntity(this.Entity, null, attr.PrefabPath, true), true) as UIBaseComponent;
                 RectTransform rect = component.Entity.Transform.GetComponent<RectTransform>();
-                Debug.Log(rect.rect); // MDEBUG:
-                Debug.Log(rect.sizeDelta); // MDEBUG:
-                rect.sizeDelta = Vector2.zero;
+                rect.localPosition = Vector3.zero;
+                rect.localScale = Vector3.one;
+                rect.localEulerAngles = Vector3.zero;
                 uiComponentDic.Add(type, component);
             }
 

@@ -89,7 +89,10 @@ namespace Model
 
             if (GameObject != null)
             {
-                Game.Instance.ObjectPool.RecycleGameObj(Sign, GameObject);
+                if (Sign != GameObjPoolComponent.None_GameObject)
+                {
+                    Game.Instance.ObjectPool.RecycleGameObj(Sign, GameObject);
+                }
                 Transform = null;
                 GameObject = null;
             }
@@ -115,7 +118,7 @@ namespace Model
 
         public void AddChild(Entity child)
         {
-            childDic.Add(child.Sign, child);
+            childDic.Add(child.Sign == GameObjPoolComponent.None_GameObject ? child.GameObject.name : child.Sign, child);
         }
 
         public Entity GetChild(string sign)

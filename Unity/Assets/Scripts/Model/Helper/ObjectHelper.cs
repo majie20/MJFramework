@@ -108,11 +108,24 @@ namespace Model
         public static Entity CreatEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
-            entity.GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, isFromAB);
+            entity.GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, parent == null ? eParent.Transform : parent, isFromAB);
             entity.Sign = sign;
 
             entity.Transform = entity.GameObject.transform;
-            entity.Transform.SetParent(parent == null ? eParent.Transform : parent);
+            entity.SetParent(eParent);
+
+            entity.AddComponentView();
+
+            return entity;
+        }
+
+        public static Entity CreatEntity2(Entity eParent, GameObject obj = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
+        {
+            Entity entity = Game.Instance.ObjectPool.HatchEntity();
+            entity.GameObject = sign != GameObjPoolComponent.None_GameObject ? Game.Instance.ObjectPool.HatchGameObjByName(sign, eParent.Transform, isFromAB) : obj;
+            entity.Sign = sign;
+
+            entity.Transform = entity.GameObject.transform;
             entity.SetParent(eParent);
 
             entity.AddComponentView();
@@ -122,7 +135,7 @@ namespace Model
 
         public static UIBaseComponent OpenUIView(Type type, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -139,7 +152,7 @@ namespace Model
 
         public static UIBaseComponent OpenUIView<A>(Type type, A a, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -156,7 +169,7 @@ namespace Model
 
         public static UIBaseComponent OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -173,7 +186,7 @@ namespace Model
 
         public static UIBaseComponent OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -210,7 +223,7 @@ namespace Model
 
         public static void CloseUIView(Type type, bool isCloseBack = false)
         {
-            Game.Instance.Scene.GetChild(UIManagerComponent.UIROOT_PATH).GetComponent<UIManagerComponent>().CloseUIView(type, isCloseBack);
+            Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().CloseUIView(type, isCloseBack);
         }
 
         public static void CloseUIView<T>(bool isCloseBack = false)

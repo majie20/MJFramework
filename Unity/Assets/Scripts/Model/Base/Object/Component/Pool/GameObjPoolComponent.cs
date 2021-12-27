@@ -6,6 +6,8 @@ namespace Model
     [LifeCycle]
     public class GameObjPoolComponent : Component, IAwake
     {
+        public static string Ordinary_GameObject = "OrdinaryGameObject";
+        public static string None_GameObject = "NoneGameObject";
         /// <summary>
         /// 对象池中的游戏物体
         /// </summary>
@@ -35,14 +37,14 @@ namespace Model
             Entity = null;
         }
 
-        public GameObject HatchGameObjByName(string name, bool isAB)
+        public GameObject HatchGameObjByName(string name, Transform parent, bool isAB)
         {
             if (gameObjDic.ContainsKey(name))
             {
                 return gameObjDic[name].Dequeue();
             }
 
-            var obj = isAB ? UnityEngine.Object.Instantiate(Game.Instance.Scene.GetComponent<AssetsComponent>().Load<GameObject>(name)) : new GameObject(name);
+            var obj = isAB ? UnityEngine.Object.Instantiate(Game.Instance.Scene.GetComponent<AssetsComponent>().Load<GameObject>(name), Vector3.zero, Quaternion.identity, parent) : new GameObject(name);
 
             return obj;
         }

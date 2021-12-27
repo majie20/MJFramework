@@ -9,7 +9,7 @@ namespace Hotfix
     {
         private static int SORT_ORDER_INIT = 10000;
         private static int SORT_ORDER_SPACING = 1000;
-        public static string UIROOT_PATH = "Assets/Res/Prefabs/UIRoot";
+        public static string GAME_OBJECT_NAME = "2DRoot";
 
         private Dictionary<Type, UIBaseComponent> uiComponentDic;
         private Stack<Type> uiStack;
