@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2682978289
+CRC: 3525703912
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: aec1eb2e4dc4bc8a174a6f549639a848
+    Hash: b068729e595cda1e6f4bde3c3b185a57
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b4e7f9bbf3a992d397d3f4b45175c8d6
+    Hash: 200ac9cb5105f35003c77132ea4b0ee2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,15 +28,13 @@ ClassTypes:
 - Class: 65
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
@@ -53,6 +51,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -71,6 +71,7 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 225
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Res/Prefabs/UIRoot.prefab
 - Assets/Res/Prefabs/NetTest.prefab

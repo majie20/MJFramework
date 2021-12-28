@@ -43,6 +43,7 @@ namespace Hotfix
         }
 
         private int sortOrder;
+        private Type maskType;
 
         public void Awake()
         {
@@ -54,6 +55,8 @@ namespace Hotfix
             UICamera = GameObject.Find("UICamera").GetComponent<Camera>();
             var canvas = this.Entity.Transform.GetComponent<Canvas>();
             canvas.worldCamera = UICamera;
+
+            maskType = typeof(UIBlackMaskComponent);
 
             Game.Instance.EventSystem.AddListener<CloseUIViewEvent>(OnCloseUIViewEvent, this);
 
@@ -72,7 +75,10 @@ namespace Hotfix
 
         private void OnCloseUIViewEvent()
         {
-            CloseUIView(uiStack.Peek(), false);
+            if (uiStack.Count > 0)
+            {
+                CloseUIView(uiStack.Peek(), false);
+            }
         }
 
         private UIBaseComponent CreateView(Type type, UIBaseDataAttribute attr)
@@ -108,19 +114,14 @@ namespace Hotfix
             var attrs = type.GetCustomAttributes(typeof(UIBaseDataAttribute), false);
             if (attrs.Length > 0)
             {
-                var attr = attrs[0] as UIBaseDataAttribute;
-                CloseUIView(type, attr, isCloseBack, true);
-                if (attr.UIViewType != UIViewType.Tips && attr.UIViewType != UIViewType.None)
+                if (attrs[0] is UIBaseDataAttribute attr)
                 {
-                    var tempType = typeof(UIBlackMaskComponent);
-                    CloseUIView(tempType, isCloseBack);
-                    UIBlackMaskComponent.SetMaskMode(attr.UIMaskMode);
-                    PushView(tempType);
+                    CloseUIView(type, attr, isCloseBack, true);
+                    SetUIMask(attr);
+                    var newView = CreateView(type, attr);
+                    PushView(type);
+                    return newView;
                 }
-
-                var newView = CreateView(type, attr);
-                PushView(type);
-                return newView;
             }
 
             return null;
@@ -131,6 +132,28 @@ namespace Hotfix
             CloseUIView(type, type.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute, isCloseBack, false);
         }
 
+        private void SortUIView()
+        {
+            CloseUIView(maskType, false);
+            if (uiStack.Count > 0)
+            {
+                var tempType = uiStack.Peek();
+                PopView();
+                SetUIMask(tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute);
+                PushView(tempType);
+            }
+        }
+
+        private void SetUIMask(UIBaseDataAttribute attr)
+        {
+            if (attr.UIViewType != UIViewType.Tips && attr.UIViewType != UIViewType.None)
+            {
+                CloseUIView(maskType, false);
+                UIBlackMaskComponent.SetMaskMode(attr.UIMaskMode);
+                PushView(maskType);
+            }
+        }
+
         private void CloseUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack, bool isOpen)
         {
             if (attr != null)
@@ -139,6 +162,7 @@ namespace Hotfix
                 {
                     if (attr.UIViewType == UIViewType.Normal)
                     {
+                        tempUIStack.Clear();
                         while (true)
                         {
                             var tempType = uiStack.Peek();
@@ -146,26 +170,37 @@ namespace Hotfix
                             {
                                 PopView();
 
-                                UIBaseComponent component = uiComponentDic[uiStack.Peek()];
-                                if (isOpen && component.Canvas.enabled)
+                                while (tempUIStack.Count > 0)
                                 {
-                                    component.Disable();
+                                    PushView(tempUIStack.Pop());
                                 }
-                                else if (!isOpen)
+
+                                SortUIView();
+                                if (uiStack.Count > 0)
                                 {
-                                    if (component.Canvas.enabled)
-                                    {
-                                        component.Disable();
-                                    }
-                                    else
+                                    UIBaseComponent component = uiComponentDic[uiStack.Peek()];
+                                    if (!(isOpen && component.Canvas.enabled))
                                     {
                                         component.Enable();
+                                    }
+                                    else if (isOpen && component.IsEnable)
+                                    {
+                                        component.Disable();
                                     }
                                 }
                                 break;
                             }
+
                             var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
-                            CloseUIView(tempType, tempAttr, false, false);
+                            if (tempAttr.UIViewType == UIViewType.Normal)
+                            {
+                                PopView();
+                                tempUIStack.Push(tempType);
+                            }
+                            else
+                            {
+                                CloseUIView(tempType, tempAttr, false, false);
+                            }
                         }
                     }
                     else if (attr.UIViewType == UIViewType.Pop)
@@ -194,13 +229,18 @@ namespace Hotfix
                                     {
                                         PushView(tempUIStack.Pop());
                                     }
+
+                                    SortUIView();
                                     break;
                                 }
+
                                 var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                                 if (tempAttr.UIViewType == UIViewType.Normal)
                                 {
+                                    SortUIView();
                                     break;
                                 }
+
                                 if (tempAttr.UIViewType == UIViewType.Tips)
                                 {
                                     CloseUIView(tempType, tempAttr, false, false);
@@ -220,13 +260,17 @@ namespace Hotfix
                                 if (tempType == type)
                                 {
                                     PopView();
+                                    SortUIView();
                                     break;
                                 }
+
                                 var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                                 if (tempAttr.UIViewType == UIViewType.Normal)
                                 {
+                                    SortUIView();
                                     break;
                                 }
+
                                 CloseUIView(tempType, tempAttr, false, false);
                             }
                         }
@@ -244,8 +288,10 @@ namespace Hotfix
                                 {
                                     PushView(tempUIStack.Pop());
                                 }
+
                                 break;
                             }
+
                             var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                             if (tempAttr.UIViewType == UIViewType.Tips)
                             {
@@ -258,6 +304,7 @@ namespace Hotfix
                             }
                         }
                     }
+
                     uiComponentDic[type].Close();
                 }
                 else
@@ -271,7 +318,7 @@ namespace Hotfix
                             if (tempAttr.UIViewType == UIViewType.Normal)
                             {
                                 UIBaseComponent component = uiComponentDic[tempType];
-                                if (isOpen && component.Canvas.enabled)
+                                if (isOpen && component.IsEnable)
                                 {
                                     component.Disable();
                                 }

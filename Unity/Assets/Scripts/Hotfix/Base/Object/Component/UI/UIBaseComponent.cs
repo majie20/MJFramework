@@ -47,9 +47,24 @@ namespace Hotfix
             }
         }
 
+        private bool isEnable;
+
+        public bool IsEnable
+        {
+            private set
+            {
+                isEnable = value;
+            }
+            get
+            {
+                return isEnable;
+            }
+        }
+
         public virtual void Awake()
         {
             AddComponent();
+            IsEnable = true;
         }
 
         public override void Dispose()
@@ -98,11 +113,13 @@ namespace Hotfix
         public virtual void Enable()
         {
             Canvas.enabled = true;
+            IsEnable = true;
         }
 
         public virtual void Disable()
         {
             Canvas.enabled = false;
+            IsEnable = false;
         }
     }
 }

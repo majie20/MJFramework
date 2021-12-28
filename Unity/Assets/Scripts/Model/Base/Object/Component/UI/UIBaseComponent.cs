@@ -47,9 +47,24 @@ namespace Model
             }
         }
 
+        private bool isEnable;
+
+        public bool IsEnable
+        {
+            private set
+            {
+                isEnable = value;
+            }
+            get
+            {
+                return isEnable;
+            }
+        }
+
         public virtual void Awake()
         {
             AddComponent();
+            IsEnable = true;
         }
 
         public override void Dispose()
@@ -78,8 +93,8 @@ namespace Model
             {
                 CanvasGroup = this.Entity.GameObject.AddComponent<CanvasGroup>();
             }
-
         }
+
         public virtual void Close()
         {
             OnClose();
@@ -98,11 +113,13 @@ namespace Model
         public virtual void Enable()
         {
             Canvas.enabled = true;
+            IsEnable = true;
         }
 
         public virtual void Disable()
         {
             Canvas.enabled = false;
+            IsEnable = false;
         }
     }
 }
