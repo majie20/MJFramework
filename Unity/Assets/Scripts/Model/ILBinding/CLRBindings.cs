@@ -65,11 +65,11 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_ILTypeInstance_Binding.Register(app);
+            UnityEngine_Debug_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_UInt32_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_UInt32_Object_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Object_Binding.Register(app);
             System_Action_Binding.Register(app);
-            UnityEngine_Debug_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_UInt32_UInt32_Array_Binding.Register(app);
             System_Collections_Generic_List_1_UInt32_Binding.Register(app);
             System_Collections_Generic_List_1_Action_Binding.Register(app);

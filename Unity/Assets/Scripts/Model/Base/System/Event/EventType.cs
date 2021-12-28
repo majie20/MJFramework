@@ -11,6 +11,9 @@ namespace Model
     public class HotProgressRefresh : EventBase<int>
     { }
 
+    public class CloseUIViewEvent : EventBase
+    { }
+
     public class EventType
     {
         private static uint GameMain = 100000;

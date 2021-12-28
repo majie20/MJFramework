@@ -68,8 +68,8 @@ namespace Model
             UIRootComponent uiRootComponent = ObjectHelper.CreateComponent<UIRootComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, null, UIRootComponent.UIROOT_PATH, true), false);
             ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity2(uiRootComponent.Entity, uiRootComponent.Entity.Transform.Find(UIManagerComponent.GAME_OBJECT_NAME).gameObject, GameObjPoolComponent.None_GameObject), false);
 
-            ObjectHelper.OpenUIView<NetTest2Component>();
             ObjectHelper.OpenUIView<NetTestComponent>();
+            ObjectHelper.OpenUIView<NetTest2Component>();
             ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
             Game.Instance.Hotfix.LoadHotfixAssembly();
             Game.Instance.Hotfix.GotoHotfix();

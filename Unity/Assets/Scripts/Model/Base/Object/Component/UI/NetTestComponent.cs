@@ -3,7 +3,7 @@
 namespace Model
 {
     [LifeCycle]
-    [UIBaseData(UIViewType = UIViewType.Normal, PrefabPath = "Assets/Res/Prefabs/NetTest", UIMaskMode = UIMaskMode.BlackTransparent)]
+    [UIBaseData(UIViewType = UIViewType.Normal, PrefabPath = "Assets/Res/Prefabs/NetTest", UIMaskMode = UIMaskMode.BlackTransparentClick)]
     public class NetTestComponent : UIBaseComponent, IOpen
     {
         public override void Awake()

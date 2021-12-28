@@ -56,16 +56,24 @@ namespace Model
             var canvas = this.Entity.Transform.GetComponent<Canvas>();
             canvas.worldCamera = UICamera;
 
+            Game.Instance.EventSystem.AddListener<CloseUIViewEvent>(OnCloseUIViewEvent, this);
+
             UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
         }
 
         public override void Dispose()
         {
+            Game.Instance.EventSystem.RemoveListener<CloseUIViewEvent>(this);
             uiComponentDic = null;
             uiStack = null;
             tempUIStack = null;
             UICamera = null;
             Entity = null;
+        }
+
+        private void OnCloseUIViewEvent()
+        {
+            CloseUIView(uiStack.Peek(), false);
         }
 
         private UIBaseComponent CreateView(Type type, UIBaseDataAttribute attr)
