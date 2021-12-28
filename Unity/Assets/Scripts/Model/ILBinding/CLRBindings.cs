@@ -40,10 +40,9 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Quaternion_Binding.Register(app);
             UnityEngine_Object_Binding.Register(app);
             UnityEngine_Transform_Binding.Register(app);
-            System_String_Binding.Register(app);
-            LifecycleHandle_Binding.Register(app);
             UnityEngine_Component_Binding.Register(app);
             UnityEngine_Canvas_Binding.Register(app);
+            UnityEngine_Behaviour_Binding.Register(app);
             ReferenceCollector_Binding.Register(app);
             UnityEngine_UI_Button_Binding.Register(app);
             UnityEngine_Events_UnityEvent_Binding.Register(app);
@@ -59,6 +58,7 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_IEnumerable_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_IEnumerator_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_IEnumerator_Binding.Register(app);
+            System_String_Binding.Register(app);
             Model_ComponentView_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Type_Binding.Register(app);
             System_Linq_Enumerable_Binding.Register(app);

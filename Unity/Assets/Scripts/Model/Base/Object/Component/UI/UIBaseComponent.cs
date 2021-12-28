@@ -3,10 +3,8 @@ using UnityEngine.UI;
 
 namespace Model
 {
-    //[LifeCycle]
     public class UIBaseComponent : Component, IAwake
     {
-        private LifecycleHandle lifecycleHandle;
         private Canvas canvas;
 
         public Canvas Canvas
@@ -52,19 +50,11 @@ namespace Model
         public virtual void Awake()
         {
             AddComponent();
-
-            lifecycleHandle.EnableEventSign = $"UILifecycleEnable{this.Guid}";
-            lifecycleHandle.DisableEventSign = $"UILifecycleDisable{this.Guid}";
-            lifecycleHandle.DestroyEventSign = $"UILifecycleDestroy{this.Guid}";
         }
 
         public override void Dispose()
         {
             Entity = null;
-
-            lifecycleHandle.EnableEventSign = null;
-            lifecycleHandle.DisableEventSign = null;
-            lifecycleHandle.DestroyEventSign = null;
         }
 
         protected virtual void AddComponent()
@@ -89,47 +79,30 @@ namespace Model
                 CanvasGroup = this.Entity.GameObject.AddComponent<CanvasGroup>();
             }
 
-            lifecycleHandle = this.Entity.Transform.GetComponent<LifecycleHandle>();
-            if (lifecycleHandle == null)
-            {
-                lifecycleHandle = this.Entity.GameObject.AddComponent<LifecycleHandle>();
-            }
         }
-
-        public virtual void Open()
-        {
-            OnOpen();
-        }
-
-        public virtual void OnOpen()
-        {
-            Game.Instance.EventSystem.AddListener(lifecycleHandle.EnableEventSign, OnUIEnable);
-            Game.Instance.EventSystem.AddListener(lifecycleHandle.DisableEventSign, OnUIDisable);
-            Game.Instance.EventSystem.AddListener(lifecycleHandle.DestroyEventSign, OnUIDestroy);
-        }
-
         public virtual void Close()
         {
             OnClose();
         }
 
-        public virtual void OnClose()
+        protected virtual void OnOpen()
         {
-            Game.Instance.EventSystem.RemoveListener(lifecycleHandle.EnableEventSign, OnUIEnable);
-            Game.Instance.EventSystem.RemoveListener(lifecycleHandle.DisableEventSign, OnUIDisable);
-            Game.Instance.EventSystem.RemoveListener(lifecycleHandle.DestroyEventSign, OnUIDestroy);
+            Canvas.enabled = true;
         }
 
-        protected virtual void OnUIEnable()
+        protected virtual void OnClose()
         {
+            Canvas.enabled = false;
         }
 
-        protected virtual void OnUIDisable()
+        public virtual void Enable()
         {
+            Canvas.enabled = true;
         }
 
-        protected virtual void OnUIDestroy()
+        public virtual void Disable()
         {
+            Canvas.enabled = false;
         }
     }
 }

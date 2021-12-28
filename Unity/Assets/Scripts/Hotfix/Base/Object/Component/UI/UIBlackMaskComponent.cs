@@ -23,19 +23,24 @@ namespace Hotfix
             Entity = null;
         }
 
-        public override void Open()
+        public void Open()
+        {
+            OnOpen();
+        }
+
+        protected override void OnOpen()
         {
         }
 
-        public override void OnOpen()
+        protected override void OnClose()
         {
         }
 
-        public override void Close()
+        public override void Enable()
         {
         }
 
-        public override void OnClose()
+        public override void Disable()
         {
         }
 

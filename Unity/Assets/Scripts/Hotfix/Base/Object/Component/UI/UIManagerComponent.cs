@@ -101,7 +101,7 @@ namespace Hotfix
             if (attrs.Length > 0)
             {
                 var attr = attrs[0] as UIBaseDataAttribute;
-                CloseUIView(type, attr, isCloseBack);
+                CloseUIView(type, attr, isCloseBack, true);
                 if (attr.UIViewType != UIViewType.Tips && attr.UIViewType != UIViewType.None)
                 {
                     var tempType = typeof(UIBlackMaskComponent);
@@ -120,30 +120,110 @@ namespace Hotfix
 
         public void CloseUIView(Type type, bool isCloseBack)
         {
-            CloseUIView(type, type.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute, isCloseBack);
+            CloseUIView(type, type.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute, isCloseBack, false);
         }
 
-        public void CloseUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack)
+        private void CloseUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack, bool isOpen)
         {
-            if (attr != null && uiStack.Contains(type))
+            if (attr != null)
             {
-                if (attr.UIViewType == UIViewType.Normal)
+                if (uiStack.Contains(type))
                 {
-                    while (true)
+                    if (attr.UIViewType == UIViewType.Normal)
                     {
-                        var tempType = uiStack.Peek();
-                        if (tempType == type)
+                        while (true)
                         {
-                            PopView();
-                            break;
+                            var tempType = uiStack.Peek();
+                            if (tempType == type)
+                            {
+                                PopView();
+
+                                UIBaseComponent component = uiComponentDic[uiStack.Peek()];
+                                if (isOpen && component.Canvas.enabled)
+                                {
+                                    component.Disable();
+                                }
+                                else if (!isOpen)
+                                {
+                                    if (component.Canvas.enabled)
+                                    {
+                                        component.Disable();
+                                    }
+                                    else
+                                    {
+                                        component.Enable();
+                                    }
+                                }
+                                break;
+                            }
+                            var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                            CloseUIView(tempType, tempAttr, false, false);
                         }
-                        var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
-                        CloseUIView(tempType, tempAttr, false);
                     }
-                }
-                else if (attr.UIViewType == UIViewType.Pop)
-                {
-                    if (isCloseBack)
+                    else if (attr.UIViewType == UIViewType.Pop)
+                    {
+                        if (isCloseBack)
+                        {
+                            tempUIStack.Clear();
+                            while (true)
+                            {
+                                var tempType = uiStack.Peek();
+                                if (tempType == type)
+                                {
+                                    PopView();
+                                    while (true)
+                                    {
+                                        var tempAttr2 = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                                        if (tempAttr2.UIViewType == UIViewType.Normal)
+                                        {
+                                            break;
+                                        }
+
+                                        CloseUIView(tempType, tempAttr2, false, false);
+                                    }
+
+                                    while (tempUIStack.Count > 0)
+                                    {
+                                        PushView(tempUIStack.Pop());
+                                    }
+                                    break;
+                                }
+                                var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                                if (tempAttr.UIViewType == UIViewType.Normal)
+                                {
+                                    break;
+                                }
+                                if (tempAttr.UIViewType == UIViewType.Tips)
+                                {
+                                    CloseUIView(tempType, tempAttr, false, false);
+                                }
+                                else
+                                {
+                                    PopView();
+                                    tempUIStack.Push(tempType);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            while (true)
+                            {
+                                var tempType = uiStack.Peek();
+                                if (tempType == type)
+                                {
+                                    PopView();
+                                    break;
+                                }
+                                var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
+                                if (tempAttr.UIViewType == UIViewType.Normal)
+                                {
+                                    break;
+                                }
+                                CloseUIView(tempType, tempAttr, false, false);
+                            }
+                        }
+                    }
+                    else if (attr.UIViewType == UIViewType.Tips || attr.UIViewType == UIViewType.None)
                     {
                         tempUIStack.Clear();
                         while (true)
@@ -152,17 +232,6 @@ namespace Hotfix
                             if (tempType == type)
                             {
                                 PopView();
-                                while (true)
-                                {
-                                    var tempAttr2 = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
-                                    if (tempAttr2.UIViewType == UIViewType.Normal)
-                                    {
-                                        break;
-                                    }
-
-                                    CloseUIView(tempType, tempAttr2, false);
-                                }
-
                                 while (tempUIStack.Count > 0)
                                 {
                                     PushView(tempUIStack.Pop());
@@ -170,66 +239,40 @@ namespace Hotfix
                                 break;
                             }
                             var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
-                            if (tempAttr.UIViewType == UIViewType.Normal)
-                            {
-                                break;
-                            }
                             if (tempAttr.UIViewType == UIViewType.Tips)
                             {
-                                CloseUIView(tempType, tempAttr, false);
+                                CloseUIView(tempType, tempAttr, false, false);
                             }
                             else
                             {
+                                PopView();
                                 tempUIStack.Push(tempType);
                             }
                         }
                     }
-                    else
+                    uiComponentDic[type].Close();
+                }
+                else
+                {
+                    if (attr.UIViewType == UIViewType.Normal)
                     {
-                        while (true)
+                        while (uiStack.Count > 0)
                         {
                             var tempType = uiStack.Peek();
-                            if (tempType == type)
-                            {
-                                PopView();
-                                break;
-                            }
                             var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
                             if (tempAttr.UIViewType == UIViewType.Normal)
                             {
+                                UIBaseComponent component = uiComponentDic[tempType];
+                                if (isOpen && component.Canvas.enabled)
+                                {
+                                    component.Disable();
+                                }
                                 break;
                             }
-                            CloseUIView(tempType, tempAttr, false);
+                            CloseUIView(tempType, tempAttr, false, false);
                         }
                     }
                 }
-                else if (attr.UIViewType == UIViewType.Tips || attr.UIViewType == UIViewType.None)
-                {
-                    tempUIStack.Clear();
-                    while (true)
-                    {
-                        var tempType = uiStack.Peek();
-                        if (tempType == type)
-                        {
-                            PopView();
-                            while (tempUIStack.Count > 0)
-                            {
-                                PushView(tempUIStack.Pop());
-                            }
-                            break;
-                        }
-                        var tempAttr = tempType.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute;
-                        if (tempAttr.UIViewType == UIViewType.Tips)
-                        {
-                            CloseUIView(tempType, tempAttr, false);
-                        }
-                        else
-                        {
-                            tempUIStack.Push(tempType);
-                        }
-                    }
-                }
-                uiComponentDic[type].Close();
             }
         }
     }

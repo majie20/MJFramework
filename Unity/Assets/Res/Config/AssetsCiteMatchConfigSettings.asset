@@ -18,6 +18,8 @@ MonoBehaviour:
   - Assets/Res/Prefabs/Cube
   - Assets/Res/Prefabs/Cylinder
   - Assets/Res/Prefabs/GameObject
+  - Assets/Res/Prefabs/NetTest 1
+  - Assets/Res/Prefabs/NetTest 2
   - Assets/Res/Prefabs/NetTest
   - Assets/Res/Prefabs/Sphere
   - Assets/Res/Prefabs/UIBlackMask
@@ -36,6 +38,8 @@ MonoBehaviour:
   - {fileID: 4519422901939628329, guid: 5eb5fdde5292284409f09d7cbdd59c86, type: 3}
   - {fileID: 7604662774367296269, guid: b59529f938ca86643b77a94b94faf8f9, type: 3}
   - {fileID: 2935239384807764712, guid: 53715fe761a447e48b05197ccf28366c, type: 3}
+  - {fileID: 3996678568743119346, guid: 6633527a78fefd74f821f9f7611686d0, type: 3}
+  - {fileID: 3996678568743119346, guid: 4a8f8a8f4f68f2a499375dfa458294b1, type: 3}
   - {fileID: 3996678568743119346, guid: bdc220d407fbe4b4eb6ed86e4e326cd2, type: 3}
   - {fileID: 2972403345721537417, guid: 980ccd3e86108ce4cbee1703121f5dca, type: 3}
   - {fileID: 4864871590779903478, guid: 0a97a80fcd64ea24f891f139b22beee1, type: 3}
