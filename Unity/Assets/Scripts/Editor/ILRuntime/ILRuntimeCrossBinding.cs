@@ -16,6 +16,11 @@ public class ILRuntimeCrossBinding
             sw.WriteLine(ILRuntime.Runtime.Enviorment.CrossBindingCodeGenerator.GenerateCrossBindingAdapterCode(typeof(ProtoBuf.IExtensible), "Model"));
         }
 
+        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/ILBinding/Adapter/BrightConfigBeanBaseAdapter.cs"))
+        {
+            sw.WriteLine(ILRuntime.Runtime.Enviorment.CrossBindingCodeGenerator.GenerateCrossBindingAdapterCode(typeof(Bright.Config.BeanBase), "Model"));
+        }
+
         AssetDatabase.Refresh();
     }
 }

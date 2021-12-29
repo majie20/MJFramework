@@ -23,7 +23,20 @@ namespace ILRuntime.Runtime.Generated
         public static void Initialize(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
             ProtoBuf_Extensible_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_String_Object_Binding.Register(app);
+            System_Func_2_String_JSONNode_Binding.Register(app);
             System_Object_Binding.Register(app);
+            System_Boolean_Binding.Register(app);
+            System_String_Binding.Register(app);
+            SimpleJSON_JSONNode_Binding.Register(app);
+            Bright_Serialization_SerializationException_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_Int32_Model_BeanBaseAdapter_Binding_Adapter_Binding.Register(app);
+            System_Collections_Generic_List_1_Model_BeanBaseAdapter_Binding_Adapter_Binding.Register(app);
+            System_Collections_Generic_List_1_Model_BeanBaseAdapter_Binding_Adapter_Binding_Enumerator_Binding.Register(app);
+            System_IDisposable_Binding.Register(app);
+            System_Collections_Generic_IEnumerable_1_JSONNode_Binding.Register(app);
+            System_Collections_Generic_IEnumerator_1_JSONNode_Binding.Register(app);
+            System_Collections_IEnumerator_Binding.Register(app);
             Model_GuidHelper_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Queue_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_Queue_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
@@ -54,11 +67,8 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_String_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
-            System_IDisposable_Binding.Register(app);
             System_Collections_Generic_IEnumerable_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_IEnumerator_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
-            System_Collections_IEnumerator_Binding.Register(app);
-            System_String_Binding.Register(app);
             Model_ComponentView_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Object_Type_Binding.Register(app);
             System_Linq_Enumerable_Binding.Register(app);
@@ -68,7 +78,6 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Debug_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_UInt32_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_UInt32_Object_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_String_Object_Binding.Register(app);
             System_Action_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_UInt32_UInt32_Array_Binding.Register(app);
             System_Collections_Generic_List_1_UInt32_Binding.Register(app);

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1094807992
+CRC: 3505710490
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 80090f083ffbb63d4f0a7c8189d79dc6
+    Hash: 26b7dda4605f90fd2819133bc7aad8df
   TypeTreeHash:
     serializedVersion: 2
     Hash: cd59cd558fbd99749a10488185d6f8e8
@@ -27,6 +27,7 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/Res/Config/Json/item_tbitem.json
 - Assets/Res/Config/AssestSpriteSettings.asset
 - Assets/Res/Config/AssetsCiteMatchConfigSettings.asset
 Dependencies:
