@@ -7,6 +7,7 @@ SpriteAtlas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 2
+  serializedVersion: 2
   m_EditorData:
     serializedVersion: 2
     textureSettings:
@@ -29,16 +30,11 @@ SpriteAtlas:
       enableRotation: 1
       enableTightPacking: 1
     variantMultiplier: 1
-    packables:
-    - {fileID: 102900000, guid: ed25df55476065d4ea3e2f6d42167e4b, type: 3}
-    totalSpriteSurfaceArea: 8558
+    packables: []
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites:
-  - {fileID: 21300000, guid: c74f186381552834fb86932bac06ae79, type: 3}
-  - {fileID: 21300000, guid: 54ab27b4996c69f4a969c3ce7f8df1b5, type: 3}
-  m_PackedSpriteNamesToIndex:
-  - Image 1715
-  - Image 1712
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
   m_Tag: 2
   m_IsVariant: 0
+  m_IsPlaceholder: 0
