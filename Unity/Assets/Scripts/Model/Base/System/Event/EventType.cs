@@ -14,6 +14,9 @@ namespace Model
     public class CloseUIViewEvent : EventBase
     { }
 
+    public class HotfixCloseUIViewEvent : EventBase
+    { }
+
     public class EventType
     {
         private static uint GameMain = 100000;

@@ -58,14 +58,14 @@ namespace Hotfix
 
             maskType = typeof(UIBlackMaskComponent);
 
-            Game.Instance.EventSystem.AddListener<CloseUIViewEvent>(OnCloseUIViewEvent, this);
+            Model.Game.Instance.EventSystem.AddListener<Model.HotfixCloseUIViewEvent>(OnCloseUIViewEvent, this);
 
             UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
         }
 
         public override void Dispose()
         {
-            Game.Instance.EventSystem.RemoveListener<CloseUIViewEvent>(this);
+            Model.Game.Instance.EventSystem.RemoveListener<Model.HotfixCloseUIViewEvent>(this);
             uiComponentDic = null;
             uiStack = null;
             tempUIStack = null;

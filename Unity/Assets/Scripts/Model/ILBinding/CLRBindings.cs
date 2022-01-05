@@ -59,6 +59,7 @@ namespace ILRuntime.Runtime.Generated
             ReferenceCollector_Binding.Register(app);
             UnityEngine_UI_Button_Binding.Register(app);
             UnityEngine_Events_UnityEvent_Binding.Register(app);
+            Model_EventSystem_Binding.Register(app);
             UnityEngine_CanvasGroup_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             System_Collections_Generic_Stack_1_Type_Binding.Register(app);
@@ -74,22 +75,13 @@ namespace ILRuntime.Runtime.Generated
             System_Linq_Enumerable_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Type_Model_IDisposableAdapter_Binding_Adapter_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_String_ILTypeInstance_Binding.Register(app);
-            UnityEngine_Debug_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_UInt32_ILTypeInstance_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_UInt32_Object_Binding.Register(app);
-            System_Action_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_UInt32_UInt32_Array_Binding.Register(app);
-            System_Collections_Generic_List_1_UInt32_Binding.Register(app);
-            System_Collections_Generic_List_1_Action_Binding.Register(app);
-            System_Collections_Generic_List_1_Object_Binding.Register(app);
             System_Collections_Generic_HashSet_1_Type_Binding.Register(app);
             ArrayQueue_1_Model_IDisposableAdapter_Binding_Adapter_Binding.Register(app);
             Model_Hotfix_Binding.Register(app);
             System_Collections_Generic_List_1_Type_Binding.Register(app);
             System_Collections_Generic_List_1_Type_Binding_Enumerator_Binding.Register(app);
             System_Runtime_CompilerServices_AsyncVoidMethodBuilder_Binding.Register(app);
-            Model_EventSystem_Binding.Register(app);
+            UnityEngine_Debug_Binding.Register(app);
             System_Threading_Monitor_Binding.Register(app);
             System_Threading_Thread_Binding.Register(app);
         }

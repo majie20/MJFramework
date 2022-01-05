@@ -9,8 +9,6 @@ namespace Hotfix
 
         public Scene Scene { private set; get; }
 
-        public EventSystem EventSystem { private set; get; }
-
         public LifecycleSystem LifecycleSystem { private set; get; }
 
         public GameObject GameObject { private set; get; }
@@ -21,8 +19,6 @@ namespace Hotfix
             GameObject = new GameObject("Hotfix");
             Transform = GameObject.transform;
             GameObject.DontDestroyOnLoad(GameObject);
-
-            EventSystem = new EventSystem();
 
             LifecycleSystem = new LifecycleSystem();
 
@@ -41,9 +37,6 @@ namespace Hotfix
 
             LifecycleSystem?.Dispose();
             LifecycleSystem = null;
-
-            EventSystem?.Dispose();
-            EventSystem = null;
         }
     }
 }

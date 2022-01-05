@@ -46,7 +46,7 @@ namespace Hotfix
 
         private void OnBtnSelfClick()
         {
-            Game.Instance.EventSystem.Invoke<CloseUIViewEvent>();
+            Model.Game.Instance.EventSystem.Invoke<Model.HotfixCloseUIViewEvent>();
         }
 
         public void SetMaskMode(UIMaskMode mode)
