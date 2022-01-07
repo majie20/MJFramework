@@ -89,7 +89,7 @@ namespace Hotfix
 
             if (GameObject != null)
             {
-                if (Sign != GameObjPoolComponent.None_GameObject)
+                if (Sign != Model.GameObjPoolComponent.None_GameObject)
                 {
                     Game.Instance.ObjectPool.RecycleGameObj(Sign, GameObject);
                 }
@@ -110,6 +110,11 @@ namespace Hotfix
             componentView.dic.Add(component, component.GetType());
         }
 
+        private void RemoveToComponentView(Component component)
+        {
+            componentView.dic.Remove(component);
+        }
+
         public void SetParent(Entity entity)
         {
             Parent = entity;
@@ -118,7 +123,7 @@ namespace Hotfix
 
         public void AddChild(Entity child)
         {
-            childDic.Add(child.Sign == GameObjPoolComponent.None_GameObject ? child.GameObject.name : child.Sign, child);
+            childDic.Add(child.Sign == Model.GameObjPoolComponent.None_GameObject ? child.GameObject.name : child.Sign, child);
         }
 
         public Entity GetChild(string sign)
@@ -229,11 +234,6 @@ namespace Hotfix
             }
 
             return false;
-        }
-
-        private void RemoveToComponentView(Component component)
-        {
-            componentView.dic.Remove(component);
         }
 
         #endregion 删除组件

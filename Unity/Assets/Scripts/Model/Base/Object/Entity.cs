@@ -110,6 +110,11 @@ namespace Model
             componentView.dic.Add(component, component.GetType());
         }
 
+        private void RemoveToComponentView(Component component)
+        {
+            componentView.dic.Remove(component);
+        }
+
         public void SetParent(Entity entity)
         {
             Parent = entity;
@@ -229,11 +234,6 @@ namespace Model
             }
 
             return false;
-        }
-
-        private void RemoveToComponentView(Component component)
-        {
-            componentView.dic.Remove(component);
         }
 
         #endregion 删除组件

@@ -122,7 +122,7 @@ namespace Hotfix
         public static Entity CreatEntity2(Entity eParent, GameObject obj = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
-            entity.GameObject = sign != GameObjPoolComponent.None_GameObject ? Game.Instance.ObjectPool.HatchGameObjByName(sign, eParent.Transform, isFromAB) : obj;
+            entity.GameObject = sign != Model.GameObjPoolComponent.None_GameObject ? Game.Instance.ObjectPool.HatchGameObjByName(sign, eParent.Transform, isFromAB) : obj;
             entity.Sign = sign;
 
             entity.Transform = entity.GameObject.transform;
