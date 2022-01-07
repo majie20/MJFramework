@@ -10,9 +10,9 @@ namespace Hotfix
         private readonly HashSet<Type> lateUpdateSystems = new HashSet<Type>();
         private readonly HashSet<Type> startSystems = new HashSet<Type>();
 
-        private ArrayQueue<Model.Component> starts = new ArrayQueue<Model.Component>(20);
-        private ArrayQueue<Model.Component> updates = new ArrayQueue<Model.Component>(20);
-        private ArrayQueue<Model.Component> lateUpdates = new ArrayQueue<Model.Component>(20);
+        private ArrayQueue<Component> starts = new ArrayQueue<Component>(20);
+        private ArrayQueue<Component> updates = new ArrayQueue<Component>(20);
+        private ArrayQueue<Component> lateUpdates = new ArrayQueue<Component>(20);
 
         public LifecycleSystem()
         {
@@ -52,7 +52,7 @@ namespace Hotfix
         {
         }
 
-        public void Add(Model.Component component)
+        public void Add(Component component)
         {
             Type type = component.GetType();
 
@@ -109,7 +109,7 @@ namespace Hotfix
 
         #region Awake
 
-        public void Awake(Model.Component component)
+        public void Awake(Component component)
         {
             if (awakeSystems.Contains(component.GetType()))
             {
@@ -119,7 +119,7 @@ namespace Hotfix
             }
         }
 
-        public void Awake<A>(Model.Component component, A a)
+        public void Awake<A>(Component component, A a)
         {
             if (awakeSystems.Contains(component.GetType()))
             {
@@ -129,7 +129,7 @@ namespace Hotfix
             }
         }
 
-        public void Awake<A, B>(Model.Component component, A a, B b)
+        public void Awake<A, B>(Component component, A a, B b)
         {
             if (awakeSystems.Contains(component.GetType()))
             {
@@ -139,7 +139,7 @@ namespace Hotfix
             }
         }
 
-        public void Awake<A, B, C>(Model.Component component, A a, B b, C c)
+        public void Awake<A, B, C>(Component component, A a, B b, C c)
         {
             if (awakeSystems.Contains(component.GetType()))
             {

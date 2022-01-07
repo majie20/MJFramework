@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace Hotfix
 {
     [LifeCycle]
-    public class NetTestComponent : Model.Component, IAwake, IUpdateSystem
+    public class NetTestComponent : Component, IAwake, IUpdateSystem
     {
         private Transform content;
         private GameObject item;

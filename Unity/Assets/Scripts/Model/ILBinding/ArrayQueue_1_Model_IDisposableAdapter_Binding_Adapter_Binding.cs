@@ -14,15 +14,15 @@ using ILRuntime.CLR.Utils;
 
 namespace ILRuntime.Runtime.Generated
 {
-    unsafe class ArrayQueue_1_Component_Binding
+    unsafe class ArrayQueue_1_Model_IDisposableAdapter_Binding_Adapter_Binding
     {
         public static void Register(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
             BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
             MethodBase method;
             Type[] args;
-            Type type = typeof(global::ArrayQueue<Model.Component>);
-            args = new Type[]{typeof(Model.Component)};
+            Type type = typeof(global::ArrayQueue<Model.IDisposableAdapter.Adapter>);
+            args = new Type[]{typeof(Model.IDisposableAdapter.Adapter)};
             method = type.GetMethod("Enqueue", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, Enqueue_0);
             args = new Type[]{};
@@ -49,11 +49,11 @@ namespace ILRuntime.Runtime.Generated
             StackObject* __ret = ILIntepreter.Minus(__esp, 2);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            Model.Component @n = (Model.Component)typeof(Model.Component).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            Model.IDisposableAdapter.Adapter @n = (Model.IDisposableAdapter.Adapter)typeof(Model.IDisposableAdapter.Adapter).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 2);
-            global::ArrayQueue<Model.Component> instance_of_this_method = (global::ArrayQueue<Model.Component>)typeof(global::ArrayQueue<Model.Component>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            global::ArrayQueue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (global::ArrayQueue<Model.IDisposableAdapter.Adapter>)typeof(global::ArrayQueue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             instance_of_this_method.Enqueue(@n);
@@ -68,7 +68,7 @@ namespace ILRuntime.Runtime.Generated
             StackObject* __ret = ILIntepreter.Minus(__esp, 1);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            global::ArrayQueue<Model.Component> instance_of_this_method = (global::ArrayQueue<Model.Component>)typeof(global::ArrayQueue<Model.Component>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            global::ArrayQueue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (global::ArrayQueue<Model.IDisposableAdapter.Adapter>)typeof(global::ArrayQueue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             var result_of_this_method = instance_of_this_method.Dequeue();
@@ -88,7 +88,7 @@ namespace ILRuntime.Runtime.Generated
             StackObject* __ret = ILIntepreter.Minus(__esp, 1);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            global::ArrayQueue<Model.Component> instance_of_this_method = (global::ArrayQueue<Model.Component>)typeof(global::ArrayQueue<Model.Component>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            global::ArrayQueue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (global::ArrayQueue<Model.IDisposableAdapter.Adapter>)typeof(global::ArrayQueue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             var result_of_this_method = instance_of_this_method.GetSize();
@@ -108,7 +108,7 @@ namespace ILRuntime.Runtime.Generated
             System.Int32 @index = ptr_of_this_method->Value;
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 2);
-            global::ArrayQueue<Model.Component> instance_of_this_method = (global::ArrayQueue<Model.Component>)typeof(global::ArrayQueue<Model.Component>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            global::ArrayQueue<Model.IDisposableAdapter.Adapter> instance_of_this_method = (global::ArrayQueue<Model.IDisposableAdapter.Adapter>)typeof(global::ArrayQueue<Model.IDisposableAdapter.Adapter>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
             var result_of_this_method = instance_of_this_method.Peek(@index);
@@ -131,7 +131,7 @@ namespace ILRuntime.Runtime.Generated
             System.Int32 @maxSize = ptr_of_this_method->Value;
 
 
-            var result_of_this_method = new global::ArrayQueue<Model.Component>(@maxSize);
+            var result_of_this_method = new global::ArrayQueue<Model.IDisposableAdapter.Adapter>(@maxSize);
 
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }
