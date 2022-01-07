@@ -5,9 +5,7 @@ namespace Hotfix
 {
     public class Game : Singleton<Game>
     {
-        public ObjectPool ObjectPool { private set; get; }
-
-        public Scene Scene { private set; get; }
+        //public Scene Scene { private set; get; }
 
         public LifecycleSystem LifecycleSystem { private set; get; }
 
@@ -22,18 +20,13 @@ namespace Hotfix
 
             LifecycleSystem = new LifecycleSystem();
 
-            ObjectPool = new ObjectPool();
-
-            Scene = new Scene();
+            //Scene = new Scene();
         }
 
         public override void Dispose()
         {
-            Scene?.Dispose();
-            Scene = null;
-
-            ObjectPool?.Dispose();
-            ObjectPool = null;
+            //Scene?.Dispose();
+            //Scene = null;
 
             LifecycleSystem?.Dispose();
             LifecycleSystem = null;

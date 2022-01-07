@@ -23,20 +23,23 @@ namespace ILRuntime.Runtime.Generated
             Type[] args;
             Type type = typeof(Model.Game);
             args = new Type[]{};
-            method = type.GetMethod("get_Scene", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, get_Scene_0);
+            method = type.GetMethod("get_Hotfix", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, get_Hotfix_0);
             args = new Type[]{};
             method = type.GetMethod("get_EventSystem", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, get_EventSystem_1);
             args = new Type[]{};
-            method = type.GetMethod("get_Hotfix", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, get_Hotfix_2);
+            method = type.GetMethod("get_ObjectPool", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, get_ObjectPool_2);
+            args = new Type[]{};
+            method = type.GetMethod("get_Scene", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, get_Scene_3);
 
 
         }
 
 
-        static StackObject* get_Scene_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* get_Hotfix_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
@@ -46,13 +49,8 @@ namespace ILRuntime.Runtime.Generated
             Model.Game instance_of_this_method = (Model.Game)typeof(Model.Game).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
-            var result_of_this_method = instance_of_this_method.Scene;
+            var result_of_this_method = instance_of_this_method.Hotfix;
 
-            object obj_result_of_this_method = result_of_this_method;
-            if(obj_result_of_this_method is CrossBindingAdaptorType)
-            {    
-                return ILIntepreter.PushObject(__ret, __mStack, ((CrossBindingAdaptorType)obj_result_of_this_method).ILInstance);
-            }
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }
 
@@ -71,7 +69,7 @@ namespace ILRuntime.Runtime.Generated
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }
 
-        static StackObject* get_Hotfix_2(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* get_ObjectPool_2(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
@@ -81,8 +79,33 @@ namespace ILRuntime.Runtime.Generated
             Model.Game instance_of_this_method = (Model.Game)typeof(Model.Game).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
-            var result_of_this_method = instance_of_this_method.Hotfix;
+            var result_of_this_method = instance_of_this_method.ObjectPool;
 
+            object obj_result_of_this_method = result_of_this_method;
+            if(obj_result_of_this_method is CrossBindingAdaptorType)
+            {    
+                return ILIntepreter.PushObject(__ret, __mStack, ((CrossBindingAdaptorType)obj_result_of_this_method).ILInstance);
+            }
+            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
+        }
+
+        static StackObject* get_Scene_3(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* ptr_of_this_method;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 1);
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
+            Model.Game instance_of_this_method = (Model.Game)typeof(Model.Game).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            __intp.Free(ptr_of_this_method);
+
+            var result_of_this_method = instance_of_this_method.Scene;
+
+            object obj_result_of_this_method = result_of_this_method;
+            if(obj_result_of_this_method is CrossBindingAdaptorType)
+            {    
+                return ILIntepreter.PushObject(__ret, __mStack, ((CrossBindingAdaptorType)obj_result_of_this_method).ILInstance);
+            }
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }
 

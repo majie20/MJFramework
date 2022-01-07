@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Hotfix
 {
     [LifeCycle]
-    public class TestComponent : Component, IAwake<string>, IUpdateSystem
+    public class TestComponent : Model.Component, IAwake<string>, IUpdateSystem
     {
         //private BodyConstructor bodyConstructor;
 

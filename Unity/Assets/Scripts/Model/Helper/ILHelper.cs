@@ -59,8 +59,10 @@ namespace Model
             appdomain.RegisterCrossBindingAdaptor(new IAsyncStateMachineClassInheritanceAdaptor());
             appdomain.RegisterCrossBindingAdaptor(new IExtensibleAdapter());
             appdomain.RegisterCrossBindingAdaptor(new BeanBaseAdapter());
+            appdomain.RegisterCrossBindingAdaptor(new ComponentAdapter());
 
             LitJson.JsonMapper.RegisterILRuntimeCLRRedirection(appdomain);
+            Game.Instance.ObjectPool.GetComponent<ComponentPoolComponent>().RegisterILRuntimeCLRRedirection(appdomain);
 
             //这里需要注册所有热更DLL中用到的跨域继承Adapter，否则无法正确抓取引用
             //appdomain.RegisterCrossBindingAdaptor(new EventDelegateParams());

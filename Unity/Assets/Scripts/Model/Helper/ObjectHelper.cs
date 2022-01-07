@@ -119,6 +119,11 @@ namespace Model
             return entity;
         }
 
+        public static void CreatEntity<T>() where T : Component
+        {
+            Debug.Log(typeof(T)); // MDEBUG:
+        }
+
         public static Entity CreatEntity2(Entity eParent, GameObject obj = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
