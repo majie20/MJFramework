@@ -4,8 +4,8 @@ using UnityEngine.UI;
 namespace Model
 {
     [LifeCycle]
-    [UIBaseData(UIViewType = UIViewType.None, PrefabPath = "Assets/Res/Prefabs/UIBlackMask", UIMaskMode = UIMaskMode.None)]
-    public class UIBlackMaskComponent : UIBaseComponent, IOpen
+    [UIBaseData(UIViewType = (int)UIViewType.None, PrefabPath = "Assets/Res/Prefabs/UIBlackMask", UIMaskMode = (int)UIMaskMode.None)]
+    public class UIBlackMaskComponent : UIBaseComponent, IOpen, IAwake
     {
         private Button btnSelf;
 
@@ -49,29 +49,29 @@ namespace Model
             Game.Instance.EventSystem.Invoke<CloseUIViewEvent>();
         }
 
-        public void SetMaskMode(UIMaskMode mode)
+        public void SetMaskMode(int mode)
         {
-            if (mode == UIMaskMode.Transparent)
+            if (mode == (int)UIMaskMode.Transparent)
             {
                 SetMaskMode(0, false, true);
             }
-            else if (mode == UIMaskMode.TransparentClick)
+            else if (mode == (int)UIMaskMode.TransparentClick)
             {
                 SetMaskMode(0, true, true);
             }
-            else if (mode == UIMaskMode.TransparentPenetrate)
+            else if (mode == (int)UIMaskMode.TransparentPenetrate)
             {
                 SetMaskMode(0, false, false);
             }
-            else if (mode == UIMaskMode.BlackTransparent)
+            else if (mode == (int)UIMaskMode.BlackTransparent)
             {
                 SetMaskMode(1, false, true);
             }
-            else if (mode == UIMaskMode.BlackTransparentClick)
+            else if (mode == (int)UIMaskMode.BlackTransparentClick)
             {
                 SetMaskMode(1, true, true);
             }
-            else if (mode == UIMaskMode.BlackTransparentPenetrate)
+            else if (mode == (int)UIMaskMode.BlackTransparentPenetrate)
             {
                 SetMaskMode(1, false, false);
             }

@@ -29,6 +29,7 @@ namespace Model
             {
                 value.Dispose();
             }
+
             componentDic = null;
             componentView = null;
             childDic = null;
@@ -67,11 +68,6 @@ namespace Model
         #endregion 游戏物体
 
         #region 组件
-
-        public T HatchComponent<T>() where T : Component, new()
-        {
-            return this.GetComponent<ComponentPoolComponent>().HatchComponent<T>();
-        }
 
         public Component HatchComponent(Type type)
         {

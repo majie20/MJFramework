@@ -36,9 +36,6 @@ namespace Model
 
         public override void Dispose()
         {
-            Hotfix?.Dispose();
-            Hotfix = null;
-
             Scene?.Dispose();
             Scene = null;
 
@@ -50,6 +47,9 @@ namespace Model
 
             EventSystem?.Dispose();
             EventSystem = null;
+
+            Hotfix?.Dispose();
+            Hotfix = null;
         }
     }
 }

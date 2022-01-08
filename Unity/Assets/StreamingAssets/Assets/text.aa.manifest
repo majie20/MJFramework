@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 618104954
+CRC: 4154839726
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c71fcd140a320152cf161e0f8f56f171
+    Hash: 93a2a6011b5b5667216a92c75d4ee617
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -11,6 +11,7 @@ HashAppended: 0
 ClassTypes:
 - Class: 49
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Res/Text/Hotfix.dll.bytes
 - Assets/Res/Text/Hotfix.pdb.bytes

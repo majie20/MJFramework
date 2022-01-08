@@ -1,66 +1,45 @@
-﻿using System.IO;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace Hotfix
 {
-    [LifeCycle]
-    public class NetTestComponent : Component, IAwake, IUpdateSystem
+    [Model.LifeCycle]
+    [Model.UIBaseData(UIViewType = (int)Model.UIViewType.Normal, PrefabPath = "Assets/Res/Prefabs/NetTest", UIMaskMode = (int)Model.UIMaskMode.BlackTransparentClick)]
+    public class NetTestComponent : Model.UIBaseComponent, IOpen, IAwake
     {
-        private Transform content;
-        private GameObject item;
-        private InputField inputField;
-        private Button button;
-        private Image image;
-        public string message;
-
-        public async void Awake()
+        public override void Awake()
         {
-            ReferenceCollector collector = Entity.GameObject.GetComponent<ReferenceCollector>();
-            content = collector.Get<GameObject>("Content").transform;
-            item = collector.Get<GameObject>("Item");
-            inputField = collector.Get<GameObject>("InputField").GetComponent<InputField>();
-            button = collector.Get<GameObject>("Button").GetComponent<Button>();
-            image = collector.Get<GameObject>("Image").GetComponent<Image>();
-
-            //button.onClick.AddListener(OnButtonClick);
-
-            Model.Game.Instance.EventSystem.AddListener<Model.NetTestSend, string>(OnNetTestSend, this);
-
-            //await Model.Game.Instance.Scene.GetComponent<Model.NetComponent>().GetTexture();
-
-            //image.sprite = await Model.ResourceHelper.CreateSprite("59298b37e5d541179a8081cb9a38e949.jpg", Model.FileHelper.FilePos.persistentDataPath,
-            //    Model.FileHelper.LoadMode.UnityWebRequest);
+            base.Awake();
         }
 
-        public void OnUpdate(float tick)
+        public override void Dispose()
         {
-            //    if (!string.IsNullOrEmpty(message))
-            //    {
-            //        var obj = GameObject.Instantiate(item, content);
-            //        obj.SetActive(true);
-            //        var textName = obj.transform.Find("TextName").GetComponent<Text>();
-            //        var textContent = obj.transform.Find("TextContent").GetComponent<Text>();
-            //        var ipEndPoint = Model.Game.Instance.Scene.GetComponent<Model.NetComponent>().IpEndPoint;
-            //        textName.text = $"{ipEndPoint.Address}:{ipEndPoint.Port}";
-            //        textContent.text = message;
-            //        message = null;
-            //        LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
-            //    }
+            base.Dispose();
         }
 
-        //private void OnButtonClick()
-        //{
-        //    if (inputField.text.Length > 0)
-        //    {
-        //        Debug.Log("OnButtonClick"); // MDEBUG:
-        //        Model.Game.Instance.Scene.GetComponent<Model.NetComponent>().Send(inputField.text);
-        //    }
-        //}
-
-        private void OnNetTestSend(string message)
+        public void Open()
         {
-            this.message = message;
+            OnOpen();
         }
+
+        protected override void OnOpen()
+        {
+            base.OnOpen();
+        }
+
+        protected override void OnClose()
+        {
+            base.OnClose();
+        }
+
+        public override void Enable()
+        {
+            base.Enable();
+        }
+
+        public override void Disable()
+        {
+            base.Disable();
+        }
+
     }
 }

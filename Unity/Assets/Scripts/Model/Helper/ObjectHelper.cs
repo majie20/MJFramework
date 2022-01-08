@@ -5,7 +5,9 @@ namespace Model
 {
     public class ObjectHelper
     {
-        public static Component CreateComponent(Type type, Entity entity, bool isFromPool = true)
+        #region CreateComponent
+
+        public static Component _CreateComponent(Type type, Entity entity, bool isFromPool = true)
         {
             Component component;
             if (isFromPool)
@@ -14,73 +16,66 @@ namespace Model
             }
             else
             {
-                component = (Component)Activator.CreateInstance(type);
+                if (type is ILRuntime.Reflection.ILRuntimeType)
+                {
+                    component = Game.Instance.Hotfix.AppDomain.Instantiate<Component>(type.FullName);
+                }
+                else
+                {
+                    component = (Component)Activator.CreateInstance(type);
+                }
             }
 
             entity.AddComponent(component);
             component.Entity = entity;
+
+            return component;
+        }
+
+        public static Component CreateComponent(Type type, Entity entity, bool isFromPool = true)
+        {
+            Component component = _CreateComponent(type, entity, isFromPool);
+
+            IAwake iAwake = component as IAwake;
+            iAwake?.Awake();
+
             Game.Instance.LifecycleSystem.Add(component);
-            Game.Instance.LifecycleSystem.Awake(component);
 
             return component;
         }
 
         public static Component CreateComponent<A>(Type type, Entity entity, A a, bool isFromPool = true)
         {
-            Component component;
-            if (isFromPool)
-            {
-                component = Game.Instance.ObjectPool.HatchComponent(type);
-            }
-            else
-            {
-                component = (Component)Activator.CreateInstance(type);
-            }
+            Component component = _CreateComponent(type, entity, isFromPool);
 
-            entity.AddComponent(component);
-            component.Entity = entity;
+            IAwake<A> iAwake = component as IAwake<A>;
+            iAwake?.Awake(a);
+
             Game.Instance.LifecycleSystem.Add(component);
-            Game.Instance.LifecycleSystem.Awake(component, a);
 
             return component;
         }
 
         public static Component CreateComponent<A, B>(Type type, Entity entity, A a, B b, bool isFromPool = true)
         {
-            Component component;
-            if (isFromPool)
-            {
-                component = Game.Instance.ObjectPool.HatchComponent(type);
-            }
-            else
-            {
-                component = (Component)Activator.CreateInstance(type);
-            }
+            Component component = _CreateComponent(type, entity, isFromPool);
 
-            entity.AddComponent(component);
-            component.Entity = entity;
+            IAwake<A, B> iAwake = component as IAwake<A, B>;
+            iAwake?.Awake(a, b);
+
             Game.Instance.LifecycleSystem.Add(component);
-            Game.Instance.LifecycleSystem.Awake(component, a, b);
 
             return component;
         }
 
         public static Component CreateComponent<A, B, C>(Type type, Entity entity, A a, B b, C c, bool isFromPool = true)
         {
-            Component component;
-            if (isFromPool)
-            {
-                component = Game.Instance.ObjectPool.HatchComponent(type);
-            }
-            else
-            {
-                component = (Component)Activator.CreateInstance(type);
-            }
+            Component component = _CreateComponent(type, entity, isFromPool);
 
-            entity.AddComponent(component);
-            component.Entity = entity;
+            IAwake<A, B, C> iAwake = component as IAwake<A, B, C>;
+            iAwake?.Awake(a, b, c);
+
             Game.Instance.LifecycleSystem.Add(component);
-            Game.Instance.LifecycleSystem.Awake(component, a, b, c);
 
             return component;
         }
@@ -105,7 +100,32 @@ namespace Model
             return (T)CreateComponent(typeof(T), entity, a, b, c, isFromPool);
         }
 
-        public static Entity CreatEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
+        #endregion CreateComponent
+
+        #region RemoveComponent
+
+        public static void RemoveComponent(Type type, Entity entity)
+        {
+            Component component = entity.GetComponent(type);
+            if (component != null)
+            {
+                component.Dispose();
+                entity.RemoveComponent(type);
+
+                Game.Instance.LifecycleSystem.Remove(component);
+            }
+        }
+
+        public static void RemoveComponent<T>(Entity entity)
+        {
+            RemoveComponent(typeof(T), entity);
+        }
+
+        #endregion RemoveComponent
+
+        #region CreateEntity
+
+        public static Entity CreateEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
             entity.GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, parent == null ? eParent.Transform : parent, isFromAB);
@@ -119,7 +139,7 @@ namespace Model
             return entity;
         }
 
-        public static Entity CreatEntity2(Entity eParent, GameObject obj = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
+        public static Entity CreateEntity2(Entity eParent, GameObject obj = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
             entity.GameObject = sign != GameObjPoolComponent.None_GameObject ? Game.Instance.ObjectPool.HatchGameObjByName(sign, eParent.Transform, isFromAB) : obj;
@@ -133,9 +153,30 @@ namespace Model
             return entity;
         }
 
-        public static UIBaseComponent OpenUIView(Type type, bool isCloseBack = false)
+        #endregion CreateEntity
+
+        #region RemoveEntity
+
+        public static void RemoveEntity(Entity entity)
+        {
+            entity.Dispose();
+            Game.Instance.ObjectPool.GetComponent<EntityPoolComponent>().RecycleEntity(entity);
+        }
+
+        #endregion RemoveEntity
+
+        #region OpenUIView
+
+        public static UIBaseComponent _OpenUIView(Type type, bool isCloseBack = false)
         {
             var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+
+            return component;
+        }
+
+        public static UIBaseComponent OpenUIView(Type type, bool isCloseBack = false)
+        {
+            var component = _OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -152,7 +193,7 @@ namespace Model
 
         public static UIBaseComponent OpenUIView<A>(Type type, A a, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = _OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -169,7 +210,7 @@ namespace Model
 
         public static UIBaseComponent OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = _OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -186,7 +227,7 @@ namespace Model
 
         public static UIBaseComponent OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = _OpenUIView(type, isCloseBack);
             if (component == null)
             {
                 Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
@@ -221,6 +262,10 @@ namespace Model
             return (T)OpenUIView(typeof(T), a, b, c, isCloseBack);
         }
 
+        #endregion OpenUIView
+
+        #region CloseUIView
+
         public static void CloseUIView(Type type, bool isCloseBack = false)
         {
             Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().CloseUIView(type, isCloseBack);
@@ -230,5 +275,7 @@ namespace Model
         {
             CloseUIView(typeof(T), isCloseBack);
         }
+
+        #endregion CloseUIView
     }
 }

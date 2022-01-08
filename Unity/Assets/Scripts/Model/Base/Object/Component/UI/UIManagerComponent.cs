@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ILRuntime.CLR.Method;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -86,7 +87,24 @@ namespace Model
         {
             if (!uiComponentDic.ContainsKey(type))
             {
-                var component = ObjectHelper.CreateComponent(type, ObjectHelper.CreatEntity(this.Entity, null, attr.PrefabPath, true), true) as UIBaseComponent;
+                UIBaseComponent component;
+                if (type is ILRuntime.Reflection.ILRuntimeType)
+                {
+                    IMethod method = Game.Instance.Hotfix.AppDomain.LoadedTypes["Hotfix.ObjectHelper"]
+                        .GetMethod("CreateComponent", 3);
+                    using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
+                    {
+                        ctx.PushObject(type);
+                        ctx.PushObject(ObjectHelper.CreateEntity(this.Entity, null, attr.PrefabPath, true));
+                        ctx.PushBool(true);
+                        ctx.Invoke();
+                        component = ctx.ReadObject<UIBaseComponent>(0);
+                    }
+                }
+                else
+                {
+                    component = ObjectHelper.CreateComponent(type, ObjectHelper.CreateEntity(this.Entity, null, attr.PrefabPath, true)) as UIBaseComponent;
+                }
                 RectTransform rect = component.Entity.Transform.GetComponent<RectTransform>();
                 rect.localPosition = Vector3.zero;
                 rect.localScale = Vector3.one;
@@ -112,14 +130,33 @@ namespace Model
 
         public UIBaseComponent OpenUIView(Type type, bool isCloseBack)
         {
-            var attr = type.GetCustomAttribute<UIBaseDataAttribute>();
-            if (attr != null)
+            if (type is ILRuntime.Reflection.ILRuntimeType)
             {
-                CloseUIView(type, attr, isCloseBack, true);
-                SetUIMask(attr);
-                var newView = CreateView(type, attr);
-                PushView(type);
-                return newView;
+                var attrs = type.GetCustomAttributes(typeof(UIBaseDataAttribute), false);
+                if (attrs.Length > 0)
+                {
+                    if (attrs[0] is UIBaseDataAttribute attr)
+                    {
+                        CloseUIView(type, attr, isCloseBack, true);
+                        SetUIMask(attr);
+                        var newView = CreateView(type, attr);
+                        PushView(type);
+                        return newView;
+                    }
+                }
+            }
+            else
+            {
+                UIBaseDataAttribute attr = type.GetCustomAttribute<UIBaseDataAttribute>();
+
+                if (attr != null)
+                {
+                    CloseUIView(type, attr, isCloseBack, true);
+                    SetUIMask(attr);
+                    var newView = CreateView(type, attr);
+                    PushView(type);
+                    return newView;
+                }
             }
 
             return null;
@@ -127,7 +164,7 @@ namespace Model
 
         public void CloseUIView(Type type, bool isCloseBack)
         {
-            CloseUIView(type, type.GetCustomAttribute<UIBaseDataAttribute>(), isCloseBack, false);
+            CloseUIView(type, GetUIBaseDataAttribute(type), isCloseBack, false);
         }
 
         private void SortUIView()
@@ -137,19 +174,26 @@ namespace Model
             {
                 var tempType = uiStack.Peek();
                 PopView();
-                SetUIMask(tempType.GetCustomAttribute<UIBaseDataAttribute>());
+                SetUIMask(GetUIBaseDataAttribute(tempType));
                 PushView(tempType);
             }
         }
 
         private void SetUIMask(UIBaseDataAttribute attr)
         {
-            if (attr.UIViewType != UIViewType.Tips && attr.UIViewType != UIViewType.None)
+            if (attr.UIViewType != (int)UIViewType.Tips && attr.UIViewType != (int)UIViewType.None)
             {
                 CloseUIView(maskType, false);
                 UIBlackMaskComponent.SetMaskMode(attr.UIMaskMode);
                 PushView(maskType);
             }
+        }
+
+        private UIBaseDataAttribute GetUIBaseDataAttribute(Type type)
+        {
+            return type is ILRuntime.Reflection.ILRuntimeType
+                ? type.GetCustomAttributes(typeof(UIBaseDataAttribute), false)[0] as UIBaseDataAttribute
+                : type.GetCustomAttribute<UIBaseDataAttribute>();
         }
 
         private void CloseUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack, bool isOpen)
@@ -158,7 +202,7 @@ namespace Model
             {
                 if (uiStack.Contains(type))
                 {
-                    if (attr.UIViewType == UIViewType.Normal)
+                    if (attr.UIViewType == (int)UIViewType.Normal)
                     {
                         tempUIStack.Clear();
                         while (true)
@@ -189,8 +233,8 @@ namespace Model
                                 break;
                             }
 
-                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                            if (tempAttr.UIViewType == UIViewType.Normal)
+                            var tempAttr = GetUIBaseDataAttribute(tempType);
+                            if (tempAttr.UIViewType == (int)UIViewType.Normal)
                             {
                                 PopView();
                                 tempUIStack.Push(tempType);
@@ -201,7 +245,7 @@ namespace Model
                             }
                         }
                     }
-                    else if (attr.UIViewType == UIViewType.Pop)
+                    else if (attr.UIViewType == (int)UIViewType.Pop)
                     {
                         if (isCloseBack)
                         {
@@ -214,8 +258,8 @@ namespace Model
                                     PopView();
                                     while (true)
                                     {
-                                        var tempAttr2 = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                                        if (tempAttr2.UIViewType == UIViewType.Normal)
+                                        var tempAttr2 = GetUIBaseDataAttribute(tempType);
+                                        if (tempAttr2.UIViewType == (int)UIViewType.Normal)
                                         {
                                             break;
                                         }
@@ -232,14 +276,14 @@ namespace Model
                                     break;
                                 }
 
-                                var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                                if (tempAttr.UIViewType == UIViewType.Normal)
+                                var tempAttr = GetUIBaseDataAttribute(tempType);
+                                if (tempAttr.UIViewType == (int)UIViewType.Normal)
                                 {
                                     SortUIView();
                                     break;
                                 }
 
-                                if (tempAttr.UIViewType == UIViewType.Tips)
+                                if (tempAttr.UIViewType == (int)UIViewType.Tips)
                                 {
                                     CloseUIView(tempType, tempAttr, false, false);
                                 }
@@ -262,8 +306,8 @@ namespace Model
                                     break;
                                 }
 
-                                var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                                if (tempAttr.UIViewType == UIViewType.Normal)
+                                var tempAttr = GetUIBaseDataAttribute(tempType);
+                                if (tempAttr.UIViewType == (int)UIViewType.Normal)
                                 {
                                     SortUIView();
                                     break;
@@ -273,7 +317,7 @@ namespace Model
                             }
                         }
                     }
-                    else if (attr.UIViewType == UIViewType.Tips || attr.UIViewType == UIViewType.None)
+                    else if (attr.UIViewType == (int)UIViewType.Tips || attr.UIViewType == (int)UIViewType.None)
                     {
                         tempUIStack.Clear();
                         while (true)
@@ -290,8 +334,8 @@ namespace Model
                                 break;
                             }
 
-                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                            if (tempAttr.UIViewType == UIViewType.Tips)
+                            var tempAttr = GetUIBaseDataAttribute(tempType);
+                            if (tempAttr.UIViewType == (int)UIViewType.Tips)
                             {
                                 CloseUIView(tempType, tempAttr, false, false);
                             }
@@ -307,13 +351,13 @@ namespace Model
                 }
                 else
                 {
-                    if (attr.UIViewType == UIViewType.Normal)
+                    if (attr.UIViewType == (int)UIViewType.Normal)
                     {
                         while (uiStack.Count > 0)
                         {
                             var tempType = uiStack.Peek();
-                            var tempAttr = tempType.GetCustomAttribute<UIBaseDataAttribute>();
-                            if (tempAttr.UIViewType == UIViewType.Normal)
+                            var tempAttr = GetUIBaseDataAttribute(tempType);
+                            if (tempAttr.UIViewType == (int)UIViewType.Normal)
                             {
                                 UIBaseComponent component = uiComponentDic[tempType];
                                 if (isOpen && component.IsEnable)

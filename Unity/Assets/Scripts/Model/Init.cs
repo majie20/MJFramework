@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace Model
 {
@@ -54,10 +52,6 @@ namespace Model
 
         private void OnApplicationQuit()
         {
-            if (Game.Instance.Hotfix.IsRuning)
-            {
-                Game.Instance.Hotfix.GameApplicationQuit();
-            }
             Game.Instance.Dispose();
         }
 
@@ -65,10 +59,10 @@ namespace Model
         {
             Debug.Log($"------完成------{a}");
             Game.Instance.EventSystem.RemoveListener<int>(EventType.GameLoadComplete, OnGameLoadComplete);
-            UIRootComponent uiRootComponent = ObjectHelper.CreateComponent<UIRootComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, null, UIRootComponent.UIROOT_PATH, true), false);
-            ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity2(uiRootComponent.Entity, uiRootComponent.Entity.Transform.Find(UIManagerComponent.GAME_OBJECT_NAME).gameObject, GameObjPoolComponent.None_GameObject), false);
+            UIRootComponent uiRootComponent = ObjectHelper.CreateComponent<UIRootComponent>(ObjectHelper.CreateEntity(Game.Instance.Scene, null, UIRootComponent.UIROOT_PATH, true), false);
+            ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreateEntity2(uiRootComponent.Entity, uiRootComponent.Entity.Transform.Find(UIManagerComponent.GAME_OBJECT_NAME).gameObject, GameObjPoolComponent.None_GameObject), false);
 
-            ObjectHelper.OpenUIView<NetTestComponent>();
+            //ObjectHelper.OpenUIView<NetTestComponent>();
             ObjectHelper.OpenUIView<NetTest2Component>();
             ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
             Game.Instance.Hotfix.LoadHotfixAssembly();

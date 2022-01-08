@@ -12,10 +12,16 @@ namespace Hotfix
             Model.Game.Instance.Hotfix.GameLateUpdate = OnLateUpdate;
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
-            UIRootComponent uiRootComponent = ObjectHelper.CreateComponent<UIRootComponent>(ObjectHelper.CreatEntity(Game.Instance.Scene, null, UIRootComponent.UIROOT_PATH, true), false);
-            ObjectHelper.CreateComponent<UIManagerComponent>(ObjectHelper.CreatEntity2(uiRootComponent.Entity, uiRootComponent.Entity.Transform.Find(UIManagerComponent.GAME_OBJECT_NAME).gameObject, Model.GameObjPoolComponent.None_GameObject), false);
+            ObjectHelper.OpenUIView<NetTestComponent>();
 
-            ObjectHelper.CreateComponent<TestComponent, string>(ObjectHelper.CreatEntity(Game.Instance.Scene, null, "Assets/Res/Prefabs/Sphere", true), "majie");
+            var entity = Model.ObjectHelper.CreateEntity(Model.Game.Instance.Scene, null, "Assets/Res/Prefabs/Sphere", true);
+            ObjectHelper.CreateComponent<TestComponent, string>(entity, "majie");
+            var c = entity.GetComponent<TestComponent>();
+            Debug.Log(c); // MDEBUG:
+            //Model.ObjectHelper.RemoveEntity(entity);
+            //Debug.Log(typeof(NetTestComponent).GetCustomAttributes(typeof(Model.UIBaseDataAttribute), false).Length); // MDEBUG:
+            //var a = typeof(NetTestComponent).GetCustomAttributes(false);
+            //Debug.Log(a.Length); // MDEBUG:
         }
 
         private static void OnUpdate(float tick)

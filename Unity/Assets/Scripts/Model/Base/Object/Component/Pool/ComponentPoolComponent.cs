@@ -31,7 +31,15 @@ namespace Model
                 return componentDic[type].Dequeue();
             }
 
-            var component = (Component)Activator.CreateInstance(type);
+            Component component = null;
+            if (type is ILRuntime.Reflection.ILRuntimeType)
+            {
+                component = Game.Instance.Hotfix.AppDomain.Instantiate<Component>(type.FullName);
+            }
+            else
+            {
+                component = (Component)Activator.CreateInstance(type);
+            }
 
             return component;
         }
@@ -39,6 +47,10 @@ namespace Model
         public void RecycleComponent(Component component)
         {
             var type = component.GetType();
+            if (type.FullName == "Model.ComponentAdapter+Adapter")
+            {
+                type = (component as ComponentAdapter.Adapter)?.ILInstance.Type.ReflectionType;
+            }
             Queue<Component> queue;
             if (componentDic.ContainsKey(type))
             {

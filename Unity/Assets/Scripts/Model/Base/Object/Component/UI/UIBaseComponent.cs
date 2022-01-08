@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Model
 {
-    public class UIBaseComponent : Component, IAwake
+    public class UIBaseComponent : Component
     {
         private Canvas canvas;
 

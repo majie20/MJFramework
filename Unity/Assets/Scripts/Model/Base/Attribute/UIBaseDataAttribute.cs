@@ -5,8 +5,8 @@ namespace Model
     [AttributeUsage(AttributeTargets.Class)]
     public class UIBaseDataAttribute : BaseAttribute
     {
-        public UIViewType UIViewType;
+        public int UIViewType;
         public string PrefabPath;
-        public UIMaskMode UIMaskMode;
+        public int UIMaskMode;
     }
 }

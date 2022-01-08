@@ -14,8 +14,6 @@ namespace Model
     public class CloseUIViewEvent : EventBase
     { }
 
-    public class HotfixCloseUIViewEvent : EventBase
-    { }
 
     public class EventType
     {

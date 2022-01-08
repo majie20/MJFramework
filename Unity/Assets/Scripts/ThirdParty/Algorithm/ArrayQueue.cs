@@ -20,7 +20,7 @@ public class ArrayQueue<T> : IEnumerable<T>
     //判断是否已满
     public bool IsFull()
     {
-        return ((_rear + 1) % _maxSize) == _front;
+        return (_rear + 1) % _maxSize == _front;
     }
 
     //判断队列是否为空
@@ -60,6 +60,42 @@ public class ArrayQueue<T> : IEnumerable<T>
         //将front后移
         _front = (_front + 1) % _maxSize;
         return val;
+    }
+
+    public void Clear()
+    {
+        //判断队列是否为空
+        if (IsEmpty())
+        {
+            return;
+        }
+
+        for (int i = 0; i < this.GetSize(); i++)
+        {
+            _arr[(_front + i) % _maxSize] = default;
+        }
+
+        _front = 0;
+        _rear = 0;
+    }
+
+    public bool Contains(T n)
+    {
+        //判断队列是否为空
+        if (IsEmpty())
+        {
+            return false;
+        }
+
+        for (int i = 0; i < this.GetSize(); i++)
+        {
+            if (_arr[(_front + i) % _maxSize].Equals(n))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //求出当前队列有效数据的个数

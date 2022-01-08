@@ -5,7 +5,6 @@ namespace Model
 {
     public class LifecycleSystem : IDisposable
     {
-        private HashSet<Type> awakeSystems = new HashSet<Type>();
         private HashSet<Type> updateSystems = new HashSet<Type>();
         private HashSet<Type> lateUpdateSystems = new HashSet<Type>();
         private HashSet<Type> startSystems = new HashSet<Type>();
@@ -14,6 +13,7 @@ namespace Model
         private ArrayQueue<Component> starts = new ArrayQueue<Component>(50);
         private ArrayQueue<Component> updates = new ArrayQueue<Component>(50);
         private ArrayQueue<Component> lateUpdates = new ArrayQueue<Component>(50);
+        private ArrayQueue<Component> temps = new ArrayQueue<Component>(50);
 
         public LifecycleSystem()
         {
@@ -40,7 +40,6 @@ namespace Model
                 }
             }
 
-            awakeSystems.Clear();
             updateSystems.Clear();
             lateUpdateSystems.Clear();
             startSystems.Clear();
@@ -51,10 +50,6 @@ namespace Model
                 {
                     object obj = Activator.CreateInstance(v);
 
-                    if (obj is IAwakeSystem awakeSystem)
-                    {
-                        awakeSystems.Add(v);
-                    }
                     if (obj is IUpdateSystem updateSystem)
                     {
                         updateSystems.Add(v);
@@ -90,6 +85,69 @@ namespace Model
             if (this.lateUpdateSystems.Contains(type))
             {
                 this.lateUpdates.Enqueue(component);
+            }
+        }
+
+        public void Remove(Component component)
+        {
+            Type type = component.GetType();
+
+            if (this.startSystems.Contains(type))
+            {
+                if (this.starts.Contains(component))
+                {
+                    temps.Clear();
+                    while (this.starts.GetSize() > 0)
+                    {
+                        var _component = this.starts.Dequeue();
+                        if (_component != component)
+                        {
+                            temps.Enqueue(_component);
+                        }
+                    }
+                    while (this.temps.GetSize() > 0)
+                    {
+                        starts.Enqueue(this.temps.Dequeue());
+                    }
+                }
+            }
+            if (this.updateSystems.Contains(type))
+            {
+                if (this.updates.Contains(component))
+                {
+                    temps.Clear();
+                    while (this.updates.GetSize() > 0)
+                    {
+                        var _component = this.updates.Dequeue();
+                        if (_component != component)
+                        {
+                            temps.Enqueue(_component);
+                        }
+                    }
+                    while (this.temps.GetSize() > 0)
+                    {
+                        updates.Enqueue(this.temps.Dequeue());
+                    }
+                }
+            }
+            if (this.lateUpdateSystems.Contains(type))
+            {
+                if (this.lateUpdates.Contains(component))
+                {
+                    temps.Clear();
+                    while (this.lateUpdates.GetSize() > 0)
+                    {
+                        var _component = this.lateUpdates.Dequeue();
+                        if (_component != component)
+                        {
+                            temps.Enqueue(_component);
+                        }
+                    }
+                    while (this.temps.GetSize() > 0)
+                    {
+                        lateUpdates.Enqueue(this.temps.Dequeue());
+                    }
+                }
             }
         }
 
@@ -129,49 +187,5 @@ namespace Model
                 }
             }
         }
-
-        #region Awake
-
-        public void Awake(Component component)
-        {
-            if (awakeSystems.Contains(component.GetType()))
-            {
-                IAwake iAwake = component as IAwake;
-
-                iAwake?.Awake();
-            }
-        }
-
-        public void Awake<A>(Component component, A a)
-        {
-            if (awakeSystems.Contains(component.GetType()))
-            {
-                IAwake<A> iAwake = component as IAwake<A>;
-
-                iAwake?.Awake(a);
-            }
-        }
-
-        public void Awake<A, B>(Component component, A a, B b)
-        {
-            if (awakeSystems.Contains(component.GetType()))
-            {
-                IAwake<A, B> iAwake = component as IAwake<A, B>;
-
-                iAwake?.Awake(a, b);
-            }
-        }
-
-        public void Awake<A, B, C>(Component component, A a, B b, C c)
-        {
-            if (awakeSystems.Contains(component.GetType()))
-            {
-                IAwake<A, B, C> iAwake = component as IAwake<A, B, C>;
-
-                iAwake?.Awake(a, b, c);
-            }
-        }
-
-        #endregion Awake
     }
 }
