@@ -26,11 +26,6 @@ public class ILRuntimeCrossBinding
             sw.WriteLine(ILRuntime.Runtime.Enviorment.CrossBindingCodeGenerator.GenerateCrossBindingAdapterCode(typeof(Model.Component), "Model"));
         }
 
-        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/ILBinding/Adapter/ModelEntityAdapter.cs"))
-        {
-            sw.WriteLine(ILRuntime.Runtime.Enviorment.CrossBindingCodeGenerator.GenerateCrossBindingAdapterCode(typeof(Model.Entity), "Model"));
-        }
-
         using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/ILBinding/Adapter/ModelUIBaseComponentAdapter.cs"))
         {
             sw.WriteLine(ILRuntime.Runtime.Enviorment.CrossBindingCodeGenerator.GenerateCrossBindingAdapterCode(typeof(Model.UIBaseComponent), "Model"));

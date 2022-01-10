@@ -52,6 +52,9 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Debug_Binding.Register(app);
             Model_ObjectHelper_Binding.Register(app);
             Model_Entity_Binding.Register(app);
+            Model_AssetsComponent_Binding.Register(app);
+            UnityEngine_TextAsset_Binding.Register(app);
+            SimpleJSON_JSON_Binding.Register(app);
             System_Threading_Monitor_Binding.Register(app);
             System_Threading_Thread_Binding.Register(app);
         }

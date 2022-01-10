@@ -42,12 +42,12 @@ namespace ILRuntime.Runtime.Generated
                     lst.Add(m);
                 }
             }
-            args = new Type[]{typeof(Model.ComponentAdapter.Adapter)};
+            args = new Type[]{typeof(Model.AssetsComponent)};
             if (genericMethods.TryGetValue("GetComponent", out lst))
             {
                 foreach(var m in lst)
                 {
-                    if(m.MatchGenericParameters(args, typeof(Model.ComponentAdapter.Adapter)))
+                    if(m.MatchGenericParameters(args, typeof(Model.AssetsComponent)))
                     {
                         method = m.MakeGenericMethod(args);
                         app.RegisterCLRMethodRedirection(method, GetComponent_2);
@@ -116,7 +116,7 @@ namespace ILRuntime.Runtime.Generated
             Model.Entity instance_of_this_method = (Model.Entity)typeof(Model.Entity).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
             __intp.Free(ptr_of_this_method);
 
-            var result_of_this_method = instance_of_this_method.GetComponent<Model.ComponentAdapter.Adapter>();
+            var result_of_this_method = instance_of_this_method.GetComponent<Model.AssetsComponent>();
 
             object obj_result_of_this_method = result_of_this_method;
             if(obj_result_of_this_method is CrossBindingAdaptorType)

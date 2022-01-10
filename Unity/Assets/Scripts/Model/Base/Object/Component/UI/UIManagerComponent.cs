@@ -61,8 +61,6 @@ namespace Model
             maskType = typeof(UIBlackMaskComponent);
 
             Game.Instance.EventSystem.AddListener<CloseUIViewEvent>(OnCloseUIViewEvent, this);
-
-            UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
         }
 
         public override void Dispose()
@@ -90,8 +88,8 @@ namespace Model
                 UIBaseComponent component;
                 if (type is ILRuntime.Reflection.ILRuntimeType)
                 {
-                    IMethod method = Game.Instance.Hotfix.AppDomain.LoadedTypes["Hotfix.ObjectHelper"]
-                        .GetMethod("CreateComponent", 3);
+                    IMethod method = Game.Instance.Hotfix.MethodDic["Hotfix.ObjectHelper.CreateComponent3"];
+
                     using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
                     {
                         ctx.PushObject(type);

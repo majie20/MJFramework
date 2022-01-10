@@ -95,8 +95,7 @@ namespace Model
                 {
                     if (types[i] is ILRuntime.Reflection.ILRuntimeType)
                     {
-                        IMethod method = Game.Instance.Hotfix.AppDomain.LoadedTypes["Hotfix.ObjectHelper"]
-                            .GetMethod("RemoveComponent", 2);
+                        IMethod method = Game.Instance.Hotfix.MethodDic["Hotfix.ObjectHelper.RemoveComponent2"];
                         using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
                         {
                             ctx.PushObject(types[i]);

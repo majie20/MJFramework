@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2653303506
+CRC: 124038559
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ae1d016a234e19f4d2bf8056e32fd7f5
+    Hash: 53d683be610f8cd86830550c0c9c2d52
   TypeTreeHash:
     serializedVersion: 2
-    Hash: cd59cd558fbd99749a10488185d6f8e8
+    Hash: 9d01d6a9a03f0c3646785c9a15a835e6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,11 +25,10 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 687078895
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Res/Config/Json/item_tbitem.json
 - Assets/Res/Config/AssestSpriteSettings.asset
 - Assets/Res/Config/AssetsCiteMatchConfigSettings.asset
 Dependencies:
-- E:/Unity/Project/StandardProject/Unity/./../Unity/Assets/StreamingAssets/Assets/prefab.aa
-- E:/Unity/Project/StandardProject/Unity/./../Unity/Assets/StreamingAssets/Assets/text.aa
+- F:/Unity/Project/HotFramework/Unity/./../Unity/Assets/StreamingAssets/Assets/text.aa
+- F:/Unity/Project/HotFramework/Unity/./../Unity/Assets/StreamingAssets/Assets/prefab.aa

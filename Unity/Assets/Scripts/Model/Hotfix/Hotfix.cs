@@ -2,21 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
-#if ILRuntime
-
 using System.IO;
+using ILRuntime.CLR.Method;
 
-#else
-using System;
-using System.Reflection;
-#endif
 
 namespace Model
 {
     public sealed class Hotfix
     {
-#if ILRuntime
         private ILRuntime.Runtime.Enviorment.AppDomain appDomain;
 
         public ILRuntime.Runtime.Enviorment.AppDomain AppDomain
@@ -33,9 +26,6 @@ namespace Model
 
         private MemoryStream dllStream;
         private MemoryStream pdbStream;
-#else
-        private Assembly assembly;
-#endif
 
         private List<Type> hotfixTypes;
 
@@ -58,28 +48,40 @@ namespace Model
         public Action GameLateUpdate;
         public Action GameApplicationQuit;
 
+        private Dictionary<string, IMethod> methodDic;
+
+        public Dictionary<string, IMethod> MethodDic
+        {
+            private set
+            {
+                methodDic = value;
+            }
+            get
+            {
+                return methodDic;
+            }
+        }
+
         public Hotfix()
         {
             IsRuning = false;
+            MethodDic = new Dictionary<string, IMethod>();
         }
 
         public void Dispose()
         {
-#if ILRuntime
+            MethodDic = null;
             dllStream?.Close();
             pdbStream?.Close();
             dllStream = null;
             pdbStream = null;
-#else
-
-#endif
+            IsRuning = false;
         }
 
         public void GotoHotfix()
         {
-#if ILRuntime
             ILHelper.InitILRuntime(this.AppDomain);
-#endif
+
             this.start.Run();
 
             IsRuning = true;
@@ -96,7 +98,7 @@ namespace Model
             byte[] assBytes = component.Load<UnityEngine.TextAsset>("Assets/Res/Text/Hotfix.dll").bytes;
             byte[] pdbBytes = component.Load<UnityEngine.TextAsset>("Assets/Res/Text/Hotfix.pdb").bytes;
 
-#if ILRuntime
+
             Debug.Log($"当前使用的是ILRuntime模式");
             this.AppDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
 
@@ -114,16 +116,14 @@ namespace Model
             this.start = new ILStaticMethod(this.AppDomain, "Hotfix.Init", "Start", 0);
 
             this.hotfixTypes = this.AppDomain.LoadedTypes.Values.Select(x => x.ReflectionType).ToList();
-#else
-            Debug.Log($"当前使用的是Mono模式");
 
-            this.assembly = Assembly.Load(assBytes, pdbBytes);
+            AddMethod();
+        }
 
-            Type hotfixInit = this.assembly.GetType("Hotfix.Init");
-            this.start = new MonoStaticMethod(hotfixInit, "Start");
-
-            this.hotfixTypes = this.assembly.GetTypes().ToList();
-#endif
+        public void AddMethod()
+        {
+            MethodDic.Add("Hotfix.ObjectHelper.CreateComponent3", AppDomain.LoadedTypes["Hotfix.ObjectHelper"].GetMethod("CreateComponent", 3));
+            MethodDic.Add("Hotfix.ObjectHelper.RemoveComponent2", AppDomain.LoadedTypes["Hotfix.ObjectHelper"].GetMethod("RemoveComponent", 2));
         }
     }
 }

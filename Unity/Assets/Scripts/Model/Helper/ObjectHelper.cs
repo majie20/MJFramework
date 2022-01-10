@@ -16,6 +16,7 @@ namespace Model
             }
             else
             {
+
                 if (type is ILRuntime.Reflection.ILRuntimeType)
                 {
                     component = Game.Instance.Hotfix.AppDomain.Instantiate<Component>(type.FullName);
@@ -139,11 +140,11 @@ namespace Model
             return entity;
         }
 
-        public static Entity CreateEntity2(Entity eParent, GameObject obj = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
+        public static Entity CreateEntity(Entity eParent, GameObject obj)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
-            entity.GameObject = sign != GameObjPoolComponent.None_GameObject ? Game.Instance.ObjectPool.HatchGameObjByName(sign, eParent.Transform, isFromAB) : obj;
-            entity.Sign = sign;
+            entity.GameObject = obj;
+            entity.Sign = GameObjPoolComponent.None_GameObject;
 
             entity.Transform = entity.GameObject.transform;
             entity.SetParent(eParent);
@@ -169,7 +170,7 @@ namespace Model
 
         public static UIBaseComponent _OpenUIView(Type type, bool isCloseBack = false)
         {
-            var component = Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = Game.Instance.GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
 
             return component;
         }
@@ -268,7 +269,7 @@ namespace Model
 
         public static void CloseUIView(Type type, bool isCloseBack = false)
         {
-            Game.Instance.Scene.GetChild(UIRootComponent.UIROOT_PATH).GetChild(UIManagerComponent.GAME_OBJECT_NAME).GetComponent<UIManagerComponent>().CloseUIView(type, isCloseBack);
+            Game.Instance.GetComponent<UIManagerComponent>().CloseUIView(type, isCloseBack);
         }
 
         public static void CloseUIView<T>(bool isCloseBack = false)
