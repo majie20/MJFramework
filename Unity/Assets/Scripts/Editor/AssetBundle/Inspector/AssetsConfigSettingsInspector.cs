@@ -93,15 +93,15 @@ public class AssetsConfigSettingsInspector : Editor
         GUILayout.Space(20);
         if (GUILayout.Button("导出"))
         {
-            Export();
+            Export(m_target);
         }
 
         EditorGUILayout.EndScrollView();  //结束 ScrollView 窗口
     }
 
-    private List<string> PathList;
-    private List<Object> AssetsList;
-    private void Export()
+    private static List<string> PathList;
+    private static List<Object> AssetsList;
+    public static void Export(AssetsConfigSettings m_target)
     {
         PathList = new List<string>();
         AssetsList = new List<Object>();
@@ -120,7 +120,7 @@ public class AssetsConfigSettingsInspector : Editor
         AssetDatabase.SaveAssets();
     }
 
-    private void AddResourcePath(string path, AssetsCiteMatchConfig config)
+    private static void AddResourcePath(string path, AssetsCiteMatchConfig config)
     {
         DirectoryInfo dir = new DirectoryInfo(path);
         FileSystemInfo[] fileInfo = dir.GetFileSystemInfos();  //返回目录中所有文件和子目录
@@ -138,7 +138,7 @@ public class AssetsConfigSettingsInspector : Editor
                     if (string.IsNullOrEmpty(config.Extension) || config.Extension.Contains(info.Extension))
                     {
                         var p = FileHelper.AbsoluteSwitchRelativelyPath(info.FullName);
-                        PathList.Add(Regex.Replace(p, FileConfig.FILE_EXTENSION_PATTERN, ""));
+                        PathList.Add(Regex.Replace(p, FileValue.FILE_EXTENSION_PATTERN, ""));
                         AssetsList.Add(AssetDatabase.LoadMainAssetAtPath(p));
                     }
                 }

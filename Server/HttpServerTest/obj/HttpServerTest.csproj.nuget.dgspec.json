@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Unity\\Project\\StandardProject\\Server\\HttpServerTest\\HttpServerTest.csproj": {}
+    "E:\\Unity\\Project\\CasualGameOne\\Work\\Server\\HttpServerTest\\HttpServerTest.csproj": {}
   },
   "projects": {
-    "E:\\Unity\\Project\\StandardProject\\Server\\HttpServerTest\\HttpServerTest.csproj": {
+    "E:\\Unity\\Project\\CasualGameOne\\Work\\Server\\HttpServerTest\\HttpServerTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Unity\\Project\\StandardProject\\Server\\HttpServerTest\\HttpServerTest.csproj",
+        "projectUniqueName": "E:\\Unity\\Project\\CasualGameOne\\Work\\Server\\HttpServerTest\\HttpServerTest.csproj",
         "projectName": "HttpServerTest",
-        "projectPath": "E:\\Unity\\Project\\StandardProject\\Server\\HttpServerTest\\HttpServerTest.csproj",
+        "projectPath": "E:\\Unity\\Project\\CasualGameOne\\Work\\Server\\HttpServerTest\\HttpServerTest.csproj",
         "packagesPath": "C:\\Users\\Administrator.DESKTOP-N9EOO33\\.nuget\\packages\\",
-        "outputPath": "E:\\Unity\\Project\\StandardProject\\Server\\HttpServerTest\\obj\\",
+        "outputPath": "E:\\Unity\\Project\\CasualGameOne\\Work\\Server\\HttpServerTest\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -76,7 +76,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

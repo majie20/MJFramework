@@ -3,6 +3,7 @@ using ILRuntime.CLR.Utils;
 using ILRuntime.Runtime.Intepreter;
 using ILRuntime.Runtime.Stack;
 using System.Collections.Generic;
+using ProtoBuf;
 
 namespace Model
 {
@@ -18,13 +19,6 @@ namespace Model
             appdomain.DelegateManager.RegisterMethodDelegate<ILTypeInstance>();
             appdomain.DelegateManager.RegisterMethodDelegate<System.String>();
 
-            appdomain.DelegateManager.RegisterDelegateConvertor<EventDelegateParams>((action) =>
-            {
-                return new EventDelegateParams((a) =>
-                {
-                    ((System.Action<object[]>)action)(a);
-                });
-            });
             appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction>((action) =>
             {
                 return new UnityEngine.Events.UnityAction(() =>
@@ -60,13 +54,14 @@ namespace Model
 
             appdomain.RegisterCrossBindingAdaptor(new IDisposableAdapter());
             appdomain.RegisterCrossBindingAdaptor(new IAsyncStateMachineClassInheritanceAdaptor());
-            appdomain.RegisterCrossBindingAdaptor(new IExtensibleAdapter());
             appdomain.RegisterCrossBindingAdaptor(new BeanBaseAdapter());
             appdomain.RegisterCrossBindingAdaptor(new ComponentAdapter());
             appdomain.RegisterCrossBindingAdaptor(new UIBaseComponentAdapter());
 
             LitJson.JsonMapper.RegisterILRuntimeCLRRedirection(appdomain);
             Model.Entity.RegisterILRuntimeCLRRedirection(appdomain);
+            //注册ProtoBuf的CLR
+            PType.RegisterILRuntimeCLRRedirection(appdomain);
             var mi = typeof(UnityEngine.Debug).GetMethod("Log", new System.Type[] { typeof(object) });
             appdomain.RegisterCLRMethodRedirection(mi, Log_11);
 

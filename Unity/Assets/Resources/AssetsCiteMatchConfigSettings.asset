@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bc2d56e5d89444a94ace5a04377301, type: 3}
+  m_Name: AssetsCiteMatchConfigSettings
+  m_EditorClassIdentifier: 
+  PathList:
+  - Assets/Res/NoBuildAB/Prefabs/UI/Loading/LoadingView
+  - Assets/Res/NoBuildAB/Prefabs/UI/VirtualJoystick/VirtualJoystickView
+  - Assets/Res/NoBuildAB/Prefabs/UI/UIBlackMask
+  - Assets/Res/NoBuildAB/Prefabs/UI/UIRoot
+  - Assets/Res/NoBuildAB/Atlas/S_LoadingAtlas
+  - Assets/Res/NoBuildAB/Atlas/S_VirtualJoystickAtlas
+  - Assets/Res/NoBuildAB/Config/ScriptableObject/AssestSpriteSettings
+  AssetsList:
+  - {fileID: 5480720306350079872, guid: 13b22a0f8ba430d429e687e29138791e, type: 3}
+  - {fileID: 4614928573762907585, guid: 8cdd8eba67c084a4cb0dbcfc52c746b7, type: 3}
+  - {fileID: 4864871590779903478, guid: 34ed4f4a3e9f35d4cb43ab1b57a527ef, type: 3}
+  - {fileID: 7430956125858382866, guid: 4fc038e36febff048b3e68db4202d0e9, type: 3}
+  - {fileID: 4343727234628468602, guid: 4a8964a96633e8645813210e2f68135c, type: 2}
+  - {fileID: 4343727234628468602, guid: d796e5290cca7714299a9f3f54130562, type: 2}
+  - {fileID: 11400000, guid: ed47fdc4c31578142b277ad02fe935d3, type: 2}

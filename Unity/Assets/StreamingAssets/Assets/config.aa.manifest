@@ -1,17 +1,15 @@
 ManifestFileVersion: 0
-CRC: 124038559
+CRC: 3008460513
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 53d683be610f8cd86830550c0c9c2d52
+    Hash: 9e18964b85c260e4ed3c34b003534d22
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9d01d6a9a03f0c3646785c9a15a835e6
+    Hash: 5ab9228d4a1e5bcd3e581063dd508734
 HashAppended: 0
 ClassTypes:
 - Class: 1
-  Script: {instanceID: 0}
-- Class: 28
   Script: {instanceID: 0}
 - Class: 49
   Script: {instanceID: 0}
@@ -21,14 +19,14 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 28906e37b2b7fd9449157a778bfaf8da, type: 3}
 - Class: 115
   Script: {instanceID: 0}
-- Class: 213
-  Script: {instanceID: 0}
 - Class: 687078895
   Script: {instanceID: 0}
 Assets:
-- Assets/Res/Config/Json/item_tbitem.json
-- Assets/Res/Config/AssestSpriteSettings.asset
-- Assets/Res/Config/AssetsCiteMatchConfigSettings.asset
+- Assets/Res/BuildAB/Config/Json/item_tbitem.json
+- Assets/Res/BuildAB/Config/ScriptableObject/AssestSpriteSettings.asset
+- Assets/Res/BuildAB/Config/AssetsCiteMatchConfigSettings.asset
+- Assets/Res/BuildAB/Config/Json/item_tbbox.json
 Dependencies:
-- F:/Unity/Project/HotFramework/Unity/./../Unity/Assets/StreamingAssets/Assets/text.aa
-- F:/Unity/Project/HotFramework/Unity/./../Unity/Assets/StreamingAssets/Assets/prefab.aa
+- F:/Unity/Project/CasualGameOne/Work/Unity/./../Unity/Assets/StreamingAssets/Assets/text.aa
+- F:/Unity/Project/CasualGameOne/Work/Unity/./../Unity/Assets/StreamingAssets/Assets/prefab.aa
+- F:/Unity/Project/CasualGameOne/Work/Unity/./../Unity/Assets/StreamingAssets/Assets/atlas.aa

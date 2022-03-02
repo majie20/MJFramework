@@ -22,7 +22,6 @@ namespace ILRuntime.Runtime.Generated
         /// </summary>
         public static void Initialize(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
-            ProtoBuf_Extensible_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_Object_Binding.Register(app);
             System_Func_2_String_JSONNode_Binding.Register(app);
             System_Object_Binding.Register(app);
@@ -37,10 +36,16 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_IEnumerable_1_JSONNode_Binding.Register(app);
             System_Collections_Generic_IEnumerator_1_JSONNode_Binding.Register(app);
             System_Collections_IEnumerator_Binding.Register(app);
-            System_Collections_Generic_HashSet_1_Type_Binding.Register(app);
-            ArrayQueue_1_Component_Binding.Register(app);
+            Model_Component_Binding.Register(app);
             Model_Singleton_1_Game_Binding.Register(app);
             Model_Game_Binding.Register(app);
+            Model_Entity_Binding.Register(app);
+            Model_FileValue_Binding.Register(app);
+            Model_AssetsComponent_Binding.Register(app);
+            UnityEngine_TextAsset_Binding.Register(app);
+            SimpleJSON_JSON_Binding.Register(app);
+            System_Collections_Generic_HashSet_1_Type_Binding.Register(app);
+            ArrayQueue_1_Component_Binding.Register(app);
             Model_Hotfix_Binding.Register(app);
             System_Collections_Generic_List_1_Type_Binding.Register(app);
             System_Collections_Generic_List_1_Type_Binding_Enumerator_Binding.Register(app);
@@ -48,13 +53,8 @@ namespace ILRuntime.Runtime.Generated
             System_Reflection_MemberInfo_Binding.Register(app);
             System_Activator_Binding.Register(app);
             Model_UIBaseComponent_Binding.Register(app);
-            Model_Component_Binding.Register(app);
             UnityEngine_Debug_Binding.Register(app);
             Model_ObjectHelper_Binding.Register(app);
-            Model_Entity_Binding.Register(app);
-            Model_AssetsComponent_Binding.Register(app);
-            UnityEngine_TextAsset_Binding.Register(app);
-            SimpleJSON_JSON_Binding.Register(app);
             System_Threading_Monitor_Binding.Register(app);
             System_Threading_Thread_Binding.Register(app);
         }

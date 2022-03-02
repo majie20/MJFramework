@@ -1,4 +1,8 @@
-﻿using SimpleJSON;
+﻿using System.Collections.Generic;
+using SimpleJSON;
+using System.Text;
+using Cysharp.Threading.Tasks;
+using LitJson;
 using UnityEngine;
 
 namespace Hotfix
@@ -13,20 +17,18 @@ namespace Hotfix
             Model.Game.Instance.Hotfix.GameLateUpdate = OnLateUpdate;
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
-            var tables = new cfg.Tables(file => JSON.Parse(Model.Game.Instance.Scene.GetComponent<Model.AssetsComponent>().Load<UnityEngine.TextAsset>("Assets/Res/Config/Json/item_tbitem").text));
+            ObjectHelper.CreateComponent<GameDataComponent>(Model.Game.Instance.Scene, false);
 
-            Debug.Log(tables.TbItem.Get(10001)); // MDEBUG:
+            //Debug.Log(Model.Game.Instance.Scene.GetComponent<GameDataComponent>().JsonTables.TbItem.Get(10000)); // MDEBUG:
 
-            //ObjectHelper.OpenUIView<NetTestComponent>();
+            //var configPath = Model.FileHelper.JoinPath($"{Model.HotConfig.AB_SAVE_RELATIVELY_PATH}{Model.HotConfig.AB_CONFIG_NAME}.json", Model.FileHelper.FilePos.StreamingAssetsPath, Model.FileHelper.LoadMode.UnityWebRequest);
+            //byte[] bytes = Model.FileHelper.LoadFileByUnityWebRequest(configPath);
+            //string configStr = Encoding.UTF8.GetString(bytes);
+            //Debug.Log(configStr); // MDEBUG:
+            //var AbConfigs = JsonMapper.ToObject<List<ABConfig>>(configStr);
+            //Debug.Log(AbConfigs[0]); // MDEBUG:
+            //Debug.Log(Model.ProtobufHelper.SerializeToString_PB(AbConfigs[0])); // MDEBUG:
 
-            //var entity = Model.ObjectHelper.CreateEntity(Model.Game.Instance.Scene, null, "Assets/Res/Prefabs/Sphere", true);
-            //ObjectHelper.CreateComponent<TestComponent, string>(entity, "majie");
-            //var c = entity.GetComponent<TestComponent>();
-            //Debug.Log(c); // MDEBUG:
-            //Model.ObjectHelper.RemoveEntity(entity);
-            //Debug.Log(typeof(NetTestComponent).GetCustomAttributes(typeof(Model.UIBaseDataAttribute), false).Length); // MDEBUG:
-            //var a = typeof(NetTestComponent).GetCustomAttributes(false);
-            //Debug.Log(a.Length); // MDEBUG:
         }
 
         private static void OnUpdate(float tick)

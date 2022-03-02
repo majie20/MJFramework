@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FileDirABList:
   - ABName: Text
-    Extension: .bytes,.json
+    Extension: 
     DirList:
-    - {fileID: 102900000, guid: 0d9577da6f9acbb47bb74aec6a78ca87, type: 3}
-    - {fileID: 102900000, guid: 33f4967b2ca26a840ab3235d24ca1852, type: 3}
+    - {fileID: 102900000, guid: 678fbbf7b12501348b8c14e43d1039a7, type: 3}
   - ABName: Prefab
     Extension: .prefab
     DirList:
@@ -26,3 +25,15 @@ MonoBehaviour:
     Extension: 
     DirList:
     - {fileID: 102900000, guid: 11b04dc613d629e4980b00dc402d12ca, type: 3}
+  - ABName: Texture
+    Extension: 
+    DirList:
+    - {fileID: 102900000, guid: 0e8ad282d79b9e74aab76e6d02a326c1, type: 3}
+  - ABName: Atlas
+    Extension: .spriteatlas
+    DirList:
+    - {fileID: 102900000, guid: 148e7fc1e68b7ad4f95381bc80c2ec53, type: 3}
+  - ABName: Font
+    Extension: .ttf
+    DirList:
+    - {fileID: 102900000, guid: 476f9becd9cf9fe42b77d1d1696bf655, type: 3}

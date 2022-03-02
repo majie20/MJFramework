@@ -14,19 +14,24 @@ namespace cfg
 public sealed class Tables
 {
     public item.TbItem TbItem {get; }
+    public item.TbBox TbBox {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
         var tables = new System.Collections.Generic.Dictionary<string, object>();
         TbItem = new item.TbItem(loader("item_tbitem")); 
         tables.Add("item.TbItem", TbItem);
+        TbBox = new item.TbBox(loader("item_tbbox")); 
+        tables.Add("item.TbBox", TbBox);
 
         TbItem.Resolve(tables); 
+        TbBox.Resolve(tables); 
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
     {
         TbItem.TranslateText(translator); 
+        TbBox.TranslateText(translator); 
     }
 }
 

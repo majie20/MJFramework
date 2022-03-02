@@ -95,8 +95,8 @@ namespace Model
         public void LoadHotfixAssembly()
         {
             var component = Game.Instance.Scene.GetComponent<AssetsComponent>();
-            byte[] assBytes = component.Load<UnityEngine.TextAsset>("Assets/Res/Text/Hotfix.dll").bytes;
-            byte[] pdbBytes = component.Load<UnityEngine.TextAsset>("Assets/Res/Text/Hotfix.pdb").bytes;
+            byte[] assBytes = component.Load<UnityEngine.TextAsset>($"{FileValue.BUILD_AB_RES_PATH}Text/Hotfix.dll").bytes;
+            byte[] pdbBytes = component.Load<UnityEngine.TextAsset>($"{FileValue.BUILD_AB_RES_PATH}Text/Hotfix.pdb").bytes;
 
 
             Debug.Log($"当前使用的是ILRuntime模式");

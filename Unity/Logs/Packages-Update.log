@@ -36,3 +36,23 @@ The following packages were updated:
   com.unity.test-framework from version 1.1.24 to 1.1.27
   com.unity.textmeshpro from version 2.0.1 to 2.1.4
   com.unity.timeline from version 1.2.6 to 1.2.18
+
+=== Mon Jan 17 01:46:20 2022
+
+Packages were changed.
+Update Mode: mergeDefaultDependencies
+
+The following packages were added:
+  com.unity.2d.pixel-perfect@2.1.0
+  com.unity.cinemachine@2.7.3
+  com.unity.ide.rider@1.1.4
+  com.unity.postprocessing@2.3.0
+
+=== Sat Feb 26 21:39:11 2022
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.ide.rider from version 1.1.4 to 1.2.1
+  com.unity.ide.visualstudio from version 2.0.12 to 2.0.14

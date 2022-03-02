@@ -1,1 +1,5 @@
 Unity/ProjectSettings/ProjectVersion.txt
+Unity/Assembly-CSharp-Editor-firstpass.csproj
+Unity/Assembly-CSharp-firstpass.csproj
+Unity/Sirenix.OdinInspector.CompatibilityLayer.csproj
+Unity/Sirenix.OdinInspector.CompatibilityLayer.Editor.csproj

@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -66,6 +67,12 @@ namespace Model
             }
         }
 
+        /// <summary>
+        /// 将绝对地址转换成相对地址
+        /// </summary>
+        /// <param name="absolutePath"></param>
+        /// <param name="relativeTo"></param>
+        /// <returns></returns>
         public static string RelativePath(string absolutePath, string relativeTo)
         {
             //from - www.cnphp6.com
@@ -116,6 +123,47 @@ namespace Model
             using (UnityWebRequest req = UnityWebRequest.Get(path))
             {
                 await req.SendWebRequest();
+
+                if (req.isHttpError || req.isNetworkError)
+                {
+                    Debug.LogWarning($"路径[{path}]的文件获取失败----{req.error}");
+                    return null;
+                }
+
+                return req.downloadHandler.data;
+            }
+        }
+
+        ///// <summary>
+        ///// 加载文件，UnityWebRequest同步
+        ///// </summary>
+        ///// <param name="path">文件地址</param>
+        public static byte[] LoadFileByUnityWebRequest(string path)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(path))
+            {
+                req.SendWebRequest().GetAwaiter().GetResult();
+
+                if (req.isHttpError || req.isNetworkError)
+                {
+                    Debug.LogWarning($"路径[{path}]的文件获取失败----{req.error}");
+                    return null;
+                }
+
+                return req.downloadHandler.data;
+            }
+        }
+
+        ///// <summary>
+        ///// 加载文件，UnityWebRequest异步,返回进度
+        ///// </summary>
+        ///// <param name="path">文件地址</param>
+        public static async UniTask<byte[]> LoadFileByUnityWebRequestAsync(string path, Action<float> call)
+        {
+            using (UnityWebRequest req = UnityWebRequest.Get(path))
+            {
+                await req.SendWebRequest().ToUniTask(Progress.CreateOnlyValueChanged(call));
+                call(1.0f);
 
                 if (req.isHttpError || req.isNetworkError)
                 {

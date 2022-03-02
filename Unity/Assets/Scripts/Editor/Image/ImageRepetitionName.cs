@@ -6,9 +6,8 @@ using System.IO;
 
 public class ImageRepetitionName 
 {
-    public static string commonPath = "Assets/Image/Common";
-
-    [MenuItem("Assets/判断是否有重复命名", false, 21)]
+    public static string commonPath = "Assets/Res/Image/Common";
+    [MenuItem("Assets/图片设置/判断是否有重复命名", false, 2)]
     public static void FindRepetitionName()
     {
         if (!Directory.Exists(commonPath))

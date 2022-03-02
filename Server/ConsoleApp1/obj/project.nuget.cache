@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uZrZ3tLsF8pa6NDyCJ0OFJLxEUNc8STRrzJAD3v4QW1WV8zH0iuwyMIcpPskUnHrLrSR0MJSqaZtbxBqY8LELw==",
+  "dgSpecHash": "/vYnoY6uWsC4yNqdC6H21M/15lgimyneL7uOmfSQvJ7MAySnPW0j9zkeG+FmXQALvKYiqV5B7yJBwKl8zhfdsg==",
   "success": true,
-  "projectFilePath": "E:\\Unity\\Project\\StandardProject\\Server\\ConsoleApp1\\ConsoleApp1.csproj",
+  "projectFilePath": "E:\\Unity\\Project\\CasualGameOne\\Work\\Server\\ConsoleApp1\\ConsoleApp1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator.DESKTOP-N9EOO33\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\1.1.2\\microsoft.extensions.logging.abstractions.1.1.2.nupkg.sha512",
     "C:\\Users\\Administrator.DESKTOP-N9EOO33\\.nuget\\packages\\microsoft.extensions.primitives\\1.1.1\\microsoft.extensions.primitives.1.1.1.nupkg.sha512",

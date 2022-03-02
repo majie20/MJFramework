@@ -60,7 +60,7 @@ namespace System.Net.Sockets.Kcp
         readonly object _innerLock = new object();
         private TaskCompletionSource<T> source;
 
-        //线程同步上下文由ValueTask机制保证，无需额外处理
+        //线程同步上下文由Task机制保证，无需额外处理
         //SynchronizationContext callbackContext;
         //public bool UseSynchronizationContext { get; set; } = true;
 

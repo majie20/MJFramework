@@ -1,10 +1,10 @@
 ﻿using Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using LitJson;
 using UnityEditor;
 using UnityEngine;
 
@@ -87,7 +87,7 @@ public class AssetBundleBuildEditor : EditorWindow
         builder.Append("[");
         for (int i = 0; i < configs.Count; i++)
         {
-            builder.Append(JsonConvert.SerializeObject(configs[i]));
+            builder.Append(JsonMapper.ToJson(configs[i]));
             if (i < configs.Count - 1)
             {
                 builder.Append(",");

@@ -1,7 +1,10 @@
 ﻿
-public sealed class ABConfig
+namespace Model
 {
-    public string ABName;
-    public int Size;
-    public string CRC;
+    public sealed class ABConfig
+    {
+        public string ABName;
+        public int Size;
+        public string CRC;
+    }
 }

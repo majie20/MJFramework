@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 423832403
+CRC: 4243802598
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -7,9 +7,17 @@ AssetBundleManifest:
       Dependencies: {}
     Info_1:
       Name: prefab.aa
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: font.aa
     Info_2:
       Name: config.aa
       Dependencies:
         Dependency_0: text.aa
         Dependency_1: prefab.aa
+        Dependency_2: atlas.aa
+    Info_3:
+      Name: atlas.aa
+      Dependencies: {}
+    Info_4:
+      Name: font.aa
+      Dependencies: {}

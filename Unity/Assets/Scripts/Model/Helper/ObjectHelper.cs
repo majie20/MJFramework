@@ -16,7 +16,6 @@ namespace Model
             }
             else
             {
-
                 if (type is ILRuntime.Reflection.ILRuntimeType)
                 {
                     component = Game.Instance.Hotfix.AppDomain.Instantiate<Component>(type.FullName);
@@ -145,7 +144,6 @@ namespace Model
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
             entity.GameObject = obj;
             entity.Sign = GameObjPoolComponent.None_GameObject;
-
             entity.Transform = entity.GameObject.transform;
             entity.SetParent(eParent);
 

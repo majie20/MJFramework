@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR && ILRuntime
+﻿#if UNITY_EDITOR
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using UnityEngine;
 [System.Reflection.Obfuscation(Exclude = true)]
 public class ILRuntimeCLRBinding : EditorWindow
 {
-    private const string HotfixFilePath = "Assets/Res/Text/Hotfix.dll.bytes";
+    private const string HotfixFilePath = "Assets/Res/BuildAB/Text/Hotfix.dll.bytes";
     private const string GenerateFilePath = "Assets/Scripts/Model/ILBinding";
 
     [MenuItem("Tools/ILRuntime/通过自动分析热更DLL生成CLR绑定")]

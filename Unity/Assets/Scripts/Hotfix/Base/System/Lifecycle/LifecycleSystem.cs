@@ -69,61 +69,54 @@ namespace Hotfix
         {
             Type type = component.GetType();
 
-            if (this.startSystems.Contains(type))
+            if (this.starts.Contains(component))
             {
-                if (this.starts.Contains(component))
+                temps.Clear();
+                while (this.starts.GetSize() > 0)
                 {
-                    temps.Clear();
-                    while (this.starts.GetSize() > 0)
+                    var _component = this.starts.Dequeue();
+                    if (_component != component)
                     {
-                        var _component = this.starts.Dequeue();
-                        if (_component != component)
-                        {
-                            temps.Enqueue(_component);
-                        }
-                    }
-                    while (this.temps.GetSize() > 0)
-                    {
-                        starts.Enqueue(this.temps.Dequeue());
+                        temps.Enqueue(_component);
                     }
                 }
-            }
-            if (this.updateSystems.Contains(type))
-            {
-                if (this.updates.Contains(component))
+                while (this.temps.GetSize() > 0)
                 {
-                    temps.Clear();
-                    while (this.updates.GetSize() > 0)
-                    {
-                        var _component = this.updates.Dequeue();
-                        if (_component != component)
-                        {
-                            temps.Enqueue(_component);
-                        }
-                    }
-                    while (this.temps.GetSize() > 0)
-                    {
-                        updates.Enqueue(this.temps.Dequeue());
-                    }
+                    starts.Enqueue(this.temps.Dequeue());
                 }
             }
-            if (this.lateUpdateSystems.Contains(type))
+
+            if (this.updates.Contains(component))
             {
-                if (this.lateUpdates.Contains(component))
+                temps.Clear();
+                while (this.updates.GetSize() > 0)
                 {
-                    temps.Clear();
-                    while (this.lateUpdates.GetSize() > 0)
+                    var _component = this.updates.Dequeue();
+                    if (_component != component)
                     {
-                        var _component = this.lateUpdates.Dequeue();
-                        if (_component != component)
-                        {
-                            temps.Enqueue(_component);
-                        }
+                        temps.Enqueue(_component);
                     }
-                    while (this.temps.GetSize() > 0)
+                }
+                while (this.temps.GetSize() > 0)
+                {
+                    updates.Enqueue(this.temps.Dequeue());
+                }
+            }
+
+            if (this.lateUpdates.Contains(component))
+            {
+                temps.Clear();
+                while (this.lateUpdates.GetSize() > 0)
+                {
+                    var _component = this.lateUpdates.Dequeue();
+                    if (_component != component)
                     {
-                        lateUpdates.Enqueue(this.temps.Dequeue());
+                        temps.Enqueue(_component);
                     }
+                }
+                while (this.temps.GetSize() > 0)
+                {
+                    lateUpdates.Enqueue(this.temps.Dequeue());
                 }
             }
         }
