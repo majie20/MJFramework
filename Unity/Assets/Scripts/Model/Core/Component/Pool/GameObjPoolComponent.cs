@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace Model
@@ -34,10 +36,10 @@ namespace Model
         {
             gameObjDic = null;
             parentDic = null;
-            Entity = null;
+            base.Dispose();
         }
 
-        public GameObject HatchGameObjByName(string name, Transform parent, bool isAB)
+        public async UniTask<GameObject> HatchGameObjByName(string name, Transform parent, bool isAB)
         {
             if (gameObjDic.ContainsKey(name))
             {
@@ -48,7 +50,8 @@ namespace Model
                 }
             }
 
-            var obj = isAB ? UnityEngine.Object.Instantiate(Game.Instance.Scene.GetComponent<AssetsComponent>().Load<GameObject>(name), Vector3.zero, Quaternion.identity, parent) : new GameObject(name);
+            var obj = isAB ? UnityEngine.Object.Instantiate(await Game.Instance.Scene.GetComponent<AssetsComponent>().LoadAsync<GameObject>(name), Vector3.zero, Quaternion.identity, parent) : new GameObject(name);
+            obj.name = Path.GetFileName(name);
 
             return obj;
         }

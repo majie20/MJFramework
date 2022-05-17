@@ -7,7 +7,7 @@ public class Vector2TypeDrawer : ITypeDrawer
 {
     public bool HandlesType(Type type)
     {
-        return type == typeof(Vector2);
+        return type.FullName == typeof(Vector2).FullName;
     }
 
     public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)

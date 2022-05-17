@@ -6,7 +6,6 @@ namespace Model
 {
     public class ComponentView : MonoBehaviour
     {
-        public bool isHotfix { set; get; }
         public Dictionary<object, Type> dic = new Dictionary<object, Type>();
     }
 }

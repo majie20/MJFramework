@@ -6,7 +6,7 @@ public class BoolTypeDrawer : ITypeDrawer
 {
     public bool HandlesType(Type type)
     {
-        return type == typeof(bool);
+        return type.FullName == typeof(bool).FullName;
     }
 
     public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)

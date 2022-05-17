@@ -2,7 +2,8 @@
     "name": "Unity.Hotfix",
     "references": [
         "GUID:7ee4b32222d025e48904360be24c5c45",
-        "GUID:07070a52d55bdeb44a90369821cf9dab"
+        "GUID:07070a52d55bdeb44a90369821cf9dab",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [
         "Editor"

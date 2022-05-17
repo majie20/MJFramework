@@ -6,7 +6,7 @@ public class DateTimeTypeDrawer : ITypeDrawer
 {
     public bool HandlesType(Type type)
     {
-        return type == typeof(DateTime);
+        return type.FullName == typeof(DateTime).FullName;
     }
 
     // Note: This is a very basic implementation. The ToString() method conversion will cut off milliseconds.

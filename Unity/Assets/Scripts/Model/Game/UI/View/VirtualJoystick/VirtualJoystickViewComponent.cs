@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 namespace Model
 {
     [LifeCycle]
-    [UIBaseData(UIViewType = (int)UIViewType.Pop, PrefabPath = "Assets/Res/NoBuildAB/Prefabs/UI/VirtualJoystick/VirtualJoystickView", UIMaskMode = (int)UIMaskMode.TransparentPenetrate)]
+    [UIBaseData(UIViewType = (int)UIViewType.Pop,
+        PrefabPath = "Assets/Res/Prefabs/UI/VirtualJoystick/VirtualJoystickView.prefab",
+        UIMaskMode = (int)UIMaskMode.TransparentPenetrate,
+        UILayer = (int)UIViewLayer.Low,
+        IsOperateMask = false)]
     public class VirtualJoystickViewComponent : UIBaseComponent, IOpen, IAwake, IUpdateSystem, ILateUpdateSystem
     {
         private CanvasGroup Buttons;
@@ -16,6 +19,7 @@ namespace Model
 
         private float _initialJoystickAlpha;
         private float _initialButtonsAlpha;
+
         public override void Awake()
         {
             base.Awake();
@@ -71,11 +75,12 @@ namespace Model
 
         public override void Dispose()
         {
-            base.Dispose();
             Buttons = null;
             Joystick = null;
             Arrows = null;
             InputManager = null;
+            JoystickRepositionable = null;
+            base.Dispose();
         }
 
         public void OnUpdate(float tick)
@@ -90,18 +95,14 @@ namespace Model
 
         public void Open()
         {
+            Game.Instance.AddComponent(this);
             OnOpen();
-
-        }
-
-        protected override void OnOpen()
-        {
-            base.OnOpen();
         }
 
         protected override void OnClose()
         {
             base.OnClose();
+            Game.Instance.RemoveComponent(this);
         }
 
         public void SetMobileControlsActive(bool state, InputManager.MovementControls movementControl = InputManager.MovementControls.Joystick)
@@ -148,5 +149,11 @@ namespace Model
                 }
             }
         }
+
+        public Vector2 GetPrimaryMovement => InputManager.PrimaryMovement;
+
+        public Vector2 GetLastNonNullPrimaryMovement => InputManager.LastNonNullPrimaryMovement;
+
+        public float GetCameraRotationInput => InputManager.CameraRotationInput;
     }
 }

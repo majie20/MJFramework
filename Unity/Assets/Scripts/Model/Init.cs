@@ -1,17 +1,13 @@
-﻿using System.Threading;
-using Cysharp.Threading.Tasks;
-using NPBehave;
+﻿using Cysharp.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
-using UnityEngine.LowLevel;
 
 namespace Model
 {
     public class Init : MonoBehaviour
     {
+        [Tooltip("显示注释")]
         public bool isUseABPackPlay;
-
-        //private Root behaviorTree;
-        public BaseGraph BaseGraph;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Inject()
@@ -19,46 +15,41 @@ namespace Model
             SynchronizationContext.SetSynchronizationContext(new UniTaskSynchronizationContext());
         }
 
-        // AfterAssembliesLoaded is called before BeforeSceneLoad
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        public static void InitUniTaskLoop()
-        {
-            var loop = PlayerLoop.GetCurrentPlayerLoop();
-            Cysharp.Threading.Tasks.PlayerLoopHelper.Initialize(ref loop);
-        }
-
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
             Game.Instance.Init();
-
-            ObjectHelper.CreateComponent<AssetsComponent, bool>(Game.Instance.Scene, isUseABPackPlay, false);
-            ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
-
-            var uiRootComponent = ObjectHelper.CreateComponent<UIRootComponent>(
-                ObjectHelper.CreateEntity(Game.Instance.Scene, null, UIRootComponent.UIROOT_PATH, true), false);
-            var uiManagerComponent = ObjectHelper.CreateComponent<UIManagerComponent>(
-                ObjectHelper.CreateEntity(uiRootComponent.Entity,
-                    uiRootComponent.Entity.Transform.Find(UIManagerComponent.GAME_OBJECT_NAME).gameObject), false);
-            uiManagerComponent.UIBlackMaskComponent = ObjectHelper.OpenUIView<UIBlackMaskComponent>();
+#if MBuild
+            CatJson.GenJsonCodesHelper.Init();
+#endif
         }
 
         private void Start()
         {
-            ObjectHelper.OpenUIView<LoadingViewComponent>();
-            NP_BaseBehaviorTree behaviorTree = new NP_BaseBehaviorTree(BaseGraph);
-            behaviorTree.Init();
-            behaviorTree.Start();
-
-
-            //#if UNITY_EDITOR
-            //            var debugger = (Debugger)gameObject.AddComponent(typeof(Debugger));
-            //            debugger.BehaviorTree = behaviorTree;
-            //#endif
-
+            UniTask.Create(Run);
         }
 
-        //异步方法，会在最后返回一个string
+        private async UniTask Run()
+        {
+            AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
+            await component.Init();
+
+            ObjectHelper.CreateComponent<UIRootComponent>(await ObjectHelper.CreateEntity(Game.Instance.Scene, null, UIRootComponent.UIROOT_PATH, true), false);
+
+            NLog.Log.Debug("-----这里有一段播放背景音乐播放测试");
+            Game.Instance.EventSystem.Invoke<E_PlayMusic, string>("event:/BGM");
+
+            Game.Instance.EventSystem.AddListenerAsync<E_GameLoadComplete>(this, OnGameLoadComplete);
+
+            if (component.PlayMode == YooAsset.YooAssets.EPlayMode.HostPlayMode)
+            {
+                await ObjectHelper.OpenUIView<LoadingViewComponent>();
+            }
+            else
+            {
+                Game.Instance.EventSystem.InvokeAsync<E_GameLoadComplete>();
+            }
+        }
 
         private void Update()
         {
@@ -68,8 +59,69 @@ namespace Model
             if (Input.GetKeyDown(KeyCode.A))
             {
                 //Game.Instance.Hotfix.GotoHotfix();
+
+                //ObjectHelper.OpenUIView<StartViewComponent>();
             }
         }
+
+        //private TimerBase t;
+        //private TimerBase tt;
+
+        /// <summary>
+        /// PostProcessing和Timer的测试
+        /// </summary>
+        //private void TestAwake()
+        //{
+        //    t = TimerHelper.DelayDo(6, () => { Debug.Log("测试按时间执行"); }, true, 2);
+        //    tt = TimerHelper.DelayDoFrame(6, () => { Debug.Log("测试按帧执行"); }, true, 2);
+        //}
+
+        /// <summary>
+        /// PostProcessing和Timer的测试
+        /// </summary>
+        //private void TestUpdate()
+        //{
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        t.Pause();
+        //        tt.Pause();
+        //        t = TimerHelper.DelayDo(6, () => { Debug.Log("测试按时间执行"); }, false, 1);
+        //        tt = TimerHelper.DelayDoFrame(6, () => { Debug.Log("测试按帧执行"); }, false, 1);
+        //    }
+        //    if (Input.GetMouseButtonDown(1))
+        //    {
+        //        t.Start();
+        //        tt.Start();
+        //    }
+        //    if (Input.GetMouseButtonDown(2))
+        //    {
+        //        t.Resume();
+        //        tt.Resume();
+        //    }
+
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        PostProcessingHelper.ShowEffect<BloodDropEffect>();
+        //    }
+        //    if (Input.GetMouseButtonDown(1))
+        //    {
+        //        PostProcessingHelper.RecoverEffect<BloodDropEffect>();
+        //    }
+        //    //if (Input.GetMouseButtonDown(0))
+        //    //{
+        //    //    DOTween.To(() => 0.0f, t =>
+        //    //    {
+        //    //        postProcessing.ShowLerpEffect<BloodDropEffect>(t);
+        //    //    },1.0f,1.0f);
+        //    //}
+        //    //if (Input.GetMouseButtonDown(1))
+        //    //{
+        //    //    DOTween.To(() => 1.0f, t =>
+        //    //    {
+        //    //        postProcessing.RecoverLerpEffect<BloodDropEffect>(t);
+        //    //    }, 0.0f, 1.0f).Complete();
+        //    //}
+        //}
 
         private void LateUpdate()
         {
@@ -77,27 +129,24 @@ namespace Model
             if (Game.Instance.Hotfix.IsRuning) Game.Instance.Hotfix.GameLateUpdate();
         }
 
-        private void OnEnable()
-        {
-            Game.Instance.EventSystem.AddListener(EventType.GameLoadComplete, OnGameLoadComplete);
-        }
-
         private void OnApplicationQuit()
         {
+            if (Game.Instance.Hotfix.IsRuning) Game.Instance.Hotfix.GameApplicationQuit();
             Game.Instance.Dispose();
         }
 
-        private void OnGameLoadComplete()
+        private async UniTask OnGameLoadComplete()
         {
-            Debug.Log("------完成------");
-            Game.Instance.EventSystem.RemoveListener(EventType.GameLoadComplete, OnGameLoadComplete);
+            NLog.Log.Debug("------完成------");
+            Game.Instance.EventSystem.RemoveListenerAsync<E_GameLoadComplete>(this);
 
-            Game.Instance.Scene.GetComponent<SpriteComponent>().InitDic(true);
+            ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
+            ObjectHelper.CloseUIView<LoadingViewComponent>();
+
             Game.Instance.Hotfix.LoadHotfixAssembly();
             Game.Instance.Hotfix.GotoHotfix();
 
-            ObjectHelper.CloseUIView<LoadingViewComponent>();
-            ObjectHelper.OpenUIView<VirtualJoystickViewComponent>();
+            await ObjectHelper.OpenUIView<StartViewComponent>();
         }
     }
 }

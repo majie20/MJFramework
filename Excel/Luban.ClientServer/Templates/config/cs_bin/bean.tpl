@@ -16,7 +16,7 @@ namespace {{x.namespace_with_top_module}}
 /// {{x.escape_comment}}
 /// </summary>
 {{~end~}}
-public {{x.cs_class_modifier}} class {{name}} : {{if parent_def_type}} {{x.parent}} {{else}} Bright.Config.BeanBase {{end}}
+public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {{x.parent}} {{else}} Bright.Config.BeanBase {{end}}
 {
     public {{name}}(ByteBuf _buf) {{if parent_def_type}} : base(_buf) {{end}}
     {
@@ -29,6 +29,7 @@ public {{x.cs_class_modifier}} class {{name}} : {{if parent_def_type}} {{x.paren
         }
         {{~end~}}
         {{~end~}}
+        PostInit();
     }
 
     public static {{name}} Deserialize{{name}}(ByteBuf _buf)
@@ -59,7 +60,7 @@ public {{x.cs_class_modifier}} class {{name}} : {{if parent_def_type}} {{x.paren
     {{~if field.gen_ref~}}
     public {{field.cs_ref_validator_define}}
     {{~end~}}
-    {{~if field.ctype.type_name == "datetime" && !field.ctype.is_nullable ~}}
+    {{~if (gen_datetime_mills field.ctype) ~}}
     public long {{field.convention_name}}_Millis => {{field.convention_name}} * 1000L;
     {{~end~}}
     {{~if field.gen_text_key~}}
@@ -84,6 +85,7 @@ public {{x.cs_class_modifier}} class {{name}} : {{if parent_def_type}} {{x.paren
         {{cs_recursive_resolve field '_tables'}}
         {{~end~}}
         {{~end~}}
+        PostResolve();
     }
 
     public {{x.cs_method_modifier}} void TranslateText(System.Func<string, string, string> translator)
@@ -108,6 +110,9 @@ public {{x.cs_class_modifier}} class {{name}} : {{if parent_def_type}} {{x.paren
     {{~end~}}
         + "}";
     }
-    }
+    
+    partial void PostInit();
+    partial void PostResolve();
+}
 
 }

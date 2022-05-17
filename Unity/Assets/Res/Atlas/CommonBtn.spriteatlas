@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CommonBtn
+  serializedVersion: 2
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    - serializedVersion: 3
+      m_BuildTarget: iPhone
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 33
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    - serializedVersion: 3
+      m_BuildTarget: Standalone
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 12
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 2
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 7c60811261780a24d8a3eb9c5508c188, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 22e07300b7eab38479fde34570221850, type: 3}
+  - {fileID: 21300000, guid: 08539fb12005ab84182fee18c660f175, type: 3}
+  - {fileID: 21300000, guid: b0bc76623f5b8eb4ab77d39869d1b601, type: 3}
+  - {fileID: 21300000, guid: 7e3b378319560ef42a6aadc82f09ca5b, type: 3}
+  - {fileID: 21300000, guid: dd0761b39b7aa3845bb99cd61be42097, type: 3}
+  - {fileID: 21300000, guid: ccfa52f36767fab4caf7e3acc5e3ac69, type: 3}
+  - {fileID: 21300000, guid: c81541554bd616a42913b2eb6c429fcd, type: 3}
+  - {fileID: 21300000, guid: faf9ce067f429e94d8d287f86e68f0db, type: 3}
+  - {fileID: 21300000, guid: 85c5bf37d00f704459b3c8b99f7909bd, type: 3}
+  - {fileID: 21300000, guid: 9c47d577219526046bbedca73a759b3e, type: 3}
+  - {fileID: 21300000, guid: 388e21c8f23a1cb4d9bd67349183c746, type: 3}
+  - {fileID: 21300000, guid: 98b65f2f48bf6bc4aa6dd35a2781b328, type: 3}
+  - {fileID: 21300000, guid: 41e356df4c18a0f40a53bb42e0cce222, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - rectangle-green
+  - 11
+  - rectangle-grey
+  - rec-blue
+  - rec-red
+  - 13
+  - rec-yellow
+  - rectangle-blue
+  - rectangle-red
+  - 14
+  - rectangle-yellow
+  - 2
+  - rec-grey
+  m_Tag: CommonBtn
+  m_IsVariant: 0
+  m_IsPlaceholder: 0

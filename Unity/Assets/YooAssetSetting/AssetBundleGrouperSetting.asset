@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
+  m_Name: AssetBundleGrouperSetting
+  m_EditorClassIdentifier: 
+  EnableAddressable: 0
+  AutoCollectShaders: 1
+  ShadersBundleName: myshaders
+  Groupers:
+  - GrouperName: AllPrefab
+    GrouperDesc: "\u6240\u6709\u9884\u5236\u4F53"
+    AssetTags: build;no_build
+    Collectors:
+    - CollectPath: Assets/Res/Prefabs
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackSeparately
+      FilterRuleName: CollectPrefab
+      NotWriteToAssetList: 0
+      AssetTags: 
+  - GrouperName: AllSpriteAtlas
+    GrouperDesc: "\u6240\u6709\u56FE\u96C6"
+    AssetTags: build;no_build
+    Collectors:
+    - CollectPath: Assets/Res/Atlas
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackSeparately
+      FilterRuleName: CollectAll
+      NotWriteToAssetList: 0
+      AssetTags: 
+  - GrouperName: AllConfig
+    GrouperDesc: "\u6240\u6709\u914D\u7F6E\u6587\u4EF6"
+    AssetTags: build;no_build
+    Collectors:
+    - CollectPath: Assets/Res/Config
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackSeparately
+      FilterRuleName: CollectConfig
+      NotWriteToAssetList: 0
+      AssetTags: 
+  - GrouperName: NoAtlasUISprite
+    GrouperDesc: "\u4E0D\u6253\u56FE\u96C6\u7684UI\u56FE\u7247"
+    AssetTags: build;no_build
+    Collectors:
+    - CollectPath: Assets/Res/Texture/UI/NoAtlas
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackSeparately
+      FilterRuleName: CollectAll
+      NotWriteToAssetList: 0
+      AssetTags: 
+  - GrouperName: AllShader
+    GrouperDesc: "\u6240\u6709Shader"
+    AssetTags: build;no_build
+    Collectors:
+    - CollectPath: Assets/Res/Shaders
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackShader
+      FilterRuleName: CollectAll
+      NotWriteToAssetList: 0
+      AssetTags: 
+  - GrouperName: CodeDll
+    GrouperDesc: "\u70ED\u66F4\u4EE3\u7801\u6587\u4EF6"
+    AssetTags: build;no_build
+    Collectors:
+    - CollectPath: Assets/Res/Text
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackGrouper
+      FilterRuleName: CollectConfig
+      NotWriteToAssetList: 0
+      AssetTags: 
+  - GrouperName: AllScene
+    GrouperDesc: "\u6240\u6709\u573A\u666F"
+    AssetTags: build;no_build
+    Collectors: []

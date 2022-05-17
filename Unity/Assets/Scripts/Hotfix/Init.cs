@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using SimpleJSON;
-using System.Text;
-using Cysharp.Threading.Tasks;
-using LitJson;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Hotfix
@@ -18,6 +14,11 @@ namespace Hotfix
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
             ObjectHelper.CreateComponent<GameDataComponent>(Model.Game.Instance.Scene, false);
+            //UniTask.Void(async () =>
+            //{
+            //    await UniTask.Delay(5500);
+            //    ObjectHelper.RemoveComponent<GameDataComponent>(Model.Game.Instance.Scene);
+            //});
 
             //Debug.Log(Model.Game.Instance.Scene.GetComponent<GameDataComponent>().JsonTables.TbItem.Get(10000)); // MDEBUG:
 
@@ -27,8 +28,10 @@ namespace Hotfix
             //Debug.Log(configStr); // MDEBUG:
             //var AbConfigs = JsonMapper.ToObject<List<ABConfig>>(configStr);
             //Debug.Log(AbConfigs[0]); // MDEBUG:
-            //Debug.Log(Model.ProtobufHelper.SerializeToString_PB(AbConfigs[0])); // MDEBUG:
+            //NLog.Log.Error(Model.ProtobufHelper.SerializeToString_PB(AbConfigs[0])); // MDEBUG:
 
+            //ObjectHelper.OpenUIView<NetTestComponent>();
+            //ObjectHelper.OpenUIView<StartViewComponent>();
         }
 
         private static void OnUpdate(float tick)

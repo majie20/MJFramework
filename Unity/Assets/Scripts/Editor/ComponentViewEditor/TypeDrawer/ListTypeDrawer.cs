@@ -9,7 +9,7 @@ public class ListTypeDrawer : ITypeDrawer
 {
     public bool HandlesType(Type type)
     {
-        return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>);
+        return type.IsGenericType && type.GetGenericTypeDefinition().FullName == typeof(List<>).FullName;
     }
 
     public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)

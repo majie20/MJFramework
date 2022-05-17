@@ -7,7 +7,7 @@ public class BoundsTypeDrawer : ITypeDrawer
 {
     public bool HandlesType(Type type)
     {
-        return type == typeof(Bounds);
+        return type.FullName == typeof(Bounds).FullName;
     }
 
     public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="Workspace" id="{6714acab-e579-44d4-bcdd-b983446d7073}">
+		<property name="builtBanksOutputDirectory">
+			<value>../Unity/Assets/Res/NoBuildAB/Audio</value>
+		</property>
+		<relationship name="masterEventFolder">
+			<destination>{607bc10f-c433-4780-bae2-b5cd26031491}</destination>
+		</relationship>
+		<relationship name="masterTagFolder">
+			<destination>{8c04f0b6-3141-40b4-b63b-967e0e0bb992}</destination>
+		</relationship>
+		<relationship name="masterEffectPresetFolder">
+			<destination>{3d2f671c-368f-40bc-b8a5-d43c44f8e1c4}</destination>
+		</relationship>
+		<relationship name="masterParameterPresetFolder">
+			<destination>{f47c1e90-ebd1-4424-9ebd-ef9cbcd63667}</destination>
+		</relationship>
+		<relationship name="masterBankFolder">
+			<destination>{b400322b-1e0d-4f1d-8631-a2d9e0408e3c}</destination>
+		</relationship>
+		<relationship name="masterSandboxFolder">
+			<destination>{86fad797-1467-4759-84b4-119f298e92c9}</destination>
+		</relationship>
+		<relationship name="masterAssetFolder">
+			<destination>{8d971b8e-aa27-41b6-b13f-fb9cf28e166f}</destination>
+		</relationship>
+		<relationship name="mixer">
+			<destination>{04ad2905-a2ad-42db-8a31-9ae3dbbb22a7}</destination>
+		</relationship>
+		<relationship name="profilerSessionFolder">
+			<destination>{4dcb8d4a-5e0b-42b5-9688-7aceece5cde0}</destination>
+		</relationship>
+		<relationship name="platforms">
+			<destination>{4ffeb4ed-38f4-40e1-a14e-9e9cd9a1ac77}</destination>
+		</relationship>
+	</object>
+</objects>

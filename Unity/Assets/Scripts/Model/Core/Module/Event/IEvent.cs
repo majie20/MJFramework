@@ -1,44 +1,53 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Model
 {
-    public class EventGroup
+    public class EventGroup<T>
     {
-        private Action<object[]> call;
-        private Dictionary<uint, object> paramdic;
-        private List<uint> signList;
-        private uint sign;
+        private StaticLinkedListDictionary<object, Action<object[]>> calls;
+        private Dictionary<T, object> paramdic;
+        private HashSet<T> signList;
+        private T[] signs;
 
-        public Action<object[]> Call => call;
-
-        public EventGroup(uint sign, int paramNum)
+        public EventGroup(T[] signs, int paramNum)
         {
-            this.sign = sign;
-            paramdic = new Dictionary<uint, object>(paramNum);
-            signList = new List<uint>(EventType.EventTypeGroupDic[this.sign].Length);
+            this.signs = signs;
+            paramdic = new Dictionary<T, object>(paramNum);
+            signList = new HashSet<T>();
         }
 
-        public void AddListener(Action<object[]> call)
+        public int Count()
         {
-            this.call += call;
+            return calls.Length;
         }
 
-        public void RemoveListener(Action<object[]> call)
+        public void AddListener(object self, Action<object[]> call)
         {
-            this.call -= call;
+            if (!calls.ContainsKey(self))
+            {
+                calls.Add(self, call);
+            }
+        }
+
+        public void RemoveListener(object self)
+        {
+            if (calls.ContainsKey(self))
+            {
+                calls.Remove(self);
+            }
         }
 
         public void RemoveAllListener()
         {
-            this.call = null;
+            calls.Clear();
         }
 
-        public void Invoke(uint subSign, object param)
+        public void Invoke(T subSign, object param)
         {
-            var group = EventType.EventTypeGroupDic[this.sign];
-            if (group.Contains(subSign) && !signList.Contains(subSign))
+            if (signs.Contains(subSign) && !signList.Contains(subSign))
             {
                 signList.Add(subSign);
             }
@@ -55,248 +64,816 @@ namespace Model
                 }
             }
 
-            if (signList.Count >= group.Length)
+            if (signList.Count >= signs.Length)
             {
                 object[] paramList = new object[paramdic.Count];
-                for (int i = 0; i < group.Length; i++)
+                var index = 0;
+                for (int i = 0; i < signs.Length; i++)
                 {
-                    if (paramdic.ContainsKey(group[i]))
+                    if (paramdic.ContainsKey(signs[i]))
                     {
-                        paramList[i] = paramdic[group[i]];
+                        paramList[index] = paramdic[signs[i]];
+                        index++;
                     }
                 }
-                this.call(paramList);
+                var data = calls[1];
+                while (data.right != 0)
+                {
+                    data = calls[data.right];
+                    data.element(paramList);
+                }
                 paramdic.Clear();
                 signList.Clear();
             }
         }
     }
 
+    #region EventBaseAsync1
+
+    public class EventBaseAsync1 : EventBase<object, Func<UniTask>>
+    {
+        public override void AddListener(object self, Func<UniTask> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke()
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke();
+            }
+        }
+    }
+
+    public class EventBaseAsync1<T1> : EventBase<object, Func<T1, UniTask>, T1>
+    {
+        public override void AddListener(object self, Func<T1, UniTask> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke(t1);
+            }
+        }
+    }
+
+    public class EventBaseAsync1<T1, T2> : EventBase<object, Func<T1, T2, UniTask>, T1, T2>
+    {
+        public override void AddListener(object self, Func<T1, T2, UniTask> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke(t1, t2);
+            }
+        }
+    }
+
+    public class EventBaseAsync1<T1, T2, T3> : EventBase<object, Func<T1, T2, T3, UniTask>, T1, T2, T3>
+    {
+        public override void AddListener(object self, Func<T1, T2, T3, UniTask> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2, T3 t3)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke(t1, t2, t3);
+            }
+        }
+    }
+
+    public class EventBaseAsync1<T1, T2, T3, T4> : EventBase<object, Func<T1, T2, T3, T4, UniTask>, T1, T2, T3, T4>
+    {
+        public override void AddListener(object self, Func<T1, T2, T3, T4, UniTask> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2, T3 t3, T4 t4)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke(t1, t2, t3, t4);
+            }
+        }
+    }
+
+    #endregion EventBaseAsync1
+
+    #region EventBase1
+
+    public class EventBase1 : EventBase<object, Action>
+    {
+        public override void AddListener(object self, Action call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke()
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke();
+            }
+        }
+    }
+
+    public class EventBase1<T1> : EventBase<object, Action<T1>, T1>
+    {
+        public override void AddListener(object self, Action<T1> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke(t1);
+            }
+        }
+    }
+
+    public class EventBase1<T1, T2> : EventBase<object, Action<T1, T2>, T1, T2>
+    {
+        public override void AddListener(object self, Action<T1, T2> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke(t1, t2);
+            }
+        }
+    }
+
+    public class EventBase1<T1, T2, T3> : EventBase<object, Action<T1, T2, T3>, T1, T2, T3>
+    {
+        public override void AddListener(object self, Action<T1, T2, T3> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2, T3 t3)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke(t1, t2, t3);
+            }
+        }
+    }
+
+    public class EventBase1<T1, T2, T3, T4> : EventBase<object, Action<T1, T2, T3, T4>, T1, T2, T3, T4>
+    {
+        public override void AddListener(object self, Action<T1, T2, T3, T4> call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2, T3 t3, T4 t4)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                data.element.Invoke(t1, t2, t3, t4);
+            }
+        }
+    }
+
+    #endregion EventBase1
+
+    #region EventBaseAsync2
+
+    public sealed class EventBaseAsync2 : EventBase<object, object>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke()
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                (data.element as Func<UniTask>).Invoke();
+            }
+        }
+    }
+
+    public sealed class EventBaseAsync2<T1> : EventBase<object, object, T1>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                (data.element as Func<T1, UniTask>).Invoke(t1);
+            }
+        }
+    }
+
+    public sealed class EventBaseAsync2<T1, T2> : EventBase<object, object, T1, T2>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                (data.element as Func<T1, T2, UniTask>).Invoke(t1, t2);
+            }
+        }
+    }
+
+    public sealed class EventBaseAsync2<T1, T2, T3> : EventBase<object, object, T1, T2, T3>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2, T3 t3)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                (data.element as Func<T1, T2, T3, UniTask>).Invoke(t1, t2, t3);
+            }
+        }
+    }
+
+    public sealed class EventBaseAsync2<T1, T2, T3, T4> : EventBase<object, object, T1, T2, T3, T4>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override void Invoke(T1 t1, T2 t2, T3 t3, T4 t4)
+        {
+            var data = datas[1];
+            while (data.right != 0)
+            {
+                data = datas[data.right];
+                (data.element as Func<T1, T2, T3, T4, UniTask>).Invoke(t1, t2, t3, t4);
+            }
+        }
+    }
+
+    #endregion EventBaseAsync2
+
+    #region EventBase2
+
+    public sealed class EventBase2 : EventBase<object, object>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+    }
+
+    public sealed class EventBase2<T1> : EventBase<object, object, T1>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+    }
+
+    public sealed class EventBase2<T1, T2> : EventBase<object, object, T1, T2>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+    }
+
+    public sealed class EventBase2<T1, T2, T3> : EventBase<object, object, T1, T2, T3>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+    }
+
+    public sealed class EventBase2<T1, T2, T3, T4> : EventBase<object, object, T1, T2, T3, T4>
+    {
+        public override void AddListener(object self, object call)
+        {
+            if (!datas.ContainsKey(self))
+            {
+                datas.Add(self, call);
+                if (self is Component component)
+                {
+                    if (!component.EventList.Contains(this))
+                    {
+                        component.EventList.Add(this);
+                    }
+                }
+            }
+        }
+    }
+
+    #endregion EventBase2
+
+    public class EventValue
+    {
+        public const int INITIAL_COUNT = 8;
+    }
+
     public interface IEvent
     {
         int Count();
 
-        void RemoveListener(object self);
+        void RemoveListener2(object self);
 
         void RemoveAllListener();
     }
 
-    public class EventBase : IEvent
+    public class EventBase<A, B> : IEvent
     {
-        private List<object> objects = new List<object>();
-        private List<Action> calls = new List<Action>();
+        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+
+        public EventBase()
+        {
+        }
 
         public int Count()
         {
-            return calls.Count;
+            return datas.Length;
         }
 
-        public void AddListener(Action call, object self)
+        public virtual void RemoveListener2(object self)
         {
-            objects.Add(self);
-            calls.Add(call);
+            RemoveListener((A)self);
         }
 
-        public void RemoveListener(object self)
+        public virtual void AddListener(A self, B call)
         {
-            for (int i = 0; i < objects.Count; i++)
+            if (!datas.ContainsKey(self))
             {
-                if (objects[i] == self)
-                {
-                    objects.RemoveAt(i);
-                    calls.RemoveAt(i);
-                    return;
-                }
+                datas.Add(self, call);
+            }
+        }
+
+        public virtual void RemoveListener(A self)
+        {
+            if (datas.ContainsKey(self))
+            {
+                datas.Remove(self);
             }
         }
 
         public void RemoveAllListener()
         {
-            objects.Clear();
-            calls.Clear();
+            datas.Clear();
         }
 
-        public void Invoke()
+        public virtual void Invoke()
         {
-            for (int i = 0; i < calls.Count; i++)
+            var data = datas[1];
+            while (data.right != 0)
             {
-                calls[i]();
+                data = datas[data.right];
+                (data.element as Action).Invoke();
             }
         }
     }
 
-    public class EventBase<T1> : IEvent
+    public class EventBase<A, B, T1> : IEvent
     {
-        private List<object> objects = new List<object>();
-        private List<Action<T1>> calls = new List<Action<T1>>();
+        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+
+        public EventBase()
+        {
+        }
 
         public int Count()
         {
-            return calls.Count;
+            return datas.Length;
         }
 
-        public void AddListener(Action<T1> call, object self)
+        public virtual void RemoveListener2(object self)
         {
-            objects.Add(self);
-            calls.Add(call);
+            RemoveListener((A)self);
         }
 
-        public void RemoveListener(object self)
+        public virtual void AddListener(A self, B call)
         {
-            for (int i = 0; i < objects.Count; i++)
+            if (!datas.ContainsKey(self))
             {
-                if (objects[i] == self)
-                {
-                    objects.RemoveAt(i);
-                    calls.RemoveAt(i);
-                    return;
-                }
+                datas.Add(self, call);
+            }
+        }
+
+        public virtual void RemoveListener(A self)
+        {
+            if (datas.ContainsKey(self))
+            {
+                datas.Remove(self);
             }
         }
 
         public void RemoveAllListener()
         {
-            objects.Clear();
-            calls.Clear();
+            datas.Clear();
         }
 
-        public void Invoke(T1 t1)
+        public virtual void Invoke(T1 t1)
         {
-            for (int i = 0; i < calls.Count; i++)
+            var data = datas[1];
+            while (data.right != 0)
             {
-                calls[i](t1);
+                data = datas[data.right];
+                (data.element as Action<T1>).Invoke(t1);
             }
         }
     }
 
-    public class EventBase<T1, T2> : IEvent
+    public class EventBase<A, B, T1, T2> : IEvent
     {
-        private List<object> objects = new List<object>();
-        private List<Action<T1, T2>> calls = new List<Action<T1, T2>>();
+        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+
+        public EventBase()
+        {
+        }
 
         public int Count()
         {
-            return calls.Count;
+            return datas.Length;
         }
 
-        public void AddListener(Action<T1, T2> call, object self)
+        public virtual void RemoveListener2(object self)
         {
-            objects.Add(self);
-            calls.Add(call);
+            RemoveListener((A)self);
         }
 
-        public void RemoveListener(object self)
+        public virtual void AddListener(A self, B call)
         {
-            for (int i = 0; i < objects.Count; i++)
+            if (!datas.ContainsKey(self))
             {
-                if (objects[i] == self)
-                {
-                    objects.RemoveAt(i);
-                    calls.RemoveAt(i);
-                    return;
-                }
+                datas.Add(self, call);
+            }
+        }
+
+        public virtual void RemoveListener(A self)
+        {
+            if (datas.ContainsKey(self))
+            {
+                datas.Remove(self);
             }
         }
 
         public void RemoveAllListener()
         {
-            objects.Clear();
-            calls.Clear();
+            datas.Clear();
         }
 
-        public void Invoke(T1 t1, T2 t2)
+        public virtual void Invoke(T1 t1, T2 t2)
         {
-            for (int i = 0; i < calls.Count; i++)
+            var data = datas[1];
+            while (data.right != 0)
             {
-                calls[i](t1, t2);
+                data = datas[data.right];
+                (data.element as Action<T1, T2>).Invoke(t1, t2);
             }
         }
     }
 
-    public class EventBase<T1, T2, T3> : IEvent
+    public class EventBase<A, B, T1, T2, T3> : IEvent
     {
-        private List<object> objects = new List<object>();
-        private List<Action<T1, T2, T3>> calls = new List<Action<T1, T2, T3>>();
+        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+
+        public EventBase()
+        {
+        }
 
         public int Count()
         {
-            return calls.Count;
+            return datas.Length;
         }
 
-        public void AddListener(Action<T1, T2, T3> call, object self)
+        public virtual void RemoveListener2(object self)
         {
-            objects.Add(self);
-            calls.Add(call);
+            RemoveListener((A)self);
         }
 
-        public void RemoveListener(object self)
+        public virtual void AddListener(A self, B call)
         {
-            for (int i = 0; i < objects.Count; i++)
+            if (!datas.ContainsKey(self))
             {
-                if (objects[i] == self)
-                {
-                    objects.RemoveAt(i);
-                    calls.RemoveAt(i);
-                    return;
-                }
+                datas.Add(self, call);
+            }
+        }
+
+        public virtual void RemoveListener(A self)
+        {
+            if (datas.ContainsKey(self))
+            {
+                datas.Remove(self);
             }
         }
 
         public void RemoveAllListener()
         {
-            objects.Clear();
-            calls.Clear();
+            datas.Clear();
         }
 
-        public void Invoke(T1 t1, T2 t2, T3 t3)
+        public virtual void Invoke(T1 t1, T2 t2, T3 t3)
         {
-            for (int i = 0; i < calls.Count; i++)
+            var data = datas[1];
+            while (data.right != 0)
             {
-                calls[i](t1, t2, t3);
+                data = datas[data.right];
+                (data.element as Action<T1, T2, T3>).Invoke(t1, t2, t3);
             }
         }
     }
 
-    public class EventBase<T1, T2, T3, T4> : IEvent
+    public class EventBase<A, B, T1, T2, T3, T4> : IEvent
     {
-        private List<object> objects = new List<object>();
-        private List<Action<T1, T2, T3, T4>> calls = new List<Action<T1, T2, T3, T4>>();
+        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+
+        public EventBase()
+        {
+        }
 
         public int Count()
         {
-            return calls.Count;
+            return datas.Length;
         }
 
-        public void AddListener(Action<T1, T2, T3, T4> call, object self)
+        public virtual void RemoveListener2(object self)
         {
-            objects.Add(self);
-            calls.Add(call);
+            RemoveListener((A)self);
         }
 
-        public void RemoveListener(object self)
+        public virtual void AddListener(A self, B call)
         {
-            for (int i = 0; i < objects.Count; i++)
+            if (!datas.ContainsKey(self))
             {
-                if (objects[i] == self)
-                {
-                    objects.RemoveAt(i);
-                    calls.RemoveAt(i);
-                    return;
-                }
+                datas.Add(self, call);
+            }
+        }
+
+        public virtual void RemoveListener(A self)
+        {
+            if (datas.ContainsKey(self))
+            {
+                datas.Remove(self);
             }
         }
 
         public void RemoveAllListener()
         {
-            objects.Clear();
-            calls.Clear();
+            datas.Clear();
         }
 
-        public void Invoke(T1 t1, T2 t2, T3 t3, T4 t4)
+        public virtual void Invoke(T1 t1, T2 t2, T3 t3, T4 t4)
         {
-            for (int i = 0; i < calls.Count; i++)
+            var data = datas[1];
+            while (data.right != 0)
             {
-                calls[i](t1, t2, t3, t4);
+                data = datas[data.right];
+                (data.element as Action<T1, T2, T3, T4>).Invoke(t1, t2, t3, t4);
             }
         }
     }

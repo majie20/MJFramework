@@ -1,16 +1,22 @@
-﻿using System;
-using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using System;
 
 namespace Hotfix
 {
     public class ObjectHelper
     {
+        public const string MODEL_NAMESPACE = "Model";
+
         #region CreateComponent
 
         public static Model.Component CreateComponent(Type type, Model.Entity entity, bool isFromPool = true)
         {
-            Model.Component component = Model.ObjectHelper._CreateComponent(type, entity, isFromPool);
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                return Model.ObjectHelper.CreateComponent(type, entity, isFromPool);
+            }
 
+            Model.Component component = Model.ObjectHelper._CreateComponent(type, entity, isFromPool);
             IAwake iAwake = component as IAwake;
             iAwake?.Awake();
 
@@ -21,6 +27,10 @@ namespace Hotfix
 
         public static Model.Component CreateComponent<A>(Type type, Model.Entity entity, A a, bool isFromPool = true)
         {
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                return Model.ObjectHelper.CreateComponent(type, entity, a, isFromPool);
+            }
             Model.Component component = Model.ObjectHelper._CreateComponent(type, entity, isFromPool);
 
             IAwake<A> iAwake = component as IAwake<A>;
@@ -33,6 +43,10 @@ namespace Hotfix
 
         public static Model.Component CreateComponent<A, B>(Type type, Model.Entity entity, A a, B b, bool isFromPool = true)
         {
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                return Model.ObjectHelper.CreateComponent(type, entity, a, b, isFromPool);
+            }
             Model.Component component = Model.ObjectHelper._CreateComponent(type, entity, isFromPool);
 
             IAwake<A, B> iAwake = component as IAwake<A, B>;
@@ -45,6 +59,10 @@ namespace Hotfix
 
         public static Model.Component CreateComponent<A, B, C>(Type type, Model.Entity entity, A a, B b, C c, bool isFromPool = true)
         {
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                return Model.ObjectHelper.CreateComponent(type, entity, a, b, c, isFromPool);
+            }
             Model.Component component = Model.ObjectHelper._CreateComponent(type, entity, isFromPool);
 
             IAwake<A, B, C> iAwake = component as IAwake<A, B, C>;
@@ -81,12 +99,14 @@ namespace Hotfix
 
         public static void RemoveComponent(Type type, Model.Entity entity)
         {
-            Model.Component component = entity.GetComponent(type);
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                Model.ObjectHelper.RemoveComponent(type, entity);
+                return;
+            }
+            Model.Component component = Model.ObjectHelper._RemoveComponent(type, entity);
             if (component != null)
             {
-                component.Dispose();
-                entity.RemoveComponent(type);
-
                 Game.Instance.LifecycleSystem.Remove(component);
             }
         }
@@ -100,94 +120,134 @@ namespace Hotfix
 
         #region OpenUIView
 
-        public static Model.UIBaseComponent OpenUIView(Type type, bool isCloseBack = false)
+        public static async UniTask<Model.UIBaseComponent> OpenUIView(Type type, bool isCloseBack = false)
         {
-            var component = Model.ObjectHelper._OpenUIView(type, isCloseBack);
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                return await Model.ObjectHelper.OpenUIView(type, isCloseBack);
+            }
+            var component = await Model.ObjectHelper._OpenUIView(type, isCloseBack);
             if (component == null)
             {
-                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+                NLog.Log.Error($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
             }
             else
             {
                 IOpen iOpen = component as IOpen;
-
                 iOpen?.Open();
             }
 
             return component;
         }
 
-        public static Model.UIBaseComponent OpenUIView<A>(Type type, A a, bool isCloseBack = false)
+        public static async UniTask<Model.UIBaseComponent> OpenUIView<A>(Type type, A a, bool isCloseBack = false)
         {
-            var component = Model.ObjectHelper._OpenUIView(type, isCloseBack);
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                return await Model.ObjectHelper.OpenUIView(type, a, isCloseBack);
+            }
+            var component = await Model.ObjectHelper._OpenUIView(type, isCloseBack);
             if (component == null)
             {
-                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+                NLog.Log.Error($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
             }
             else
             {
                 IOpen<A> iOpen = component as IOpen<A>;
-
                 iOpen?.Open(a);
             }
 
             return component;
         }
 
-        public static Model.UIBaseComponent OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
+        public static async UniTask<Model.UIBaseComponent> OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
         {
-            var component = Model.ObjectHelper._OpenUIView(type, isCloseBack);
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                return await Model.ObjectHelper.OpenUIView(type, a, b, isCloseBack);
+            }
+            var component = await Model.ObjectHelper._OpenUIView(type, isCloseBack);
             if (component == null)
             {
-                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+                NLog.Log.Error($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
             }
             else
             {
                 IOpen<A, B> iOpen = component as IOpen<A, B>;
-
                 iOpen?.Open(a, b);
             }
 
             return component;
         }
 
-        public static Model.UIBaseComponent OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
+        public static async UniTask<Model.UIBaseComponent> OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
         {
-            var component = Model.ObjectHelper._OpenUIView(type, isCloseBack);
+            if (type.Namespace == MODEL_NAMESPACE)
+            {
+                return await Model.ObjectHelper.OpenUIView(type, a, b, c, isCloseBack);
+            }
+            var component = await Model.ObjectHelper._OpenUIView(type, isCloseBack);
             if (component == null)
             {
-                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+                NLog.Log.Error($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
             }
             else
             {
                 IOpen<A, B, C> iOpen = component as IOpen<A, B, C>;
-
                 iOpen?.Open(a, b, c);
             }
 
             return component;
         }
 
-        public static T OpenUIView<T>(bool isCloseBack = false) where T : Model.UIBaseComponent
+        public static async UniTask<T> OpenUIView<T>(bool isCloseBack = false) where T : Model.UIBaseComponent
         {
-            return (T)OpenUIView(typeof(T), isCloseBack);
+            return (T)await OpenUIView(typeof(T), isCloseBack);
         }
 
-        public static T OpenUIView<T, A>(A a, bool isCloseBack = false) where T : Model.UIBaseComponent
+        public static async UniTask<T> OpenUIView<T, A>(A a, bool isCloseBack = false) where T : Model.UIBaseComponent
         {
-            return (T)OpenUIView(typeof(T), a, isCloseBack);
+            return (T)await OpenUIView(typeof(T), a, isCloseBack);
         }
 
-        public static T OpenUIView<T, A, B>(A a, B b, bool isCloseBack = false) where T : Model.UIBaseComponent
+        public static async UniTask<T> OpenUIView<T, A, B>(A a, B b, bool isCloseBack = false) where T : Model.UIBaseComponent
         {
-            return (T)OpenUIView(typeof(T), a, b, isCloseBack);
+            return (T)await OpenUIView(typeof(T), a, b, isCloseBack);
         }
 
-        public static T OpenUIView<T, A, B, C>(A a, B b, C c, bool isCloseBack = false) where T : Model.UIBaseComponent
+        public static async UniTask<T> OpenUIView<T, A, B, C>(A a, B b, C c, bool isCloseBack = false) where T : Model.UIBaseComponent
         {
-            return (T)OpenUIView(typeof(T), a, b, c, isCloseBack);
+            return (T)await OpenUIView(typeof(T), a, b, c, isCloseBack);
         }
 
         #endregion OpenUIView
+
+        #region CloseUIView
+
+        public static void CloseUIView(Type type, bool isCloseBack = false)
+        {
+            Model.ObjectHelper.CloseUIView(type, isCloseBack);
+        }
+
+        public static void CloseUIView<T>(bool isCloseBack = false)
+        {
+            CloseUIView(typeof(T), isCloseBack);
+        }
+
+        #endregion CloseUIView
+
+        #region Lifecycle
+
+        public static void AddLifecycle(Model.Component component)
+        {
+            Game.Instance.LifecycleSystem.Add(component);
+        }
+
+        public static void RemoveLifecycle(Model.Component component)
+        {
+            Game.Instance.LifecycleSystem.Remove(component);
+        }
+
+        #endregion Lifecycle
     }
 }

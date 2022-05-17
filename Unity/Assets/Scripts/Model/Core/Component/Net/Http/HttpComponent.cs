@@ -1,14 +1,16 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
-using UnityEngine;
+using System.Threading;
 
 namespace Model
 {
     public class HttpComponent : Component, IAwake
     {
         public static int INITIAL_LENGHT = 3;
+        public static int DEF_TIMEOUT_VALUE = 3000;
 
         private Queue<HttpClient> unusedClients = new Queue<HttpClient>();
         private StaticLinkedList<HttpClient> usedClients = new StaticLinkedList<HttpClient>(0);
@@ -48,112 +50,172 @@ namespace Model
         private void Recycle(HttpClient client)
         {
             client.CancelPendingRequests();
+            usedClients.Remove(client);
             unusedClients.Enqueue(client);
         }
 
-        private async UniTask<HttpResponseMessage> RequestAsync(HttpClient client, Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        private async UniTask<HttpResponseMessage> RequestAsync(HttpClient client, Uri url, HttpMethod httpMethod, CancellationTokenSource cts = null, byte[] bytes = null)
         {
-            HttpRequestMessage message = new HttpRequestMessage(httpMethod, new Uri(url, method));
+            HttpRequestMessage message = new HttpRequestMessage(httpMethod, url);
             if (bytes != null)
             {
                 message.Content = new ByteArrayContent(bytes);
             }
 
-            HttpResponseMessage response = await client.SendAsync(message);
-            response.EnsureSuccessStatusCode();
+            var ctsTime = new CancellationTokenSource();
+            ctsTime.CancelAfterSlim(DEF_TIMEOUT_VALUE);
 
-            Debug.LogWarning($"Response Status Code: {response.StatusCode} {response.ReasonPhrase}");
+            HttpResponseMessage response;
+            bool isCanceled;
+            if (cts == null)
+            {
+                (isCanceled, response) = await client.SendAsync(message, ctsTime.Token).AsUniTask().SuppressCancellationThrow();
+            }
+            else
+            {
+                var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, ctsTime.Token);
+                (isCanceled, response) = await client.SendAsync(message, linkedTokenSource.Token).AsUniTask().SuppressCancellationThrow();
+            }
+
+            if (isCanceled)
+            {
+            }
+            else
+            {
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    Game.Instance.EventSystem.InvokeAsync<E_HttpStatusError, HttpStatusCode>(response.StatusCode);
+                }
+
+                NLog.Log.Debug($"Response Status Code: {response.StatusCode} {response.ReasonPhrase}");
+            }
 
             return response;
         }
 
-        public async UniTask<byte[]> ToBytesAsync(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        #region Async
+
+        public async UniTask<byte[]> ToBytesAsync(Uri url, HttpMethod httpMethod, CancellationTokenSource cts = null, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
-            var response = await RequestAsync(client, url, method, httpMethod, bytes);
+            var response = await RequestAsync(client, url, httpMethod, cts, bytes);
 
-            var buffer = await response.Content.ReadAsByteArrayAsync();
+            if (response == null)
+            {
+                Recycle(client);
+                return null;
+            }
+
+            var buffer = await response.Content.ReadAsByteArrayAsync().AsUniTask();
 
             Recycle(client);
 
             return buffer;
         }
 
-        public async UniTask<string> ToStringAsync(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        public async UniTask<string> ToStringAsync(Uri url, HttpMethod httpMethod, CancellationTokenSource cts = null, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
-            var response = await RequestAsync(client, url, method, httpMethod, bytes);
+            var response = await RequestAsync(client, url, httpMethod, cts, bytes);
 
-            var str = await response.Content.ReadAsStringAsync();
+            if (response == null)
+            {
+                Recycle(client);
+                return null;
+            }
+
+            var str = await response.Content.ReadAsStringAsync().AsUniTask();
 
             Recycle(client);
 
             return str;
         }
 
-        public async UniTask ToStreamAsync(Uri url, string method, HttpMethod httpMethod, Func<HttpResponseMessage, UniTask> call, byte[] bytes = null)
+        public async UniTask ToStreamAsync(Uri url, HttpMethod httpMethod, Func<HttpResponseMessage, UniTask> call, CancellationTokenSource cts = null, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
-            var response = await RequestAsync(client, url, method, httpMethod, bytes);
+            var response = await RequestAsync(client, url, httpMethod, cts, bytes);
 
             await call(response);
 
             Recycle(client);
         }
 
-        public byte[] ToBytes(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        #endregion Async
+
+        #region Sync
+
+        public byte[] ToBytes(Uri url, HttpMethod httpMethod, CancellationTokenSource cts = null, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
-            var response = RequestAsync(client, url, method, httpMethod, bytes).GetAwaiter().GetResult();
+            var response = RequestAsync(client, url, httpMethod, cts, bytes).GetAwaiter().GetResult();
 
-            var buffer = response.Content.ReadAsByteArrayAsync().Result;
+            if (response == null)
+            {
+                Recycle(client);
+                return null;
+            }
+
+            var buffer = response.Content.ReadAsByteArrayAsync().AsUniTask().GetAwaiter().GetResult();
 
             Recycle(client);
 
             return buffer;
         }
 
-        public string ToString(Uri url, string method, HttpMethod httpMethod, byte[] bytes = null)
+        public string ToString(Uri url, HttpMethod httpMethod, CancellationTokenSource cts = null, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
-            var response = RequestAsync(client, url, method, httpMethod, bytes).GetAwaiter().GetResult();
+            var response = RequestAsync(client, url, httpMethod, cts, bytes).GetAwaiter().GetResult();
 
-            var str = response.Content.ReadAsStringAsync().Result;
+            if (response == null)
+            {
+                Recycle(client);
+                return null;
+            }
+
+            var str = response.Content.ReadAsStringAsync().AsUniTask().GetAwaiter().GetResult();
 
             Recycle(client);
 
             return str;
         }
 
-        public void ToStream(Uri url, string method, HttpMethod httpMethod, Action<HttpResponseMessage> call, byte[] bytes = null)
+        public void ToStream(Uri url, HttpMethod httpMethod, Action<HttpResponseMessage> call, CancellationTokenSource cts = null, byte[] bytes = null)
         {
             HttpClient client = Hatch();
 
-            var response = RequestAsync(client, url, method, httpMethod, bytes).GetAwaiter().GetResult();
+            var response = RequestAsync(client, url, httpMethod, cts, bytes).GetAwaiter().GetResult();
 
             call(response);
 
             Recycle(client);
         }
 
+        #endregion Sync
+
         public override void Dispose()
         {
+            var usedClient = usedClients[1];
+            while (usedClient.cur != 0)
+            {
+                usedClient = usedClients[usedClient.cur];
+                usedClient.element.Dispose();
+            }
+
             foreach (var client in unusedClients)
             {
                 client.Dispose();
             }
 
-            foreach (var client in usedClients)
-            {
-                client.Dispose();
-            }
-
-            Entity = null;
+            usedClients = null;
+            unusedClients = null;
+            base.Dispose();
         }
     }
 }

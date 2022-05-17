@@ -1,0 +1,14 @@
+{
+    "ShaderCount": 0,
+    "VariantCount": 0,
+    "ShaderVariants": [
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/BlitCopy",
+            "PassType": 0,
+            "Keywords": [
+                ""
+            ]
+        }
+    ]
+}

@@ -4,6 +4,7 @@ using MoreMountains.Tools;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using System;
+using System.IO;
 
 namespace Model
 {
@@ -64,10 +65,10 @@ namespace Model
         /// <summary>
         /// On Start, we get our working canvas, and we set our neutral position
         /// </summary>
-        protected virtual void Awake()
-        {
-            // Initialize();
-        }
+        //protected virtual void Awake()
+        //{
+        //    // Initialize();
+        //}
 
         protected virtual void Start()
         {
@@ -83,7 +84,7 @@ namespace Model
             SetNeutralPosition();
             if (TargetCamera == null)
             {
-                TargetCamera = Game.Instance.GetComponent<UIRootComponent>().UICamera;
+                TargetCamera = Game.Instance.Scene.GetChild(Path.GetFileName(UIRootComponent.UIROOT_PATH)).GetComponent<UIRootComponent>().UICamera;
             }
             ParentCanvasRenderMode = GetComponentInParent<Canvas>().renderMode;
             _initialZPosition = _knobTransform.position.z;

@@ -4,11 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - LevelBounds
-  - FX
-  - Enemy
-  - World
-  - NoMask
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -18,22 +14,22 @@ TagManager:
   - UI
   - 
   - 
-  - Obstacles
-  - Ground
-  - Player
-  - ObstaclesDoors
-  - NoPathfinding
-  - Enemies
-  - NoCollisions
-  - Hole
-  - MovingPlatform
-  - FallingPlatform
-  - Projectile
-  - Camera1
-  - Camera2
-  - Camera3
-  - Camera4
   - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Test_PostProcessing
   - 
   - 
   - 
@@ -46,18 +42,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
+  - name: Low
     uniqueID: 1798043625
     locked: 0
-  - name: Ground
+  - name: Normal
     uniqueID: 2296623839
     locked: 0
-  - name: Foreground
+  - name: High
     uniqueID: 1603220759
     locked: 0
-  - name: Characters
+  - name: Top
     uniqueID: 47421343
-    locked: 0
-  - name: Above
-    uniqueID: 961700441
     locked: 0

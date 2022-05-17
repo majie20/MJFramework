@@ -6,7 +6,7 @@ public class UnityObjectTypeDrawer : ITypeDrawer
 {
     public bool HandlesType(Type type)
     {
-        return type == typeof(UnityEngine.Object) ||
+        return type.FullName == typeof(UnityEngine.Object).FullName ||
                 type.IsSubclassOf(typeof(UnityEngine.Object));
     }
 

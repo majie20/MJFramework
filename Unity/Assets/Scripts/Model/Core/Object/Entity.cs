@@ -5,6 +5,7 @@ using ILRuntime.Runtime.Stack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace Model
@@ -12,14 +13,15 @@ namespace Model
     public class Entity : IDisposable
     {
         protected Dictionary<Type, Component> componentDic;
-        protected Dictionary<long, Entity> childDic;
+        protected Dictionary<string, Entity> childDic;
         protected ComponentView componentView;
+        protected string path;
 
         private Entity parent;
 
         public Entity Parent
         {
-            set
+            protected set
             {
                 parent = value;
             }
@@ -75,7 +77,7 @@ namespace Model
 
         public long Guid
         {
-            private set
+            protected set
             {
                 _guid = value;
             }
@@ -85,15 +87,31 @@ namespace Model
             }
         }
 
+        private bool isDispose;
+
+        public bool IsDispose
+        {
+            protected set
+            {
+                isDispose = value;
+            }
+            get
+            {
+                return isDispose;
+            }
+        }
+
         public Entity()
         {
             componentDic = new Dictionary<Type, Component>();
-            childDic = new Dictionary<long, Entity>();
+            childDic = new Dictionary<string, Entity>();
             Guid = GuidHelper.GuidToLongID();
         }
 
         public virtual void Dispose()
         {
+            IsDispose = true;
+            Parent.RemoveChild(this.path);
             if (childDic.Count > 0)
             {
                 foreach (var child in childDic.Values)
@@ -127,6 +145,7 @@ namespace Model
             }
 
             componentView = null;
+            Parent = null;
 
             if (GameObject != null)
             {
@@ -137,24 +156,29 @@ namespace Model
                 Transform = null;
                 GameObject = null;
             }
+
+            IsDispose = false;
         }
 
         public void AddComponentView()
         {
             var component = GameObject.GetComponent<Model.ComponentView>();
             componentView = component == null ? GameObject.AddComponent<Model.ComponentView>() : component;
-            componentView.isHotfix = false;
         }
 
         private void AddToComponentView(Component component)
         {
-            var type = component.GetType();
-            if (type.FullName == "Model.ComponentAdapter+Adapter")
+            if (component is ComponentAdapter.Adapter componentAdapter)
             {
-                componentView.dic.Add(component, (component as ComponentAdapter.Adapter)?.ILInstance.Type.ReflectionType);
+                componentView.dic.Add(component, componentAdapter.ILInstance.Type.ReflectionType);
+            }
+            else if (component is UIBaseComponentAdapter.Adapter uiBaseComponentAdapter)
+            {
+                componentView.dic.Add(component, uiBaseComponentAdapter.ILInstance.Type.ReflectionType);
             }
             else
             {
+                var type = component.GetType();
                 componentView.dic.Add(component, type);
             }
         }
@@ -164,25 +188,60 @@ namespace Model
             componentView.dic.Remove(component);
         }
 
-        public void SetParent(Entity entity)
+        public void SetParent(Entity entity, bool isSetParent = true)
         {
-            Parent = entity;
-            entity.AddChild(this);
+            this.Parent = entity;
+            if (isSetParent)
+            {
+                this.Transform.SetParent(entity.Transform);
+            }
+            this.Parent.AddChild(this);
+        }
+
+        public void SetPath(string path)
+        {
+            this.path = path;
         }
 
         public void AddChild(Entity child)
         {
-            childDic.Add(child.Guid, child);
+            StringBuilder builder = new StringBuilder();
+            var tran = child.Transform;
+            var scene = Game.Instance.Scene.Transform;
+            builder.Append(tran.name);
+            tran = tran.parent;
+
+            while (true)
+            {
+                if (tran == this.Transform || tran == scene || tran == null)
+                {
+                    var path = builder.ToString();
+                    child.SetPath(path);
+                    childDic.Add(path, child);
+                    return;
+                }
+
+                builder.Insert(0, $"{tran.name}/");
+                tran = tran.parent;
+            }
         }
 
-        public Entity GetChild(long guid)
+        public Entity GetChild(string path)
         {
-            if (childDic.ContainsKey(guid))
+            if (childDic.ContainsKey(path))
             {
-                return childDic[guid];
+                return childDic[path];
             }
 
             return null;
+        }
+
+        public void RemoveChild(string path)
+        {
+            if (!IsDispose && childDic.ContainsKey(path))
+            {
+                childDic.Remove(path);
+            }
         }
 
         public bool HasComponent(Type type)
@@ -205,9 +264,9 @@ namespace Model
         public Component AddComponent(Component component)
         {
             Type type = component.GetType();
-            if (type.FullName == "Model.ComponentAdapter+Adapter")
+            if (component is ILRuntime.Runtime.Enviorment.CrossBindingAdaptorType croos)
             {
-                type = (component as ComponentAdapter.Adapter)?.ILInstance.Type.ReflectionType;
+                type = croos.ILInstance.Type.ReflectionType;
             }
             if (componentDic.ContainsKey(type))
             {
@@ -273,9 +332,9 @@ namespace Model
         public void RemoveComponent(Component component)
         {
             Type type = component.GetType();
-            if (type.FullName == "Model.ComponentAdapter+Adapter")
+            if (component is ILRuntime.Runtime.Enviorment.CrossBindingAdaptorType croos)
             {
-                type = (component as ComponentAdapter.Adapter)?.ILInstance.Type.ReflectionType;
+                type = croos.ILInstance.Type.ReflectionType;
             }
             if (componentDic.ContainsKey(type))
             {

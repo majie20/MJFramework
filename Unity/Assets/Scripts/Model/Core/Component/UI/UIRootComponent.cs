@@ -4,7 +4,7 @@ namespace Model
 {
     public class UIRootComponent : Component, IAwake
     {
-        public static string UIROOT_PATH = $"{FileValue.NO_BUILD_AB_RES_PATH}Prefabs/UI/UIRoot";
+        public static string UIROOT_PATH = $"{FileValue.RES_PATH}Prefabs/UI/UIRoot";
 
         private Camera uiCamera;
 
@@ -19,17 +19,18 @@ namespace Model
                 return uiCamera;
             }
         }
+
         public void Awake()
         {
             UICamera = this.Entity.Transform.Find("UICamera").GetComponent<Camera>();
 
-            Game.Instance.AddComponent(this);
+            ObjectHelper.CreateComponent<UI2DRootComponent>(ObjectHelper.CreateEntity(Entity, Entity.Transform.Find(UI2DRootComponent.GAME_OBJECT_NAME).gameObject), false);
         }
 
         public override void Dispose()
         {
-            Entity = null;
             UICamera = null;
+            base.Dispose();
         }
     }
 }

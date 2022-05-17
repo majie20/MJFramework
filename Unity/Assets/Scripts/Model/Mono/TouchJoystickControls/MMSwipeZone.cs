@@ -15,7 +15,7 @@ namespace Model
 	[System.Serializable]
 	public class SwipeEvent : UnityEvent<MMSwipeEvent> {}
 
-	public class SwipeZoneEvent : EventBase<MMSwipeEvent> {}
+	public class SwipeZoneEvent : EventBase1<MMSwipeEvent> {}
 
 	/// <summary>
 	/// An event usually triggered when a swipe happens. It contains the swipe "base" direction, and detailed information if needed (angle, length, origin and destination

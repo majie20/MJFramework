@@ -12,12 +12,12 @@ namespace Hotfix
 
         public void Awake(string a)
         {
-            Debug.Log($"Awake:{a}"); // MDEBUG:
+            NLog.Log.Debug($"Awake:{a}"); // MDEBUG:
         }
 
         public void OnUpdate(float tick)
         {
-            Debug.Log($"OnUpdate:{tick}"); // MDEBUG:
+            NLog.Log.Debug($"OnUpdate:{tick}"); // MDEBUG:
         }
     }
 }

@@ -1,3 +1,5 @@
+using ILRuntime.Runtime.Enviorment;
+using ILRuntime.Runtime.Intepreter;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ public class ComponentViewEditor : Editor
 
         foreach (var v in dic)
         {
-            ComponentViewHelper.Draw(v, componentView.isHotfix);
+            ComponentViewHelper.Draw(v);
         }
 
         EditorGUILayout.EndVertical();
@@ -43,56 +45,167 @@ public static class ComponentViewHelper
         }
     }
 
-    public static void Draw(KeyValuePair<object, Type> obj, bool isHotfix)
+    public static void Draw(KeyValuePair<object, Type> obj)
     {
         try
         {
             EditorGUILayout.LabelField($"{obj.Value.FullName}:", new GUIStyle { fontSize = 12 });
-
-            if (isHotfix)
-            {
-                return;
-            }
             FieldInfo[] fields = obj.Value.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 
-            foreach (FieldInfo fieldInfo in fields)
+            if (obj.Key is CrossBindingAdaptorType instance)
             {
-                Type type = fieldInfo.FieldType;
-                if (type.IsDefined(typeof(HideInInspector), false))
+                Type tempType = null;
+                if (obj.Key is ComponentAdapter.Adapter)
                 {
-                    continue;
+                    tempType = typeof(Model.Component);
+                }
+                else if (obj.Key is UIBaseComponentAdapter.Adapter)
+                {
+                    tempType = typeof(Model.UIBaseComponent);
                 }
 
-                if (fieldInfo.IsDefined(typeof(HideInInspector), false))
+                if (tempType == null)
                 {
-                    continue;
+                    return;
                 }
 
-                object value = fieldInfo.GetValue(obj.Key);
+                FieldInfo[] tempFields = tempType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 
-                for (int i = 0; i < typeDrawers.Count; i++)
+                foreach (FieldInfo fieldInfo in tempFields)
                 {
-                    var typeDrawer = typeDrawers[i];
-
-                    if (!typeDrawer.HandlesType(type))
+                    Type type = fieldInfo.FieldType;
+                    if (type.IsDefined(typeof(HideInInspector), false))
                     {
                         continue;
                     }
 
-                    string fieldName = fieldInfo.Name;
-                    if (fieldName.Length > 17 && fieldName.Contains("k__BackingField"))
+                    if (fieldInfo.IsDefined(typeof(HideInInspector), false))
                     {
-                        fieldName = fieldName.Substring(1, fieldName.Length - 17);
+                        continue;
                     }
-                    typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
 
-                    break;
+                    for (int i = 0; i < typeDrawers.Count; i++)
+                    {
+                        var typeDrawer = typeDrawers[i];
+
+                        if (!typeDrawer.HandlesType(type))
+                        {
+                            continue;
+                        }
+
+                        string fieldName = fieldInfo.Name;
+                        if (fieldName.Length > 17 && fieldName.Contains("k__BackingField"))
+                        {
+                            fieldName = fieldName.Substring(1, fieldName.Length - 17);
+                        }
+
+                        object value = fieldInfo.GetValue(obj.Key);
+                        typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+
+                        break;
+                    }
+                }
+
+                foreach (FieldInfo fieldInfo in fields)
+                {
+                    Type type = fieldInfo.FieldType;
+                    if (type.IsDefined(typeof(HideInInspector), false))
+                    {
+                        continue;
+                    }
+
+                    if (fieldInfo.IsDefined(typeof(HideInInspector), false))
+                    {
+                        continue;
+                    }
+
+                    if (fieldInfo.Name == "isInvokingToString")
+                    {
+                        continue;
+                    }
+
+                    if (type == typeof(ILTypeInstance) || type == typeof(ILRuntime.Runtime.Enviorment.AppDomain) || type == typeof(CrossBindingMethodInfo))
+                    {
+                        continue;
+                    }
+
+                    var result = false;
+                    foreach (FieldInfo info in tempFields)
+                    {
+                        if (fieldInfo.Name == info.Name)
+                        {
+                            result = true;
+                            break;
+                        }
+                    }
+
+                    if (result)
+                    {
+                        continue;
+                    }
+
+                    for (int i = 0; i < typeDrawers.Count; i++)
+                    {
+                        var typeDrawer = typeDrawers[i];
+
+                        if (!typeDrawer.HandlesType(type))
+                        {
+                            continue;
+                        }
+
+                        string fieldName = fieldInfo.Name;
+                        if (fieldName.Length > 17 && fieldName.Contains("k__BackingField"))
+                        {
+                            fieldName = fieldName.Substring(1, fieldName.Length - 17);
+                        }
+                        object value = fieldInfo.GetValue(instance.ILInstance);
+                        typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                foreach (FieldInfo fieldInfo in fields)
+                {
+                    Type type = fieldInfo.FieldType;
+                    if (type.IsDefined(typeof(HideInInspector), false))
+                    {
+                        continue;
+                    }
+
+                    if (fieldInfo.IsDefined(typeof(HideInInspector), false))
+                    {
+                        continue;
+                    }
+
+                    for (int i = 0; i < typeDrawers.Count; i++)
+                    {
+                        var typeDrawer = typeDrawers[i];
+
+                        if (!typeDrawer.HandlesType(type))
+                        {
+                            continue;
+                        }
+
+                        string fieldName = fieldInfo.Name;
+                        if (fieldName.Length > 17 && fieldName.Contains("k__BackingField"))
+                        {
+                            fieldName = fieldName.Substring(1, fieldName.Length - 17);
+                        }
+
+                        object value = fieldInfo.GetValue(obj.Key);
+                        typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+
+                        break;
+                    }
                 }
             }
         }
         catch (Exception e)
         {
-            Debug.Log($"component view error: {obj.GetType().FullName}+==>{e}"); // MDEBUG:
+            Debug.Log($"component view error: {obj.Value.FullName}+==>{e}"); // MDEBUG:
         }
     }
 }

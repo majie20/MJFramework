@@ -1,9 +1,12 @@
-set GEN_CLIENT=dotnet ..\Tools\Luban.ClientServer\Luban.ClientServer.dll
+set WORKSPACE=..
+set GEN_CLIENT=%WORKSPACE%\Tools\Luban.Client\Luban.Client.exe
 
-%GEN_CLIENT% -j cfg --^
- -d Defines\__root__.xml ^
- --input_data_dir Datas ^
- --output_data_dir output_json ^
+set CONF_ROOT=%WORKSPACE%\DesignerConfigs
+
+%GEN_CLIENT% -h %LUBAN_SERVER_IP% -j cfg --generateonly --^
+ -d %CONF_ROOT%\Defines\__root__.xml ^
+ --input_data_dir %CONF_ROOT%\Datas ^
+ --output_data_dir dummy ^
  --gen_types data_json ^
  -s all
 pause

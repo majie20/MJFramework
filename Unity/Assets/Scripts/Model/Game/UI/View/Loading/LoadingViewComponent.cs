@@ -3,103 +3,83 @@ using UnityEngine.UI;
 
 namespace Model
 {
-    [UIBaseData(UIViewType = (int)UIViewType.Normal, PrefabPath = "Assets/Res/NoBuildAB/Prefabs/UI/Loading/LoadingView", UIMaskMode = (int)UIMaskMode.Transparent)]
+    [UIBaseData(UIViewType = (int)UIViewType.Normal,
+        PrefabPath = "Assets/Res/Prefabs/UI/Loading/LoadingView.prefab",
+        UIMaskMode = (int)UIMaskMode.Transparent,
+        UILayer = (int)Model.UIViewLayer.Normal)]
     public class LoadingViewComponent : UIBaseComponent, IOpen, IAwake
     {
-        private LoadType loadType;
+        private LoadProgressType _loadProgressType;
         private Text TextProgress;
+        private Slider SliderProgress;
+        private string _hintText;
 
         public override void Awake()
         {
             base.Awake();
             ReferenceCollector rc = this.Entity.GameObject.GetComponent<ReferenceCollector>();
             TextProgress = rc.Get<GameObject>("TextProgress").GetComponent<Text>();
+            SliderProgress = rc.Get<GameObject>("SliderProgress").GetComponent<Slider>();
         }
 
         public override void Dispose()
         {
-            base.Dispose();
             TextProgress = null;
+            base.Dispose();
         }
 
-        public void Open()
+        public async void Open()
         {
             OnOpen();
-            loadType = LoadType.None;
-#if UNITY_EDITOR
-            AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
-            if (component.IsUseABPackPlay)
-            {
-                Game.Instance.Scene.GetComponent<HotComponent>().Run(false);
-            }
-            else
-            {
-                component.Run();
-            }
-#else
-            Game.Instance.Scene.GetComponent<HotComponent>().Run(false);
-#endif
-        }
+            _hintText = "";
+            _loadProgressType = LoadProgressType.None;
+            SliderProgress.value = 0;
 
-        protected override void OnOpen()
-        {
-            base.OnOpen();
-            Game.Instance.EventSystem.AddListener<LoadStateSwitch, LoadType>(OnLoadStateSwitch, this);
-            Game.Instance.EventSystem.AddListener<LoadingViewProgressRefresh, float>(OnLoadingViewProgressRefresh, this);
+            Game.Instance.EventSystem.AddListener<E_LoadStateSwitch, LoadProgressType>(this, OnLoadStateSwitch);
+            Game.Instance.EventSystem.AddListener<E_LoadingViewProgressRefresh, int, int, long, long>(this, OnLoadingViewProgressRefresh);
+
+            AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
+            await Game.Instance.Scene.GetComponent<HotComponent>().Run();
         }
 
         protected override void OnClose()
         {
             base.OnClose();
-            Game.Instance.EventSystem.AddListener<LoadingViewProgressRefresh, float>(OnLoadingViewProgressRefresh, this);
         }
 
-        private void OnLoadingViewProgressRefresh(float num)
+        private void OnLoadingViewProgressRefresh(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
         {
-            TextProgress.text = $"{num * 100:F2}%";
+            var value = totalDownloadBytes == 0 ? 1 : currentDownloadBytes / totalDownloadBytes;
+            SliderProgress.value = value;
+            TextProgress.text = $"{_hintText}：{currentDownloadCount}/{totalDownloadCount},{value * 100:F2}%";
         }
 
-        private void OnLoadStateSwitch(LoadType type)
+        private void OnLoadStateSwitch(LoadProgressType type)
         {
-            loadType = type;
+            _loadProgressType = type;
             switch (type)
             {
-                case LoadType.LoadAssetsConfig:
-                    Debug.LogWarning("正在加载资源配置"); // MDEBUG:
+                case LoadProgressType.UpdateStaticVersion:
+                    _hintText = "正在更新资源版本号";
+                    NLog.Log.Debug("正在更新资源版本号"); // MDEBUG:
                     break;
 
-                case LoadType.LoadAssetsConfigComplete:
-                    Debug.LogWarning("加载资源配置完成"); // MDEBUG:
+                case LoadProgressType.UpdatePatchManifest:
+                    _hintText = "正在更新资源清单";
+                    NLog.Log.Debug("正在更新资源清单"); // MDEBUG:
                     break;
 
-                case LoadType.CheckAssetsUpdate:
-                    Debug.LogWarning("正在检查资源更新"); // MDEBUG:
+                case LoadProgressType.DownloadHotAssets:
+                    _hintText = "正在下载资源";
+                    NLog.Log.Debug("正在下载资源"); // MDEBUG:
                     break;
 
-                case LoadType.DownloadHotAssets:
-                    Debug.LogWarning("正在更新资源"); // MDEBUG:
-                    break;
-
-                case LoadType.DownloadHotAssetsComplete:
-                    Debug.LogWarning("更新资源完成"); // MDEBUG:
-                    break;
-
-                case LoadType.UnzipAssets:
-                    Debug.LogWarning("正在解压资源"); // MDEBUG:
-                    break;
-
-                case LoadType.UnzipAssetsComplete:
-                    Debug.LogWarning("正在解压资源完成"); // MDEBUG:
-                    break;
-
-                case LoadType.LoadAssets:
-                    Debug.LogWarning("正在加载资源"); // MDEBUG:
-                    break;
-
-                case LoadType.LoadAssetsComplete:
-                    Debug.LogWarning("加载资源完成"); // MDEBUG:
+                case LoadProgressType.DownloadHotAssetsSuccess:
+                    _hintText = "下载资源完成";
+                    NLog.Log.Debug("下载资源完成"); // MDEBUG:
                     break;
             }
+            TextProgress.text = $"{_hintText}";
         }
     }
 }

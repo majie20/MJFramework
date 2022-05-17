@@ -1,22 +1,25 @@
-﻿#if UNITY_EDITOR
-
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
 [System.Reflection.Obfuscation(Exclude = true)]
 public class ILRuntimeCLRBinding : EditorWindow
 {
-    private const string HotfixFilePath = "Assets/Res/BuildAB/Text/Hotfix.dll.bytes";
-    private const string GenerateFilePath = "Assets/Scripts/Model/ILBinding";
+    private const string HotfixFilePath = "Assets/Res/Text/Hotfix.dll.bytes";
+    private const string GenerateFilePath = "Assets/Scripts/Model/Generate/ILBinding";
 
     [MenuItem("Tools/ILRuntime/通过自动分析热更DLL生成CLR绑定")]
-    public static void GenerateCLRBindingByAnalysis()
+    public static async void GenerateCLRBindingByAnalysis()
     {
         if (File.Exists(HotfixFilePath))
         {
+            EditorHelper.AddDefineSymbols("ILRuntime", BuildTargetGroup.Standalone);
+            EditorHelper.AddDefineSymbols("ILRuntime", BuildTargetGroup.iOS);
+            EditorHelper.AddDefineSymbols("ILRuntime", BuildTargetGroup.Android);
+
+            await Task.Delay(2000);
+
             for (int i = 0; i < GenerateFilePath.Length; i++)
             {
                 if (GenerateFilePath[i] == '/')
@@ -49,9 +52,13 @@ public class ILRuntimeCLRBinding : EditorWindow
         }
     }
 
-    [MenuItem("Tools/ILRuntime/删除所以绑定代码，通过自动分析热更DLL生成CLR绑定")]
+    [MenuItem("Tools/ILRuntime/删除所有绑定代码")]
     public static void DeleteAllAndGenerateCLRBindingByAnalysis()
     {
+        EditorHelper.RemoveDefineSymbols("ILRuntime", BuildTargetGroup.Standalone);
+        EditorHelper.RemoveDefineSymbols("ILRuntime", BuildTargetGroup.iOS);
+        EditorHelper.RemoveDefineSymbols("ILRuntime", BuildTargetGroup.Android);
+
         if (Directory.Exists(GenerateFilePath))
         {
             string[] files = System.IO.Directory.GetFiles(GenerateFilePath);
@@ -63,9 +70,5 @@ public class ILRuntimeCLRBinding : EditorWindow
         }
 
         AssetDatabase.Refresh();
-
-        GenerateCLRBindingByAnalysis();
     }
 }
-
-#endif

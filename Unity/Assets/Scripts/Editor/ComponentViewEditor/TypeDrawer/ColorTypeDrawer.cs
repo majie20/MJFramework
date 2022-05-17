@@ -7,7 +7,7 @@ public class ColorTypeDrawer : ITypeDrawer
 {
     public bool HandlesType(Type type)
     {
-        return type == typeof(Color);
+        return type.FullName == typeof(Color).FullName;
     }
 
     public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)

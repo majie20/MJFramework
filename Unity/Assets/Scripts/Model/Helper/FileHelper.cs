@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -126,7 +125,7 @@ namespace Model
 
                 if (req.isHttpError || req.isNetworkError)
                 {
-                    Debug.LogWarning($"路径[{path}]的文件获取失败----{req.error}");
+                    NLog.Log.Warn($"路径[{path}]的文件获取失败----{req.error}");
                     return null;
                 }
 
@@ -146,7 +145,7 @@ namespace Model
 
                 if (req.isHttpError || req.isNetworkError)
                 {
-                    Debug.LogWarning($"路径[{path}]的文件获取失败----{req.error}");
+                    NLog.Log.Warn($"路径[{path}]的文件获取失败----{req.error}");
                     return null;
                 }
 
@@ -167,7 +166,7 @@ namespace Model
 
                 if (req.isHttpError || req.isNetworkError)
                 {
-                    Debug.LogWarning($"路径[{path}]的文件获取失败----{req.error}");
+                    NLog.Log.Warn($"路径[{path}]的文件获取失败----{req.error}");
                     return null;
                 }
 

@@ -1,153 +1,282 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.U2D;
+using YooAsset;
+using Object = UnityEngine.Object;
 
 namespace Model
 {
-    public class AssetsComponent : Component, IAwake<bool>
+    public class AssetsComponent : Component, IAwake
     {
-        private Dictionary<string, AssetBundle> assetBundleDic;
+        public const string INIT_LOAD_CONFIG_PATH = "Assets/Res/Config/ScriptableObject/InitAssetReferenceSettings.asset";
+        public const string UI_ATLAS_LINK_CONFIG_PATH = "Assets/Res/Config/ScriptableObject/UIPrefabToAtlasSettings.asset";
 
-        private Dictionary<string, Object> assetsCiteMatchConfigDic;
+        private Dictionary<string, AssetOperationHandle> AssetOperationDic;
+        private Dictionary<string, SubAssetsOperationHandle> SubAssetOperationDic;
 
-        private int curProgress;
+        private AssetsBundleSettings _abSettings;
 
-        public int CurProgress
+        public AssetsBundleSettings ABSettings
         {
-            private set
-            {
-                curProgress = value;
-            }
-            get
-            {
-                return curProgress;
-            }
+            private set { _abSettings = value; }
+            get { return _abSettings; }
         }
 
-        private bool isUseABPackPlay;
+        private UIPrefabToAtlasSettings _uiptaSettings;
 
-        public bool IsUseABPackPlay
+        public UIPrefabToAtlasSettings UIPtaSettings
         {
-            private set
-            {
-                isUseABPackPlay = value;
-            }
-            get
-            {
-                return isUseABPackPlay;
-            }
+            private set { _uiptaSettings = value; }
+            get { return _uiptaSettings; }
         }
 
-        public void Awake(bool a)
-        {
-            IsUseABPackPlay = a;
-            assetBundleDic = new Dictionary<string, AssetBundle>();
-            assetsCiteMatchConfigDic = new Dictionary<string, Object>();
+        private YooAssets.EPlayMode _playMode;
 
-            Add(Resources.Load<AssetsCiteMatchConfigSettings>("AssetsCiteMatchConfigSettings"));
+        public YooAssets.EPlayMode PlayMode
+        {
+            private set { _playMode = value; }
+            get { return _playMode; }
+        }
+
+        public void Awake()
+        {
+            ABSettings = Resources.Load<AssetsBundleSettings>("AssetsBundleSettings");
+            PlayMode = ABSettings.PlayMode;
+            AssetOperationDic = new Dictionary<string, AssetOperationHandle>();
+            SubAssetOperationDic = new Dictionary<string, SubAssetsOperationHandle>();
         }
 
         public override void Dispose()
         {
-            assetBundleDic = null;
-            assetsCiteMatchConfigDic = null;
-            Entity = null;
-        }
-
-        public T Load<T>(string sign) where T : UnityEngine.Object
-        {
-            if (assetsCiteMatchConfigDic.ContainsKey(sign))
+            Resources.UnloadAsset(ABSettings);
+            ABSettings = null;
+            foreach (var handle in AssetOperationDic)
             {
-                return (T)assetsCiteMatchConfigDic[sign];
+                handle.Value.Release();
             }
 
-            return default;
-        }
-
-        public Object Load(string sign)
-        {
-            if (assetsCiteMatchConfigDic.ContainsKey(sign))
+            foreach (var handle in SubAssetOperationDic)
             {
-                return assetsCiteMatchConfigDic[sign];
+                handle.Value.Release();
             }
 
-            return default;
+            AssetOperationDic = null;
+            SubAssetOperationDic = null;
+
+            base.Dispose();
         }
 
-        public void Unload(string name, bool unloadAllLoadedObjects)
-        {
-            var ab = assetBundleDic[name];
-            assetBundleDic.Remove(name);
-            ab.Unload(unloadAllLoadedObjects);
-        }
+        #region 资源加载
 
-        public async UniTask Run(bool isHot)
-        {
-            EventSystem eventSystem = Game.Instance.EventSystem;
-            eventSystem.Invoke<LoadStateSwitch, LoadType>(LoadType.LoadAssets);
-            CurProgress = 0;
-            HotComponent component = Game.Instance.Scene.GetComponent<HotComponent>();
-            int sumSize = component.SumSize;
-            int[] progressList = new int[component.AbConfigs.Count];
+        #region 同步
 
-            for (int i = 0; i < component.AbConfigs.Count; i++)
+        public Object LoadSync(Type type, string sign, bool isCover = false)
+        {
+            if (isCover)
             {
-                var size = component.AbConfigs[i].Size;
-                var encryptPassword = component.Settings.EncryptPassword;
-                var abName = component.AbConfigs[i].ABName;
-                var abPackPath = FileHelper.JoinPath(
-                    $"{HotConfig.AB_SAVE_RELATIVELY_PATH}{Path.GetFileNameWithoutExtension(abName)}{component.Settings.ABExtension}",
-                    isHot ? FileHelper.FilePos.PersistentDataPath : FileHelper.FilePos.StreamingAssetsPath,
-                    FileHelper.LoadMode.UnityWebRequest);
-                var buffer = await FileHelper.LoadFileByUnityWebRequestAsync(abPackPath, f =>
-                {
-                    CurProgress -= progressList[i];
-                    progressList[i] = Mathf.FloorToInt(size * f);
-                    CurProgress += progressList[i];
-                    eventSystem.Invoke<LoadingViewProgressRefresh, float>((float)CurProgress / sumSize);
-                });
-                buffer = AESHelper.Decrypt(buffer, encryptPassword);
-                var abcr = AssetBundle.LoadFromMemoryAsync(buffer);
-                await UniTask.WaitUntil(() => abcr.isDone);
-
-                assetBundleDic.Add(Regex.Replace(abName, FileValue.FILE_EXTENSION_PATTERN, ""), abcr.assetBundle);
+                Unload(sign);
+            }
+            if (!AssetOperationDic.TryGetValue(sign, out AssetOperationHandle handle))
+            {
+                handle = YooAssets.LoadAssetSync(sign, type);
+                AssetOperationDic.Add(sign, handle);
             }
 
-            var abr = assetBundleDic["config"].LoadAssetAsync<AssetsCiteMatchConfigSettings>("AssetsCiteMatchConfigSettings");
-            await UniTask.WaitUntil(() => abr.isDone);
+            return handle.AssetObject;
+        }
 
-            if (abr.asset is AssetsCiteMatchConfigSettings settings)
+        public T LoadSync<T>(string sign, bool isCover = false) where T : UnityEngine.Object
+        {
+            return LoadSync(typeof(T), sign, isCover) as T;
+        }
+
+        public B LoadSubSync<A, B>(string sign, string subSign, bool isCover = false) where A : UnityEngine.Object where B : UnityEngine.Object
+        {
+            if (isCover)
             {
-                Add(settings);
+                UnloadSub(sign);
+            }
+            if (!SubAssetOperationDic.TryGetValue(sign, out SubAssetsOperationHandle handle))
+            {
+                handle = YooAssets.LoadSubAssetsSync<A>(sign);
+                SubAssetOperationDic.Add(sign, handle);
             }
 
-            eventSystem.Invoke<LoadStateSwitch, LoadType>(LoadType.LoadAssetsComplete);
-            Game.Instance.EventSystem.Invoke(EventType.GameLoadComplete);
+            return handle.GetSubAssetObject<B>(subSign);
         }
 
-#if UNITY_EDITOR
+        #endregion 同步
 
-        public void Run()
+        #region 异步
+
+        public async UniTask<Object> LoadAsync(Type type, string sign, bool isCover = false)
         {
-            EventSystem eventSystem = Game.Instance.EventSystem;
-            Add(AssetDatabase.LoadAssetAtPath<AssetsCiteMatchConfigSettings>($"{FileValue.BUILD_AB_RES_PATH}Config/AssetsCiteMatchConfigSettings.asset"));
-            eventSystem.Invoke<LoadStateSwitch, LoadType>(LoadType.LoadAssetsComplete);
-            Game.Instance.EventSystem.Invoke(EventType.GameLoadComplete);
+            if (isCover)
+            {
+                Unload(sign);
+            }
+            if (!AssetOperationDic.TryGetValue(sign, out AssetOperationHandle handle))
+            {
+                handle = YooAssets.LoadAssetSync(sign, type);
+                await handle.ToUniTask();
+                AssetOperationDic.Add(sign, handle);
+            }
+
+            return handle.AssetObject;
         }
 
+        public async UniTask<T> LoadAsync<T>(string sign, bool isCover = false) where T : UnityEngine.Object
+        {
+            return await LoadAsync(typeof(T), sign, isCover) as T;
+        }
+
+        public async UniTask<B> LoadSubAsync<A, B>(string sign, string subSign, bool isCover = false) where A : UnityEngine.Object where B : UnityEngine.Object
+        {
+            if (isCover)
+            {
+                UnloadSub(sign);
+            }
+            if (!SubAssetOperationDic.TryGetValue(sign, out SubAssetsOperationHandle handle))
+            {
+                handle = YooAssets.LoadSubAssetsSync<A>(sign);
+                await handle.ToUniTask();
+                SubAssetOperationDic.Add(sign, handle);
+            }
+
+            return handle.GetSubAssetObject<B>(subSign);
+        }
+
+        public async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string sign, UnityEngine.SceneManagement.LoadSceneMode sceneMode, bool activateOnLoad, bool isCover = false)
+        {
+            SceneOperationHandle handle = YooAssets.LoadSceneAsync(sign, sceneMode, activateOnLoad);
+            await handle.ToUniTask();
+            return handle.SceneObject;
+        }
+
+        #endregion 异步
+
+        #endregion 资源加载
+
+        #region 资源卸载
+
+        public void UnloadUnusedAssets()
+        {
+            YooAssets.UnloadUnusedAssets();
+        }
+
+        public void ForceUnloadAllAssets()
+        {
+            YooAssets.ForceUnloadAllAssets();
+        }
+
+        public void Unload(string sign)
+        {
+            if (AssetOperationDic.TryGetValue(sign, out AssetOperationHandle handle))
+            {
+                handle.Release();
+                AssetOperationDic.Remove(sign);
+            }
+        }
+
+        public void UnloadSub(string sign)
+        {
+            if (SubAssetOperationDic.TryGetValue(sign, out SubAssetsOperationHandle handle))
+            {
+                handle.Release();
+                SubAssetOperationDic.Remove(sign);
+            }
+        }
+
+        #endregion 资源卸载
+
+        public async UniTask Init()
+        {
+            IDecryptionServices services;
+            if (_abSettings.EncryptType == EncryptType.Empty)
+            {
+                services = new EmptyDecrypt();
+            }
+            else if (_abSettings.EncryptType == EncryptType.Offset)
+            {
+                services = new OffsetDecrypt();
+            }
+            else
+            {
+                services = new EmptyDecrypt();
+            }
+
+            if (PlayMode == YooAssets.EPlayMode.EditorPlayMode)// 编辑器模拟模式
+            {
+                var createParameters = new YooAssets.EditorPlayModeParameters();
+                createParameters.LocationServices = new DefaultLocationServices("");
+                createParameters.DecryptionServices = services;
+                await YooAssets.InitializeAsync(createParameters);
+            }
+            else if (PlayMode == YooAssets.EPlayMode.OfflinePlayMode)// 单机模式
+            {
+                var createParameters = new YooAssets.OfflinePlayModeParameters();
+                createParameters.LocationServices = new DefaultLocationServices("");
+                createParameters.DecryptionServices = services;
+                await YooAssets.InitializeAsync(createParameters);
+            }
+            else if (PlayMode == YooAssets.EPlayMode.HostPlayMode)// 联机模式
+            {
+                var createParameters = new YooAssets.HostPlayModeParameters();
+                createParameters.LocationServices = new DefaultLocationServices("");
+                createParameters.DecryptionServices = services;
+                createParameters.ClearCacheWhenDirty = false;
+                createParameters.DefaultHostServer = GetHostServerURL();
+                createParameters.FallbackHostServer = GetHostServerURL();
+                await YooAssets.InitializeAsync(createParameters);
+            }
+
+            await Run();
+        }
+
+        public async UniTask Run()
+        {
+            UIPtaSettings = await LoadAsync<UIPrefabToAtlasSettings>(UI_ATLAS_LINK_CONFIG_PATH);
+
+            await LoadAssetReferenceSettingsAsync(INIT_LOAD_CONFIG_PATH);
+        }
+
+        public async UniTask LoadAssetReferenceSettingsAsync(string sign, bool isCover = false)
+        {
+            AssetReferenceSettings settings = await LoadAsync<AssetReferenceSettings>(sign, isCover);
+            var list = settings.AssetPathList;
+            var len = list.Count;
+            var assembly = typeof(UnityEngine.GameObject).Assembly;
+            for (int i = 0; i < len; i++)
+            {
+                var e = list[i];
+                var path = e.path;
+                await LoadAsync(assembly.GetType(e.typeName), path, isCover);
+            }
+        }
+
+        public async UniTask LoadUIAtlas(string sign)
+        {
+            if (UIPtaSettings.InfoDic.TryGetValue(sign, out string value))
+            {
+                await LoadAsync<SpriteAtlas>(value);
+            }
+        }
+
+        public void ClearUnusedCacheFiles()
+        {
+            YooAssets.ClearUnusedCacheFiles();
+        }
+
+        private string GetHostServerURL()
+        {
+            string platform = PlatformHelper.GetPlatformSign();
+#if MBuild
+            return $"http://127.0.0.1:8080/{platform}";
+#else
+            return $"http://127.0.0.1:8080/{platform}";
 #endif
-
-        public void Add(AssetsCiteMatchConfigSettings settings)
-        {
-            var pathList = settings.PathList;
-            var assetsList = settings.AssetsList;
-            for (int i = 0; i < pathList.Count; i++)
-            {
-                assetsCiteMatchConfigDic.Add(pathList[i], assetsList[i]);
-            }
         }
     }
 }

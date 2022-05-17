@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 namespace Model
@@ -22,13 +23,21 @@ namespace Model
 
         public override void Dispose()
         {
-            foreach (var child in childDic.Values)
+            IsDispose = true;
+            if (childDic.Count > 0)
             {
-                child.Dispose();
+                foreach (var child in childDic.Values)
+                {
+                    child.Dispose();
+                }
             }
-            foreach (var value in componentDic.Values)
+
+            if (componentDic.Count > 0)
             {
-                value.Dispose();
+                foreach (var value in componentDic.Values)
+                {
+                    value.Dispose();
+                }
             }
 
             componentDic = null;
@@ -38,6 +47,7 @@ namespace Model
             UnityEngine.Object.Destroy(GameObject);
             Transform = null;
             GameObject = null;
+            IsDispose = false;
         }
 
         #region Entity
@@ -56,9 +66,9 @@ namespace Model
 
         #region 游戏物体
 
-        public GameObject HatchGameObjByName(string name, Transform parent, bool isAB)
+        public async UniTask<GameObject> HatchGameObjByName(string name, Transform parent, bool isAB)
         {
-            return this.GetComponent<GameObjPoolComponent>().HatchGameObjByName(name, parent, isAB);
+            return await this.GetComponent<GameObjPoolComponent>().HatchGameObjByName(name, parent, isAB);
         }
 
         public void RecycleGameObj(string sign, GameObject obj)

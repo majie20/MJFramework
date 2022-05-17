@@ -28,6 +28,8 @@ namespace Model
             Transform = GameObject.transform;
             Object.DontDestroyOnLoad(GameObject);
 
+            ComponentDic = new Dictionary<Type, Component>();
+
             EventSystem = new EventSystem();
 
             LifecycleSystem = new LifecycleSystem();
@@ -37,14 +39,10 @@ namespace Model
             Scene = new Scene();
 
             Hotfix = new Hotfix();
-
-            ComponentDic = new Dictionary<Type, Component>();
         }
 
         public override void Dispose()
         {
-            ComponentDic = null;
-
             Scene?.Dispose();
             Scene = null;
 
@@ -59,11 +57,17 @@ namespace Model
 
             Hotfix?.Dispose();
             Hotfix = null;
+
+            ComponentDic = null;
         }
 
         public void AddComponent<T>(T component) where T : Component
         {
             var type = typeof(T);
+            if (component is ILRuntime.Runtime.Enviorment.CrossBindingAdaptorType croos)
+            {
+                type = croos.ILInstance.Type.ReflectionType;
+            }
             if (!ComponentDic.ContainsKey(type))
             {
                 ComponentDic.Add(type, component);
@@ -79,6 +83,19 @@ namespace Model
             }
 
             return null;
+        }
+
+        public void RemoveComponent<T>(T component) where T : Component
+        {
+            var type = typeof(T);
+            if (component is ILRuntime.Runtime.Enviorment.CrossBindingAdaptorType croos)
+            {
+                type = croos.ILInstance.Type.ReflectionType;
+            }
+            if (ComponentDic.ContainsKey(type))
+            {
+                ComponentDic.Remove(type);
+            }
         }
     }
 }

@@ -13,19 +13,33 @@ namespace Model
             this.AddComponentView();
 
             ObjectHelper.CreateComponent<HttpComponent>(this, false);
+            ObjectHelper.CreateComponent<AssetsComponent>(this, false);
             ObjectHelper.CreateComponent<HotComponent>(this, false);
             ObjectHelper.CreateComponent<NPContextComponent>(this, false);
+            ObjectHelper.CreateComponent<GameManagerComponent>(this, false);
+            ObjectHelper.CreateComponent<MusicManager>(this, false);
+            //ObjectHelper.CreateComponent<PostProcessingComponent>(this, false);
+            //ObjectHelper.CreateComponent<PostProcessAssetComponent>(this, false);
+            ObjectHelper.CreateComponent<TimerComponent>(this, false);
         }
 
         public override void Dispose()
         {
-            foreach (var child in childDic.Values)
+            IsDispose = true;
+            if (childDic.Count > 0)
             {
-                child.Dispose();
+                foreach (var child in childDic.Values)
+                {
+                    child.Dispose();
+                }
             }
-            foreach (var value in componentDic.Values)
+
+            if (componentDic.Count > 0)
             {
-                value.Dispose();
+                foreach (var value in componentDic.Values)
+                {
+                    value.Dispose();
+                }
             }
 
             componentDic = null;
@@ -35,6 +49,7 @@ namespace Model
             UnityEngine.Object.Destroy(GameObject);
             Transform = null;
             GameObject = null;
+            IsDispose = false;
         }
     }
 }

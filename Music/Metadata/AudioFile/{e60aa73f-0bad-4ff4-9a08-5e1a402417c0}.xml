@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{e60aa73f-0bad-4ff4-9a08-5e1a402417c0}">
+		<property name="assetPath">
+			<value>BGM/天天消宝石游戏资源-天天爱消除-bgm 游戏益智(bgm_g_爱给网_aigei_com.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>56.476734693877553</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{8d971b8e-aa27-41b6-b13f-fb9cf28e166f}</destination>
+		</relationship>
+	</object>
+</objects>

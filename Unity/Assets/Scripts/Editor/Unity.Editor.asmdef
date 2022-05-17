@@ -2,7 +2,14 @@
     "name": "Unity.Editor",
     "references": [
         "GUID:7ee4b32222d025e48904360be24c5c45",
-        "GUID:07070a52d55bdeb44a90369821cf9dab"
+        "GUID:07070a52d55bdeb44a90369821cf9dab",
+        "GUID:0c752da273b17c547ae705acf0f2adf2",
+        "GUID:44d09cf463b68274884d8a3c8a94e528",
+        "GUID:b8e24fd1eb19b4226afebb2810e3c19b",
+        "GUID:002c1bbed08fa44d282ef34fd5edb138",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:a35efad8797223d499f8c68b1f545dbc",
+        "GUID:d60799ab2a985554ea1a39cd38695018"
     ],
     "includePlatforms": [
         "Editor"

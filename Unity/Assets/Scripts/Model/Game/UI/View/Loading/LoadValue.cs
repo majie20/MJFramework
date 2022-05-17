@@ -5,17 +5,12 @@ using UnityEngine;
 namespace Model
 {
 
-    public enum LoadType 
+    public enum LoadProgressType 
     {
         None,
-        LoadAssetsConfig,
-        LoadAssetsConfigComplete,
-        CheckAssetsUpdate,
+        UpdateStaticVersion,
+        UpdatePatchManifest,
         DownloadHotAssets,
-        DownloadHotAssetsComplete,
-        UnzipAssets,
-        UnzipAssetsComplete,
-        LoadAssets,
-        LoadAssetsComplete,
+        DownloadHotAssetsSuccess,
     }
 }

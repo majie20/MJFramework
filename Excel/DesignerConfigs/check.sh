@@ -1,9 +1,12 @@
 #!/bin/zsh
-GEN_CLIENT=dotnet ../Tools/Luban.ClientServer/Luban.ClientServer.dll
+WORKSPACE=..
+GEN_CLIENT=${WORKSPACE}/Tools/Luban.Client/Luban.Client.dll
 
-dotnet ${GEN_CLIENT} -j cfg --\
- -d Defines/__root__.xml \
- --input_data_dir Datas \
- --output_data_dir output_json \
- --gen_types data_json \
+CONF_ROOT=${WORKSPACE}/DesignerConfigs
+
+dotnet ${GEN_CLIENT} -h 127.0.0.1 -j cfg --generateonly --\
+ -d ${CONF_ROOT}/Defines/__root__.xml \
+ --input_data_dir ${CONF_ROOT}/Datas \
+ --output_data_dir ../Projects/GenerateDatas/json \
+ --gen_types data_bin \
  -s all 

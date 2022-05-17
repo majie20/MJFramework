@@ -3,19 +3,53 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public class ComponentPoolComponent : Component, IAwake
+    [LifeCycle]
+    public class ComponentPoolComponent : Component, IAwake, ILateUpdateSystem
     {
         private Dictionary<Type, Queue<Component>> componentDic;
+        private List<Component> components;
 
         public void Awake()
         {
             componentDic = new Dictionary<Type, Queue<Component>>();
+            components = new List<Component>();
         }
 
         public override void Dispose()
         {
             componentDic = null;
-            Entity = null;
+            components = null;
+            base.Dispose();
+        }
+
+        public void OnLateUpdate()
+        {
+            if (components.Count == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < components.Count; i++)
+            {
+                var component = components[i];
+                var type = component.GetType();
+                if (component is ILRuntime.Runtime.Enviorment.CrossBindingAdaptorType croos)
+                {
+                    type = croos.ILInstance.Type.ReflectionType;
+                }
+                Queue<Component> queue;
+                if (componentDic.ContainsKey(type))
+                {
+                    queue = componentDic[type];
+                }
+                else
+                {
+                    queue = new Queue<Component>();
+                    componentDic.Add(type, queue);
+                }
+
+                queue.Enqueue(component);
+            }
+            components.Clear();
         }
 
         public T HatchComponent<T>() where T : Component
@@ -30,7 +64,7 @@ namespace Model
                 return componentDic[type].Dequeue();
             }
 
-            Component component = null;
+            Component component;
             if (type is ILRuntime.Reflection.ILRuntimeType)
             {
                 component = Game.Instance.Hotfix.AppDomain.Instantiate<Component>(type.FullName);
@@ -45,23 +79,7 @@ namespace Model
 
         public void RecycleComponent(Component component)
         {
-            var type = component.GetType();
-            if (type.FullName == "Model.ComponentAdapter+Adapter")
-            {
-                type = (component as ComponentAdapter.Adapter)?.ILInstance.Type.ReflectionType;
-            }
-            Queue<Component> queue;
-            if (componentDic.ContainsKey(type))
-            {
-                queue = componentDic[type];
-            }
-            else
-            {
-                queue = new Queue<Component>();
-                componentDic.Add(type, queue);
-            }
-
-            queue.Enqueue(component);
+            components.Add(component);
         }
     }
 }

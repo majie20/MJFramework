@@ -9,10 +9,7 @@ using Model;
 
 public class ImageAtlas
 {
-    private static string folderABPath = "Assets/Res/BuildAB/Atlas";
-    private static string folderNoABPath = "Assets/Res/NoBuildAB/Atlas";
-
-    private static string atlasPath;
+    private static string atlasPath = "Assets/Res/Atlas";
 
     [MenuItem("Assets/图片设置/自动生成图集", false, 1)]
     public static void UpdateAtlas()
@@ -25,7 +22,6 @@ public class ImageAtlas
             return;
         }
 
-        GetAtlasPath(selectPath);
         CreateFloder();
         ScanFloader(selectPath);
 
@@ -57,19 +53,6 @@ public class ImageAtlas
 //             }
 //         }
 //         AssetDatabase.SaveAssets();
-    }
-
-    //获取图集文件夹的路径
-    public static void GetAtlasPath(string path)
-    {
-        if (path.Contains("NoBuildAB"))
-        {
-            atlasPath = folderNoABPath;
-        }
-        else
-        {
-            atlasPath = folderABPath;
-        }
     }
 
     //递归判断是否含有子文件夹

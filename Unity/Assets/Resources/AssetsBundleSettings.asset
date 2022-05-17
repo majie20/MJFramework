@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7383fcb2148c8bc4c8e2ffb15535a41e, type: 3}
   m_Name: AssetsBundleSettings
   m_EditorClassIdentifier: 
-  ABExtension: .aa
-  ZipExtension: .mm
-  ZipPassword: majie
+  IsOfflineGame: 0
+  EncryptType: 0
   EncryptPassword: 111111111111111111111111
-  AssetBundleSavePath: ./../Unity/Assets/StreamingAssets/Assets
-  ZipAssetBundleSavePath: ./../Unity/AssetBundleRes/Output
+  EncryptOffsetVolume: 32
+  PlayMode: 0

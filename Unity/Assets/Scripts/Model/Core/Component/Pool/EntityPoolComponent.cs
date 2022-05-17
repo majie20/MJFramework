@@ -14,7 +14,7 @@ namespace Model
         public override void Dispose()
         {
             entityDic = null;
-            Entity = null;
+            base.Dispose();
         }
 
         public Entity HatchEntity()

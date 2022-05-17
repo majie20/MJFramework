@@ -8,5 +8,7 @@ namespace Model
         public int UIViewType;
         public string PrefabPath;
         public int UIMaskMode;
+        public int UILayer;
+        public bool IsOperateMask = true;
     }
 }

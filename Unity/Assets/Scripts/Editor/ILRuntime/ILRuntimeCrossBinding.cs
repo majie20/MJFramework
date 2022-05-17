@@ -13,17 +13,17 @@ public class ILRuntimeCrossBinding
 
 
 
-        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/ILBinding/Adapter/BrightConfigBeanBaseAdapter.cs"))
+        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/Adapter/BrightConfigBeanBaseAdapter.cs"))
         {
             sw.WriteLine(ILRuntime.Runtime.Enviorment.CrossBindingCodeGenerator.GenerateCrossBindingAdapterCode(typeof(Bright.Config.BeanBase), "Model"));
         }
 
-        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/ILBinding/Adapter/ModelComponentAdapter.cs"))
+        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/Adapter/ModelComponentAdapter.cs"))
         {
             sw.WriteLine(ILRuntime.Runtime.Enviorment.CrossBindingCodeGenerator.GenerateCrossBindingAdapterCode(typeof(Model.Component), "Model"));
         }
 
-        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/ILBinding/Adapter/ModelUIBaseComponentAdapter.cs"))
+        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Assets/Scripts/Model/Adapter/ModelUIBaseComponentAdapter.cs"))
         {
             sw.WriteLine(ILRuntime.Runtime.Enviorment.CrossBindingCodeGenerator.GenerateCrossBindingAdapterCode(typeof(Model.UIBaseComponent), "Model"));
         }

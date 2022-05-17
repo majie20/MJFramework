@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using ILRuntime.CLR.Method;
+using System;
 using UnityEngine;
 
 namespace Model
@@ -28,6 +30,9 @@ namespace Model
 
             entity.AddComponent(component);
             component.Entity = entity;
+            component.IsRuning = true;
+            component.awakeCalled = true;
+            component.called = false;
 
             return component;
         }
@@ -104,14 +109,26 @@ namespace Model
 
         #region RemoveComponent
 
-        public static void RemoveComponent(Type type, Entity entity)
+        public static Component _RemoveComponent(Type type, Entity entity)
         {
             Component component = entity.GetComponent(type);
             if (component != null)
             {
                 component.Dispose();
+                component.IsRuning = false;
                 entity.RemoveComponent(type);
 
+                return component;
+            }
+
+            return null;
+        }
+
+        public static void RemoveComponent(Type type, Entity entity)
+        {
+            Component component = _RemoveComponent(type, entity);
+            if (component != null)
+            {
                 Game.Instance.LifecycleSystem.Remove(component);
             }
         }
@@ -125,10 +142,10 @@ namespace Model
 
         #region CreateEntity
 
-        public static Entity CreateEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
+        public static async UniTask<Entity> CreateEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
-            entity.GameObject = Game.Instance.ObjectPool.HatchGameObjByName(sign, parent == null ? eParent.Transform : parent, isFromAB);
+            entity.GameObject = await Game.Instance.ObjectPool.HatchGameObjByName(sign, parent == null ? eParent.Transform : parent, isFromAB);
             entity.Sign = sign;
 
             entity.Transform = entity.GameObject.transform;
@@ -139,15 +156,69 @@ namespace Model
             return entity;
         }
 
+        public static async UniTask<Entity> CreateEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false, params Type[] types)
+        {
+            Entity entity = await CreateEntity(eParent, parent, sign, isFromAB);
+            for (int i = 0; i < types.Length; i++)
+            {
+                var type = types[i];
+                if (type is ILRuntime.Reflection.ILRuntimeType)
+                {
+                    IMethod method = Game.Instance.Hotfix.MethodDic["Hotfix.ObjectHelper.CreateComponent3"];
+
+                    using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
+                    {
+                        ctx.PushObject(type);
+                        ctx.PushObject(entity);
+                        ctx.PushBool(true);
+                        ctx.Invoke();
+                    }
+                }
+                else
+                {
+                    CreateComponent(type, entity);
+                }
+            }
+
+            return entity;
+        }
+
         public static Entity CreateEntity(Entity eParent, GameObject obj)
         {
             Entity entity = Game.Instance.ObjectPool.HatchEntity();
             entity.GameObject = obj;
             entity.Sign = GameObjPoolComponent.None_GameObject;
             entity.Transform = entity.GameObject.transform;
-            entity.SetParent(eParent);
+            entity.SetParent(eParent, false);
 
             entity.AddComponentView();
+
+            return entity;
+        }
+
+        public static Entity CreateEntity(Entity eParent, GameObject obj, params Type[] types)
+        {
+            Entity entity = CreateEntity(eParent, obj);
+            for (int i = 0; i < types.Length; i++)
+            {
+                var type = types[i];
+                if (type is ILRuntime.Reflection.ILRuntimeType)
+                {
+                    IMethod method = Game.Instance.Hotfix.MethodDic["Hotfix.ObjectHelper.CreateComponent3"];
+
+                    using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
+                    {
+                        ctx.PushObject(type);
+                        ctx.PushObject(entity);
+                        ctx.PushBool(true);
+                        ctx.Invoke();
+                    }
+                }
+                else
+                {
+                    CreateComponent(type, entity);
+                }
+            }
 
             return entity;
         }
@@ -166,99 +237,95 @@ namespace Model
 
         #region OpenUIView
 
-        public static UIBaseComponent _OpenUIView(Type type, bool isCloseBack = false)
+        public static async UniTask<UIBaseComponent> _OpenUIView(Type type, bool isCloseBack = false)
         {
-            var component = Game.Instance.GetComponent<UIManagerComponent>().OpenUIView(type, isCloseBack);
+            var component = await Game.Instance.GetComponent<UI2DRootComponent>().OpenUIView(type, isCloseBack);
 
             return component;
         }
 
-        public static UIBaseComponent OpenUIView(Type type, bool isCloseBack = false)
+        public static async UniTask<UIBaseComponent> OpenUIView(Type type, bool isCloseBack = false)
         {
-            var component = _OpenUIView(type, isCloseBack);
+            var component = await _OpenUIView(type, isCloseBack);
             if (component == null)
             {
-                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+                NLog.Log.Error($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
             }
             else
             {
                 IOpen iOpen = component as IOpen;
-
                 iOpen?.Open();
             }
 
             return component;
         }
 
-        public static UIBaseComponent OpenUIView<A>(Type type, A a, bool isCloseBack = false)
+        public static async UniTask<UIBaseComponent> OpenUIView<A>(Type type, A a, bool isCloseBack = false)
         {
-            var component = _OpenUIView(type, isCloseBack);
+            var component = await _OpenUIView(type, isCloseBack);
             if (component == null)
             {
-                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+                NLog.Log.Error($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
             }
             else
             {
                 IOpen<A> iOpen = component as IOpen<A>;
-
                 iOpen?.Open(a);
             }
 
             return component;
         }
 
-        public static UIBaseComponent OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
+        public static async UniTask<UIBaseComponent> OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
         {
-            var component = _OpenUIView(type, isCloseBack);
+            var component = await _OpenUIView(type, isCloseBack);
             if (component == null)
             {
-                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+                NLog.Log.Error($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
             }
             else
             {
                 IOpen<A, B> iOpen = component as IOpen<A, B>;
-
                 iOpen?.Open(a, b);
             }
 
             return component;
         }
 
-        public static UIBaseComponent OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
+        public static async UniTask<UIBaseComponent> OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
         {
-            var component = _OpenUIView(type, isCloseBack);
+            var component = await _OpenUIView(type, isCloseBack);
             if (component == null)
             {
-                Debug.LogError($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
+                NLog.Log.Error($"打开UI界面失败！===>{type.FullName}"); // MDEBUG:
             }
             else
             {
                 IOpen<A, B, C> iOpen = component as IOpen<A, B, C>;
-
                 iOpen?.Open(a, b, c);
             }
 
             return component;
         }
 
-        public static T OpenUIView<T>(bool isCloseBack = false) where T : UIBaseComponent
+        public static async UniTask<T> OpenUIView<T>(bool isCloseBack = false) where T : UIBaseComponent
         {
-            return (T)OpenUIView(typeof(T), isCloseBack);
+            return (T)await OpenUIView(typeof(T), isCloseBack);
         }
 
-        public static T OpenUIView<T, A>(A a, bool isCloseBack = false) where T : UIBaseComponent
+        public static async UniTask<T> OpenUIView<T, A>(A a, bool isCloseBack = false) where T : UIBaseComponent
         {
-            return (T)OpenUIView(typeof(T), a, isCloseBack);
+            return (T)await OpenUIView(typeof(T), a, isCloseBack);
         }
 
-        public static T OpenUIView<T, A, B>(A a, B b, bool isCloseBack = false) where T : UIBaseComponent
+        public static async UniTask<T> OpenUIView<T, A, B>(A a, B b, bool isCloseBack = false) where T : UIBaseComponent
         {
-            return (T)OpenUIView(typeof(T), a, b, isCloseBack);
+            return (T)await OpenUIView(typeof(T), a, b, isCloseBack);
         }
 
-        public static T OpenUIView<T, A, B, C>(A a, B b, C c, bool isCloseBack = false) where T : UIBaseComponent
+        public static async UniTask<T> OpenUIView<T, A, B, C>(A a, B b, C c, bool isCloseBack = false) where T : UIBaseComponent
         {
-            return (T)OpenUIView(typeof(T), a, b, c, isCloseBack);
+            return (T)await OpenUIView(typeof(T), a, b, c, isCloseBack);
         }
 
         #endregion OpenUIView
@@ -267,7 +334,7 @@ namespace Model
 
         public static void CloseUIView(Type type, bool isCloseBack = false)
         {
-            Game.Instance.GetComponent<UIManagerComponent>().CloseUIView(type, isCloseBack);
+            Game.Instance.GetComponent<UI2DRootComponent>().CloseUIView(type, isCloseBack);
         }
 
         public static void CloseUIView<T>(bool isCloseBack = false)
