@@ -25,7 +25,7 @@ namespace NLog {
                 _socket.Bind(new IPEndPoint(IPAddress.Any, port));
                 _socket.Listen(100);
                 isConnected = true;
-                _log.Info(string.Format("Listening on port {0}...", port));
+                _log.Debug(string.Format("Listening on port {0}...", port));
                 accept();
             } catch (Exception ex) {
                 _socket = null;
@@ -48,7 +48,7 @@ namespace NLog {
         void acceptedClientConnection(Socket client) {
             _clients.Add(client);
             IPEndPoint clientEndPoint = (IPEndPoint)client.RemoteEndPoint;
-            _log.Info(string.Format("New client connection accepted ({0}:{1})",
+            _log.Debug(string.Format("New client connection accepted ({0}:{1})",
                 clientEndPoint.Address, clientEndPoint.Port));
             if (OnClientConnect != null) {
                 OnClientConnect(this, new TcpSocketEventArgs(client));
@@ -60,10 +60,10 @@ namespace NLog {
         protected override void disconnectedByRemote(Socket socket) {
             try {
                 IPEndPoint clientEndPoint = (IPEndPoint)socket.RemoteEndPoint;
-                _log.Info(string.Format("Client disconnected ({0}:{1})",
+                _log.Debug(string.Format("Client disconnected ({0}:{1})",
                     clientEndPoint.Address, clientEndPoint.Port));
             } catch (Exception) {
-                _log.Info("Client disconnected.");
+                _log.Debug("Client disconnected.");
             }
             socket.Close();
             _clients.Remove(socket);
@@ -84,12 +84,12 @@ namespace NLog {
             }
 
             if (isConnected) {
-                _log.Info("Stopped listening.");
+                _log.Debug("Stopped listening.");
                 isConnected = false;
                 _socket.Close();
                 triggerOnDisconnect();
             } else {
-                _log.Info("Already diconnected.");
+                _log.Debug("Already diconnected.");
             }
         }
 

@@ -12,7 +12,7 @@ namespace NLog.Unity {
         }
 
         void log(Logger logger, LogLevel logLevel, string message) {
-            if (logLevel <= LogLevel.Info) {
+            if (logLevel <= LogLevel.Debug) {
                 Debug.Log(message);
             } else if (logLevel == LogLevel.Warn) {
                 Debug.LogWarning(message);

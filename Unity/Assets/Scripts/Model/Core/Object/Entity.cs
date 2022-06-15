@@ -15,7 +15,20 @@ namespace Model
         protected Dictionary<Type, Component> componentDic;
         protected Dictionary<string, Entity> childDic;
         protected ComponentView componentView;
+
         protected string path;
+
+        public string Path
+        {
+            protected set
+            {
+                path = value;
+            }
+            get
+            {
+                return path;
+            }
+        }
 
         private Entity parent;
 
@@ -111,7 +124,7 @@ namespace Model
         public virtual void Dispose()
         {
             IsDispose = true;
-            Parent.RemoveChild(this.path);
+            Parent.RemoveChild(this.Path);
             if (childDic.Count > 0)
             {
                 foreach (var child in childDic.Values)
@@ -141,6 +154,7 @@ namespace Model
                         ObjectHelper.RemoveComponent(types[i], this);
                     }
                 }
+
                 componentDic.Clear();
             }
 
@@ -151,7 +165,7 @@ namespace Model
             {
                 if (Sign != GameObjPoolComponent.None_GameObject)
                 {
-                    Game.Instance.ObjectPool.RecycleGameObj(Sign, GameObject);
+                    Game.Instance.Scene.GetComponent<GameObjPoolComponent>().RecycleGameObj(Sign, GameObject);
                 }
                 Transform = null;
                 GameObject = null;
@@ -172,10 +186,6 @@ namespace Model
             {
                 componentView.dic.Add(component, componentAdapter.ILInstance.Type.ReflectionType);
             }
-            else if (component is UIBaseComponentAdapter.Adapter uiBaseComponentAdapter)
-            {
-                componentView.dic.Add(component, uiBaseComponentAdapter.ILInstance.Type.ReflectionType);
-            }
             else
             {
                 var type = component.GetType();
@@ -188,19 +198,15 @@ namespace Model
             componentView.dic.Remove(component);
         }
 
-        public void SetParent(Entity entity, bool isSetParent = true)
+        public void SetParent(Entity entity)
         {
             this.Parent = entity;
-            if (isSetParent)
-            {
-                this.Transform.SetParent(entity.Transform);
-            }
             this.Parent.AddChild(this);
         }
 
         public void SetPath(string path)
         {
-            this.path = path;
+            this.Path = path;
         }
 
         public void AddChild(Entity child)
@@ -312,11 +318,6 @@ namespace Model
 
         #region 删除组件
 
-        public void RemoveComponent<T>() where T : Component
-        {
-            RemoveComponent(typeof(T));
-        }
-
         public void RemoveComponent(Type type)
         {
             if (componentDic.ContainsKey(type))
@@ -325,23 +326,7 @@ namespace Model
                 RemoveToComponentView(component);
                 componentDic.Remove(type);
 
-                Game.Instance.ObjectPool.RecycleComponent(component);
-            }
-        }
-
-        public void RemoveComponent(Component component)
-        {
-            Type type = component.GetType();
-            if (component is ILRuntime.Runtime.Enviorment.CrossBindingAdaptorType croos)
-            {
-                type = croos.ILInstance.Type.ReflectionType;
-            }
-            if (componentDic.ContainsKey(type))
-            {
-                RemoveToComponentView(component);
-                componentDic.Remove(type);
-
-                Game.Instance.ObjectPool.RecycleComponent(component);
+                Game.Instance.Scene.GetComponent<ComponentPoolComponent>().RecycleComponent(component);
             }
         }
 

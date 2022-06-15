@@ -6,9 +6,9 @@ set CONF_ROOT=%WORKSPACE%\Excel\DesignerConfigs
 dotnet %GEN_CLIENT_SERVER% -j cfg -- ^
  -d %CONF_ROOT%\Defines\__root__.xml ^
  --input_data_dir %CONF_ROOT%\Datas ^
- --output_code_dir %WORKSPACE%\Unity\Assets\Scripts\Hotfix\Generate\JsonConfigCode ^
+ --output_code_dir %WORKSPACE%\Unity\Assets\Scripts\Model\Generate\JsonConfigCode ^
  --output_data_dir %WORKSPACE%\Unity\Assets\Res\Config\JsonConfig ^
  --gen_types code_cs_unity_bin,data_bin ^
  -s all
 
-pause
+@REM pause

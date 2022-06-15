@@ -35,12 +35,9 @@ namespace NLog {
         const string Format = ESC + "{0}" + ESC + "{1}" + "{2}" + ESC + Reset;
 
         static readonly Dictionary<LogLevel, string[]> colors = new Dictionary<LogLevel, string[]> {
-            { LogLevel.Trace, new [] { FG_White,  BG_Cyan } },
             { LogLevel.Debug, new [] { FG_Blue,   BG_None } },
-            { LogLevel.Info,  new [] { FG_Green,  BG_None } },
             { LogLevel.Warn,  new [] { FG_Yellow, BG_None } },
             { LogLevel.Error, new [] { FG_White,  BG_Red } },
-            { LogLevel.Fatal, new [] { FG_White,  BG_Magenta } }
         };
 
         public string FormatMessage(LogLevel logLevel, string message) {

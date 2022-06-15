@@ -7,7 +7,6 @@ using UnityEngine;
 public class Startup
 {
     private const string ScriptAssembliesDir = "Library/ScriptAssemblies";
-    private const string CodeDir = "Assets/Res/Text/";
     private const string HotfixDll = "Unity.Hotfix.dll";
     private const string HotfixPdb = "Unity.Hotfix.pdb";
 
@@ -15,24 +14,25 @@ public class Startup
     {
         if (EditorApplication.isPlayingOrWillChangePlaymode)
         {
-            //AssetsConfigSettingsInspector.Export(UnityEditor.AssetDatabase.LoadAssetAtPath<AssetsConfigSettings>("Assets/Scripts/Editor/AssetBundle/Config/AssetsConfig/AssetsConfigSettings.asset"));
-            //AssetsConfigSettingsInspector.Export(UnityEditor.AssetDatabase.LoadAssetAtPath<AssetsConfigSettings>("Assets/Scripts/Editor/AssetBundle/Config/AssetsConfig/NoBuildAssetsConfigSettings.asset"));
+            AssetCollectorEditor.ExportAssetCollector(AssetDatabase.LoadAssetAtPath<Object>(EditorConfig.GAME_LOAD_COMPLETE_AC));
+            AssetCollectorEditor.ExportAssetCollector(AssetDatabase.LoadAssetAtPath<Object>(EditorConfig.INIT_AC));
         }
         else
         {
-            FileHelper.CreateDir(CodeDir);
+            FileHelper.CreateDir(EditorConfig.CODE_DIR_PATH);
 
             if (File.Exists($"{ScriptAssembliesDir}/{HotfixDll}") && File.Exists($"{ScriptAssembliesDir}/{HotfixDll}"))
             {
-                File.Copy(Path.Combine(ScriptAssembliesDir, HotfixDll), Path.Combine(CodeDir, "Hotfix.dll.bytes"), true);
-                File.Copy(Path.Combine(ScriptAssembliesDir, HotfixPdb), Path.Combine(CodeDir, "Hotfix.pdb.bytes"), true);
-                Debug.Log($"复制Hotfix.dll、Hotfix.pdb到{CodeDir}，成功！");
+                File.Copy(Path.Combine(ScriptAssembliesDir, HotfixDll), Path.Combine(EditorConfig.CODE_DIR_PATH, "Hotfix.dll.bytes"), true);
+                File.Copy(Path.Combine(ScriptAssembliesDir, HotfixPdb), Path.Combine(EditorConfig.CODE_DIR_PATH, "Hotfix.pdb.bytes"), true);
+                Debug.Log($"复制Hotfix.dll、Hotfix.pdb到{EditorConfig.CODE_DIR_PATH}，成功！");
 
                 AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
             else
             {
-                Debug.LogWarning($"复制Hotfix.dll、Hotfix.pdb到{CodeDir}，失败！");
+                Debug.LogWarning($"复制Hotfix.dll、Hotfix.pdb到{EditorConfig.CODE_DIR_PATH}，失败！");
             }
         }
     }

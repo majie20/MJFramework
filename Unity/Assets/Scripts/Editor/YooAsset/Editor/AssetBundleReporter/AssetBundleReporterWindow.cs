@@ -1,4 +1,5 @@
 #if UNITY_2019_4_OR_NEWER
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.UIElements;
@@ -37,59 +38,68 @@ namespace YooAsset.Editor
 		}
 
 		private ToolbarMenu _viewModeMenu;
-		private SummaryReporterViewer _summaryViewer;
-		private AssetListReporterViewer _assetListViewer;
-		private BundleListReporterViewer _bundleListViewer;
+		private ReporterSummaryViewer _summaryViewer;
+		private ReporterAssetListViewer _assetListViewer;
+		private ReporterBundleListViewer _bundleListViewer;
 
 		private EViewMode _viewMode;
-		private string _searchKeyWord;
 		private BuildReport _buildReport;
+		private string _reportFilePath;
+		private string _searchKeyWord;
 
-        public void OnEnable()
+
+		public void CreateGUI()
 		{
-			VisualElement root = this.rootVisualElement;
-
-			// 加载布局文件
-			string rootPath = EditorTools.GetYooAssetSourcePath();
-			string uxml = $"{rootPath}/Editor/AssetBundleReporter/{nameof(AssetBundleReporterWindow)}.uxml";
-			var visualAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxml);
-			if (visualAsset == null)
+			try
 			{
-				Debug.LogError($"Not found {nameof(AssetBundleReporterWindow)}.uxml : {uxml}");
-				return;
+				VisualElement root = this.rootVisualElement;
+
+				// 加载布局文件
+				var visualAsset =  EditorHelper.LoadWindowUXML<AssetBundleReporterWindow>();
+				if (visualAsset == null)
+					return;
+				
+				visualAsset.CloneTree(root);
+
+				// 导入按钮
+				var importBtn = root.Q<Button>("ImportButton");
+				importBtn.clicked += ImportBtn_onClick;
+
+				// 视图模式菜单
+				_viewModeMenu = root.Q<ToolbarMenu>("ViewModeMenu");
+				_viewModeMenu.menu.AppendAction(EViewMode.Summary.ToString(), ViewModeMenuAction0, ViewModeMenuFun0);
+				_viewModeMenu.menu.AppendAction(EViewMode.AssetView.ToString(), ViewModeMenuAction1, ViewModeMenuFun1);
+				_viewModeMenu.menu.AppendAction(EViewMode.BundleView.ToString(), ViewModeMenuAction2, ViewModeMenuFun2);
+
+				// 搜索栏
+				var searchField = root.Q<ToolbarSearchField>("SearchField");
+				searchField.RegisterValueChangedCallback(OnSearchKeyWordChange);
+
+				// 加载视图
+				_summaryViewer = new ReporterSummaryViewer();
+				_summaryViewer.InitViewer();
+
+				// 加载视图
+				_assetListViewer = new ReporterAssetListViewer();
+				_assetListViewer.InitViewer();
+
+				// 加载视图
+				_bundleListViewer = new ReporterBundleListViewer();
+				_bundleListViewer.InitViewer();
+
+				// 显示视图
+				_viewMode = EViewMode.Summary;
+				_viewModeMenu.text = EViewMode.Summary.ToString();
+				_summaryViewer.AttachParent(root);
 			}
-			visualAsset.CloneTree(root);
-
-			// 导入按钮
-			var importBtn = root.Q<Button>("ImportButton");
-			importBtn.clicked += ImportBtn_onClick;
-
-			// 视图模式菜单
-			_viewModeMenu = root.Q<ToolbarMenu>("ViewModeMenu");
-			_viewModeMenu.menu.AppendAction(EViewMode.Summary.ToString(), ViewModeMenuAction0, ViewModeMenuFun0);
-			_viewModeMenu.menu.AppendAction(EViewMode.AssetView.ToString(), ViewModeMenuAction1, ViewModeMenuFun1);
-			_viewModeMenu.menu.AppendAction(EViewMode.BundleView.ToString(), ViewModeMenuAction2, ViewModeMenuFun2);
-
-			// 搜索栏
-			var searchField = root.Q<ToolbarSearchField>("SearchField");
-			searchField.RegisterValueChangedCallback(OnSearchKeyWordChange);
-
-			// 加载视图
-			_summaryViewer = new SummaryReporterViewer();
-			_summaryViewer.InitViewer();
-
-			// 加载视图
-			_assetListViewer = new AssetListReporterViewer();
-			_assetListViewer.InitViewer();
-
-			// 加载视图
-			_bundleListViewer = new BundleListReporterViewer();
-			_bundleListViewer.InitViewer();
-
-			// 显示视图
-			_viewMode = EViewMode.Summary;
-			_viewModeMenu.text = EViewMode.Summary.ToString();
-			_summaryViewer.AttachParent(root);
+			catch (Exception e)
+			{
+				Debug.LogError(e.ToString());
+			}
+		}
+		public void OnDestroy()
+		{
+			AssetBundleRecorder.UnloadAll();
 		}
 
 		private void ImportBtn_onClick()
@@ -98,19 +108,20 @@ namespace YooAsset.Editor
 			if (string.IsNullOrEmpty(selectFilePath))
 				return;
 
-			string jsonData = FileUtility.ReadFile(selectFilePath);
+			_reportFilePath = selectFilePath;
+			string jsonData = FileUtility.ReadFile(_reportFilePath);
 			_buildReport = BuildReport.Deserialize(jsonData);
 			_assetListViewer.FillViewData(_buildReport, _searchKeyWord);
-			_bundleListViewer.FillViewData(_buildReport, _searchKeyWord);
+			_bundleListViewer.FillViewData(_buildReport, _reportFilePath, _searchKeyWord);
 			_summaryViewer.FillViewData(_buildReport);
 		}
 		private void OnSearchKeyWordChange(ChangeEvent<string> e)
 		{
 			_searchKeyWord = e.newValue;
-			if(_buildReport != null)
+			if (_buildReport != null)
 			{
 				_assetListViewer.FillViewData(_buildReport, _searchKeyWord);
-				_bundleListViewer.FillViewData(_buildReport, _searchKeyWord);
+				_bundleListViewer.FillViewData(_buildReport, _reportFilePath, _searchKeyWord);
 			}
 		}
 		private void ViewModeMenuAction0(DropdownMenuAction action)

@@ -14,7 +14,7 @@ namespace Model
             Component component;
             if (isFromPool)
             {
-                component = Game.Instance.ObjectPool.HatchComponent(type);
+                component = Game.Instance.Scene.GetComponent<ComponentPoolComponent>().HatchComponent(type);
             }
             else
             {
@@ -33,6 +33,8 @@ namespace Model
             component.IsRuning = true;
             component.awakeCalled = true;
             component.called = false;
+
+            component.AddComponentParent();
 
             return component;
         }
@@ -142,12 +144,51 @@ namespace Model
 
         #region CreateEntity
 
-        public static async UniTask<Entity> CreateEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false)
+        public static async UniTask<T> CreateEntity<T>(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false, bool isAsync = true, bool isParentCanNull = false) where T : Entity
         {
-            Entity entity = Game.Instance.ObjectPool.HatchEntity();
-            entity.GameObject = await Game.Instance.ObjectPool.HatchGameObjByName(sign, parent == null ? eParent.Transform : parent, isFromAB);
+            T entity = Game.Instance.Scene.GetComponent<EntityPoolComponent>().HatchEntity<T>();
+            entity.GameObject = await Game.Instance.Scene.GetComponent<GameObjPoolComponent>().HatchGameObjBySign(sign, !isParentCanNull && parent == null ? eParent.Transform : parent, isFromAB, isAsync);
             entity.Sign = sign;
 
+            entity.Transform = entity.GameObject.transform;
+            entity.SetParent(eParent);
+
+            entity.AddComponentView();
+            return entity;
+        }
+
+        public static async UniTask<T> CreateEntity<T>(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false, bool isAsync = true, bool isParentCanNull = false, params Type[] types) where T : Entity
+        {
+            T entity = await CreateEntity<T>(eParent, parent, sign, isFromAB, isAsync, isParentCanNull);
+            for (int i = 0; i < types.Length; i++)
+            {
+                var type = types[i];
+                if (type is ILRuntime.Reflection.ILRuntimeType)
+                {
+                    IMethod method = Game.Instance.Hotfix.MethodDic["Hotfix.ObjectHelper.CreateComponent3"];
+
+                    using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
+                    {
+                        ctx.PushObject(type);
+                        ctx.PushObject(entity);
+                        ctx.PushBool(true);
+                        ctx.Invoke();
+                    }
+                }
+                else
+                {
+                    CreateComponent(type, entity);
+                }
+            }
+
+            return entity;
+        }
+
+        public static T CreateEntity<T>(Entity eParent, GameObject obj) where T : Entity
+        {
+            T entity = Game.Instance.Scene.GetComponent<EntityPoolComponent>().HatchEntity<T>();
+            entity.GameObject = obj;
+            entity.Sign = GameObjPoolComponent.None_GameObject;
             entity.Transform = entity.GameObject.transform;
             entity.SetParent(eParent);
 
@@ -156,9 +197,9 @@ namespace Model
             return entity;
         }
 
-        public static async UniTask<Entity> CreateEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false, params Type[] types)
+        public static T CreateEntity<T>(Entity eParent, GameObject obj, params Type[] types) where T : Entity
         {
-            Entity entity = await CreateEntity(eParent, parent, sign, isFromAB);
+            T entity = CreateEntity<T>(eParent, obj);
             for (int i = 0; i < types.Length; i++)
             {
                 var type = types[i];
@@ -181,46 +222,26 @@ namespace Model
             }
 
             return entity;
+        }
+
+        public static async UniTask<Entity> CreateEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false, bool isAsync = true, bool isParentCanNull = false)
+        {
+            return await CreateEntity<Entity>(eParent, parent, sign, isFromAB, isAsync, isParentCanNull);
+        }
+
+        public static async UniTask<Entity> CreateEntity(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false, bool isAsync = true, bool isParentCanNull = false, params Type[] types)
+        {
+            return await CreateEntity<Entity>(eParent, parent, sign, isFromAB, isAsync, isParentCanNull, types);
         }
 
         public static Entity CreateEntity(Entity eParent, GameObject obj)
         {
-            Entity entity = Game.Instance.ObjectPool.HatchEntity();
-            entity.GameObject = obj;
-            entity.Sign = GameObjPoolComponent.None_GameObject;
-            entity.Transform = entity.GameObject.transform;
-            entity.SetParent(eParent, false);
-
-            entity.AddComponentView();
-
-            return entity;
+            return CreateEntity<Entity>(eParent, obj);
         }
 
         public static Entity CreateEntity(Entity eParent, GameObject obj, params Type[] types)
         {
-            Entity entity = CreateEntity(eParent, obj);
-            for (int i = 0; i < types.Length; i++)
-            {
-                var type = types[i];
-                if (type is ILRuntime.Reflection.ILRuntimeType)
-                {
-                    IMethod method = Game.Instance.Hotfix.MethodDic["Hotfix.ObjectHelper.CreateComponent3"];
-
-                    using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
-                    {
-                        ctx.PushObject(type);
-                        ctx.PushObject(entity);
-                        ctx.PushBool(true);
-                        ctx.Invoke();
-                    }
-                }
-                else
-                {
-                    CreateComponent(type, entity);
-                }
-            }
-
-            return entity;
+            return CreateEntity<Entity>(eParent, obj, types);
         }
 
         #endregion CreateEntity
@@ -230,7 +251,7 @@ namespace Model
         public static void RemoveEntity(Entity entity)
         {
             entity.Dispose();
-            Game.Instance.ObjectPool.GetComponent<EntityPoolComponent>().RecycleEntity(entity);
+            Game.Instance.Scene.GetComponent<EntityPoolComponent>().RecycleEntity(entity);
         }
 
         #endregion RemoveEntity
@@ -239,7 +260,7 @@ namespace Model
 
         public static async UniTask<UIBaseComponent> _OpenUIView(Type type, bool isCloseBack = false)
         {
-            var component = await Game.Instance.GetComponent<UI2DRootComponent>().OpenUIView(type, isCloseBack);
+            var component = await Game.Instance.GGetComponent<UI2DRootComponent>().OpenUIView(type, isCloseBack);
 
             return component;
         }
@@ -334,7 +355,7 @@ namespace Model
 
         public static void CloseUIView(Type type, bool isCloseBack = false)
         {
-            Game.Instance.GetComponent<UI2DRootComponent>().CloseUIView(type, isCloseBack);
+            UniTask.Void(async () => await Game.Instance.GGetComponent<UI2DRootComponent>().CloseUIView(type, isCloseBack));
         }
 
         public static void CloseUIView<T>(bool isCloseBack = false)
@@ -343,5 +364,26 @@ namespace Model
         }
 
         #endregion CloseUIView
+
+        #region 设置Camera
+
+        public static void SetMainCamera()
+        {
+            var gameRoot = Game.Instance.Scene.GetChild("GameRoot");
+
+            ObjectHelper.CreateComponent<VCameraCtrlComponent>(ObjectHelper.CreateEntity(gameRoot, gameRoot.Transform.Find("VcamList").gameObject));
+
+            var mainCamera = gameRoot.GetChild("Main Camera");
+            if (mainCamera != null)
+            {
+                ObjectHelper.CreateComponent<CameraCtrlComponent>(mainCamera);
+            }
+            else
+            {
+                ObjectHelper.CreateComponent<CameraCtrlComponent>(ObjectHelper.CreateEntity(gameRoot, gameRoot.Transform.Find("Main Camera").gameObject));
+            }
+        }
+
+        #endregion 设置Camera
     }
 }

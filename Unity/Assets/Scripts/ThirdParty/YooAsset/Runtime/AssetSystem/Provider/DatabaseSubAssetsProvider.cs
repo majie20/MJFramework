@@ -11,14 +11,13 @@ namespace YooAsset
 			get
 			{
 				if (IsDone)
-					return 100f;
+					return 1f;
 				else
 					return 0;
 			}
 		}
 
-		public DatabaseSubAssetsProvider(string assetPath, System.Type assetType)
-			: base(assetPath, assetType)
+		public DatabaseSubAssetsProvider(AssetInfo assetInfo) : base(assetInfo)
 		{
 		}
 		public override void Update()
@@ -30,19 +29,17 @@ namespace YooAsset
 			if (Status == EStatus.None)
 			{
 				// 检测资源文件是否存在
-				string guid = UnityEditor.AssetDatabase.AssetPathToGUID(AssetPath);
+				string guid = UnityEditor.AssetDatabase.AssetPathToGUID(MainAssetInfo.AssetPath);
 				if (string.IsNullOrEmpty(guid))
 				{
 					Status = EStatus.Fail;
-					LastError = $"Not found asset : {AssetPath}";
+					LastError = $"Not found asset : {MainAssetInfo.AssetPath}";
 					YooLogger.Error(LastError);
 					InvokeCompletion();
 					return;
 				}
-				else
-				{
-					Status = EStatus.Loading;
-				}
+
+				Status = EStatus.Loading;
 
 				// 注意：模拟异步加载效果提前返回
 				if (IsWaitForAsyncComplete == false)
@@ -52,17 +49,17 @@ namespace YooAsset
 			// 1. 加载资源对象
 			if (Status == EStatus.Loading)
 			{
-				if (AssetType == null)
+				if (MainAssetInfo.AssetType == null)
 				{
-					AllAssetObjects = UnityEditor.AssetDatabase.LoadAllAssetRepresentationsAtPath(AssetPath);
+					AllAssetObjects = UnityEditor.AssetDatabase.LoadAllAssetRepresentationsAtPath(MainAssetInfo.AssetPath);
 				}
 				else
 				{
-					UnityEngine.Object[] findAssets = UnityEditor.AssetDatabase.LoadAllAssetRepresentationsAtPath(AssetPath);
+					UnityEngine.Object[] findAssets = UnityEditor.AssetDatabase.LoadAllAssetRepresentationsAtPath(MainAssetInfo.AssetPath);
 					List<UnityEngine.Object> result = new List<Object>(findAssets.Length);
 					foreach (var findAsset in findAssets)
 					{
-						if (findAsset.GetType() == AssetType)
+						if (MainAssetInfo.AssetType.IsAssignableFrom(findAsset.GetType()))
 							result.Add(findAsset);
 					}
 					AllAssetObjects = result.ToArray();
@@ -76,7 +73,10 @@ namespace YooAsset
 				Status = AllAssetObjects == null ? EStatus.Fail : EStatus.Success;
 				if (Status == EStatus.Fail)
 				{
-					LastError = $"Failed to load sub assets : {nameof(AssetType)} in {AssetPath}";
+					if (MainAssetInfo.AssetType == null)
+						LastError = $"Failed to load sub assets : {MainAssetInfo.AssetPath} AssetType : null";
+					else
+						LastError = $"Failed to load sub assets : {MainAssetInfo.AssetPath} AssetType : {MainAssetInfo.AssetType}";
 					YooLogger.Error(LastError);
 				}
 				InvokeCompletion();

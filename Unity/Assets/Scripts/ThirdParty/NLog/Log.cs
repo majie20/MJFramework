@@ -4,11 +4,7 @@ namespace NLog
     {
         private static readonly Logger _log = LoggerFactory.GetLogger("Log");
 
-        //public static void Trace(string message) {
-        //    _log.Trace(message);
-        //}
-
-        public static void Debug(string message)
+        private static void Debug(string message)
         {
             _log.Debug(message);
         }
@@ -18,11 +14,7 @@ namespace NLog
             _log.Debug(message.ToString());
         }
 
-        //public static void Info(string message) {
-        //    _log.Info(message);
-        //}
-
-        public static void Warn(string message)
+        private static void Warn(string message)
         {
             _log.Warn(message);
         }
@@ -32,7 +24,7 @@ namespace NLog
             _log.Warn(message.ToString());
         }
 
-        public static void Error(string message)
+        private static void Error(string message)
         {
             _log.Error(message);
         }
@@ -41,10 +33,6 @@ namespace NLog
         {
             _log.Error(message.ToString());
         }
-
-        //public static void Fatal(string message) {
-        //    _log.Fatal(message);
-        //}
 
         public static void Assert(bool condition, string message)
         {

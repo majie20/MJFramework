@@ -8,25 +8,32 @@ namespace YooAsset
 	internal class HostPlayModeImpl : IBundleServices
 	{
 		// 补丁清单
-		internal PatchManifest AppPatchManifest;
-		internal PatchManifest LocalPatchManifest;
+		internal PatchManifest AppPatchManifest { private set; get; }
+		internal PatchManifest LocalPatchManifest { private set; get; }
 
 		// 参数相关
-		internal bool ClearCacheWhenDirty { private set; get; }
+		private bool _locationToLower;
+		private bool _clearCacheWhenDirty;
 		private string _defaultHostServer;
 		private string _fallbackHostServer;
+
+		public bool ClearCacheWhenDirty
+		{
+			get { return _clearCacheWhenDirty; }
+		}
 
 		/// <summary>
 		/// 异步初始化
 		/// </summary>
-		public InitializationOperation InitializeAsync(bool clearCacheWhenDirty, string defaultHostServer, string fallbackHostServer)
+		public InitializationOperation InitializeAsync(bool locationToLower, bool clearCacheWhenDirty, string defaultHostServer, string fallbackHostServer)
 		{
-			ClearCacheWhenDirty = clearCacheWhenDirty;
+			_locationToLower = locationToLower;
+			_clearCacheWhenDirty = clearCacheWhenDirty;
 			_defaultHostServer = defaultHostServer;
 			_fallbackHostServer = fallbackHostServer;
 
 			var operation = new HostPlayModeInitializationOperation(this);
-			OperationSystem.ProcessOperaiton(operation);
+			OperationSystem.StartOperaiton(operation);
 			return operation;
 		}
 
@@ -36,7 +43,7 @@ namespace YooAsset
 		public UpdateStaticVersionOperation UpdateStaticVersionAsync(int timeout)
 		{
 			var operation = new HostPlayModeUpdateStaticVersionOperation(this, timeout);
-			OperationSystem.ProcessOperaiton(operation);
+			OperationSystem.StartOperaiton(operation);
 			return operation;
 		}
 
@@ -46,7 +53,7 @@ namespace YooAsset
 		public UpdateManifestOperation UpdatePatchManifestAsync(int resourceVersion, int timeout)
 		{
 			var operation = new HostPlayModeUpdateManifestOperation(this, resourceVersion, timeout);
-			OperationSystem.ProcessOperaiton(operation);
+			OperationSystem.StartOperaiton(operation);
 			return operation;
 		}
 
@@ -56,7 +63,7 @@ namespace YooAsset
 		public UpdatePackageOperation UpdatePackageAsync(int resourceVersion, int timeout)
 		{
 			var operation = new HostPlayModeUpdatePackageOperation(this, resourceVersion, timeout);
-			OperationSystem.ProcessOperaiton(operation);
+			OperationSystem.StartOperaiton(operation);
 			return operation;
 		}
 
@@ -180,29 +187,32 @@ namespace YooAsset
 		/// <summary>
 		/// 创建下载器
 		/// </summary>
-		public PatchDownloaderOperation CreatePatchDownloaderByPaths(List<string> assetPaths, int fileLoadingMaxNumber, int failedTryAgain)
+		public PatchDownloaderOperation CreatePatchDownloaderByPaths(AssetInfo[] assetInfos, int fileLoadingMaxNumber, int failedTryAgain)
 		{
-			List<BundleInfo> downloadList = GetDownloadListByPaths(assetPaths);
+			List<BundleInfo> downloadList = GetDownloadListByPaths(assetInfos);
 			var operation = new PatchDownloaderOperation(downloadList, fileLoadingMaxNumber, failedTryAgain);
 			return operation;
 		}
-		private List<BundleInfo> GetDownloadListByPaths(List<string> assetPaths)
+		private List<BundleInfo> GetDownloadListByPaths(AssetInfo[] assetInfos)
 		{
 			// 获取资源对象的资源包和所有依赖资源包
 			List<PatchBundle> checkList = new List<PatchBundle>();
-			foreach (var assetPath in assetPaths)
+			foreach (var assetInfo in assetInfos)
 			{
-				string mainBundleName = LocalPatchManifest.GetBundleName(assetPath);
-				if (string.IsNullOrEmpty(mainBundleName) == false)
+				if (assetInfo.IsInvalid)
 				{
-					if (LocalPatchManifest.Bundles.TryGetValue(mainBundleName, out PatchBundle mainBundle))
-					{
-						if (checkList.Contains(mainBundle) == false)
-							checkList.Add(mainBundle);
-					}
+					YooLogger.Warning(assetInfo.Error);
+					continue;
 				}
 
-				string[] dependBundleNames = LocalPatchManifest.GetAllDependencies(assetPath);
+				string mainBundleName = LocalPatchManifest.GetBundleName(assetInfo.AssetPath);
+				if (LocalPatchManifest.Bundles.TryGetValue(mainBundleName, out PatchBundle mainBundle))
+				{
+					if (checkList.Contains(mainBundle) == false)
+						checkList.Add(mainBundle);
+				}
+
+				string[] dependBundleNames = LocalPatchManifest.GetAllDependencies(assetInfo.AssetPath);
 				foreach (var dependBundleName in dependBundleNames)
 				{
 					if (LocalPatchManifest.Bundles.TryGetValue(dependBundleName, out PatchBundle dependBundle))
@@ -243,6 +253,12 @@ namespace YooAsset
 			var operation = new PatchUnpackerOperation(unpcakList, fileUpackingMaxNumber, failedTryAgain);
 			return operation;
 		}
+		public PatchUnpackerOperation CreatePatchUnpackerByAll(int fileUpackingMaxNumber, int failedTryAgain)
+		{
+			List<BundleInfo> unpcakList = PatchHelper.GetUnpackListByAll(AppPatchManifest);
+			var operation = new PatchUnpackerOperation(unpcakList, fileUpackingMaxNumber, failedTryAgain);
+			return operation;
+		}
 
 		// WEB相关
 		public string GetPatchDownloadMainURL(string fileName)
@@ -274,12 +290,20 @@ namespace YooAsset
 			return bundleInfo;
 		}
 
-		#region IBundleServices接口
-		BundleInfo IBundleServices.GetBundleInfo(string bundleName)
+		// 设置资源清单
+		internal void SetAppPatchManifest(PatchManifest patchManifest)
 		{
-			if (string.IsNullOrEmpty(bundleName))
-				return new BundleInfo(string.Empty);
+			AppPatchManifest = patchManifest;
+		}
+		internal void SetLocalPatchManifest(PatchManifest patchManifest)
+		{
+			LocalPatchManifest = patchManifest;
+			LocalPatchManifest.InitAssetPathMapping(_locationToLower);
+		}
 
+		#region IBundleServices接口
+		private BundleInfo CreateBundleInfo(string bundleName)
+		{
 			if (LocalPatchManifest.Bundles.TryGetValue(bundleName, out PatchBundle patchBundle))
 			{
 				// 查询沙盒资源				
@@ -304,26 +328,45 @@ namespace YooAsset
 			}
 			else
 			{
-				YooLogger.Warning($"Not found bundle in patch manifest : {bundleName}");
-				BundleInfo bundleInfo = new BundleInfo(bundleName);
-				return bundleInfo;
+				throw new Exception("Should never get here !");
 			}
+		}
+		BundleInfo IBundleServices.GetBundleInfo(AssetInfo assetInfo)
+		{
+			if (assetInfo.IsInvalid)
+				throw new Exception("Should never get here !");
+
+			string bundleName = LocalPatchManifest.GetBundleName(assetInfo.AssetPath);
+			return CreateBundleInfo(bundleName);
+		}
+		BundleInfo[] IBundleServices.GetAllDependBundleInfos(AssetInfo assetInfo)
+		{
+			if (assetInfo.IsInvalid)
+				throw new Exception("Should never get here !");
+
+			var depends = LocalPatchManifest.GetAllDependencies(assetInfo.AssetPath);
+			List<BundleInfo> result = new List<BundleInfo>(depends.Length);
+			foreach (var bundleName in depends)
+			{
+				BundleInfo bundleInfo = CreateBundleInfo(bundleName);
+				result.Add(bundleInfo);
+			}
+			return result.ToArray();
 		}
 		AssetInfo[] IBundleServices.GetAssetInfos(string[] tags)
 		{
-			return PatchHelper.GetAssetsInfoByTag(LocalPatchManifest, tags);
+			return PatchHelper.GetAssetsInfoByTags(LocalPatchManifest, tags);
+		}
+		PatchAsset IBundleServices.TryGetPatchAsset(string assetPath)
+		{
+			if (LocalPatchManifest.Assets.TryGetValue(assetPath, out PatchAsset patchAsset))
+				return patchAsset;
+			else
+				return null;
 		}
 		string IBundleServices.MappingToAssetPath(string location)
 		{
 			return LocalPatchManifest.MappingToAssetPath(location);
-		}
-		string IBundleServices.GetBundleName(string assetPath)
-		{
-			return LocalPatchManifest.GetBundleName(assetPath);
-		}
-		string[] IBundleServices.GetAllDependencies(string assetPath)
-		{
-			return LocalPatchManifest.GetAllDependencies(assetPath);
 		}
 		#endregion
 	}

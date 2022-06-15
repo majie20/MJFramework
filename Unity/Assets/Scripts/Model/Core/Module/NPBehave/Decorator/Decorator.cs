@@ -27,7 +27,7 @@
         {
             base.Dispose();
             this.Decoratee.Dispose();
-            Model.Game.Instance.ObjectPool.GetComponent<Model.NPNodePoolComponent>().RecycleNode(this.Decoratee);
+            Model.Game.Instance.Scene.GetComponent<Model.NPNodePoolComponent>().RecycleNode(this.Decoratee);
             this.Decoratee = null;
         }
 

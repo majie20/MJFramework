@@ -41,7 +41,12 @@ Unity/XNode.csproj
 Unity/XNodeEditor.csproj
 Unity/YooAsset.csproj
 Unity/YooAsset.Editor.csproj
+Unity/Assembly-CSharp-Editor.csproj
+Unity/Assembly-CSharp.csproj
 
 Excel/.cache.meta
 Unity/Assets/FR2_Cache.asset
 Unity/Assets/FR2_Cache.asset.meta
+Unity\Assets\Scripts\Model\Generate\ILBinding
+Unity/引用外部资源情况表.json
+Unity/UI预制体引用图集情况表.json

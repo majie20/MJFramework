@@ -7,77 +7,77 @@ namespace Model
     {
         #region 订阅-异步
 
-        public void AddListenerAsync<T1>(object self, Func<UniTask> call) where T1 : EventBaseAsync1, new()
+        public void AddListenerAsync<T1>(Component self, Func<UniTask> call) where T1 : EventBaseAsync1, new()
         {
             AddEventModel<T1>().AddListener(self, call);
         }
 
-        public void AddListenerAsync<T1, T2>(object self, Func<T2, UniTask> call) where T1 : EventBaseAsync1<T2>, new()
+        public void AddListenerAsync<T1, T2>(Component self, Func<T2, UniTask> call) where T1 : EventBaseAsync1<T2>, new()
         {
             AddEventModel<T1>().AddListener(self, call);
         }
 
-        public void AddListenerAsync<T1, T2, T3>(object self, Func<T2, T3, UniTask> call) where T1 : EventBaseAsync1<T2, T3>, new()
+        public void AddListenerAsync<T1, T2, T3>(Component self, Func<T2, T3, UniTask> call) where T1 : EventBaseAsync1<T2, T3>, new()
         {
             AddEventModel<T1>().AddListener(self, call);
         }
 
-        public void AddListenerAsync<T1, T2, T3, T4>(object self, Func<T2, T3, T4, UniTask> call) where T1 : EventBaseAsync1<T2, T3, T4>, new()
+        public void AddListenerAsync<T1, T2, T3, T4>(Component self, Func<T2, T3, T4, UniTask> call) where T1 : EventBaseAsync1<T2, T3, T4>, new()
         {
             AddEventModel<T1>().AddListener(self, call);
         }
 
-        public void AddListenerAsync<T1, T2, T3, T4, T5>(object self, Func<T2, T3, T4, T5, UniTask> call) where T1 : EventBaseAsync1<T2, T3, T4, T5>, new()
+        public void AddListenerAsync<T1, T2, T3, T4, T5>(Component self, Func<T2, T3, T4, T5, UniTask> call) where T1 : EventBaseAsync1<T2, T3, T4, T5>, new()
         {
             AddEventModel<T1>().AddListener(self, call);
         }
 
-        public void AddListenerAsync(uint sign, object self, Func<UniTask> call)
+        public void AddListenerAsync(uint sign, Component self, Func<UniTask> call)
         {
             AddEventModel<EventBaseAsync2>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync<T2>(uint sign, object self, Func<T2, UniTask> call)
+        public void AddListenerAsync<T2>(uint sign, Component self, Func<T2, UniTask> call)
         {
             AddEventModel<EventBaseAsync2<T2>>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync<T2, T3>(uint sign, object self, Func<T2, T3, UniTask> call)
+        public void AddListenerAsync<T2, T3>(uint sign, Component self, Func<T2, T3, UniTask> call)
         {
             AddEventModel<EventBaseAsync2<T2, T3>>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync<T2, T3, T4>(uint sign, object self, Func<T2, T3, T4, UniTask> call)
+        public void AddListenerAsync<T2, T3, T4>(uint sign, Component self, Func<T2, T3, T4, UniTask> call)
         {
             AddEventModel<EventBaseAsync2<T2, T3, T4>>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync<T2, T3, T4, T5>(uint sign, object self, Func<T2, T3, T4, T5, UniTask> call)
+        public void AddListenerAsync<T2, T3, T4, T5>(uint sign, Component self, Func<T2, T3, T4, T5, UniTask> call)
         {
             AddEventModel<EventBaseAsync2<T2, T3, T4, T5>>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync(string sign, object self, Func<UniTask> call)
+        public void AddListenerAsync(string sign, Component self, Func<UniTask> call)
         {
             AddEventModel<EventBaseAsync2>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync<T2>(string sign, object self, Func<T2, UniTask> call)
+        public void AddListenerAsync<T2>(string sign, Component self, Func<T2, UniTask> call)
         {
             AddEventModel<EventBaseAsync2<T2>>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync<T2, T3>(string sign, object self, Func<T2, T3, UniTask> call)
+        public void AddListenerAsync<T2, T3>(string sign, Component self, Func<T2, T3, UniTask> call)
         {
             AddEventModel<EventBaseAsync2<T2, T3>>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync<T2, T3, T4>(string sign, object self, Func<T2, T3, T4, UniTask> call)
+        public void AddListenerAsync<T2, T3, T4>(string sign, Component self, Func<T2, T3, T4, UniTask> call)
         {
             AddEventModel<EventBaseAsync2<T2, T3, T4>>(sign).AddListener(self, call);
         }
 
-        public void AddListenerAsync<T2, T3, T4, T5>(string sign, object self, Func<T2, T3, T4, T5, UniTask> call)
+        public void AddListenerAsync<T2, T3, T4, T5>(string sign, Component self, Func<T2, T3, T4, T5, UniTask> call)
         {
             AddEventModel<EventBaseAsync2<T2, T3, T4, T5>>(sign).AddListener(self, call);
         }
@@ -86,91 +86,91 @@ namespace Model
 
         #region 移除-异步
 
-        public void RemoveListenerAsync<T1>(object self) where T1 : EventBaseAsync1, new()
+        public void RemoveListenerAsync<T1>(Component self) where T1 : EventBaseAsync1, new()
         {
             var e = GetEventModel<T1>();
             e?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2>(object self) where T1 : EventBaseAsync1<T2>, new()
+        public void RemoveListenerAsync<T1, T2>(Component self) where T1 : EventBaseAsync1<T2>, new()
         {
             var e = GetEventModel<T1>();
             e?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2, T3>(object self) where T1 : EventBaseAsync1<T2, T3>, new()
+        public void RemoveListenerAsync<T1, T2, T3>(Component self) where T1 : EventBaseAsync1<T2, T3>, new()
         {
             var e = GetEventModel<T1>();
             e?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2, T3, T4>(object self) where T1 : EventBaseAsync1<T2, T3, T4>, new()
+        public void RemoveListenerAsync<T1, T2, T3, T4>(Component self) where T1 : EventBaseAsync1<T2, T3, T4>, new()
         {
             var e = GetEventModel<T1>();
             e?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2, T3, T4, T5>(object self) where T1 : EventBaseAsync1<T2, T3, T4, T5>, new()
+        public void RemoveListenerAsync<T1, T2, T3, T4, T5>(Component self) where T1 : EventBaseAsync1<T2, T3, T4, T5>, new()
         {
             var e = GetEventModel<T1>();
             e?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync(uint sign, object self)
+        public void RemoveListenerAsync(uint sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1>(uint sign, object self)
+        public void RemoveListenerAsync<T1>(uint sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2<T1>)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2>(uint sign, object self)
+        public void RemoveListenerAsync<T1, T2>(uint sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2<T1, T2>)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2, T3>(uint sign, object self)
+        public void RemoveListenerAsync<T1, T2, T3>(uint sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2<T1, T2, T3>)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2, T3, T4>(uint sign, object self)
+        public void RemoveListenerAsync<T1, T2, T3, T4>(uint sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2<T1, T2, T3, T4>)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync(string sign, object self)
+        public void RemoveListenerAsync(string sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1>(string sign, object self)
+        public void RemoveListenerAsync<T1>(string sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2<T1>)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2>(string sign, object self)
+        public void RemoveListenerAsync<T1, T2>(string sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2<T1, T2>)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2, T3>(string sign, object self)
+        public void RemoveListenerAsync<T1, T2, T3>(string sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2<T1, T2, T3>)?.RemoveListener(self);
         }
 
-        public void RemoveListenerAsync<T1, T2, T3, T4>(string sign, object self)
+        public void RemoveListenerAsync<T1, T2, T3, T4>(string sign, Component self)
         {
             var e = GetEventModel(sign);
             (e as EventBaseAsync2<T1, T2, T3, T4>)?.RemoveListener(self);

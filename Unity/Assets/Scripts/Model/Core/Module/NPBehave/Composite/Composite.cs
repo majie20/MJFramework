@@ -29,7 +29,7 @@ namespace NPBehave
             for (int i = 0; i < Children.Length; i++)
             {
                 this.Children[i].Dispose();
-                Model.Game.Instance.ObjectPool.GetComponent<Model.NPNodePoolComponent>().RecycleNode(Children[i]);
+                Model.Game.Instance.Scene.GetComponent<Model.NPNodePoolComponent>().RecycleNode(Children[i]);
             }
             this.Children = null;
         }

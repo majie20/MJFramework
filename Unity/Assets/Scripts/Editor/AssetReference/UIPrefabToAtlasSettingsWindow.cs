@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using CatJson;
+using Model;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.U2D;
 
 public class UIPrefabToAtlasSettingsWindow : EditorWindow
 {
@@ -12,42 +15,34 @@ public class UIPrefabToAtlasSettingsWindow : EditorWindow
         window.minSize = new Vector2(800, 600);
     }
 
-    private UIPrefabToAtlasSettings _settings;
-
-    private void OnEnable()
+    public void OnEnable()
     {
-        _settings = AssetDatabase.LoadAssetAtPath<UIPrefabToAtlasSettings>(EditorConfig.UI_PREFAB_TO_ATLAS_SETTINGS_PATH);
-        if (_settings == null)
+        _infoDic = new Dictionary<GameObject, DefaultAsset>();
+        if (File.Exists(EditorConfig.UI_PREFAB_TO_ATLAS_INFO))
         {
-            _settings = ScriptableObject.CreateInstance<UIPrefabToAtlasSettings>();
-            AssetDatabase.CreateAsset(_settings, EditorConfig.UI_PREFAB_TO_ATLAS_SETTINGS_PATH);
-            EditorUtility.SetDirty(_settings);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
-        _infoDic = new Dictionary<GameObject, SpriteAtlas>();
-        foreach (var info in _settings.InfoDic)
-        {
-            _infoDic.Add(AssetDatabase.LoadAssetAtPath<GameObject>(info.Key), AssetDatabase.LoadAssetAtPath<SpriteAtlas>(info.Value));
+            var infoDic = JsonParser.ParseJson<Dictionary<string, UIPrefabToAtlasInfo>>(AssetDatabase.LoadAssetAtPath<TextAsset>(EditorConfig.UI_PREFAB_TO_ATLAS_INFO).text);
+            foreach (var info in infoDic)
+            {
+                _infoDic.Add(AssetDatabase.LoadAssetAtPath<GameObject>(info.Key), AssetDatabase.LoadAssetAtPath<DefaultAsset>($"{EditorConfig.UI_SPRITE_PATH}{info.Value.Path}"));
+            }
         }
     }
 
     private GameObject _operateObj;
-    private SpriteAtlas _operateAtlas;
+    private DefaultAsset _operateDir;
 
-    private Dictionary<GameObject, SpriteAtlas> _infoDic;
+    private Dictionary<GameObject, DefaultAsset> _infoDic;
 
     private void OnGUI()
     {
         EditorGUILayout.BeginHorizontal();
         var obj = EditorGUILayout.ObjectField(_operateObj, typeof(GameObject), false);
-        var atlas = EditorGUILayout.ObjectField(_operateAtlas, typeof(SpriteAtlas), false);
-        if (atlas != null && atlas != _operateAtlas)
+        var dir = EditorGUILayout.ObjectField(_operateDir, typeof(DefaultAsset), false);
+        if (dir != null && dir != _operateDir)
         {
-            if (AssetDatabase.GetAssetPath(atlas).StartsWith(EditorConfig.ATLAS_PATH))
+            if (AssetDatabase.GetAssetPath(dir).StartsWith(EditorConfig.UI_SPRITE_PATH))
             {
-                _operateAtlas = atlas as SpriteAtlas;
+                _operateDir = dir as DefaultAsset;
             }
         }
         if (obj != null && obj != _operateObj)
@@ -57,17 +52,25 @@ public class UIPrefabToAtlasSettingsWindow : EditorWindow
                 _operateObj = obj as GameObject;
                 if (_operateObj != null && _infoDic.ContainsKey(_operateObj))
                 {
-                    _operateAtlas = _infoDic[_operateObj];
+                    _operateDir = _infoDic[_operateObj];
                 }
             }
         }
-        if (_operateObj != null && _operateAtlas != null)
+        if (_operateObj != null && _operateDir != null)
         {
             if (GUILayout.Button("Add", GUILayout.Width(100)))
             {
-                if (!_infoDic.ContainsKey(_operateObj) && !_infoDic.ContainsValue(_operateAtlas))
+                if (_infoDic.ContainsKey(_operateObj))
                 {
-                    _infoDic.Add(_operateObj, _operateAtlas);
+                    if (_infoDic[_operateObj] != _operateDir)
+                    {
+                        _infoDic[_operateObj] = _operateDir;
+                        Save();
+                    }
+                }
+                else
+                {
+                    _infoDic.Add(_operateObj, _operateDir);
                     Save();
                 }
             }
@@ -83,7 +86,7 @@ public class UIPrefabToAtlasSettingsWindow : EditorWindow
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.ObjectField(info.Key, typeof(GameObject), false);
-            EditorGUILayout.ObjectField(info.Value, typeof(SpriteAtlas), false);
+            EditorGUILayout.ObjectField(info.Value, typeof(DefaultAsset), false);
             if (GUILayout.Button("X", GUILayout.Width(100)))
             {
                 temp = info.Key;
@@ -105,14 +108,27 @@ public class UIPrefabToAtlasSettingsWindow : EditorWindow
         Save();
     }
 
-    private void Save()
+    public void Save()
     {
-        _settings.InfoDic = new Dictionary<string, string>();
+        var infoDic = new Dictionary<string, UIPrefabToAtlasInfo>();
         foreach (var info in _infoDic)
         {
-            _settings.InfoDic.Add(AssetDatabase.GetAssetPath(info.Key), AssetDatabase.GetAssetPath(info.Value));
+            List<string> pathList = new List<string>();
+            var path = AssetDatabase.GetAssetPath(info.Value);
+            EditorHelper.GetAssetPath(pathList, path);
+            infoDic.Add(AssetDatabase.GetAssetPath(info.Key),
+                new UIPrefabToAtlasInfo()
+                {
+                    Path = Regex.Replace(path, EditorConfig.UI_SPRITE_PATH, ""),
+                    IsEmpty = pathList.Count == 0
+                });
         }
-        EditorUtility.SetDirty(_settings);
+
+        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(EditorConfig.UI_PREFAB_TO_ATLAS_INFO))
+        {
+            sw.WriteLine(JsonParser.ToJson(infoDic));
+        }
+
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }

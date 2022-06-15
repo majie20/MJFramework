@@ -1,16 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Model
+﻿namespace Model
 {
-
-    public enum LoadProgressType 
+    public enum LoadProgressType
     {
         None,
         UpdateStaticVersion,
         UpdatePatchManifest,
         DownloadHotAssets,
-        DownloadHotAssetsSuccess,
+        LoadAssets,
+    }
+
+    public enum LoadUseType
+    {
+        Hot,
+        Normal,
     }
 }

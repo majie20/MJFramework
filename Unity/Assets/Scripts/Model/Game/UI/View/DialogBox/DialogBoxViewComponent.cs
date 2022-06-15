@@ -26,12 +26,13 @@ namespace Model
             var btnList = rc.Get<GameObject>("BtnList").transform;
             for (int i = 1; i < 3; i++)
             {
+                var index = i;
                 var textBtn = btnList.Find($"Btn{i}/TextBtn{i}").GetComponent<Text>();
                 var btn = btnList.Find($"Btn{i}").GetComponent<Button>();
                 this.TextBtnList.Add(textBtn);
                 this.BtnList.Add(btn);
 
-                btn.onClick.AddListener(() => OnBtnClick(i));
+                btn.onClick.AddListener(() => OnBtnClick(index));
             }
         }
 

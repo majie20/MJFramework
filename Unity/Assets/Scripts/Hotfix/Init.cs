@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Model;
 using UnityEngine;
 
 namespace Hotfix
@@ -13,7 +14,10 @@ namespace Hotfix
             Model.Game.Instance.Hotfix.GameLateUpdate = OnLateUpdate;
             Model.Game.Instance.Hotfix.GameApplicationQuit = OnApplicationQuit;
 
-            ObjectHelper.CreateComponent<GameDataComponent>(Model.Game.Instance.Scene, false);
+            //ObjectHelper.CreateComponent<TestComponent>(Model.Game.Instance.Scene, false);
+
+            //ObjectHelper.CreateComponent<GameDataComponent>(Model.Game.Instance.Scene, false);
+
             //UniTask.Void(async () =>
             //{
             //    await UniTask.Delay(5500);

@@ -1,1 +1,0 @@
-2022/05/14 00:03:03 [error] 14956#8788: *1 CreateFile() "./html/StandaloneWindows64/StaticVersion.bytes" failed (3: The system cannot find the path specified), client: 127.0.0.1, server: localhost, request: "GET /StandaloneWindows64/StaticVersion.bytes?637880545837609120 HTTP/1.1", host: "127.0.0.1:8080"

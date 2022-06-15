@@ -15,68 +15,102 @@ MonoBehaviour:
   EnableAddressable: 0
   AutoCollectShaders: 1
   ShadersBundleName: myshaders
-  Groupers:
-  - GrouperName: AllPrefab
-    GrouperDesc: "\u6240\u6709\u9884\u5236\u4F53"
+  Groups:
+  - GroupName: all_scene
+    GroupDesc: "\u6240\u6709\u573A\u666F"
+    AssetTags: build;no_build
+    Collectors:
+    - CollectPath: Assets/Res/Scenes/Level
+      CollectorType: 0
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackSeparately
+      FilterRuleName: CollectScene
+      AssetTags: 
+    - CollectPath: Assets/Res/Scenes/Main.unity
+      CollectorType: 0
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackSeparately
+      FilterRuleName: CollectScene
+      AssetTags: 
+  - GroupName: all_prefab
+    GroupDesc: "\u6240\u6709\u9884\u5236\u4F53"
     AssetTags: build;no_build
     Collectors:
     - CollectPath: Assets/Res/Prefabs
+      CollectorType: 0
       AddressRuleName: AddressByFileName
       PackRuleName: PackSeparately
       FilterRuleName: CollectPrefab
-      NotWriteToAssetList: 0
       AssetTags: 
-  - GrouperName: AllSpriteAtlas
-    GrouperDesc: "\u6240\u6709\u56FE\u96C6"
+  - GroupName: all_atlas
+    GroupDesc: "\u6240\u6709\u56FE\u96C6"
     AssetTags: build;no_build
     Collectors:
     - CollectPath: Assets/Res/Atlas
+      CollectorType: 0
       AddressRuleName: AddressByFileName
       PackRuleName: PackSeparately
-      FilterRuleName: CollectAll
-      NotWriteToAssetList: 0
+      FilterRuleName: CollectSpriteAtlas
       AssetTags: 
-  - GrouperName: AllConfig
-    GrouperDesc: "\u6240\u6709\u914D\u7F6E\u6587\u4EF6"
+  - GroupName: all_audio
+    GroupDesc: "\u6240\u6709\u97F3\u6548"
     AssetTags: build;no_build
     Collectors:
-    - CollectPath: Assets/Res/Config
+    - CollectPath: Assets/Res/FMODBanks
+      CollectorType: 0
       AddressRuleName: AddressByFileName
       PackRuleName: PackSeparately
       FilterRuleName: CollectConfig
-      NotWriteToAssetList: 0
       AssetTags: 
-  - GrouperName: NoAtlasUISprite
-    GrouperDesc: "\u4E0D\u6253\u56FE\u96C6\u7684UI\u56FE\u7247"
+  - GroupName: all_no_atlas_ui_texture
+    GroupDesc: "\u6240\u6709\u4E0D\u6253\u56FE\u96C6\u7684UI\u56FE\u7247"
     AssetTags: build;no_build
     Collectors:
     - CollectPath: Assets/Res/Texture/UI/NoAtlas
+      CollectorType: 0
       AddressRuleName: AddressByFileName
       PackRuleName: PackSeparately
       FilterRuleName: CollectAll
-      NotWriteToAssetList: 0
       AssetTags: 
-  - GrouperName: AllShader
-    GrouperDesc: "\u6240\u6709Shader"
-    AssetTags: build;no_build
-    Collectors:
-    - CollectPath: Assets/Res/Shaders
-      AddressRuleName: AddressByFileName
-      PackRuleName: PackShader
-      FilterRuleName: CollectAll
-      NotWriteToAssetList: 0
-      AssetTags: 
-  - GrouperName: CodeDll
-    GrouperDesc: "\u70ED\u66F4\u4EE3\u7801\u6587\u4EF6"
+  - GroupName: hotfix_code
+    GroupDesc: "\u70ED\u66F4\u4EE3\u7801"
     AssetTags: build;no_build
     Collectors:
     - CollectPath: Assets/Res/Text
+      CollectorType: 0
       AddressRuleName: AddressByFileName
-      PackRuleName: PackGrouper
+      PackRuleName: PackCollector
       FilterRuleName: CollectConfig
-      NotWriteToAssetList: 0
       AssetTags: 
-  - GrouperName: AllScene
-    GrouperDesc: "\u6240\u6709\u573A\u666F"
+  - GroupName: all_config
+    GroupDesc: "\u6240\u6709\u914D\u7F6E"
     AssetTags: build;no_build
-    Collectors: []
+    Collectors:
+    - CollectPath: Assets/Res/Config/ScriptableObject
+      CollectorType: 0
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackSeparately
+      FilterRuleName: CollectConfig
+      AssetTags: 
+    - CollectPath: Assets/Res/Config/JsonConfig
+      CollectorType: 0
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackCollector
+      FilterRuleName: CollectConfig
+      AssetTags: 
+    - CollectPath: Assets/Res/Config/Json
+      CollectorType: 0
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackSeparately
+      FilterRuleName: CollectConfig
+      AssetTags: 
+  - GroupName: all_shader
+    GroupDesc: "\u6240\u6709Shader"
+    AssetTags: build;no_build
+    Collectors:
+    - CollectPath: Assets/Res/Shaders
+      CollectorType: 0
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackShader
+      FilterRuleName: CollectAll
+      AssetTags: 

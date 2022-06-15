@@ -2776,6 +2776,13 @@ namespace ILRuntime.Runtime.Intepreter
                                     }
                                     else
                                     {
+                                        intVal = (int)(ip - ptr);
+                                        var eh = FindExceptionHandlerByBranchTarget(intVal, finallyEndAddress, ehs);
+                                        if (eh != null)
+                                        {
+                                            ip = ptr + eh.HandlerStart;
+                                            continue;
+                                        }
                                         ip = ptr + finallyEndAddress;
                                         finallyEndAddress = 0;
                                         continue;
@@ -2860,6 +2867,7 @@ namespace ILRuntime.Runtime.Intepreter
                                                         dst = *(StackObject**)&objRef->Value;
                                                         var ft = domain.GetTypeByIndex(dst->Value) as ILType;
                                                         ilm = ft.GetVirtualMethod(ilm) as ILMethod;
+                                                        useRegister = ilm.ShouldUseRegisterVM;
                                                     }
                                                     else
                                                     {
@@ -2867,6 +2875,7 @@ namespace ILRuntime.Runtime.Intepreter
                                                         if (obj == null)
                                                             throw new NullReferenceException();
                                                         ilm = ((ILTypeInstance)obj).Type.GetVirtualMethod(ilm) as ILMethod;
+                                                        useRegister = ilm.ShouldUseRegisterVM;
                                                     }
                                                 }
                                                 if (useRegister)

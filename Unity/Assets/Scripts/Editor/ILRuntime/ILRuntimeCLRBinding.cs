@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,15 +9,13 @@ public class ILRuntimeCLRBinding : EditorWindow
     private const string GenerateFilePath = "Assets/Scripts/Model/Generate/ILBinding";
 
     [MenuItem("Tools/ILRuntime/通过自动分析热更DLL生成CLR绑定")]
-    public static async void GenerateCLRBindingByAnalysis()
+    public static void GenerateCLRBindingByAnalysis()
     {
         if (File.Exists(HotfixFilePath))
         {
             EditorHelper.AddDefineSymbols("ILRuntime", BuildTargetGroup.Standalone);
             EditorHelper.AddDefineSymbols("ILRuntime", BuildTargetGroup.iOS);
             EditorHelper.AddDefineSymbols("ILRuntime", BuildTargetGroup.Android);
-
-            await Task.Delay(2000);
 
             for (int i = 0; i < GenerateFilePath.Length; i++)
             {

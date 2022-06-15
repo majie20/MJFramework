@@ -1,5 +1,4 @@
-﻿using Cinemachine;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Model
 {
@@ -8,11 +7,8 @@ namespace Model
     {
         public void Awake()
         {
-            ReferenceCollector rc = this.Entity.GameObject.GetComponent<ReferenceCollector>();
-            var vcam = rc.Get<GameObject>("vcam1").GetComponent<CinemachineVirtualCamera>();
-            NLog.Log.Error(vcam.name);
-
-            Game.Instance.EventSystem.AddListener<E_LevelLoadFinish>(this, FinishLevelLoad);
+            Game.Instance.EventSystem.AddListener<E_GamePause>(this, OnGamePause);
+            Game.Instance.EventSystem.AddListener<E_GameContinue>(this, OnGameContinue);
         }
 
         public override void Dispose()
@@ -23,12 +19,17 @@ namespace Model
         public void OnUpdate(float tick)
         {
         }
-        public void FinishLevelLoad()
-        {
-            ReferenceCollector rc = this.Entity.GameObject.GetComponent<ReferenceCollector>();
-            var vcam = rc.Get<GameObject>("vcam1").GetComponent<CinemachineVirtualCamera>();
-            vcam.Follow = GameObject.Find("player").transform;
 
+        private void OnGamePause()
+        {
+            Time.timeScale = 0;
+            ObjectHelper.OpenUIView<PauseViewComponent>();
+        }
+
+        private void OnGameContinue()
+        {
+            Time.timeScale = 1;
+            ObjectHelper.CloseUIView<PauseViewComponent>();
         }
     }
 }

@@ -6,10 +6,10 @@ using UnityEngine.EventSystems;
 
 public class OtherEditor
 {
-    [MenuItem("Assets/工具/复制资源路径", priority = 0)]
+    [MenuItem("Assets/工具/复制资源路径", priority = 1)]
     private static void CopyAssetPath()
     {
-        var path = AssetDatabase.GUIDToAssetPath(Selection.assetGUIDs[0]);
+        var path = AssetDatabase.GetAssetPath(Selection.activeObject);
         //if (File.Exists(path))
         //{
         //    GUIUtility.systemCopyBuffer =
@@ -19,6 +19,7 @@ public class OtherEditor
         //    return;
         //}
         GUIUtility.systemCopyBuffer = Model.FileHelper.AbsoluteSwitchRelativelyPath(path);
+        new UIPrefabToAtlasSettingsWindow();
     }
 
     [MenuItem("Edit/HitUI #X")]

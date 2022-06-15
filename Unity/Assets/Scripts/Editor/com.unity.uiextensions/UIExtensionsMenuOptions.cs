@@ -1882,12 +1882,13 @@ namespace UnityEditor.UI
 
         #region TextPic
         [MenuItem("GameObject/UI/Extensions/TextPic", false)]
-		static public void AddTextPic(MenuCommand menuCommand)
+		static public GameObject AddTextPic(MenuCommand menuCommand)
 		{
 			GameObject go = CreateUIElementRoot("TextPic", menuCommand, s_ImageGUIElementSize);
 			go.AddComponent<TextPic>();
 			Selection.activeGameObject = go;
-		}
+            return go;
+        }
         #endregion
 
         //#region BoxSlider
@@ -1943,130 +1944,172 @@ namespace UnityEditor.UI
             go.AddComponent<UISelectableExtension>();
             Selection.activeGameObject = go;
         }
+		#endregion
+
+		//#region Radial Slider
+		//[MenuItem("GameObject/UI/Extensions/Radial Slider", false)]
+		//static public void AddRadialSlider(MenuCommand menuCommand)
+		//{
+		//    GameObject sliderRoot = CreateUIElementRoot("Radial Slider", menuCommand, s_ThickGUIElementSize);
+		//    GameObject SliderControl = CreateUIObject("Slider", sliderRoot);
+
+		//    Image image = sliderRoot.AddComponent<Image>();
+		//    image.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kStandardSpritePath);
+		//    image.type = Image.Type.Simple;
+		//    image.color = s_DefaultSelectableColor;
+
+		//    RectTransform sliderRootRectTransform = sliderRoot.GetComponent<RectTransform>();
+		//    sliderRootRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+		//    sliderRootRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+		//    sliderRootRectTransform.anchoredPosition = Vector2.zero;
+		//    sliderRootRectTransform.sizeDelta = new Vector2(250f, 250f);
+
+		//    Image slidrImage = SliderControl.AddComponent<Image>();
+		//    slidrImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kStandardSpritePath);
+		//    slidrImage.type = Image.Type.Filled;
+		//    slidrImage.fillMethod = Image.FillMethod.Radial360;
+		//    slidrImage.fillOrigin = 3;
+		//    slidrImage.color = Color.red;
+		//    slidrImage.fillAmount = 0;
+		//    RadialSlider slider = SliderControl.AddComponent<RadialSlider>();
+		//    slider.StartColor = Color.green;
+		//    slider.EndColor = Color.red;
+
+		//    RectTransform sliderRectTransform = SliderControl.GetComponent<RectTransform>();
+		//    sliderRectTransform.anchorMin = Vector2.zero;
+		//    sliderRectTransform.anchorMax = Vector2.one;
+		//    sliderRectTransform.sizeDelta = Vector2.zero;
+
+		//    Selection.activeGameObject = sliderRoot;
+		//}
+		//#endregion
+
+		//#region RangeSlider
+		//[MenuItem("GameObject/UI/Extensions/Range Slider", false)]
+		//static public void AddRangeSlider(MenuCommand menuCommand)
+		//{
+		//    GameObject rangeSliderRoot = CreateUIElementRoot("Range Slider", menuCommand, new Vector2(160, 20));
+
+		//    GameObject background = CreateUIObject("Background", rangeSliderRoot);
+
+		//    GameObject fillArea = CreateUIObject("Fill Area", rangeSliderRoot);
+		//    GameObject fill = CreateUIObject("Fill", fillArea);
+
+		//    GameObject handleSlideArea = CreateUIObject("Handle Slide Area", rangeSliderRoot);
+		//    GameObject lowHandle = CreateUIObject("Low Handle", handleSlideArea);
+		//    GameObject highHandle = CreateUIObject("High Handle", handleSlideArea);
+
+		//    SetAnchorsAndStretch(rangeSliderRoot);
+		//    Image backgroundImage = background.AddComponent<Image>();
+		//    backgroundImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kBackgroundSpriteResourcePath);
+		//    backgroundImage.type = Image.Type.Sliced;
+		//    backgroundImage.fillCenter = false;
+
+		//    RectTransform backgroundRect = backgroundImage.rectTransform;
+		//    backgroundRect.anchorMin = new Vector2(0, 0.25f);
+		//    backgroundRect.anchorMax = new Vector2(1, 0.75f);
+		//    backgroundRect.sizeDelta = Vector2.zero;
+
+		//    RectTransform fillAreaRect = SetAnchorsAndStretch(fillArea);
+		//    fillAreaRect.anchorMin = new Vector2(0, 0.25f);
+		//    fillAreaRect.anchorMax = new Vector2(1, 0.75f);
+		//    fillAreaRect.offsetMin = new Vector2(5, 0);
+		//    fillAreaRect.offsetMax = new Vector2(-5, 0);
+
+		//    RectTransform fillRect = SetAnchorsAndStretch(fill);
+		//    Image fillImage = fill.AddComponent<Image>();
+		//    fillImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kStandardSpritePath);
+		//    fillImage.type = Image.Type.Sliced;
+		//    fillImage.fillCenter = true;
+		//    fillRect.offsetMin = new Vector2(-5, 0);
+		//    fillRect.offsetMax = new Vector2(5, 0);
+
+		//    RectTransform handleSlideRect = SetAnchorsAndStretch(handleSlideArea);
+		//    handleSlideRect.anchorMin = new Vector2(0, 0.5f);
+		//    handleSlideRect.anchorMax = new Vector2(1, 0.5f);
+		//    handleSlideRect.offsetMin = new Vector2(10, -10);
+		//    handleSlideRect.offsetMax = new Vector2(-10, 10);
+
+		//    RectTransform lowHandleRect = SetAnchorsAndStretch(lowHandle);
+		//    Image lowHandleImage = lowHandle.AddComponent<Image>();
+		//    lowHandleImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kKnobPath);
+		//    lowHandleRect.sizeDelta = new Vector2(20, 0);
+
+		//    RectTransform highHandleRect = SetAnchorsAndStretch(highHandle);
+		//    Image highHandleImage = highHandle.AddComponent<Image>();
+		//    highHandleImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kKnobPath);
+		//    highHandleRect.sizeDelta = new Vector2(20, 0);
+
+		//    RangeSlider rangeSlider = rangeSliderRoot.AddComponent<RangeSlider>();
+		//    rangeSlider.FillRect = fillRect;
+		//    rangeSlider.LowHandleRect = lowHandleRect;
+		//    rangeSlider.HighHandleRect = highHandleRect;
+		//    rangeSlider.LowValue = rangeSlider.MinValue;
+		//    rangeSlider.HighValue = rangeSlider.MaxValue;
+		//    rangeSlider.targetGraphic = fillImage;
+
+		//    Selection.activeGameObject = rangeSliderRoot;
+		//}
+		//#endregion
+
+		//#region Menu Manager GO
+		//[MenuItem("GameObject/UI/Extensions/Menu Manager", false)]
+		//static public void AddMenuManager(MenuCommand menuCommand)
+		//{
+		//    GameObject child = new GameObject("MenuManager");
+		//    Undo.RegisterCreatedObjectUndo(child, "Create " + "MenuManager");
+		//    child.AddComponent<MenuManager>();
+		//    Selection.activeGameObject = child;
+		//}
+		//#endregion
+
+        static GameObject AddText(MenuCommand menuCommand)
+        {
+            GameObject pic = AddTextPic(menuCommand);
+            pic.AddComponent<TextPicConifg>();
+            return pic;
+        }
+
+        #region 新富文本
+        [MenuItem("GameObject/UI/新富文本", false)]
+        static public void AddUITextPic(MenuCommand menuCommand)
+        {
+            GameObject pic = AddText(menuCommand);
+            if (Selection.activeGameObject && Selection.activeGameObject.GetComponentInParent<Canvas>())
+            {
+                pic.transform.SetParent(Selection.activeGameObject.transform);
+            }
+            else
+            {
+                pic.transform.SetParent(GetOrCreateCanvasGameObject().transform);
+            }
+        }
         #endregion
 
-        //#region Radial Slider
-        //[MenuItem("GameObject/UI/Extensions/Radial Slider", false)]
-        //static public void AddRadialSlider(MenuCommand menuCommand)
-        //{
-        //    GameObject sliderRoot = CreateUIElementRoot("Radial Slider", menuCommand, s_ThickGUIElementSize);
-        //    GameObject SliderControl = CreateUIObject("Slider", sliderRoot);
+		#region 新按钮
+		[MenuItem("GameObject/UI/新按钮", false)]
+		static public void AddUIButton(MenuCommand menuCommand)
+		{
+			GameObject btn = new GameObject("NewButton");
+			btn.AddComponent<CanvasRenderer>();
+			btn.AddComponent<Image>();
+			btn.AddComponent<Button>();
+			btn.AddComponent<ButtonStyle>();
+			GameObject pic = AddText(menuCommand);
+			pic.transform.SetParent(btn.transform);
+            RectTransform rect = pic.GetComponent<RectTransform>();
+            rect.anchorMax=Vector2.one;
+			rect.anchorMin=Vector2.zero;
+			rect.offsetMax=Vector2.zero;
+			rect.offsetMin=Vector2.zero;
+			btn.transform.SetParent(GetOrCreateCanvasGameObject().transform);
+		}
+		#endregion
 
-        //    Image image = sliderRoot.AddComponent<Image>();
-        //    image.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kStandardSpritePath);
-        //    image.type = Image.Type.Simple;
-        //    image.color = s_DefaultSelectableColor;
+		#endregion
 
-        //    RectTransform sliderRootRectTransform = sliderRoot.GetComponent<RectTransform>();
-        //    sliderRootRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        //    sliderRootRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-        //    sliderRootRectTransform.anchoredPosition = Vector2.zero;
-        //    sliderRootRectTransform.sizeDelta = new Vector2(250f, 250f);
-
-        //    Image slidrImage = SliderControl.AddComponent<Image>();
-        //    slidrImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kStandardSpritePath);
-        //    slidrImage.type = Image.Type.Filled;
-        //    slidrImage.fillMethod = Image.FillMethod.Radial360;
-        //    slidrImage.fillOrigin = 3;
-        //    slidrImage.color = Color.red;
-        //    slidrImage.fillAmount = 0;
-        //    RadialSlider slider = SliderControl.AddComponent<RadialSlider>();
-        //    slider.StartColor = Color.green;
-        //    slider.EndColor = Color.red;
-
-        //    RectTransform sliderRectTransform = SliderControl.GetComponent<RectTransform>();
-        //    sliderRectTransform.anchorMin = Vector2.zero;
-        //    sliderRectTransform.anchorMax = Vector2.one;
-        //    sliderRectTransform.sizeDelta = Vector2.zero;
-
-        //    Selection.activeGameObject = sliderRoot;
-        //}
-        //#endregion
-
-        //#region RangeSlider
-        //[MenuItem("GameObject/UI/Extensions/Range Slider", false)]
-        //static public void AddRangeSlider(MenuCommand menuCommand)
-        //{
-        //    GameObject rangeSliderRoot = CreateUIElementRoot("Range Slider", menuCommand, new Vector2(160, 20));
-
-        //    GameObject background = CreateUIObject("Background", rangeSliderRoot);
-
-        //    GameObject fillArea = CreateUIObject("Fill Area", rangeSliderRoot);
-        //    GameObject fill = CreateUIObject("Fill", fillArea);
-
-        //    GameObject handleSlideArea = CreateUIObject("Handle Slide Area", rangeSliderRoot);
-        //    GameObject lowHandle = CreateUIObject("Low Handle", handleSlideArea);
-        //    GameObject highHandle = CreateUIObject("High Handle", handleSlideArea);
-
-        //    SetAnchorsAndStretch(rangeSliderRoot);
-        //    Image backgroundImage = background.AddComponent<Image>();
-        //    backgroundImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kBackgroundSpriteResourcePath);
-        //    backgroundImage.type = Image.Type.Sliced;
-        //    backgroundImage.fillCenter = false;
-
-        //    RectTransform backgroundRect = backgroundImage.rectTransform;
-        //    backgroundRect.anchorMin = new Vector2(0, 0.25f);
-        //    backgroundRect.anchorMax = new Vector2(1, 0.75f);
-        //    backgroundRect.sizeDelta = Vector2.zero;
-
-        //    RectTransform fillAreaRect = SetAnchorsAndStretch(fillArea);
-        //    fillAreaRect.anchorMin = new Vector2(0, 0.25f);
-        //    fillAreaRect.anchorMax = new Vector2(1, 0.75f);
-        //    fillAreaRect.offsetMin = new Vector2(5, 0);
-        //    fillAreaRect.offsetMax = new Vector2(-5, 0);
-
-        //    RectTransform fillRect = SetAnchorsAndStretch(fill);
-        //    Image fillImage = fill.AddComponent<Image>();
-        //    fillImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kStandardSpritePath);
-        //    fillImage.type = Image.Type.Sliced;
-        //    fillImage.fillCenter = true;
-        //    fillRect.offsetMin = new Vector2(-5, 0);
-        //    fillRect.offsetMax = new Vector2(5, 0);
-
-        //    RectTransform handleSlideRect = SetAnchorsAndStretch(handleSlideArea);
-        //    handleSlideRect.anchorMin = new Vector2(0, 0.5f);
-        //    handleSlideRect.anchorMax = new Vector2(1, 0.5f);
-        //    handleSlideRect.offsetMin = new Vector2(10, -10);
-        //    handleSlideRect.offsetMax = new Vector2(-10, 10);
-
-        //    RectTransform lowHandleRect = SetAnchorsAndStretch(lowHandle);
-        //    Image lowHandleImage = lowHandle.AddComponent<Image>();
-        //    lowHandleImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kKnobPath);
-        //    lowHandleRect.sizeDelta = new Vector2(20, 0);
-
-        //    RectTransform highHandleRect = SetAnchorsAndStretch(highHandle);
-        //    Image highHandleImage = highHandle.AddComponent<Image>();
-        //    highHandleImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>(kKnobPath);
-        //    highHandleRect.sizeDelta = new Vector2(20, 0);
-
-        //    RangeSlider rangeSlider = rangeSliderRoot.AddComponent<RangeSlider>();
-        //    rangeSlider.FillRect = fillRect;
-        //    rangeSlider.LowHandleRect = lowHandleRect;
-        //    rangeSlider.HighHandleRect = highHandleRect;
-        //    rangeSlider.LowValue = rangeSlider.MinValue;
-        //    rangeSlider.HighValue = rangeSlider.MaxValue;
-        //    rangeSlider.targetGraphic = fillImage;
-
-        //    Selection.activeGameObject = rangeSliderRoot;
-        //}
-        //#endregion
-
-        //#region Menu Manager GO
-        //[MenuItem("GameObject/UI/Extensions/Menu Manager", false)]
-        //static public void AddMenuManager(MenuCommand menuCommand)
-        //{
-        //    GameObject child = new GameObject("MenuManager");
-        //    Undo.RegisterCreatedObjectUndo(child, "Create " + "MenuManager");
-        //    child.AddComponent<MenuManager>();
-        //    Selection.activeGameObject = child;
-        //}
-        //#endregion
-
-
-        #endregion
-
-        #region Helper Functions
-        private static GameObject AddInputFieldAsChild(GameObject parent)
+		#region Helper Functions
+		private static GameObject AddInputFieldAsChild(GameObject parent)
 		{
 			GameObject root = CreateUIObject("InputField", parent);
 

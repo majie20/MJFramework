@@ -13,7 +13,7 @@ namespace Model
     }
 
     [CreateAssetMenu(fileName = "AssetsBundleSettings", menuName = "ScriptableObjects/AssetsBundleSettings", order = 1)]
-    public class AssetsBundleSettings : ScriptableObject
+    public class AssetsBundleSettings : SerializedScriptableObject
     {
         [LabelText("是否是单机游戏")]
         public bool IsOfflineGame;
@@ -36,7 +36,7 @@ namespace Model
 
         public static IEnumerable GetPlayModeValues = new ValueDropdownList<YooAssets.EPlayMode>()
         {
-            {"编辑器模拟模式", YooAssets.EPlayMode.EditorPlayMode},
+            {"编辑器模拟模式", YooAssets.EPlayMode.EditorSimulateMode},
             {"单机模式", YooAssets.EPlayMode.OfflinePlayMode},
             {"联机模式", YooAssets.EPlayMode.HostPlayMode},
         };

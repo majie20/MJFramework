@@ -6,9 +6,6 @@ namespace Model
 {
     public class Init : MonoBehaviour
     {
-        [Tooltip("显示注释")]
-        public bool isUseABPackPlay;
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Inject()
         {
@@ -18,6 +15,37 @@ namespace Model
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+            Application.targetFrameRate = 60;
+            Screen.SetResolution(1280, 720, FullScreenMode.FullScreenWindow);
+
+            var logger = new Logger(Debug.unityLogger.logHandler);
+            NLog.Unity.NLogConfig nLogConfig = GameObject.Find("NLog").GetComponent<NLog.Unity.NLogConfig>();
+            if (nLogConfig)
+            {
+                if (nLogConfig.logLevel == NLog.LogLevel.Debug)
+                {
+                    logger.filterLogType = LogType.Log;
+                }
+                else if (nLogConfig.logLevel == NLog.LogLevel.Warn)
+                {
+                    logger.filterLogType = LogType.Warning;
+                }
+                else if (nLogConfig.logLevel == NLog.LogLevel.Error)
+                {
+                    logger.filterLogType = LogType.Error;
+                }
+                else if (nLogConfig.logLevel == NLog.LogLevel.On)
+                {
+                    logger.logEnabled = true;
+                }
+                else if (nLogConfig.logLevel == NLog.LogLevel.Off)
+                {
+                    logger.logEnabled = false;
+                }
+            }
+            Debug.unityLogger.logHandler = logger;
+
+            EventType.Init();
             Game.Instance.Init();
 #if MBuild
             CatJson.GenJsonCodesHelper.Init();
@@ -34,21 +62,17 @@ namespace Model
             AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
             await component.Init();
 
+            ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
+
             ObjectHelper.CreateComponent<UIRootComponent>(await ObjectHelper.CreateEntity(Game.Instance.Scene, null, UIRootComponent.UIROOT_PATH, true), false);
 
-            NLog.Log.Debug("-----这里有一段播放背景音乐播放测试");
-            Game.Instance.EventSystem.Invoke<E_PlayMusic, string>("event:/BGM");
-
-            Game.Instance.EventSystem.AddListenerAsync<E_GameLoadComplete>(this, OnGameLoadComplete);
-
-            if (component.PlayMode == YooAsset.YooAssets.EPlayMode.HostPlayMode)
+            LoadSceneData data = new LoadSceneData()
             {
-                await ObjectHelper.OpenUIView<LoadingViewComponent>();
-            }
-            else
-            {
-                Game.Instance.EventSystem.InvokeAsync<E_GameLoadComplete>();
-            }
+                ScenePath = $"Assets/Res/Scenes/Main.unity",
+                SettingsPath = FileValue.GAME_LOAD_COMPLETE_ARS,
+                Call = OnGameLoadComplete
+            };
+            await ObjectHelper.OpenUIView<LoadingViewComponent, LoadUseType, LoadSceneData>(LoadUseType.Hot, data);
         }
 
         private void Update()
@@ -63,65 +87,6 @@ namespace Model
                 //ObjectHelper.OpenUIView<StartViewComponent>();
             }
         }
-
-        //private TimerBase t;
-        //private TimerBase tt;
-
-        /// <summary>
-        /// PostProcessing和Timer的测试
-        /// </summary>
-        //private void TestAwake()
-        //{
-        //    t = TimerHelper.DelayDo(6, () => { Debug.Log("测试按时间执行"); }, true, 2);
-        //    tt = TimerHelper.DelayDoFrame(6, () => { Debug.Log("测试按帧执行"); }, true, 2);
-        //}
-
-        /// <summary>
-        /// PostProcessing和Timer的测试
-        /// </summary>
-        //private void TestUpdate()
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        t.Pause();
-        //        tt.Pause();
-        //        t = TimerHelper.DelayDo(6, () => { Debug.Log("测试按时间执行"); }, false, 1);
-        //        tt = TimerHelper.DelayDoFrame(6, () => { Debug.Log("测试按帧执行"); }, false, 1);
-        //    }
-        //    if (Input.GetMouseButtonDown(1))
-        //    {
-        //        t.Start();
-        //        tt.Start();
-        //    }
-        //    if (Input.GetMouseButtonDown(2))
-        //    {
-        //        t.Resume();
-        //        tt.Resume();
-        //    }
-
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        PostProcessingHelper.ShowEffect<BloodDropEffect>();
-        //    }
-        //    if (Input.GetMouseButtonDown(1))
-        //    {
-        //        PostProcessingHelper.RecoverEffect<BloodDropEffect>();
-        //    }
-        //    //if (Input.GetMouseButtonDown(0))
-        //    //{
-        //    //    DOTween.To(() => 0.0f, t =>
-        //    //    {
-        //    //        postProcessing.ShowLerpEffect<BloodDropEffect>(t);
-        //    //    },1.0f,1.0f);
-        //    //}
-        //    //if (Input.GetMouseButtonDown(1))
-        //    //{
-        //    //    DOTween.To(() => 1.0f, t =>
-        //    //    {
-        //    //        postProcessing.RecoverLerpEffect<BloodDropEffect>(t);
-        //    //    }, 0.0f, 1.0f).Complete();
-        //    //}
-        //}
 
         private void LateUpdate()
         {
@@ -138,15 +103,20 @@ namespace Model
         private async UniTask OnGameLoadComplete()
         {
             NLog.Log.Debug("------完成------");
-            Game.Instance.EventSystem.RemoveListenerAsync<E_GameLoadComplete>(this);
 
-            ObjectHelper.CreateComponent<SpriteComponent>(Game.Instance.Scene, false);
-            ObjectHelper.CloseUIView<LoadingViewComponent>();
+            await Game.Instance.Scene.GetComponent<AssetsComponent>().LoadNecessary();
+            Game.Instance.Scene.GetComponent<SpriteComponent>().Init();
+            ObjectHelper.CreateComponent<GameConfigDataComponent>(Game.Instance.Scene, false);
+            ObjectHelper.CreateComponent<MusicManagerComponent>(Game.Instance.Scene, false);
 
-            Game.Instance.Hotfix.LoadHotfixAssembly();
+            await Game.Instance.Hotfix.LoadHotfixAssembly();
             Game.Instance.Hotfix.GotoHotfix();
 
             await ObjectHelper.OpenUIView<StartViewComponent>();
+
+            NLog.Log.Debug("-----这里有一段播放背景音乐播放测试");
+            //Game.Instance.EventSystem.InvokeAsync<E_PlayMusic, int>(10001);
+            ObjectHelper.SetMainCamera();
         }
     }
 }

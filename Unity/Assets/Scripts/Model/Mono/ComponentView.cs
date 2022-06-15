@@ -6,6 +6,6 @@ namespace Model
 {
     public class ComponentView : MonoBehaviour
     {
-        public Dictionary<object, Type> dic = new Dictionary<object, Type>();
+        public Dictionary<Component, Type> dic = new Dictionary<Component, Type>();
     }
 }

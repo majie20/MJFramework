@@ -7,8 +7,6 @@ namespace Model
 {
     public class Game : Singleton<Game>
     {
-        public ObjectPool ObjectPool { private set; get; }
-
         public Scene Scene { private set; get; }
 
         public EventSystem EventSystem { private set; get; }
@@ -30,11 +28,9 @@ namespace Model
 
             ComponentDic = new Dictionary<Type, Component>();
 
-            EventSystem = new EventSystem();
+            EventSystem = new EventSystem(false);
 
             LifecycleSystem = new LifecycleSystem();
-
-            ObjectPool = new ObjectPool();
 
             Scene = new Scene();
 
@@ -45,9 +41,6 @@ namespace Model
         {
             Scene?.Dispose();
             Scene = null;
-
-            ObjectPool?.Dispose();
-            ObjectPool = null;
 
             LifecycleSystem?.Dispose();
             LifecycleSystem = null;
@@ -61,7 +54,7 @@ namespace Model
             ComponentDic = null;
         }
 
-        public void AddComponent<T>(T component) where T : Component
+        public void GAddComponent<T>(T component) where T : Component
         {
             var type = typeof(T);
             if (component is ILRuntime.Runtime.Enviorment.CrossBindingAdaptorType croos)
@@ -74,7 +67,7 @@ namespace Model
             }
         }
 
-        public T GetComponent<T>() where T : Component
+        public T GGetComponent<T>() where T : Component
         {
             var type = typeof(T);
             if (ComponentDic.ContainsKey(type))
@@ -85,7 +78,7 @@ namespace Model
             return null;
         }
 
-        public void RemoveComponent<T>(T component) where T : Component
+        public void GRemoveComponent<T>(T component) where T : Component
         {
             var type = typeof(T);
             if (component is ILRuntime.Runtime.Enviorment.CrossBindingAdaptorType croos)

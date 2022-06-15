@@ -4,3 +4,4 @@
 [assembly: InternalsVisibleTo("UniTask.DOTween")]
 [assembly: InternalsVisibleTo("UniTask.TextMeshPro")]
 [assembly: InternalsVisibleTo("Unity.Model")]
+[assembly: InternalsVisibleTo("Unity.ThirdParty")]

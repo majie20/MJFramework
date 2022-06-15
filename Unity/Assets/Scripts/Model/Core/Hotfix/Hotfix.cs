@@ -1,4 +1,5 @@
-﻿using ILRuntime.CLR.Method;
+﻿using Cysharp.Threading.Tasks;
+using ILRuntime.CLR.Method;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -90,11 +91,11 @@ namespace Model
             return this.hotfixTypes;
         }
 
-        public void LoadHotfixAssembly()
+        public async UniTask LoadHotfixAssembly()
         {
             var component = Game.Instance.Scene.GetComponent<AssetsComponent>();
-            byte[] assBytes = component.LoadSync<UnityEngine.TextAsset>($"{FileValue.RES_PATH}Text/Hotfix.dll.bytes").bytes;
-            byte[] pdbBytes = component.LoadSync<UnityEngine.TextAsset>($"{FileValue.RES_PATH}Text/Hotfix.pdb.bytes").bytes;
+            byte[] assBytes = (await component.LoadAsync<UnityEngine.TextAsset>($"{FileValue.CODE_DIR_PATH}Hotfix.dll.bytes")).bytes;
+            byte[] pdbBytes = (await component.LoadAsync<UnityEngine.TextAsset>($"{FileValue.CODE_DIR_PATH}Hotfix.pdb.bytes")).bytes;
 
             NLog.Log.Debug($"当前使用的是ILRuntime模式");
             this.AppDomain = new ILRuntime.Runtime.Enviorment.AppDomain();

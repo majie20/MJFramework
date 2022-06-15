@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.U2D;
+using UnityEngine;
 using UnityEngine.U2D;
 
 public class ImportSettingsEditor
 {
-    private const string RESTYPESETTINGS_PATH = "Assets/Scripts/Editor/ImportSettings/ResTypeSettings.asset";
-
     private static TextureImporterFormat UI_ANDROID_FORMAT = TextureImporterFormat.ETC2_RGBA8;
     private static TextureImporterFormat UI_ANDROID_FORMAT2 = TextureImporterFormat.ETC2_RGB4;
 
@@ -19,10 +18,11 @@ public class ImportSettingsEditor
     [MenuItem("Tools/ImportSettings/设置所有资源")]
     public static void SetAllRes()
     {
-        ResTypeSettings settings = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(RESTYPESETTINGS_PATH);
+        ResTypeSettings settings = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(EditorConfig.RES_TYPE_SETTINGS_PATH);
 
         SetUITextureRes(settings.UITextureResConfig);
         SetUIAtlasRes(settings.UIAtlasResConfig);
+        UnityEngine.Debug.Log($"设置所有资源完成！"); // MDEBUG:
     }
 
     #region UI资源设置
@@ -33,30 +33,31 @@ public class ImportSettingsEditor
         SetUITextureRes();
     }
 
-    public static void SetUITextureRes(ResTypeSettings.ConfigInfo info = null)
+    public static void SetUITextureRes(ConfigInfo info = null)
     {
         if (info == null)
         {
-            info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(RESTYPESETTINGS_PATH).UITextureResConfig;
+            info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(EditorConfig.RES_TYPE_SETTINGS_PATH).UITextureResConfig;
         }
 
         List<string> pathList = new List<string>();
         for (int i = 0; i < info.list.Count; i++)
         {
-            EditorHelper.GetAssetPath(pathList, AssetDatabase.GetAssetPath(info.list[i].value));
+            EditorHelper.GetAssetPath(pathList, AssetDatabase.GetAssetPath(info.list[i]));
         }
 
         SetUITextureResByList(pathList, info);
+        Debug.Log("设置UI图片资源--完成！"); // MDEBUG:
     }
 
-    public static void SetUITextureResByList(List<string> pathList, ResTypeSettings.ConfigInfo info = null)
+    public static void SetUITextureResByList(List<string> pathList, ConfigInfo info = null)
     {
         if (info == null)
         {
-            info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(RESTYPESETTINGS_PATH).UITextureResConfig;
+            info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(EditorConfig.RES_TYPE_SETTINGS_PATH).UITextureResConfig;
         }
 
-        var source = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(info.template)) as TextureImporter;
+        var source = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(info.target)) as TextureImporter;
 
         TextureImporterSettings settings = new TextureImporterSettings();
         source.ReadTextureSettings(settings);
@@ -107,7 +108,7 @@ public class ImportSettingsEditor
     {
         List<string> pathList = GetSelectObjectPathList();
 
-        var info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(RESTYPESETTINGS_PATH).UITextureResConfig;
+        var info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(EditorConfig.RES_TYPE_SETTINGS_PATH).UITextureResConfig;
 
         List<string> tempList = new List<string>();
         for (int i = 0; i < pathList.Count; i++)
@@ -115,7 +116,7 @@ public class ImportSettingsEditor
             var result = false;
             for (int j = 0; j < info.list.Count; j++)
             {
-                if (pathList[i].StartsWith(AssetDatabase.GetAssetPath(info.list[j].value)))
+                if (pathList[i].StartsWith(AssetDatabase.GetAssetPath(info.list[j])))
                 {
                     result = true;
                     break;
@@ -129,6 +130,7 @@ public class ImportSettingsEditor
         }
 
         SetUITextureResByList(pathList, info);
+        Debug.Log("设置选中的UI图片资源--完成！"); // MDEBUG:
     }
 
     #endregion UI资源设置
@@ -141,30 +143,31 @@ public class ImportSettingsEditor
         SetUIAtlasRes();
     }
 
-    public static void SetUIAtlasRes(ResTypeSettings.ConfigInfo info = null)
+    public static void SetUIAtlasRes(ConfigInfo info = null)
     {
         if (info == null)
         {
-            info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(RESTYPESETTINGS_PATH).UIAtlasResConfig;
+            info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(EditorConfig.RES_TYPE_SETTINGS_PATH).UIAtlasResConfig;
         }
 
         List<string> pathList = new List<string>();
         for (int i = 0; i < info.list.Count; i++)
         {
-            EditorHelper.GetAssetPath(pathList, AssetDatabase.GetAssetPath(info.list[i].value));
+            EditorHelper.GetAssetPath(pathList, AssetDatabase.GetAssetPath(info.list[i]));
         }
 
         SetUIAtlasResByList(pathList, info);
+        Debug.Log("设置UI图集资源--完成！"); // MDEBUG:
     }
 
-    public static void SetUIAtlasResByList(List<string> pathList, ResTypeSettings.ConfigInfo info = null)
+    public static void SetUIAtlasResByList(List<string> pathList, ConfigInfo info = null)
     {
         if (info == null)
         {
-            info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(RESTYPESETTINGS_PATH).UIAtlasResConfig;
+            info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(EditorConfig.RES_TYPE_SETTINGS_PATH).UIAtlasResConfig;
         }
 
-        var source = info.template as SpriteAtlas;
+        var source = info.target as SpriteAtlas;
 
         SpriteAtlasTextureSettings textureSettings = source.GetTextureSettings();
         SpriteAtlasPackingSettings packingSettings = source.GetPackingSettings();
@@ -194,9 +197,9 @@ public class ImportSettingsEditor
         }
         SpriteAtlasUtility.PackAtlases(atlasList.ToArray(), EditorUserBuildSettings.activeBuildTarget);
 
+        AssetDatabase.StopAssetEditing();
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        AssetDatabase.StopAssetEditing();
     }
 
     [MenuItem("Assets/ImportSettings/设置选中的UI图集资源", priority = 1)]
@@ -204,7 +207,7 @@ public class ImportSettingsEditor
     {
         List<string> pathList = GetSelectObjectPathList();
 
-        var info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(RESTYPESETTINGS_PATH).UIAtlasResConfig;
+        var info = AssetDatabase.LoadAssetAtPath<ResTypeSettings>(EditorConfig.RES_TYPE_SETTINGS_PATH).UIAtlasResConfig;
 
         List<string> tempList = new List<string>();
         for (int i = 0; i < pathList.Count; i++)
@@ -212,7 +215,7 @@ public class ImportSettingsEditor
             var result = false;
             for (int j = 0; j < info.list.Count; j++)
             {
-                if (pathList[i].StartsWith(AssetDatabase.GetAssetPath(info.list[j].value)))
+                if (pathList[i].StartsWith(AssetDatabase.GetAssetPath(info.list[j])))
                 {
                     result = true;
                     break;
@@ -226,6 +229,8 @@ public class ImportSettingsEditor
         }
 
         SetUIAtlasResByList(pathList, info);
+
+        Debug.Log("设置选中的UI图集资源--完成！"); // MDEBUG:
     }
 
     #endregion Atlas资源设置

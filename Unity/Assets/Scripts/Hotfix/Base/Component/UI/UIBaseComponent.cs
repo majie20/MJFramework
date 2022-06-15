@@ -14,7 +14,7 @@
 
         protected override void OnOpen()
         {
-            _canvas.enabled = true;
+            Canvas.enabled = true;
         }
 
         protected override void OnClose()
@@ -24,13 +24,13 @@
 
         public override void Enable()
         {
-            _canvas.enabled = true;
+            Canvas.enabled = true;
             IsEnable = true;
         }
 
         public override void Disable()
         {
-            _canvas.enabled = false;
+            Canvas.enabled = false;
             IsEnable = false;
         }
     }

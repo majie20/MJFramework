@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CatJson;
+using System.Collections.Generic;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -6,13 +7,72 @@ using vietlabs.fr2;
 
 public class AssetReferenceEditor
 {
-    [MenuItem("Assets/资源引用/查看UI预制体引用图集", priority = 0)]
+    [MenuItem("Assets/资源收集/查看UI预制体引用图集情况", priority = 0)]
     private static void CheckUIPrefabReferenceAtlas()
     {
-        var assetPath = AssetDatabase.GetAssetPath(Selection.activeObject);
+        List<string> pathList = new List<string>();
+        for (int i = 0; i < Selection.assetGUIDs.Length; i++)
+        {
+            EditorHelper.GetAssetPath(pathList, AssetDatabase.GUIDToAssetPath(Selection.assetGUIDs[i]));
+        }
+
+        Dictionary<string, List<string>> infoDic = new Dictionary<string, List<string>>();
+        for (int i = 0; i < pathList.Count; i++)
+        {
+            CheckUIPrefabReferenceAtlas(pathList[i], infoDic);
+        }
+
+        foreach (var info in infoDic)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{info.Key}引用的静态图集：\n");
+            for (int i = 0; i < info.Value.Count; i++)
+            {
+                sb.Append(info.Value[i]);
+                sb.Append("\n");
+            }
+
+            if (info.Value.Count > 1)
+            {
+                Debug.LogError(sb); // MDEBUG:
+            }
+            else
+            {
+                Debug.Log(sb); // MDEBUG:
+            }
+        }
+
+        Debug.Log($"查看UI预制体引用图集情况--完成"); // MDEBUG:
+    }
+
+    [MenuItem("Tools/资源收集/查看所有UI预制体引用图集情况", priority = 0)]
+    public static void CheckUIPrefabReferenceAtlasAll()
+    {
+        FR2_Cache.Api.Check4Changes(true);
+        FR2_SceneCache.Api.SetDirty();
+
+        Dictionary<string, List<string>> infoDic = new Dictionary<string, List<string>>();
+        List<string> pathList = new List<string>();
+        EditorHelper.GetAssetPath(pathList, EditorConfig.UI_PREFAB_PATH);
+
+        for (int i = 0; i < pathList.Count; i++)
+        {
+            CheckUIPrefabReferenceAtlas(pathList[i], infoDic);
+        }
+
+        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("UI预制体引用图集情况表.json"))
+        {
+            sw.WriteLine(JsonParser.ToJson(infoDic));
+        }
+
+        Debug.Log($"查看所有UI预制体引用图集情况--完成"); // MDEBUG:
+    }
+
+    private static void CheckUIPrefabReferenceAtlas(string assetPath, Dictionary<string, List<string>> infoDic)
+    {
         if (!assetPath.StartsWith(EditorConfig.UI_PREFAB_PATH))
         {
-            Debug.LogError("不是UI预制体!"); // MDEBUG:
+            Debug.LogError($"{assetPath}不是UI预制体!"); // MDEBUG:
             return;
         }
         var list = AssetDatabase.GetDependencies(assetPath, true);
@@ -27,7 +87,6 @@ public class AssetReferenceEditor
 
         if (textureList.Count == 0)
         {
-            Debug.LogError("没有引用静态图集!"); // MDEBUG:
             return;
         }
 
@@ -44,13 +103,6 @@ public class AssetReferenceEditor
             }
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.Append("引用的图集：\n");
-        for (int i = 0; i < atlasList.Count; i++)
-        {
-            sb.Append(atlasList[i]);
-            sb.Append("\n");
-        }
-        Debug.Log(sb); // MDEBUG:
+        infoDic.Add(assetPath, atlasList);
     }
 }

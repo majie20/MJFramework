@@ -12,12 +12,16 @@ namespace Model
 
             this.AddComponentView();
 
+            ObjectHelper.CreateComponent<GamePlayDataComponent>(this, false);
+            ObjectHelper.CreateComponent<ComponentPoolComponent>(this, false);
+            ObjectHelper.CreateComponent<GameObjPoolComponent>(this, false);
+            ObjectHelper.CreateComponent<EntityPoolComponent>(this, false);
+            ObjectHelper.CreateComponent<NPNodePoolComponent>(this, false);
             ObjectHelper.CreateComponent<HttpComponent>(this, false);
             ObjectHelper.CreateComponent<AssetsComponent>(this, false);
             ObjectHelper.CreateComponent<HotComponent>(this, false);
             ObjectHelper.CreateComponent<NPContextComponent>(this, false);
             ObjectHelper.CreateComponent<GameManagerComponent>(this, false);
-            ObjectHelper.CreateComponent<MusicManager>(this, false);
             //ObjectHelper.CreateComponent<PostProcessingComponent>(this, false);
             //ObjectHelper.CreateComponent<PostProcessAssetComponent>(this, false);
             ObjectHelper.CreateComponent<TimerComponent>(this, false);

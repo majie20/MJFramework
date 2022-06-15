@@ -1,7 +1,14 @@
-﻿using System;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum LoadType
+{
+    Normal,
+    Sub,
+    RawFile
+}
 
 [CreateAssetMenu(fileName = "AssetReferenceSettings", menuName = "ScriptableObjects/AssetReferenceSettings", order = 2)]
 public class AssetReferenceSettings : SerializedScriptableObject
@@ -11,6 +18,7 @@ public class AssetReferenceSettings : SerializedScriptableObject
     {
         public string typeName;
         public string path;
+        public LoadType type;
     }
 
     [ReadOnly]

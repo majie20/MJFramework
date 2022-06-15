@@ -16,4 +16,110 @@ MonoBehaviour:
   defaultEditorBehaviour: 11
   processMouseMoveInInspector: 1
   drawingConfig:
-    configs: []
+    configs:
+    - DrawnTypeName: UnityEngine.AssetBundleManifest, UnityEngine.AssetBundleModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.AudioBehaviour, UnityEngine.AudioModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.AudioListener, UnityEngine.AudioModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Behaviour, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.CanvasGroup, UnityEngine.UIModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Collider, UnityEngine.PhysicsModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Collider2D, UnityEngine.Physics2DModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Component, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.ConstantForce, UnityEngine.PhysicsModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.ConstantForce2D, UnityEngine.Physics2DModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.CubemapArray, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.FailedToLoadScriptObject, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Flare, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.FlareLayer, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.GridLayout, UnityEngine.GridModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.GUISkin, UnityEngine.IMGUIModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Halo, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.LensFlare, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.LightmapSettings, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.LocalizationAsset, UnityEngine.LocalizationModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.LowerResBlitTexture, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.MeshFilter, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.MonoBehaviour, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Motion, UnityEngine.AnimationModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Object, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.ParticleSystemRenderer, UnityEngine.ParticleSystemModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.PhysicMaterial, UnityEngine.PhysicsModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.PhysicsMaterial2D, UnityEngine.Physics2DModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.PhysicsUpdateBehaviour2D, UnityEngine.Physics2DModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.PreloadData, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Projector, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Renderer, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.RuntimeAnimatorController, UnityEngine.AnimationModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.ScriptableObject, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Skybox, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.SparseTexture, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.SpeedTreeWindAsset, UnityEngine.TerrainModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.TerrainData, UnityEngine.TerrainModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Texture, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.AI.NavMeshData, UnityEngine.AIModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Audio.AudioMixerGroup, UnityEngine.AudioModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Audio.AudioMixerSnapshot, UnityEngine.AudioModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Connect.UnityConnectSettings, UnityEngine.UnityConnectModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.Networking.PlayerConnection.PlayerConnection, UnityEngine.CoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.TextCore.FontAsset, UnityEngine.TextCoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.TextCore.TextGradientPreset, UnityEngine.TextCoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.TextCore.TextSettings, UnityEngine.TextCoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.TextCore.TextSpriteAsset, UnityEngine.TextCoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.TextCore.TextStyleSheet, UnityEngine.TextCoreModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.UIElements.VectorImage, UnityEngine.UIElementsModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.VFX.VFXRenderer, UnityEngine.VFXModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.VFX.VisualEffectAsset, UnityEngine.VFXModule
+      EditorTypeName: 
+    - DrawnTypeName: UnityEngine.XR.WSA.WorldAnchor, UnityEngine.VRModule
+      EditorTypeName: 

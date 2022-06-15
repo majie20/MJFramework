@@ -1,7 +1,6 @@
 // ----------------------------------------------------------------------------
-// The MIT License
-// Simple Entity Component System framework https://github.com/Leopotam/ecs
-// Copyright (c) 2017-2021 Leopotam <leopotam@gmail.com>
+// The Proprietary or MIT-Red License
+// Copyright (c) 2012-2022 Leopotam <leopotam@yandex.ru>
 // ----------------------------------------------------------------------------
 
 using System;

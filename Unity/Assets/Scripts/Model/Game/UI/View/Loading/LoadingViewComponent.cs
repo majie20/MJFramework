@@ -6,8 +6,10 @@ namespace Model
     [UIBaseData(UIViewType = (int)UIViewType.Normal,
         PrefabPath = "Assets/Res/Prefabs/UI/Loading/LoadingView.prefab",
         UIMaskMode = (int)UIMaskMode.Transparent,
-        UILayer = (int)Model.UIViewLayer.Normal)]
-    public class LoadingViewComponent : UIBaseComponent, IOpen, IAwake
+        UILayer = (int)Model.UIViewLayer.High,
+        IsOperateMask = false,
+        IsFullScreen = true)]
+    public class LoadingViewComponent : UIBaseComponent, IOpen<LoadUseType, LoadSceneData>, IAwake
     {
         private LoadProgressType _loadProgressType;
         private Text TextProgress;
@@ -25,10 +27,11 @@ namespace Model
         public override void Dispose()
         {
             TextProgress = null;
+            SliderProgress = null;
             base.Dispose();
         }
 
-        public async void Open()
+        public async void Open(LoadUseType useType, LoadSceneData data)
         {
             OnOpen();
             _hintText = "";
@@ -36,10 +39,17 @@ namespace Model
             SliderProgress.value = 0;
 
             Game.Instance.EventSystem.AddListener<E_LoadStateSwitch, LoadProgressType>(this, OnLoadStateSwitch);
-            Game.Instance.EventSystem.AddListener<E_LoadingViewProgressRefresh, int, int, long, long>(this, OnLoadingViewProgressRefresh);
+            Game.Instance.EventSystem.AddListener<E_LoadingViewProgressRefresh1, int, int, long, long>(this, OnLoadingViewProgressRefresh);
+            Game.Instance.EventSystem.AddListener<E_LoadingViewProgressRefresh2, float>(this, OnLoadingViewProgressRefresh);
 
-            AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
-            await Game.Instance.Scene.GetComponent<HotComponent>().Run();
+            if (useType == LoadUseType.Hot)
+            {
+                await Game.Instance.Scene.GetComponent<HotComponent>().Run(data);
+            }
+            else if (useType == LoadUseType.Normal)
+            {
+                await Game.Instance.Scene.GetComponent<GameManagerComponent>().Run(data);
+            }
         }
 
         protected override void OnClose()
@@ -49,9 +59,15 @@ namespace Model
 
         private void OnLoadingViewProgressRefresh(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
         {
-            var value = totalDownloadBytes == 0 ? 1 : currentDownloadBytes / totalDownloadBytes;
+            var value = (float)currentDownloadBytes / totalDownloadBytes;
             SliderProgress.value = value;
-            TextProgress.text = $"{_hintText}：{currentDownloadCount}/{totalDownloadCount},{value * 100:F2}%";
+            TextProgress.text = $"{_hintText}：{(float)currentDownloadCount}/{totalDownloadCount},{value * 100:F2}%";
+        }
+
+        private void OnLoadingViewProgressRefresh(float value)
+        {
+            SliderProgress.value = value;
+            TextProgress.text = $"{_hintText}：{value * 100:F2}%";
         }
 
         private void OnLoadStateSwitch(LoadProgressType type)
@@ -74,12 +90,12 @@ namespace Model
                     NLog.Log.Debug("正在下载资源"); // MDEBUG:
                     break;
 
-                case LoadProgressType.DownloadHotAssetsSuccess:
-                    _hintText = "下载资源完成";
-                    NLog.Log.Debug("下载资源完成"); // MDEBUG:
+                case LoadProgressType.LoadAssets:
+                    _hintText = "正在加载资源";
+                    NLog.Log.Debug("正在加载资源"); // MDEBUG:
                     break;
             }
-            TextProgress.text = $"{_hintText}";
+            TextProgress.text = $"{_hintText} : 0.0%";
         }
     }
 }

@@ -1,7 +1,6 @@
 // ----------------------------------------------------------------------------
-// The MIT License
-// Simple Entity Component System framework https://github.com/Leopotam/ecs
-// Copyright (c) 2017-2021 Leopotam <leopotam@gmail.com>
+// The Proprietary or MIT-Red License
+// Copyright (c) 2012-2022 Leopotam <leopotam@yandex.ru>
 // ----------------------------------------------------------------------------
 
 using System;
@@ -342,46 +341,6 @@ namespace Leopotam.Ecs {
         [MethodImpl (MethodImplOptions.AggressiveInlining)]
         public EcsComponentRef<Inc1> Get1Ref (in int idx) {
             return _pool1.Ref (_get1[idx]);
-        }
-
-        /// <summary>
-        /// Optimizes filtered data for fast access.
-        /// </summary>
-        public void Optimize () {
-#if DEBUG
-            if (LockCount > 0) { throw new Exception ("Can't optimize locked filter."); }
-#endif
-            OptimizeSort (0, EntitiesCount - 1);
-        }
-
-        void OptimizeSort (int left, int right) {
-            if (left < right) {
-                var q = OptimizeSortPartition (left, right);
-                OptimizeSort (left, q - 1);
-                OptimizeSort (q + 1, right);
-            }
-        }
-
-        int OptimizeSortPartition (int left, int right) {
-            var pivot = _get1[right];
-            var pivotE = Entities[right];
-            var i = left;
-            for (var j = left; j < right; j++) {
-                if (_get1[j] <= pivot) {
-                    var c = _get1[j];
-                    _get1[j] = _get1[i];
-                    _get1[i] = c;
-                    var e = Entities[j];
-                    Entities[j] = Entities[i];
-                    Entities[i] = e;
-                    i++;
-                }
-            }
-            _get1[right] = _get1[i];
-            _get1[i] = pivot;
-            Entities[right] = Entities[i];
-            Entities[i] = pivotE;
-            return i;
         }
 #if UNITY_2019_1_OR_NEWER
         [UnityEngine.Scripting.Preserve]

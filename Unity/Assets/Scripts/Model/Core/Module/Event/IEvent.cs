@@ -90,19 +90,17 @@ namespace Model
 
     #region EventBaseAsync1
 
-    public class EventBaseAsync1 : EventBase<object, Func<UniTask>>
+    public class EventBaseAsync1 : EventBase<Func<UniTask>>
     {
-        public override void AddListener(object self, Func<UniTask> call)
+        public override void AddListener(Component self, Func<UniTask> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -118,19 +116,17 @@ namespace Model
         }
     }
 
-    public class EventBaseAsync1<T1> : EventBase<object, Func<T1, UniTask>, T1>
+    public class EventBaseAsync1<T1> : EventBase<Func<T1, UniTask>, T1>
     {
-        public override void AddListener(object self, Func<T1, UniTask> call)
+        public override void AddListener(Component self, Func<T1, UniTask> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -146,19 +142,17 @@ namespace Model
         }
     }
 
-    public class EventBaseAsync1<T1, T2> : EventBase<object, Func<T1, T2, UniTask>, T1, T2>
+    public class EventBaseAsync1<T1, T2> : EventBase<Func<T1, T2, UniTask>, T1, T2>
     {
-        public override void AddListener(object self, Func<T1, T2, UniTask> call)
+        public override void AddListener(Component self, Func<T1, T2, UniTask> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -174,19 +168,17 @@ namespace Model
         }
     }
 
-    public class EventBaseAsync1<T1, T2, T3> : EventBase<object, Func<T1, T2, T3, UniTask>, T1, T2, T3>
+    public class EventBaseAsync1<T1, T2, T3> : EventBase<Func<T1, T2, T3, UniTask>, T1, T2, T3>
     {
-        public override void AddListener(object self, Func<T1, T2, T3, UniTask> call)
+        public override void AddListener(Component self, Func<T1, T2, T3, UniTask> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -202,19 +194,17 @@ namespace Model
         }
     }
 
-    public class EventBaseAsync1<T1, T2, T3, T4> : EventBase<object, Func<T1, T2, T3, T4, UniTask>, T1, T2, T3, T4>
+    public class EventBaseAsync1<T1, T2, T3, T4> : EventBase<Func<T1, T2, T3, T4, UniTask>, T1, T2, T3, T4>
     {
-        public override void AddListener(object self, Func<T1, T2, T3, T4, UniTask> call)
+        public override void AddListener(Component self, Func<T1, T2, T3, T4, UniTask> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -234,19 +224,17 @@ namespace Model
 
     #region EventBase1
 
-    public class EventBase1 : EventBase<object, Action>
+    public class EventBase1 : EventBase<Action>
     {
-        public override void AddListener(object self, Action call)
+        public override void AddListener(Component self, Action call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -262,19 +250,17 @@ namespace Model
         }
     }
 
-    public class EventBase1<T1> : EventBase<object, Action<T1>, T1>
+    public class EventBase1<T1> : EventBase<Action<T1>, T1>
     {
-        public override void AddListener(object self, Action<T1> call)
+        public override void AddListener(Component self, Action<T1> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -290,19 +276,17 @@ namespace Model
         }
     }
 
-    public class EventBase1<T1, T2> : EventBase<object, Action<T1, T2>, T1, T2>
+    public class EventBase1<T1, T2> : EventBase<Action<T1, T2>, T1, T2>
     {
-        public override void AddListener(object self, Action<T1, T2> call)
+        public override void AddListener(Component self, Action<T1, T2> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -318,19 +302,17 @@ namespace Model
         }
     }
 
-    public class EventBase1<T1, T2, T3> : EventBase<object, Action<T1, T2, T3>, T1, T2, T3>
+    public class EventBase1<T1, T2, T3> : EventBase<Action<T1, T2, T3>, T1, T2, T3>
     {
-        public override void AddListener(object self, Action<T1, T2, T3> call)
+        public override void AddListener(Component self, Action<T1, T2, T3> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -346,19 +328,17 @@ namespace Model
         }
     }
 
-    public class EventBase1<T1, T2, T3, T4> : EventBase<object, Action<T1, T2, T3, T4>, T1, T2, T3, T4>
+    public class EventBase1<T1, T2, T3, T4> : EventBase<Action<T1, T2, T3, T4>, T1, T2, T3, T4>
     {
-        public override void AddListener(object self, Action<T1, T2, T3, T4> call)
+        public override void AddListener(Component self, Action<T1, T2, T3, T4> call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -378,19 +358,17 @@ namespace Model
 
     #region EventBaseAsync2
 
-    public sealed class EventBaseAsync2 : EventBase<object, object>
+    public sealed class EventBaseAsync2 : EventBase<object>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -406,19 +384,17 @@ namespace Model
         }
     }
 
-    public sealed class EventBaseAsync2<T1> : EventBase<object, object, T1>
+    public sealed class EventBaseAsync2<T1> : EventBase<object, T1>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -434,19 +410,17 @@ namespace Model
         }
     }
 
-    public sealed class EventBaseAsync2<T1, T2> : EventBase<object, object, T1, T2>
+    public sealed class EventBaseAsync2<T1, T2> : EventBase<object, T1, T2>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -462,19 +436,17 @@ namespace Model
         }
     }
 
-    public sealed class EventBaseAsync2<T1, T2, T3> : EventBase<object, object, T1, T2, T3>
+    public sealed class EventBaseAsync2<T1, T2, T3> : EventBase<object, T1, T2, T3>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -490,19 +462,17 @@ namespace Model
         }
     }
 
-    public sealed class EventBaseAsync2<T1, T2, T3, T4> : EventBase<object, object, T1, T2, T3, T4>
+    public sealed class EventBaseAsync2<T1, T2, T3, T4> : EventBase<object, T1, T2, T3, T4>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -522,91 +492,76 @@ namespace Model
 
     #region EventBase2
 
-    public sealed class EventBase2 : EventBase<object, object>
+    public sealed class EventBase2 : EventBase<object>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
     }
 
-    public sealed class EventBase2<T1> : EventBase<object, object, T1>
+    public sealed class EventBase2<T1> : EventBase<object, T1>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
     }
 
-    public sealed class EventBase2<T1, T2> : EventBase<object, object, T1, T2>
+    public sealed class EventBase2<T1, T2> : EventBase<object, T1, T2>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
     }
 
-    public sealed class EventBase2<T1, T2, T3> : EventBase<object, object, T1, T2, T3>
+    public sealed class EventBase2<T1, T2, T3> : EventBase<object, T1, T2, T3>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
     }
 
-    public sealed class EventBase2<T1, T2, T3, T4> : EventBase<object, object, T1, T2, T3, T4>
+    public sealed class EventBase2<T1, T2, T3, T4> : EventBase<object, T1, T2, T3, T4>
     {
-        public override void AddListener(object self, object call)
+        public override void AddListener(Component self, object call)
         {
             if (!datas.ContainsKey(self))
             {
                 datas.Add(self, call);
-                if (self is Component component)
+                if (!self.EventList.Contains(this))
                 {
-                    if (!component.EventList.Contains(this))
-                    {
-                        component.EventList.Add(this);
-                    }
+                    self.EventList.Add(this);
                 }
             }
         }
@@ -623,14 +578,14 @@ namespace Model
     {
         int Count();
 
-        void RemoveListener2(object self);
+        void RemoveListener(Component self);
 
         void RemoveAllListener();
     }
 
-    public class EventBase<A, B> : IEvent
+    public class EventBase<B> : IEvent
     {
-        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> datas = new StaticLinkedListDictionary<Component, B>(EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -641,12 +596,7 @@ namespace Model
             return datas.Length;
         }
 
-        public virtual void RemoveListener2(object self)
-        {
-            RemoveListener((A)self);
-        }
-
-        public virtual void AddListener(A self, B call)
+        public virtual void AddListener(Component self, B call)
         {
             if (!datas.ContainsKey(self))
             {
@@ -654,7 +604,7 @@ namespace Model
             }
         }
 
-        public virtual void RemoveListener(A self)
+        public virtual void RemoveListener(Component self)
         {
             if (datas.ContainsKey(self))
             {
@@ -678,9 +628,9 @@ namespace Model
         }
     }
 
-    public class EventBase<A, B, T1> : IEvent
+    public class EventBase<B, T1> : IEvent
     {
-        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> datas = new StaticLinkedListDictionary<Component, B>(EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -693,10 +643,10 @@ namespace Model
 
         public virtual void RemoveListener2(object self)
         {
-            RemoveListener((A)self);
+            RemoveListener((Component)self);
         }
 
-        public virtual void AddListener(A self, B call)
+        public virtual void AddListener(Component self, B call)
         {
             if (!datas.ContainsKey(self))
             {
@@ -704,7 +654,7 @@ namespace Model
             }
         }
 
-        public virtual void RemoveListener(A self)
+        public virtual void RemoveListener(Component self)
         {
             if (datas.ContainsKey(self))
             {
@@ -728,9 +678,9 @@ namespace Model
         }
     }
 
-    public class EventBase<A, B, T1, T2> : IEvent
+    public class EventBase<B, T1, T2> : IEvent
     {
-        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> datas = new StaticLinkedListDictionary<Component, B>(EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -743,10 +693,10 @@ namespace Model
 
         public virtual void RemoveListener2(object self)
         {
-            RemoveListener((A)self);
+            RemoveListener((Component)self);
         }
 
-        public virtual void AddListener(A self, B call)
+        public virtual void AddListener(Component self, B call)
         {
             if (!datas.ContainsKey(self))
             {
@@ -754,7 +704,7 @@ namespace Model
             }
         }
 
-        public virtual void RemoveListener(A self)
+        public virtual void RemoveListener(Component self)
         {
             if (datas.ContainsKey(self))
             {
@@ -778,9 +728,9 @@ namespace Model
         }
     }
 
-    public class EventBase<A, B, T1, T2, T3> : IEvent
+    public class EventBase<B, T1, T2, T3> : IEvent
     {
-        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> datas = new StaticLinkedListDictionary<Component, B>(EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -793,10 +743,10 @@ namespace Model
 
         public virtual void RemoveListener2(object self)
         {
-            RemoveListener((A)self);
+            RemoveListener((Component)self);
         }
 
-        public virtual void AddListener(A self, B call)
+        public virtual void AddListener(Component self, B call)
         {
             if (!datas.ContainsKey(self))
             {
@@ -804,7 +754,7 @@ namespace Model
             }
         }
 
-        public virtual void RemoveListener(A self)
+        public virtual void RemoveListener(Component self)
         {
             if (datas.ContainsKey(self))
             {
@@ -828,9 +778,9 @@ namespace Model
         }
     }
 
-    public class EventBase<A, B, T1, T2, T3, T4> : IEvent
+    public class EventBase<B, T1, T2, T3, T4> : IEvent
     {
-        protected StaticLinkedListDictionary<A, B> datas = new StaticLinkedListDictionary<A, B>(EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> datas = new StaticLinkedListDictionary<Component, B>(EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -843,10 +793,10 @@ namespace Model
 
         public virtual void RemoveListener2(object self)
         {
-            RemoveListener((A)self);
+            RemoveListener((Component)self);
         }
 
-        public virtual void AddListener(A self, B call)
+        public virtual void AddListener(Component self, B call)
         {
             if (!datas.ContainsKey(self))
             {
@@ -854,7 +804,7 @@ namespace Model
             }
         }
 
-        public virtual void RemoveListener(A self)
+        public virtual void RemoveListener(Component self)
         {
             if (datas.ContainsKey(self))
             {

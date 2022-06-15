@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Assets/Res/Audio/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 637873865513930648
+  lastModified: 637887757545590841
   FileSizes: []
   Exists: 1
 --- !u!114 &-6597160300767451362
@@ -96,7 +96,7 @@ MonoBehaviour:
   Path: Assets/Res/Audio/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637873865513900620
+  lastModified: 637887757545460720
   FileSizes:
   - Name: 
     Value: 798
@@ -144,7 +144,7 @@ MonoBehaviour:
   - {fileID: 1870244135663555227}
   StringsBanks:
   - {fileID: -1323905781872175610}
-  cacheTime: 637873865513930648
+  cacheTime: 637887757545590841
   cacheVersion: 10
 --- !u!114 &1870244135663555227
 MonoBehaviour:
@@ -161,7 +161,7 @@ MonoBehaviour:
   Path: Assets/Res/Audio/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637873865513870592
+  lastModified: 637887757545300577
   FileSizes: []
   Exists: 1
 --- !u!114 &2977145991127326614

@@ -12,38 +12,46 @@ namespace YooAsset.Editor
 		{
 			var buildParameters = context.GetContextObject<AssetBundleBuilder.BuildParametersContext>();
 			var buildMapContext = context.GetContextObject<BuildMapContext>();
-			CreateReportFile(buildParameters, buildMapContext);
+			buildParameters.StopWatch();
+
+			var buildMode = buildParameters.Parameters.BuildMode;
+			if (buildMode != EBuildMode.SimulateBuild)
+			{
+				CreateReportFile(buildParameters, buildMapContext);
+			}
+			else
+			{
+				float buildSeconds = buildParameters.GetBuildingSeconds();
+				BuildRunner.Info($"Build time consuming {buildSeconds} seconds.");
+			}
 		}
 
 		private void CreateReportFile(AssetBundleBuilder.BuildParametersContext buildParameters, BuildMapContext buildMapContext)
 		{
 			PatchManifest patchManifest = AssetBundleBuilderHelper.LoadPatchManifestFile(buildParameters.PipelineOutputDirectory, buildParameters.Parameters.BuildVersion);
-			BuildReport buildReport = new BuildReport();
-			buildParameters.StopWatch();
+			BuildReport buildReport = new BuildReport();		
 
 			// 概述信息
 			{
 				buildReport.Summary.UnityVersion = UnityEngine.Application.unityVersion;
 				buildReport.Summary.BuildTime = DateTime.Now.ToString();
-				buildReport.Summary.BuildSeconds = buildParameters.GetBuildingSeconds();
+				buildReport.Summary.BuildSeconds = (int)buildParameters.GetBuildingSeconds();
 				buildReport.Summary.BuildTarget = buildParameters.Parameters.BuildTarget;
 				buildReport.Summary.BuildMode = buildParameters.Parameters.BuildMode;
 				buildReport.Summary.BuildVersion = buildParameters.Parameters.BuildVersion;
 				buildReport.Summary.BuildinTags = buildParameters.Parameters.BuildinTags;
 				buildReport.Summary.EnableAddressable = buildParameters.Parameters.EnableAddressable;
-				buildReport.Summary.EnableAutoCollect = buildParameters.Parameters.EnableAutoCollect;
 				buildReport.Summary.AppendFileExtension = buildParameters.Parameters.AppendFileExtension;
-				buildReport.Summary.AutoCollectShaders = AssetBundleGrouperSettingData.Setting.AutoCollectShaders;
-				buildReport.Summary.ShadersBundleName = AssetBundleGrouperSettingData.Setting.ShadersBundleName;
+				buildReport.Summary.CopyBuildinTagFiles = buildParameters.Parameters.CopyBuildinTagFiles;
+				buildReport.Summary.AutoCollectShaders = AssetBundleCollectorSettingData.Setting.AutoCollectShaders;
+				buildReport.Summary.ShadersBundleName = AssetBundleCollectorSettingData.Setting.ShadersBundleName;
 				buildReport.Summary.EncryptionServicesClassName = buildParameters.Parameters.EncryptionServices == null ?
 					"null" : buildParameters.Parameters.EncryptionServices.GetType().FullName;
 
 				// 构建参数
 				buildReport.Summary.CompressOption = buildParameters.Parameters.CompressOption;
-				buildReport.Summary.AppendHash = buildParameters.Parameters.AppendHash;
 				buildReport.Summary.DisableWriteTypeTree = buildParameters.Parameters.DisableWriteTypeTree;
 				buildReport.Summary.IgnoreTypeTreeChanges = buildParameters.Parameters.IgnoreTypeTreeChanges;
-				buildReport.Summary.DisableLoadAssetByFileName = buildParameters.Parameters.DisableLoadAssetByFileName;
 
 				// 构建结果
 				buildReport.Summary.AssetFileTotalCount = buildMapContext.AssetFileCount;
@@ -65,6 +73,7 @@ namespace YooAsset.Editor
 				ReportAssetInfo reportAssetInfo = new ReportAssetInfo();
 				reportAssetInfo.Address = patchAsset.Address;
 				reportAssetInfo.AssetPath = patchAsset.AssetPath;
+				reportAssetInfo.AssetTags = patchAsset.AssetTags;
 				reportAssetInfo.AssetGUID = AssetDatabase.AssetPathToGUID(patchAsset.AssetPath);
 				reportAssetInfo.MainBundleName = mainBundle.BundleName;
 				reportAssetInfo.MainBundleSize = mainBundle.SizeBytes;

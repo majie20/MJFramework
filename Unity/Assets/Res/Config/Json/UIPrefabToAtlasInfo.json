@@ -1,0 +1,18 @@
+{
+	"Assets/Res/Prefabs/UI/Loading/LoadingView.prefab":{
+		"Path":"StaticSprite/S_Loading"
+	},
+	"Assets/Res/Prefabs/UI/VirtualJoystick/VirtualJoystickView.prefab":{
+		"Path":"StaticSprite/S_VirtualJoystick",
+		"IsEmpty":true
+	},
+	"Assets/Res/Prefabs/UI/Scene/SceneView.prefab":{
+		"Path":"StaticSprite/S_Scene"
+	},
+	"Assets/Res/Prefabs/UI/Start/StartView.prefab":{
+		"Path":"StaticSprite/S_Start"
+	},
+	"Assets/Res/Prefabs/UI/SelectLevel/SelectView.prefab":{
+		"Path":"StaticSprite/S_Select"
+	}
+}

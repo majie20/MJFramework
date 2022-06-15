@@ -4,14 +4,20 @@ using Model;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(ComponentView))]
 public class ComponentViewEditor : Editor
 {
+    private string text = "";
+
     public override void OnInspectorGUI()
     {
+        this.text = EditorGUILayout.TextField(text);
+        EditorGUILayout.Space(10);
+
         EditorGUILayout.BeginVertical();
 
         ComponentView componentView = (ComponentView)target;
@@ -19,7 +25,10 @@ public class ComponentViewEditor : Editor
 
         foreach (var v in dic)
         {
-            ComponentViewHelper.Draw(v);
+            if (Regex.IsMatch(v.Value.FullName.ToLower(), this.text.ToLower()))
+            {
+                ComponentViewHelper.Draw(v);
+            }
         }
 
         EditorGUILayout.EndVertical();
@@ -45,7 +54,7 @@ public static class ComponentViewHelper
         }
     }
 
-    public static void Draw(KeyValuePair<object, Type> obj)
+    public static void Draw(KeyValuePair<Model.Component, Type> obj)
     {
         try
         {
@@ -58,10 +67,6 @@ public static class ComponentViewHelper
                 if (obj.Key is ComponentAdapter.Adapter)
                 {
                     tempType = typeof(Model.Component);
-                }
-                else if (obj.Key is UIBaseComponentAdapter.Adapter)
-                {
-                    tempType = typeof(Model.UIBaseComponent);
                 }
 
                 if (tempType == null)
@@ -84,6 +89,11 @@ public static class ComponentViewHelper
                         continue;
                     }
 
+                    if (fieldInfo.Name == "awakeCalled" || fieldInfo.Name == "called")
+                    {
+                        continue;
+                    }
+
                     for (int i = 0; i < typeDrawers.Count; i++)
                     {
                         var typeDrawer = typeDrawers[i];
@@ -94,11 +104,6 @@ public static class ComponentViewHelper
                         }
 
                         string fieldName = fieldInfo.Name;
-                        if (fieldName.Length > 17 && fieldName.Contains("k__BackingField"))
-                        {
-                            fieldName = fieldName.Substring(1, fieldName.Length - 17);
-                        }
-
                         object value = fieldInfo.GetValue(obj.Key);
                         typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
 
@@ -154,10 +159,6 @@ public static class ComponentViewHelper
                         }
 
                         string fieldName = fieldInfo.Name;
-                        if (fieldName.Length > 17 && fieldName.Contains("k__BackingField"))
-                        {
-                            fieldName = fieldName.Substring(1, fieldName.Length - 17);
-                        }
                         object value = fieldInfo.GetValue(instance.ILInstance);
                         typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
 
@@ -180,6 +181,11 @@ public static class ComponentViewHelper
                         continue;
                     }
 
+                    if (fieldInfo.Name == "awakeCalled" || fieldInfo.Name == "called")
+                    {
+                        continue;
+                    }
+
                     for (int i = 0; i < typeDrawers.Count; i++)
                     {
                         var typeDrawer = typeDrawers[i];
@@ -190,11 +196,6 @@ public static class ComponentViewHelper
                         }
 
                         string fieldName = fieldInfo.Name;
-                        if (fieldName.Length > 17 && fieldName.Contains("k__BackingField"))
-                        {
-                            fieldName = fieldName.Substring(1, fieldName.Length - 17);
-                        }
-
                         object value = fieldInfo.GetValue(obj.Key);
                         typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
 

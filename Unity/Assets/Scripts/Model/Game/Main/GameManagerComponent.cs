@@ -6,16 +6,12 @@ namespace Model
     [LifeCycle]
     public class GameManagerComponent : Component, IAwake, IUpdateSystem
     {
-        private bool gameState;
-        private CharacterComponent Player;
-        private LevelCtrlComponent LevelCtrlComponent;
+        private int _curLevelCode;
 
         public void Awake()
         {
             Game.Instance.EventSystem.AddListener<E_OpenLevel, int>(this, OnOpenLevel);
             Game.Instance.EventSystem.AddListener<E_ExitLevel>(this, OnExitLevel);
-            Game.Instance.EventSystem.AddListener<E_GamePause>(this, OnGamePause);
-            Game.Instance.EventSystem.AddListener<E_GameContinue>(this, OnGameContinue);
         }
 
         public override void Dispose()
@@ -27,50 +23,64 @@ namespace Model
         {
         }
 
+        public async UniTask Run(LoadSceneData data)
+        {
+            await LoadHelper.LoadScene(data);
+        }
+
+        private async UniTask OpenLevelCall()
+        {
+            await ObjectHelper.OpenUIView<SceneViewComponent>();
+            await ObjectHelper.OpenUIView<VirtualJoystickViewComponent>();
+
+            var gameRoot = Game.Instance.Scene.GetChild("GameRoot");
+
+            ObjectHelper.CreateComponent<LevelCtrlComponent>(ObjectHelper.CreateEntity(gameRoot, GameObject.Find("GameRoot/Main Camera")));
+
+            ObjectHelper.SetMainCamera();
+
+            var player = await ObjectHelper.CreateEntity(gameRoot, null,
+               "Assets/Res/Prefabs/Model/Character/KoalaModel.prefab", true, true, false,
+               typeof(CharacterMovementComponent), typeof(PlayerComponent), typeof(CharacterColliderComponent), typeof(CharacterJumpComponent));
+
+            Game.Instance.EventSystem.Invoke<E_SetMainCameraFollowTarget, Transform>(player.Transform);
+        }
+
         private void OnOpenLevel(int level)
         {
+            _curLevelCode = level;
             UniTask.Void(async () =>
             {
-                this.LevelCtrlComponent = ObjectHelper.CreateComponent<LevelCtrlComponent>(
-                    await ObjectHelper.CreateEntity(Game.Instance.Scene, null,
-                        $"Assets/Res/Prefabs/Level/Level{level}.prefab", true));
-                var player = await ObjectHelper.CreateEntity(Game.Instance.Scene, null,
-                    "Assets/Res/Prefabs/Model/Character/KoalaModel.prefab", true, typeof(CharacterComponent), typeof(CharacterMovementComponent), typeof(CharacterCtrlComponent), typeof(CharacterColliderComponent));
-                player.GameObject.name = "player";
-                this.Player = player.GetComponent<CharacterComponent>();
-
-                ObjectHelper.OpenUIView<SceneViewComponent>();
-                ObjectHelper.OpenUIView<VirtualJoystickViewComponent>();
-
-                gameState = true;
-                Game.Instance.EventSystem.Invoke<E_LevelLoadFinish>();
+                LoadSceneData data = new LoadSceneData()
+                {
+                    ScenePath = $"Assets/Res/Scenes/Level/Level{_curLevelCode}.unity",
+                    SettingsPath = $"Assets/Res/Config/ScriptableObject/AssetReference/Level{_curLevelCode}_ARS.asset",
+                    Call = OpenLevelCall
+                };
+                await ObjectHelper.OpenUIView<LoadingViewComponent, LoadUseType, LoadSceneData>(LoadUseType.Normal, data);
             });
         }
 
         private void OnExitLevel()
         {
-            ObjectHelper.RemoveEntity(this.Player.Entity);
-            ObjectHelper.RemoveEntity(this.LevelCtrlComponent.Entity);
-            this.Player = null;
-            this.LevelCtrlComponent = null;
             Time.timeScale = 1;
-            ObjectHelper.CloseUIView<PauseViewComponent>();
-            ObjectHelper.CloseUIView<SceneViewComponent>();
-            ObjectHelper.CloseUIView<VirtualJoystickViewComponent>();
+
+            UniTask.Void(async () =>
+            {
+                LoadSceneData data = new LoadSceneData()
+                {
+                    ScenePath = $"Assets/Res/Scenes/Main.unity",
+                    Call = ExitLevelCall
+                };
+                await ObjectHelper.OpenUIView<LoadingViewComponent, LoadUseType, LoadSceneData>(LoadUseType.Normal, data);
+            });
         }
 
-        private void OnGamePause()
+        private async UniTask ExitLevelCall()
         {
-            gameState = false;
-            Time.timeScale = 0;
-            ObjectHelper.OpenUIView<PauseViewComponent>();
-        }
+            ObjectHelper.SetMainCamera();
 
-        private void OnGameContinue()
-        {
-            gameState = true;
-            Time.timeScale = 1;
-            ObjectHelper.CloseUIView<PauseViewComponent>();
+            await ObjectHelper.OpenUIView<SelectViewComponent>();
         }
     }
 }

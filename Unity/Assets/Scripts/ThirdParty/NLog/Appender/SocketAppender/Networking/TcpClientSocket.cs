@@ -23,7 +23,7 @@ namespace NLog {
                 socket.EndConnect(ar);
                 isConnected = true;
                 IPEndPoint clientEndPoint = (IPEndPoint)socket.RemoteEndPoint;
-                _log.Info(string.Format("Connected to {0}:{1}",
+                _log.Debug(string.Format("Connected to {0}:{1}",
                     clientEndPoint.Address, clientEndPoint.Port));
                 if (OnConnect != null) {
                     OnConnect(this, null);
@@ -40,7 +40,7 @@ namespace NLog {
         }
 
         protected override void disconnectedByRemote(Socket socket) {
-            _log.Info("Disconnected by remote.");
+            _log.Debug("Disconnected by remote.");
             Disconnect();
         }
 

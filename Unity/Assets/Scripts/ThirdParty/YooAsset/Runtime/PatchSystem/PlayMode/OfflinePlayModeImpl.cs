@@ -6,15 +6,17 @@ namespace YooAsset
 {
 	internal class OfflinePlayModeImpl : IBundleServices
 	{
-		internal PatchManifest AppPatchManifest;
+		private PatchManifest _appPatchManifest;
+		private bool _locationToLower;
 
 		/// <summary>
 		/// 异步初始化
 		/// </summary>
-		public InitializationOperation InitializeAsync()
+		public InitializationOperation InitializeAsync(bool locationToLower)
 		{
+			_locationToLower = locationToLower;
 			var operation = new OfflinePlayModeInitializationOperation(this);
-			OperationSystem.ProcessOperaiton(operation);
+			OperationSystem.StartOperaiton(operation);
 			return operation;
 		}
 
@@ -23,9 +25,9 @@ namespace YooAsset
 		/// </summary>
 		public int GetResourceVersion()
 		{
-			if (AppPatchManifest == null)
+			if (_appPatchManifest == null)
 				return 0;
-			return AppPatchManifest.ResourceVersion;
+			return _appPatchManifest.ResourceVersion;
 		}
 
 		/// <summary>
@@ -33,44 +35,73 @@ namespace YooAsset
 		/// </summary>
 		public PatchUnpackerOperation CreatePatchUnpackerByTags(string[] tags, int fileUpackingMaxNumber, int failedTryAgain)
 		{
-			List<BundleInfo> unpcakList = PatchHelper.GetUnpackListByTags(AppPatchManifest, tags);
+			List<BundleInfo> unpcakList = PatchHelper.GetUnpackListByTags(_appPatchManifest, tags);
+			var operation = new PatchUnpackerOperation(unpcakList, fileUpackingMaxNumber, failedTryAgain);
+			return operation;
+		}
+		public PatchUnpackerOperation CreatePatchUnpackerByAll(int fileUpackingMaxNumber, int failedTryAgain)
+		{
+			List<BundleInfo> unpcakList = PatchHelper.GetUnpackListByAll(_appPatchManifest);
 			var operation = new PatchUnpackerOperation(unpcakList, fileUpackingMaxNumber, failedTryAgain);
 			return operation;
 		}
 
-		#region IBundleServices接口
-		BundleInfo IBundleServices.GetBundleInfo(string bundleName)
+		// 设置资源清单
+		internal void SetAppPatchManifest(PatchManifest patchManifest)
 		{
-			if (string.IsNullOrEmpty(bundleName))
-				return new BundleInfo(string.Empty);
+			_appPatchManifest = patchManifest;
+			_appPatchManifest.InitAssetPathMapping(_locationToLower);
+		}
 
-			if (AppPatchManifest.Bundles.TryGetValue(bundleName, out PatchBundle patchBundle))
+		#region IBundleServices接口
+		private BundleInfo CreateBundleInfo(string bundleName)
+		{
+			if (_appPatchManifest.Bundles.TryGetValue(bundleName, out PatchBundle patchBundle))
 			{
 				BundleInfo bundleInfo = new BundleInfo(patchBundle, BundleInfo.ELoadMode.LoadFromStreaming);
 				return bundleInfo;
 			}
 			else
 			{
-				YooLogger.Warning($"Not found bundle in patch manifest : {bundleName}");
-				BundleInfo bundleInfo = new BundleInfo(bundleName);
-				return bundleInfo;
+				throw new Exception("Should never get here !");
 			}
+		}
+		BundleInfo IBundleServices.GetBundleInfo(AssetInfo assetInfo)
+		{
+			if (assetInfo.IsInvalid)
+				throw new Exception("Should never get here !");
+
+			string bundleName = _appPatchManifest.GetBundleName(assetInfo.AssetPath);
+			return CreateBundleInfo(bundleName);
+		}
+		BundleInfo[] IBundleServices.GetAllDependBundleInfos(AssetInfo assetInfo)
+		{
+			if (assetInfo.IsInvalid)
+				throw new Exception("Should never get here !");
+
+			var depends = _appPatchManifest.GetAllDependencies(assetInfo.AssetPath);
+			List<BundleInfo> result = new List<BundleInfo>(depends.Length);
+			foreach (var bundleName in depends)
+			{
+				BundleInfo bundleInfo = CreateBundleInfo(bundleName);
+				result.Add(bundleInfo);
+			}
+			return result.ToArray();
 		}
 		AssetInfo[] IBundleServices.GetAssetInfos(string[] tags)
 		{
-			return PatchHelper.GetAssetsInfoByTag(AppPatchManifest, tags);
+			return PatchHelper.GetAssetsInfoByTags(_appPatchManifest, tags);
+		}
+		PatchAsset IBundleServices.TryGetPatchAsset(string assetPath)
+		{
+			if (_appPatchManifest.Assets.TryGetValue(assetPath, out PatchAsset patchAsset))
+				return patchAsset;
+			else
+				return null;
 		}
 		string IBundleServices.MappingToAssetPath(string location)
 		{
-			return AppPatchManifest.MappingToAssetPath(location);
-		}
-		string IBundleServices.GetBundleName(string assetPath)
-		{
-			return AppPatchManifest.GetBundleName(assetPath);
-		}
-		string[] IBundleServices.GetAllDependencies(string assetPath)
-		{
-			return AppPatchManifest.GetAllDependencies(assetPath);
+			return _appPatchManifest.MappingToAssetPath(location);
 		}
 		#endregion
 	}

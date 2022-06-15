@@ -15,6 +15,7 @@ MonoBehaviour:
   BuildVersion: 1
   BuildMode: 0
   BuildTags: no_build
-  CompressOption: 2
+  CompressOption: 0
   EncyptionClassName: EmptyEncrypt
   AppendExtension: 1
+  CopyBuildinTagFiles: 1

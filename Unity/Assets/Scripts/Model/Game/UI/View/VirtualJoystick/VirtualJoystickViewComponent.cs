@@ -95,14 +95,14 @@ namespace Model
 
         public void Open()
         {
-            Game.Instance.AddComponent(this);
+            Game.Instance.GAddComponent(this);
             OnOpen();
         }
 
         protected override void OnClose()
         {
             base.OnClose();
-            Game.Instance.RemoveComponent(this);
+            Game.Instance.GRemoveComponent(this);
         }
 
         public void SetMobileControlsActive(bool state, InputManager.MovementControls movementControl = InputManager.MovementControls.Joystick)
