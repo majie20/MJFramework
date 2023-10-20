@@ -1,0 +1,33 @@
+{
+  "name": "com.bytedance.starkminiunity",
+  "displayName": "StarkMini 微端库 (Unity 2021.3)",
+  "version": "1.5.27",
+  "unity": "2021.3",
+  "unitySinceBuild": "2021.3",
+  "unityUntilBuild": "*",
+  "description": "版本兼容性: Unity 2021.3 ~ *\nStarkMini Library for Unity 2021.3 ~ *\n推荐使用 Unity 2019.4.8 LTS或 2021.3.x LTS\n\n最近更新：\n\n[1.5.16] [1.5.17] - 2022-08-04\n  - 修正：部分接口在WebGL下会调用Task.Delay导致卡死的问题\n  - 功能：新增 async TaskUtils.Delay() 接口，可以安全兼容WebGL的异步Delay方法，可以代替Task.Delay\n  - 功能：增加、完善 DownloadAll 边玩边下相关的功能接口、事件\n  - 功能：下载速度统计\n  - 功能：增加 Catalog内容导出工具：读取Catalog文件，导出其中 bundle 与资源信息的清单表\n  - 优化：降低 AA Initialize 加载Catalog时mono内存的占用\n \n\n[1.5.14] [1.5.15] - 2021-10-07\n- 优化：避免分段批量处理时Progress bar停止刷新过久 \n- 新增：Addressables.AssetKeyCaseMode ： 设置全局 asset key 大小写模式。支持忽略大小写。 默认DefaultSensitive - 大小写敏感\n\n**重要：默认 Cdn Url 域名迁移：**\n- 迁移 ttcdn 的 CdnRootUrl 至新的域名。 旧域名预计将于2020年9月起失效。\n- `AddressableConfig.CdnRootUrl` 的默认值，已更新为最新正确的ttcdn的url.\n- 参阅通知：↗见上方Links链接公告 \n\n**后台下载 `DownloadAllInTheBackground` 相关功能改进：**\n- 修正：并发请求数提高到3以上时，在手机设备可能明显提高CPU占用、耗电和发烫 的问题\n- 优化：并发性能、GC Alloc、CPU耗时，避免性能卡顿Jank\n- 调整：后台下载 DownloadAll 相关功能、接口、参数\n  - 新增：获取后台下载总共需要大小: `GetDownloadAllTotalSizeSync()`\n  - 新增：下载全部完成的监听事件 `DownloadAllCompletedEvent`\n  - 新增：下载过程中发生错误的监听事件 `DownloadAllErrorEvent`\n  - 调整：参数 `queueIntervalTime` 也放入 `ConcurrencyOptions` 结构体\n  - 新增：实现后台下载 Retry 机制，允许设置 重试次数、重试的延迟时间\n    - 新增：`DownloadAllFileRetryCount`： DownloadAll 每个下载文件失败时重试次数。 默认5。\n    - 新增：`DownloadAllFileRetryDelayTime`： DownloadAll 每个下载文件失败时做重试的延迟时间。 默认1秒。\n\n**Editor 编辑器相关功能改进：**\n- 修正：运行中pause状态批量操作，Editor卡住。\n- 依赖分析工具：\n  - 新增：打通Stark Asset Analyser的 StarkProxyList (白名单设置) 管理功能\n  - 新增：新增一列，判断并显示是否被 StarkProxy 列为启用名单。\n  - 新增：支持ResList中资源内容的解析。\n  - 修正：Session编辑，拖拽到面板后列出资源可能与实际拖动资源不一致的问题。\n- 运行时加载分析：\n  - 新增功能：导入列表文件 ResList。 -- 以便于将在已收集的列表基础上，做资源加载分析、做首包资源整理。\n- 新增：Editor菜单：\"StarkMini/Experimental/Dump All AA Group Assets Infos\"。\n\n**批量转化工具 Stark Asset Analyser `[1.2.30]` `[1.2.31]` 改进：**\n  - 新增：支持NGUI转化\n  - 新增：支持SpineMaterial转化\n  - 新增：转化命令：强制转化（忽略MD5缓存）\n  - 新增：转化工具分析结果列表中，打通直接批量执行 ProxyList 白名单管理\n  - 优化：大幅提升转化速度\n  - 优化：自动检查资源MD5变动\n  - 优化：现在自动校验AA是否初始化、自动校验是否同步接口可用。\n  - 优化：现在通过设置 `Stark.AssetAnalyser.ProxyResourceManager.AAInitializeMode` 可以自定义选择一种初始化模式。 默认自动异步初始化。\n  - 优化：现在自动校验key location是否有效，并在失效时提供足够的调试信息。\n  - 修正：无法设置Mesh进白名单的问题\n  - 修正：Breakdown Prefab的转化处理\n  - 修正：AnimatorController的转化处理\n  - 修正：转化时，对于asset名变了的资源没有正确判断 proxy data isDirty 的问题。\n  - 修正：动态设置的低清材质，无法在运行时替换的问题\n  - 修正：下载等待队列管理逻辑错误，可能会导致相同runtimeKey的不同类型proxy的资源，在下载完成后仍被滞留在队列中，导致无法触发高清替换的问题。\n  - 修正：意外触发同步AA Initialize、或异步初始化过程中触发，并导致初始化出错的问题；\n  - 修正：已不存在address导致后续proxy逻辑错误。\n\n**新工具开发中：**\n  - 下载顺序功能：\n    - 录制下载顺序，顺序列表key更新，开关接口，BackgroundDownloadAll自动读取下载顺序列表\n\n\n[1.5.2] [1.5.3] - 2021-06-16\n- 新增：`Addressables.IsBundleDownloadLogVerbose` - AA Bundle下载的Log Verbose开关\n- 新增：后台下载 DownloadAll 支持并发：\n  - 新增：属性 `Addressables.DownloadAllConcurrencyOptions` - 设置并发请求数、并发的文件大小限制，支持mobile, wifi区别参数\n- 新增：获取后台下载 DownloadAll 结果状态、进度的接口：\n  - `GetDownloadAllResultStatus()`\n  - `GetDownloadAllProgress()`\n  - `GetDownloadAllProgressData()`\n- 新增：增加Editor菜单：DumpAliveAAResourcesInfo\n- 修正：构建命令行batchmode中 如果正在 isCompiling 会导致 AASettings 报错的问题\n- 优化：EventViewer 工具，现在实时显示 Alive Count （活跃未释放的handle数）\n\n\n详见上方Links更新记录链接",
+  "keywords": [
+    "asset",
+    "resources",
+    "bundle",
+    "bundles",
+    "assetbundles"
+  ],
+  "dependencies": {
+    "com.unity.scriptablebuildpipeline": "1.13.1",
+    "com.unity.modules.assetbundle": "1.0.0",
+    "com.unity.modules.unitywebrequest": "1.0.0",
+    "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+  },
+  "category": "Libraries",
+  "links": [
+    { "label": "查看文档 | View Document", "url": "https://bytedance.feishu.cn/docs/doccnSzijs7L5sWGUQy8qyXbCW6" },
+    { "label": "查看更新记录 | View Changelog", "url": "https://bytedance.feishu.cn/docs/doccnWBgomdRR04JuKCinSrZkmg" },
+    { "label": "【公告】| [21.08.23] 紧急：字节CDN域名变更通知", "url": "https://bytedance.feishu.cn/docs/doccn6pdadXcDJFXnzDlauydmmg#" }
+  ],
+  "bgdt": {
+    "install": [
+      { "path": "./", "to": "${upm_root}" }
+    ]
+  }
+}

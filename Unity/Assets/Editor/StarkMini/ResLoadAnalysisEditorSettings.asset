@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1151573788, guid: 4e0e395aa282e1a47900c655ed0f5557, type: 3}
+  m_Name: ResLoadAnalysisEditorSettings
+  m_EditorClassIdentifier: 
+  _dataAnalysisMode: 0
+  _hideNoneAssetsEntries: 0
+  _showDependentBundles: 1
+  _hideDuplicateBundles: 1
+  _PreLoadPhases: []
+  _PreLoadLastOtherPhase:
+    enabled: 1
+    index: 9999
+    isAnyOther: 1
+    groupUids: []
+    resListPaths: []
+    depBundlePatterns: []
+    color: {r: 0.87843144, g: 0, b: 0.87843144, a: 1}
+  EnableAnalyzePhase: 1
+  EnableApplyPhaseColor: 1
+  EnableShowPhaseName: 0
+  ShowBundlePhaseInSize: 1
+  ShowBundlePhaseInGroup: 0
+  ShowBundlePhaseInResList: 0
+  minBundleSizeKB: 0
+  longCostTimeThresh: 5

@@ -1,0 +1,20 @@
+{
+    "name": "com.Brogrammist.JSAM.Editor",
+    "rootNamespace": "Brogrammist.JSAM.Editor",
+    "references": [
+        "GUID:971d9a10892b1ec0a96fbdb1bb70a411"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "ATL.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

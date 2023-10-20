@@ -1,0 +1,18 @@
+
+{
+    "displayName" : "Stark SDK - Unity Tools",
+    "name"        : "com.bytedance.starksdk.unitytools",
+    "version"     : "2.7.3",
+    "description" : "Stark SDK Unity Tools\n\u7528\u4E8E\u6784\u5EFAUnity Apk\u3001WebGL\u4EE5\u53CA\u53D1\u5E03\u6E38\u620F\u5230\u6296\u97F3\u5E73\u53F0\u7684\u5DE5\u5177\n",
+    "keywords"    : [
+    ],
+    "category"    : "Libraries",
+    "links"       : [
+        {
+            "label" : "View Document",
+            "url"   : "https://bytedance.feishu.cn/docs/doccnGEsOm0yquys4iAgtVi7nKh#"
+        }
+    ],
+    "unitySinceBuild" : "2019.4",
+    "unityUntilBuild" : "*"
+}

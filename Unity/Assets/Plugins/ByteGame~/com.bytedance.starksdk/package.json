@@ -1,0 +1,26 @@
+{
+    "displayName": "Stark SDK",
+    "name": "com.bytedance.starksdk",
+    "version": "5.47.0",
+    "scripts": {
+        "postinstall": "",
+        "preuninstall": ""
+    },
+    "versions": [],
+    "state": "normal",
+    "description": "StarkSDK Plugin",
+    "keywords": [],
+    "category": "Libraries",
+    "links": [
+        {
+            "label": "View Document",
+            "url": "https://bytedance.feishu.cn/docs/doccngutoUd3Y8P3HemS5Mq2vHe"
+        },
+        {
+            "label": "View Changelog",
+            "url": "https://bytedance.feishu.cn/docs/doccnfO07C3R783siaLMS4VdaKd#"
+        }
+    ],
+        "unitySinceBuild": "*",
+    "unityUntilBuild": "*"
+}

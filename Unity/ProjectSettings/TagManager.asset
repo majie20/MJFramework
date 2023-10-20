@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Item
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Environment
+  - Player
+  - Monster
+  - PlayerWeapon
+  - MonsterWeapon
+  - Area
+  - Trigger
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - PostProcessing
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Low
+    uniqueID: 1798043625
+    locked: 0
+  - name: Normal
+    uniqueID: 2296623839
+    locked: 0
+  - name: High
+    uniqueID: 1603220759
+    locked: 0
+  - name: Top
+    uniqueID: 47421343
+    locked: 0
+  - name: Highest
+    uniqueID: 3416931897
+    locked: 0

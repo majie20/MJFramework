@@ -1,0 +1,213 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
+  m_Name: AssetBundleGrouperSetting
+  m_EditorClassIdentifier: 
+  ShowPackageView: 0
+  EnableAddressable: 0
+  LocationToLower: 0
+  IncludeAssetGUID: 0
+  UniqueBundleName: 1
+  ShowEditorAlias: 1
+  Packages:
+  - PackageName: DefaultPackage
+    PackageDesc: "\u9ED8\u8BA4\u5305"
+    Groups:
+    - GroupName: all_level
+      GroupDesc: "\u6240\u6709\u5173\u5361"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Environment/Level
+        CollectorGUID: 49ea0edeec16de44b92b383f5b0d9a22
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Environment/Scene
+        CollectorGUID: 7ebdc1bd86870ea4a8fbfeb37b240219
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: all_audio
+      GroupDesc: "\u6240\u6709\u97F3\u6548"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/AudioFiles
+        CollectorGUID: ea3181e145888a6498d7fe88c37ee3c9
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Audio
+        CollectorGUID: e1a1a1c31a1383b48bfde48cd15b1c92
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: hotfix_code
+      GroupDesc: "\u70ED\u66F4\u4EE3\u7801"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Text
+        CollectorGUID: 
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackCollector
+        FilterRuleName: CollectConfig
+        AssetTags: 
+        UserData: 
+    - GroupName: all_config
+      GroupDesc: "\u6240\u6709\u914D\u7F6E"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Config/ScriptableObject
+        CollectorGUID: 
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Config/JsonConfig
+        CollectorGUID: 
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackCollector
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: all_shader
+      GroupDesc: "\u6240\u6709Shader"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Shaders
+        CollectorGUID: 
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackShader
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: all_physics_material
+      GroupDesc: "\u6240\u6709\u7269\u7406\u6750\u8D28"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/PhysicsMaterial
+        CollectorGUID: f378efb96b399ee48b8e6c35893b57ea
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: all_unit
+      GroupDesc: "\u6240\u6709\u89D2\u8272\u6216\u8005\u602A\u7269"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Unit/Monster
+        CollectorGUID: 9fbc9c81cab65f748a49912efc32b2cc
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Unit/Player
+        CollectorGUID: 95203966883bebe4cb8153743363c852
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/Unit/BehaviorGraph
+        CollectorGUID: 8b70a344d37a5ed46b0b0ff041dbbe9b
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: all_ui
+      GroupDesc: "\u6240\u6709UI"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/UI/Prefab
+        CollectorGUID: 2f9c7253a8805f2428f7cf0f438a5a3b
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/UI/Texture/DynamicSprite
+        CollectorGUID: 5a38732a2e842394cadc69863aa14957
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/UI/Texture/Emoji
+        CollectorGUID: ddd19edabd5f1f146b6a66f525913756
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/UI/Texture/NoAtlas
+        CollectorGUID: 9eee423b01c7a6f488ecff14afad77db
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Res/UI/Texture/StaticSprite
+        CollectorGUID: 5a346fea7a9d8b648bf48b47d04c638d
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: main_scene
+      GroupDesc: "\u4E3B\u8981\u573A\u666F"
+      AssetTags: build;no_build
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Res/Scenes/Main.unity
+        CollectorGUID: 23e1c03f606aca34887173fc811d3752
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

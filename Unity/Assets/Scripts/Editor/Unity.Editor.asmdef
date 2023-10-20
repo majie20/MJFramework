@@ -1,0 +1,31 @@
+{
+    "name": "Unity.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7ee4b32222d025e48904360be24c5c45",
+        "GUID:07070a52d55bdeb44a90369821cf9dab",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:a35efad8797223d499f8c68b1f545dbc",
+        "GUID:d60799ab2a985554ea1a39cd38695018",
+        "GUID:aab3caaf43456d6449a3e035348ff798",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:41cf0bc5b3cbaca4b9904902932d08c1",
+        "GUID:c5ecc461727906345a35491a0440694f",
+        "GUID:5c1ff9bd975acec488150743d53a93ca",
+        "GUID:2373f786d14518f44b0f475db77ba4de",
+        "GUID:13ba8ce62aa80c74598530029cb2d649",
+        "GUID:61a68efbb0c03dc42ad7614dc4858ec4",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

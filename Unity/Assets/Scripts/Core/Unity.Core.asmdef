@@ -1,0 +1,27 @@
+{
+    "name": "Unity.Core",
+    "rootNamespace": "",
+    "references": [
+        "GUID:07070a52d55bdeb44a90369821cf9dab",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:d60799ab2a985554ea1a39cd38695018",
+        "GUID:4c25c05f410a3a447a75c3b0909152ef",
+        "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
+        "GUID:06e56dbbb8dec4d43a0b85b0fe0dd0ca",
+        "GUID:61a68efbb0c03dc42ad7614dc4858ec4",
+        "GUID:5efd170ecd8084500bed5692932fe14e",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:971d9a10892b1ec0a96fbdb1bb70a411",
+        "GUID:0f8df04a5a494444eb8fa0504f6fb965"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

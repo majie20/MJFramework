@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d1b85757c74cda409dfe0f2bd8d0836, type: 3}
+  m_Name: ~SpriteAtlasSettings
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Folder: {fileID: 102900000, guid: 2b1600f5c6855bd45ae5d4d6e341239a, type: 3}
+  CollectorList:
+  - {fileID: 102900000, guid: 09d6859492277cf429f9aee80b403aaf, type: 3}
+  - {fileID: 102900000, guid: dc58aaeffd8ab5041a66c30df59ae8ea, type: 3}
+  - {fileID: 102900000, guid: 7ec8680330ffe484aa7cabfa22477f2e, type: 3}
+  - {fileID: 102900000, guid: b019f53532931a64195239c1e523b822, type: 3}

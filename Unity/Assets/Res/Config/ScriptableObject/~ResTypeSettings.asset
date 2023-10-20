@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d24fc766c5d80724d8d7deb33dc2bd3f, type: 3}
+  m_Name: ~ResTypeSettings
+  m_EditorClassIdentifier: 
+  UITextureResConfig:
+    target: {fileID: 2800000, guid: 2266d271eb737964e876a49a2e130a7a, type: 3}
+    list:
+    - {fileID: 102900000, guid: 5a38732a2e842394cadc69863aa14957, type: 3}
+    - {fileID: 102900000, guid: 5a346fea7a9d8b648bf48b47d04c638d, type: 3}
+    - {fileID: 102900000, guid: ddd19edabd5f1f146b6a66f525913756, type: 3}
+    - {fileID: 102900000, guid: 57bcbe5ee9c8c1b41b5cddd3438d4b29, type: 3}
+  UIAtlasResConfig:
+    target: {fileID: 4343727234628468602, guid: 3d3ed3bb796d873488813cf70c23b61f,
+      type: 2}
+    list:
+    - {fileID: 102900000, guid: 2b1600f5c6855bd45ae5d4d6e341239a, type: 3}
+    - {fileID: 102900000, guid: eb176a45ba9a547439c961aabdeef9ff, type: 3}

@@ -1,0 +1,9 @@
+
+
+message ABConfig 
+{  
+  required string ABName = 1;
+  required int32 Size = 2;
+  required string CRC = 3;
+}
+

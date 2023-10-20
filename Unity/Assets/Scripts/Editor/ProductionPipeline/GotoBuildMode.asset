@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106ec7fe66163854da05eb79342704d3, type: 3}
+  m_Name: GotoBuildMode
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Steps:
+  - FullName: M.ProductionPipeline.BuildPlayModeStep
+    IsRunning: 1
+    Fields: 
+  - FullName: M.ProductionPipeline.GenCodeBinStep
+    IsRunning: 1
+    Fields: 
+  - FullName: M.ProductionPipeline.AddDefineStep
+    IsRunning: 1
+    Fields: Name=MBuild
+  - FullName: M.ProductionPipeline.ExportAllUISpriteAtlasStep
+    IsRunning: 0
+    Fields: 
+  - FullName: M.ProductionPipeline.SetAllResFormatStep
+    IsRunning: 0
+    Fields: 
+  - FullName: M.ProductionPipeline.ILRuntimeCLRClearStep
+    IsRunning: 0
+    Fields: 
+  - FullName: M.ProductionPipeline.ILRuntimeCLRBindingStep
+    IsRunning: 0
+    Fields: 
+  - FullName: M.ProductionPipeline.ExportAllAssetCollectorStep
+    IsRunning: 1
+    Fields: 
+  - FullName: M.ProductionPipeline.CheckUIPrefabReferenceAtlasStep
+    IsRunning: 1
+    Fields: 
+  - FullName: M.ProductionPipeline.CollectAllUnitInfoStep
+    IsRunning: 1
+    Fields: 
+  - FullName: M.ProductionPipeline.CheckResReferenceStep
+    IsRunning: 1
+    Fields: 

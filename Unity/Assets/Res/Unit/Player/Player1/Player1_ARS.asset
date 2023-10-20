@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12cee945e20f84a4ca5adfe4b9a55ac2, type: 3}
+  m_Name: Player1_ARS
+  m_EditorClassIdentifier: 
+  InstantlyAssetDataList:
+  - TypeName: UnityEngine.GameObject
+    Obj: {fileID: 2473876094262166300, guid: 4ffd39245fb8daa44b236781a5ad469a, type: 3}
+    Path: Assets/Res/Unit/Player/Player1/Player1.prefab
+    Type: 0
+  - TypeName: UnityEditor.Animations.AnimatorController
+    Obj: {fileID: 9100000, guid: 1b634efea226b7d42b2c0f4682e1e442, type: 2}
+    Path: Assets/Res/Unit/Player/Player1/Player1.controller
+    Type: 0
+  RearAssetDataList: []

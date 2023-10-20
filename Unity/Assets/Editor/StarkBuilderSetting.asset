@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1315287583, guid: 7e23a523ae65c45ec85f05463979c29a, type: 3}
+  m_Name: StarkBuilderSetting
+  m_EditorClassIdentifier: 
+  isDevBuild: 0
+  stripEngineCode: 0
+  appId: ttbf0fc9b2203c72c607
+  isWebGL2: 0
+  needCompress: 1
+  wasmResourceUrl: https://636c-cloud1-4gc89nkzefa0a08a-1321213358.tcb.qcloud.la
+  webglPackagePath: E:\Unity\Project\MGameOne\bin\tt\webgl_package-20231012_200003.zip
+  useByteAudioAPI: 0
+  useNewFileSystem: 1
+  wasmMemorySize: 512
+  urlCacheList:
+  - https://636c-cloud1-4gc89nkzefa0a08a-1321213358.tcb.qcloud.la
+  dontCacheFileNames:
+  - json
+  - version
+  apkFileNameBase: casualgameone
+  appHost: 2
+  compressMethod: 2
+  runtimeEnv: 0
+  framework: 1
+  architecture: 2
+  miniApkVersion: 0
+  scriptingBackend: 0
+  NativeWhiteListRegex:
+  - com.bytedance.starksdk
+  - _Backup~

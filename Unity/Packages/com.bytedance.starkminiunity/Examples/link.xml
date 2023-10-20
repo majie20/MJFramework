@@ -1,0 +1,5 @@
+<linker>
+    <assembly fullname="starkmini.Examples">
+        <type fullname="AddressableConfig" preserve="all"/>
+    </assembly>
+</linker>

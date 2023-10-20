@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1281411804, guid: 4e0e395aa282e1a47900c655ed0f5557, type: 3}
+  m_Name: AutoBuilderSetting
+  m_EditorClassIdentifier: 
+  apkNameBase: casualgameone
+  appId: ttbf0fc9b2203c72c607
+  ttcdnAaProfileName: ttcdn
+  ttcdnAaProfileApkSuffix: _ttcdn
+  fullAaProfileName: full
+  fullAaProfileApkSuffix: _full
+  localhostAaProfileName: localhost
+  localhostAaProfileApkSuffix: _localhost
+  buildCompressType: 1
+  localPushKeepData: 0

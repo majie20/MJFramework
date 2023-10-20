@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root Version="2.1">
+  <Common AutoAddressable="False" UniqueBundleName="False" ShowPackageView="False" />
+  <Package PackageName="DefaultPackage" PackageDesc="默认包">
+    <Group GroupName="all_scene" GroupDesc="所有场景" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/Scenes/Level" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectScene" AssetTags="" />
+      <Collector CollectPath="Assets/Res/Scenes/Main.unity" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectScene" AssetTags="" />
+    </Group>
+    <Group GroupName="all_prefab" GroupDesc="所有预制体" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/Prefabs" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectPrefab" AssetTags="" />
+    </Group>
+    <Group GroupName="all_atlas" GroupDesc="所有图集" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/Atlas" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectSpriteAtlas" AssetTags="" />
+    </Group>
+    <Group GroupName="all_audio" GroupDesc="所有音效" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/FMODBanks" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectConfig" AssetTags="" />
+    </Group>
+    <Group GroupName="all_no_atlas_ui_texture" GroupDesc="所有不打图集的UI图片" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/Texture/UI/NoAtlas" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectAll" AssetTags="" />
+    </Group>
+    <Group GroupName="hotfix_code" GroupDesc="热更代码" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/Text" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackCollector" FilterRule="CollectConfig" AssetTags="" />
+    </Group>
+    <Group GroupName="all_config" GroupDesc="所有配置" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/Config/ScriptableObject" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectConfig" AssetTags="" />
+      <Collector CollectPath="Assets/Res/Config/JsonConfig" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackCollector" FilterRule="CollectConfig" AssetTags="" />
+      <Collector CollectPath="Assets/Res/Config/Json" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectConfig" AssetTags="" />
+    </Group>
+    <Group GroupName="all_shader" GroupDesc="所有Shader" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/Shaders" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackShader" FilterRule="CollectAll" AssetTags="" />
+    </Group>
+    <Group GroupName="all_animation" GroupDesc="所有动画" AssetTags="build;no_build">
+      <Collector CollectPath="Assets/Res/Animation" CollectGUID="" CollectType="MainAssetCollector" AddressRule="AddressByFileName" PackRule="PackSeparately" FilterRule="CollectAll" AssetTags="" />
+    </Group>
+  </Package>
+</root>

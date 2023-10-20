@@ -1,0 +1,739 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>starkmini_editor</name>
+    </assembly>
+    <members>
+        <member name="M:StarkMini.Editor.AutoBuilder.RunDouyinSCGame(System.String,System.Boolean)">
+            <summary> Run Douyin SCGame </summary>
+            <param name="apkPath"></param>
+            <param name="useUI"></param>
+            <param name="keepData"></param>
+        </member>
+        <member name="M:StarkMini.Editor.AutoBuilder.StartSCGameFor(System.String,System.String,System.String)">
+            <summary> Start SCGame For </summary>
+            <param name="host_type">"douyin", "toutiao"</param>
+            <param name="appid"></param>
+            <param name="version_type"></param>
+        </member>
+        <member name="M:StarkMini.Editor.AutoBuilder.RemoveLocalSCGameDataFor(System.String,System.String,System.String)">
+            <summary> Remove Local SCGame Data For </summary>
+            <param name="host_type">"douyin", "toutiao"</param>
+            <param name="appid"></param>
+            <param name="version_type"></param>
+        </member>
+        <member name="M:StarkMini.Editor.AutoBuilder.KillRunningCmd(System.Boolean)">
+            <summary>
+            Kill the running cmd, giving a popup dialog if use prompt UI
+            </summary>
+            <param name="promptUI">if true, giving a popup dialog to choose confirmation</param>
+            <returns>kill confirmed</returns>
+        </member>
+        <member name="M:StarkMini.Editor.AutoBuilder.RunCmd(System.String,System.String,System.Boolean,System.String,System.Single,System.Single)">
+            <summary>
+            运行一个命令 使用 arguments
+            </summary>
+            <param name="cmd"></param>
+            <param name="arguments"></param>
+            <param name="useUI">如果是true，最后会给一个弹框提示运行结果。</param>
+            <param name="stderrLogType"></param>
+            <param name="waitElapseLimit">限制运行等待时间，单位: 秒，传入 0 则不限制</param>
+            <param name="waitHangNoOutputLimit">限制卡顿无任何输出的等待时间，单位: 秒，传入 0 则不限制</param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AutoBuilder.BuildAndroidByParamsArchs(System.String,System.Boolean,StarkMini.Editor.AutoBuilderProfileType,UnityEditor.AndroidArchitecture[])">
+            <summary>
+            BuildAndroidByParamsArchs
+            </summary>
+            <param name="builderName"></param>
+            <param name="useConfirm"></param>
+            <param name="profileType"></param>
+            <param name="archs"></param>
+            <returns>apkPaths</returns>
+        </member>
+        <member name="M:StarkMini.Editor.AutoBuilder.BuildAndroidByParams(System.String,System.Boolean,StarkMini.Editor.AutoBuilderProfileType,UnityEditor.AndroidArchitecture)">
+            <summary>
+            BuildAndroidByParams
+            </summary>
+            <param name="builderName"></param>
+            <param name="useConfirm"></param>
+            <param name="profileType"></param>
+            <param name="arch"></param>
+            <returns>apkPath</returns>
+        </member>
+        <member name="M:StarkMini.Editor.AutoBuilder.BuildAndroidDirectlyByParams(System.String,System.Boolean,UnityEditor.AndroidArchitecture,System.String)">
+            <summary>
+            BuildAndroidDirectlyByParams
+            </summary>
+            <param name="builderName"></param>
+            <param name="useConfirm"></param>
+            <param name="arch"></param>
+            <param name="profileSuffix"></param>
+            <returns>apkPath</returns>
+        </member>
+        <member name="T:StarkMini.Editor.AddressableAssetsTools">
+            <summary>
+            Editor下AddressableAssets相关的工具方法
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AddressableAssetsTools.CreateOrSetGroup(UnityEditor.AddressableAssets.Settings.AddressableAssetSettings,System.String,System.Boolean,System.Boolean,System.Int32,System.Int32,System.Boolean,System.Action{UnityEditor.AddressableAssets.Settings.AddressableAssetGroup})">
+            <summary>
+            创建或设置 Asset Group
+            </summary>
+            <param name="settings">AddressableAssetSettings</param>
+            <param name="name">Group name</param>
+            <param name="isRemote">If use Remote BuildPath LoadPath</param>
+            <param name="addLabelAsName">If add a label as group name into AddressableAssetSettings</param>
+            <param name="timeout">set group timeout of BundledAssetGroupSchema</param>
+            <param name="retryCount">set retry count of BundledAssetGroupSchema</param>
+            <param name="isDefaultGroup">If set as default group of AddressableAssetSettings</param>
+            <param name="onFinish">Callback when whole process of create and set group finish</param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AddressableAssetsTools.OpenAddressablesGroupsConfig">
+            <summary>
+            打开AA配置窗口
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AddressableAssetsTools.CreateStartUpScene">
+            <summary>
+            将所有 Scenes In Build 的场景配置转化为AA资源，并创建Starkup Scene场景，用于加载原来的场景资源。
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.AnalyserProxyToolUtil">
+            <summary>
+            提供访问 AnalyserProxy 工具的方法
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.AssetDepsAnalysisEditor">
+            <summary>
+            Editor工具：检查资源依赖
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.AssetDepsTool">
+            <summary>
+            封装Asset依赖分析、处理、状态Cache的工具类。 注：使用时需要实例化此类的对象。
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetDepsTool.NotifyAASettingsBatchModifiedEvent">
+            <summary>
+            batch of asset entries was modified
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetDepsTool.FindAssetsAAGroupsSet(System.Collections.Generic.IList{System.String})">
+            <summary>
+            通过资源列表，找到所有对应的AAGroups。 返回 HashSet，每个元素为(string) AAGroup 的 Name，不会有重复项。
+            </summary>
+            <param name="assetPaths"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetDepsTool.BatchProcessAssetsSync(System.Collections.Generic.List{System.String},StarkMini.Editor.AssetProcessCommand,System.Func{System.String,System.Boolean})">
+            <summary>
+            批量处理资源（同步版），会根据 command.ProcessEventHandler 触发 BatchStart, BatchFinish 事件，并在最后 AssetDatabase.SaveAssets 保存。
+            </summary>
+            <param name="assetPaths"></param>
+            <param name="command"></param>
+            <param name="inclusiveFilterFunc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetDepsTool.BatchProcessAssets(System.Collections.Generic.List{System.String},StarkMini.Editor.AssetProcessCommand,System.Func{System.String,System.Boolean},System.Boolean)">
+            <summary>
+            批量处理资源（async异步版），会根据 command.ProcessEventHandler 触发 BatchStart, BatchFinish 事件，并在最后 AssetDatabase.SaveAssets 保存。
+            </summary>
+            <param name="assetPaths"></param>
+            <param name="command"></param>
+            <param name="inclusiveFilterFunc"></param>
+            <param name="isSync"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetDepsTool.ResetItemFiltersAll">
+            <summary>
+            重置所有各类型的filter开关
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetDepsTool.SetFilterShowAll(System.Boolean)">
+            <summary>
+            开启 show all
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.AssetsUtil">
+            <summary>
+            便于工程中Assets访问、查找、判断的通用方法
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.IsInAssets(System.String,System.Boolean)">
+            <summary>
+            Is in project "Assets/" folder
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.IsInAssetsOrPackages(System.String,System.Boolean)">
+            <summary>
+            Is in project "Assets/" or "Packages/" folder
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.IsInResources(System.String,System.Boolean)">
+            <summary>
+            Is in any "/Resources/" folder
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.IsInEditor(System.String,System.Boolean)">
+            <summary>
+            Is in any "/Editor/" folder
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.IsInPackages(System.String,System.Boolean)">
+            <summary>
+            Is in project "Packages/" folder
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.NeedPrefixAssetsFolder(System.String)">
+            <summary>
+            Is need prefix path by Assets folder
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.IsInProjectFolders(System.String,System.String[])">
+            <summary>
+            Is in project specified folders
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.IsAsset(System.String)">
+            <summary>
+            Is valid guid in AssetDatabase
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.IsNotAsset(System.String)">
+            <summary>
+            Is no valid guid in AssetDatabase
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetGameObjectPath(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Obsolete: Call <see cref="M:StarkMini.Editor.AssetsUtil.GetGameObjectTransformPath(UnityEngine.GameObject,System.Boolean)"/> instead!
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetGameObjectTransformPath(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            transform path of GameObject
+            </summary>
+            <param name="obj"></param>
+            <param name="includeMe"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.FindAssetUsagesInCurScenes(System.String,System.Int32)">
+            <summary>
+            在当前Scenes中查找所有Asset的使用节点，返回GameObject列表
+            </summary>
+            <param name="assetPath"></param>
+            <param name="countLimit"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.DoFindSceneObjectsPopup(System.Collections.Generic.List{UnityEngine.GameObject},System.String,UnityEngine.Vector2)">
+            <summary>
+            弹框，提供一个列表界面，以选择Scene中找到的GameObject，配合<see cref="M:StarkMini.Editor.AssetsUtil.FindAssetUsagesInCurScenes(System.String,System.Int32)"/>的返回结果使用/>
+            </summary>
+            <param name="gameObjects"></param>
+            <param name="assetPath"></param>
+            <param name="popupPosition"></param>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.SelectFoundAssetInScene(UnityEngine.GameObject,System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            在Scene中选中目标GameObject
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAllAssetsByAssetFilter(System.String)">
+            <summary>
+            Obsolete! Call <see cref="M:StarkMini.Editor.AssetsUtil.FindAssetsByFilter(System.String,System.String[])"/> instead!
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.FindAssetsByFilter(System.String,System.String[])">
+            <summary>
+            Use <see cref="T:UnityEditor.AssetDatabase"/> to Find Assets by `filter` string. Returns Asset Paths.
+            </summary>
+            <param name="filter"></param>
+            <param name="searchInFolders">The folders where the search will start.</param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAllAssetsGuidsByAssetFilter(System.String)">
+            <summary>
+            Obsolete! Call <see cref="M:StarkMini.Editor.AssetsUtil.FindAssetsGuidsByFilter(System.String,System.String[])"/> instead!
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.FindAssetsGuidsByFilter(System.String,System.String[])">
+            <summary>
+            Use <see cref="T:UnityEditor.AssetDatabase"/> to Find Assets by `filter` string. Returns Asset GUIDs.
+            </summary>
+            <param name="filter"></param>
+            <param name="searchInFolders">The folders where the search will start.</param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAAGroupByAsset(System.String)">
+            <summary>
+            通过资源，找到对应的AAGroup。 返回 string，AAGroup 的 Name。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAAGroupsSetByAssets(System.Collections.Generic.IList{System.String})">
+            <summary>
+            通过资源列表，找到所有对应的AAGroups。 返回 HashSet，每个元素为(string) AAGroup 的 Name，不会有重复项。
+            </summary>
+            <param name="assetPaths"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAssetTypeDisplayName(System.String)">
+            <summary>
+            <para>资源类型名，用于显示</para>
+            <para>Asset Type Name, for display</para>
+            </summary>
+            <param name="assetPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAssetTypeDisplayName(UnityEngine.Object)">
+            <summary>
+            <para>获得资源类型名，用于显示</para>
+            <para>Asset Type Name, for display</para>
+            </summary>
+            <param name="asset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAssetFileSize(System.String)">
+            <summary>
+            <para>资源文件大小（基于操作系统文件信息）</para>
+            <para>Asset File Size (based on operation system FileInfo)</para>
+            </summary>
+            <param name="assetPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAssetRuntimeMemorySize(System.String)">
+            <summary>
+            <para>资源内存大小，基于<see cref="T:UnityEngine.Profiling.Profiler"/></para>
+            <para>Asset Runtime Memory Size, based on <see cref="T:UnityEngine.Profiling.Profiler"/></para>
+            </summary>
+            <param name="assetPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAssetBuildStorageSize(System.String)">
+            <summary>
+            <para>构建存储大小，通常是压缩后。（目前只适用于Texture资源）</para>
+            <para>Build Storage Size, usually after compression. (For now, available for Texture asset only)</para>
+            </summary>
+            <param name="assetPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.AssetsUtil.GetAssetImportFormatName(System.String)">
+            <summary>
+            <para>导入格式名称。（目前只适用于Texture资源）</para>
+            <para>Import Format Name. (For now, available for Texture asset only)</para>
+            </summary>
+            <param name="assetPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.CatalogTools.ExportCatalogAssetsList">
+            <summary>
+            导出Catalog的资源列表
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.EditorTextureUtil">
+            <summary>
+            <para><see cref="T:UnityEditor.TextureUtil"/> Accessor</para>
+            <para>提供 `UnityEditor.TextureUtil` 的内部接口，方便获取额外的Texture Asset信息</para>
+            </summary>
+            <author>Seibe TAKAHASHI</author>
+            <remarks>
+            (c) 2017 Seibe TAKAHASHI.
+            This code is released under the MIT License.
+            http://opensource.org/licenses/mit-license.php
+            </remarks>
+        </member>
+        <member name="F:StarkMini.Editor.FindBuildinResources.conf_replaceFromStandard">
+            conf replaces
+        </member>
+        <member name="F:StarkMini.Editor.FindBuildinResources.shader">
+            system names
+        </member>
+        <member name="F:StarkMini.Editor.FindBuildinResources.msg_title__hint">
+            message texts
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.isResToCheck(UnityEngine.Shader)">
+            <summary> 是否列入要检查的Shader </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.isResToCheck(UnityEngine.Material)">
+            <summary> 是否列入要检查的Material </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.isResToCheck(UnityEngine.Texture)">
+            <summary> 是否列入要检查的Texture </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.isResToCheck(UnityEngine.Sprite)">
+            <summary> 是否列入要检查的Sprite </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.isResPathToCheck(System.String,System.Boolean)">
+            <summary>
+            是否列入要检查的资源 (按路径)
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.RefreshResData(System.Boolean)">
+            <summary>
+            进行刷新
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.isResValueValid">
+            <summary>
+            判断资源数据是否就绪
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.ValidateResValue">
+            <summary>
+            检查资源数据是否就绪，如果没有，进行刷新
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.GetBuildinResource(System.Boolean)">
+            <summary>
+            加载 buildin资源
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.CheckShaderCount(System.String)">
+            <summary>
+            检查指定 shader 数量
+            </summary>
+            <param>byFoundAsset - `true`: 必需 Shader.Find 到实例。 `false`: 只需name相同。</param>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.CheckAllShadersCount">
+            <summary>
+            检查所有 shader 数量
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.ReplaceStandardToDiffuse">
+            <summary>
+            将standard 替换成Mobile Diffuse
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.ReplaceBuildinToLocal">
+            <summary>
+            将buildin shader 替换成本地shader
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.CheckShaderKeywords">
+            <summary>
+            检查 shader keywords
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.CheckMaterialCount(System.String)">
+            <summary>
+            检查 默认材质
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.ReplaceDefaultMaterial">
+            <summary>
+            替换默认材质
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.RemoveParticleSystemWithDefaultParticle">
+            <summary>
+            移除使用默认材质的ParticleSystem组件
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.TraverseNodeGui(StarkMini.Editor.FindBuildinResources.Node)">
+            <summary>
+            遍历显示
+            </summary>
+            <param name="n"></param>
+        </member>
+        <member name="M:StarkMini.Editor.FindBuildinResources.TraverseNode(StarkMini.Editor.FindBuildinResources.Node,System.Action{StarkMini.Editor.FindBuildinResources.Node})">
+            <summary>
+            遍历 操作
+            </summary>
+            <param name="n"></param>
+            <param name="a"></param>
+        </member>
+        <member name="T:StarkMini.Editor.IAssetProcessTool">
+            <summary>
+            资源处理工具Interface
+            </summary>
+        </member>
+        <member name="P:StarkMini.Editor.IAssetProcessTool.ToolName">
+            <summary>
+            工具名
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:StarkMini.Editor.IAssetProcessTool.ToolContextMenuName">
+            <summary>
+            工具菜单名
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.IAssetProcessTool.GetProcessCommands">
+            <summary>
+            获取处理工具的处理命令列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.IAssetProcessTool.FindProcessCommand(System.String)">
+            <summary>
+            获取指定的处理命令
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.IAssetProcessTool.IsProcessable(System.String,UnityEngine.Object)">
+            <summary>
+            判断是否是可处理的资源
+            已废弃，请使用：<see cref="M:StarkMini.Editor.IAssetProcessTool.IsProcessable(System.String)"/>
+            </summary>
+            <param name="assetPath"></param>
+            <param name="asset"></param>
+            <returns>返回是否可处理此资源</returns>
+        </member>
+        <member name="M:StarkMini.Editor.IAssetProcessTool.IsProcessable(System.String)">
+            <summary>
+            判断是否是可处理的资源
+            </summary>
+            <param name="assetPath"></param>
+            <returns>返回是否可处理此资源</returns>
+        </member>
+        <member name="T:StarkMini.Editor.AssetProcessResult">
+            <summary>
+            资源处理结果
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.AssetProcessToolType">
+            <summary>
+            资源处理命令的工具使用类型
+            </summary>
+        </member>
+        <member name="F:StarkMini.Editor.AssetProcessToolType.DefaultShared">
+            <summary>
+            默认与所有AssetDepsTool关联的工具共享使用。
+            </summary>
+        </member>
+        <member name="F:StarkMini.Editor.AssetProcessToolType.SelfToolOnly">
+            <summary>
+            仅限工具自身使用，不与AssetDepsTool依赖分析工具共享使用。
+            </summary>
+        </member>
+        <member name="F:StarkMini.Editor.AssetProcessToolType.AssetDepsToolOnly">
+            <summary>
+            只限AssetDepsTool依赖分析工具使用。
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.AssetProcessEvent">
+            <summary>
+            资源处理事件
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.AssetProcessCommand">
+            <summary>
+            资源处理命令
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.AssetProcessCommand.ProcessDelegate">
+            <summary>
+            资源处理方法的Delegate
+            </summary>
+            <param name="assetPath"></param>
+            <param name="asset"></param>
+            <returns>返回是否成功</returns>
+        </member>
+        <member name="T:StarkMini.Editor.AssetProcessCommand.ProcessEventDelegate">
+            <summary>
+            处理事件方法的Delegate
+            </summary>
+            <param name="eventType"></param>
+        </member>
+        <member name="P:StarkMini.Editor.AssetProcessCommand.UserData">
+            <summary>
+            用户数据，可以被传入给处理函数
+            </summary>
+        </member>
+        <member name="P:StarkMini.Editor.AssetProcessCommand.Name">
+            <summary>
+            命令名。在命令列表中应当唯一可区分。
+            </summary>
+        </member>
+        <member name="P:StarkMini.Editor.AssetProcessCommand.DispalyText">
+            <summary>
+            命令的显示文本。
+            </summary>
+        </member>
+        <member name="P:StarkMini.Editor.AssetProcessCommand.ToolType">
+            <summary>
+            工具类型
+            </summary>
+        </member>
+        <member name="P:StarkMini.Editor.AssetProcessCommand.ProcessFunc">
+            <summary>
+            资源处理方法
+            </summary>
+        </member>
+        <member name="P:StarkMini.Editor.AssetProcessCommand.ProcessEventHandler">
+            <summary>
+            事件响应方法
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.AssetProcessCommand.#ctor(System.String,System.String,StarkMini.Editor.AssetProcessCommand.ProcessDelegate,StarkMini.Editor.AssetProcessCommand.ProcessEventDelegate)">
+            <summary>
+            构造一个资源处理命令
+            </summary>
+            <param name="name"></param>
+            <param name="dispalyText"></param>
+            <param name="processFunc"></param>
+            <param name="processEventHandler"></param>
+        </member>
+        <member name="M:StarkMini.Editor.AssetProcessCommand.#ctor(System.String,System.String,StarkMini.Editor.AssetProcessToolType,StarkMini.Editor.AssetProcessCommand.ProcessDelegate,StarkMini.Editor.AssetProcessCommand.ProcessEventDelegate)">
+            <summary>
+            构造一个资源处理命令
+            </summary>
+            <param name="name"></param>
+            <param name="dispalyText"></param>
+            <param name="tooltip"></param>
+            <param name="toolType"></param>
+            <param name="processFunc"></param>
+            <param name="processEventHandler"></param>
+        </member>
+        <member name="M:StarkMini.Editor.ResLoadAnalysisTreeViewTool.BatchProcessCommand(System.Collections.Generic.List{StarkMini.Editor.TreeDataModel.TreeViewItem{StarkMini.Editor.ResLoadAnalysisTreeElement}},StarkMini.Editor.AssetProcessCommand,System.Action)">
+            <summary>
+            批量处理资源，会根据 command.ProcessEventHandler 触发 BatchStart, BatchFinish 事件，并在最后 AssetDatabase.SaveAssets 保存。
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.ResLoadAnalysisTreeViewTool.BatchProcessCommandByNodeIds(System.Collections.Generic.List{StarkMini.Editor.TreeDataModel.TreeViewItem{StarkMini.Editor.ResLoadAnalysisTreeElement}},StarkMini.Editor.AssetProcessCommand,System.Action)">
+            <summary>
+            批量处理资源，会根据 command.ProcessEventHandler 触发 BatchStart, BatchFinish 事件，并在最后 AssetDatabase.SaveAssets 保存。
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.SearchForComponents">
+            <summary>
+            Editor工具：检查Components引用
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.UnityDowngradeTool">
+            <summary>
+            Unity 降级工具，解决降级引起的 script missing, guid 变更 等问题
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.StarkMiniGUI.ExpandRect(UnityEngine.Rect,System.Single)">
+            <summary>
+            扩展rect，在上下左右4个方向同时。
+            </summary>
+            <param name="rect"></param>
+            <param name="amount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.StarkMiniGUI.ShrinkRect(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            收缩rect，在上下左右4个方向同时。
+            </summary>
+            <param name="rect"></param>
+            <param name="amount"></param>
+            <param name="minSize"></param>
+            <returns></returns>
+        </member>
+        <member name="F:StarkMini.Editor.StarkMiniGUI.StarkMiniEditorIcons.IconsFullListWebUrl">
+            <summary>
+            Web url to view all icons (a big table of all unity editor builtin icons, with names) <br/>
+            查看所有图标的网址（一个包含所有Unity编辑器内置图标及其名称的表格）
+            </summary>
+        </member>
+        <member name="F:StarkMini.Editor.StarkMiniGUI.StarkMiniEditorStyles.MaxColorChannelValue">
+            <summary>
+            Max Value of Color Channel
+            </summary>
+        </member>
+        <member name="F:StarkMini.Editor.StarkMiniGUI.StarkMiniEditorStyles.ColorValueFactor">
+            <summary>
+            Channel Factor for Color
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.StarkMiniGUI.TooltipCache">
+            <summary>
+            Tooltip 缓存
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.StarkMiniGUI.ContextClickHelper">
+            <summary>
+            Context点击辅助
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.StarkMiniGUI.ContextClickHelper.#ctor(System.Boolean,System.Action{System.Int32})">
+            <summary>
+            
+            </summary>
+            <param name="delayEnabled">是否开启延迟调用显示ContextMenu</param>
+            <param name="executeContextClick">显示ContextMenu</param>
+        </member>
+        <member name="P:StarkMini.Editor.StarkMiniGUI.ContextClickHelper.DelayEnabled">
+            <summary>
+            是否开启延迟执行ContextClick
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.StarkMiniGUI.ContextClickHelper.SetClickedItem(System.Int32)">
+            <summary>
+            设置 context click item 的 id
+            </summary>
+            <param name="id">id</param>
+        </member>
+        <member name="M:StarkMini.Editor.StarkMiniGUI.ContextClickHelper.SetClickedItem(System.Int32,System.Object)">
+            <summary>
+            设置 context click item 的 id 和 自定义数据 userData
+            </summary>
+            <param name="id">id</param>
+            <param name="userData">自定义数据</param>
+        </member>
+        <member name="M:StarkMini.Editor.StarkMiniTools.TrimPathDisplay(System.String,System.Int32,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            修剪文件路径用于显示
+            </summary>
+            <param name="path"></param>
+            <param name="maxTotalLen">最大总长度。0 或 &lt;0 则不限制</param>
+            <param name="maxDirLen">最大目录长度。0 或 &lt;0 则不限制</param>
+            <param name="maxFileNameLen">最大文件名长度。0 或 &lt;0 则不限制</param>
+            <param name="trimStartingAssetsDir">修剪掉开头的"Assets/"</param>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.StarkMiniTools.YieldIfNotPaused">
+            <summary>
+            await Task.Yield only if Editor is Not PausedDuringPlay.<br/>
+            Caution: use it carefully, cuz it may also cause Editor GUI freezed yield skipped in your GUI logic.
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.StarkMiniTools.YieldSafely">
+            <summary>
+            Safe yield for Editor GUI.<br/>
+            If Editor PausedDuringPlay, Unpause Editor during await Task.Yield. Otherwise, just await Task.Yield normally.
+            </summary>
+        </member>
+        <member name="T:StarkMini.Editor.BasePopupWindowContent">
+            <summary>
+            一个基础的 PopupWindowContent 类，方便做可编辑浮窗，提供基本的：关闭按钮、title、大小设置功能、Scroll列表
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.TreeDataModel.TreeModel`1.RemoveAllElements">
+            <summary>
+            remove elements from root children 
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.TreeDataModel.TreeModel`1.RemoveElementsFromId(System.Int32)">
+            <summary>
+            remove elements from root children, ranged by `fromId`
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.TreeDataModel.TreeModel`1.RemoveElements(System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            remove elements from root children, ranged by `elementIDs` list
+            </summary>
+        </member>
+        <member name="M:StarkMini.Editor.TreeDataModel.TreeViewWithTreeModel`1.GetAllNodes">
+            <summary>
+            Get all TreeViewItem(T) nodes in TreeView
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StarkMini.Editor.TreeDataModel.TreeViewWithTreeModel`1.GetSelectedNodes">
+            <summary>
+            Get selected TreeViewItem(T) nodes
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

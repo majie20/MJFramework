@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+       <assembly fullname="Unity.Core" preserve="all"/>
+       <assembly fullname="Unity.Model" preserve="all"/>
+       <assembly fullname="Unity.ThirdParty" preserve="all"/>
+       <assembly fullname="SLATE" preserve="all"/>
+       <assembly fullname="UniTask" preserve="all"/>
+       <assembly fullname="Animancer" preserve="all"/>
+       <assembly fullname="SuperTiled2Unity" preserve="all"/>
+       <assembly fullname="com.alelievr.NodeGraphProcessor.Runtime" preserve="all"/>
+       <assembly fullname="UnityEngine.Physics2DModule" preserve="all"/>
+       <assembly fullname="UnityEngine.CoreModule" preserve="all"/>
+       <assembly fullname="UnityEngine.GridModule" preserve="all"/>
+       <assembly fullname="UnityEngine.TilemapModule" preserve="all"/>
+       <assembly fullname="UnityEngine.AudioModule" preserve="all"/>
+       <assembly fullname="Unity.InputSystem" preserve="all"/>
+       <!--<assembly fullname="Cinemachine" preserve="all"/>-->
+       <!--<assembly fullname="UnityEngine.CoreModule">
+         <type fullname="UnityEngine.ShaderVariantCollection" preserve="all" />
+         <type fullname="UnityEngine.Shader" preserve="all" />
+       </assembly>-->
+</linker>

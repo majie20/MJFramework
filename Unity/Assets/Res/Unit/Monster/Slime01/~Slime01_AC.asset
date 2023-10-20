@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7f9b62a92d96d341a7ee210932ccd9d, type: 3}
+  m_Name: ~Slime01_AC
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  target: {fileID: 11400000, guid: e3cd8cddee0ee474db78685ad4425020, type: 2}
+  list1:
+  - Obj: {fileID: 2473876094262166300, guid: 10ff5643c6c3df84c8f78d4c6d57ce69, type: 3}
+    Type: 0
+  - Obj: {fileID: 9100000, guid: 74aee2c95d1fec546a53809e4212e8c2, type: 2}
+    Type: 0
+  - Obj: {fileID: 11400000, guid: 8e50e095620c26c48a67d5632693d1b0, type: 2}
+    Type: 0
+  - Obj: {fileID: 11400000, guid: cfa5499163515a74eb500959562d3643, type: 2}
+    Type: 0

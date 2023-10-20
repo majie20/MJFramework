@@ -1,0 +1,1226 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa92ba2685ba13549a48a6e3350e673f, type: 3}
+  m_Name: Slime_BG01
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: nodes
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[GraphProcessor.BaseNode, com.alelievr.NodeGraphProcessor.Runtime]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 17
+    - Name: 
+      Entry: 7
+      Data: 1|Model.P_StartNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: b34f31e4-5d44-40e4-b511-107de9065b38
+    - Name: computeOrder
+      Entry: 3
+      Data: 0
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 160.927521
+    - Name: 
+      Entry: 4
+      Data: 575.3334
+    - Name: 
+      Entry: 4
+      Data: 178.666656
+    - Name: 
+      Entry: 4
+      Data: 94.666626
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: true
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|Model.P_SelectorNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 25281c31-3669-4363-9b21-72c380107770
+    - Name: computeOrder
+      Entry: 3
+      Data: 2
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 714.71
+    - Name: 
+      Entry: 4
+      Data: 575.449158
+    - Name: 
+      Entry: 4
+      Data: 154.399963
+    - Name: 
+      Entry: 4
+      Data: 74.4000244
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|Model.P_WaitUntilStoppedNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 04851834-7c45-4bfd-a874-24b9a5eb9ac5
+    - Name: computeOrder
+      Entry: 3
+      Data: 4
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1304
+    - Name: 
+      Entry: 4
+      Data: 800.6667
+    - Name: 
+      Entry: 4
+      Data: 209.333252
+    - Name: 
+      Entry: 4
+      Data: 94.66669
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|Model.P_MoveNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 0454cbe1-6dd4-4443-a348-8efa42ea6daa
+    - Name: computeOrder
+      Entry: 3
+      Data: 3
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 952.3333
+    - Name: 
+      Entry: 4
+      Data: 775.3334
+    - Name: 
+      Entry: 4
+      Data: 228.666687
+    - Name: 
+      Entry: 4
+      Data: 134
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Way
+      Entry: 3
+      Data: 1
+    - Name: Direction
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 5|Model.P_ActionNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: d0bfe0e8-32d1-4cfc-9e87-96682c8080e7
+    - Name: computeOrder
+      Entry: 3
+      Data: 8
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1902
+    - Name: 
+      Entry: 4
+      Data: 518
+    - Name: 
+      Entry: 4
+      Data: 317.999878
+    - Name: 
+      Entry: 4
+      Data: 114
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: CallType
+      Entry: 1
+      Data: Action_TogglePatrolPoint
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|Model.P_WaitUntilStoppedNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 97cf0268-f070-4d32-a1fb-8f22f81007bb
+    - Name: computeOrder
+      Entry: 3
+      Data: 9
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 2254.48682
+    - Name: 
+      Entry: 4
+      Data: 644
+    - Name: 
+      Entry: 4
+      Data: 206.3999
+    - Name: 
+      Entry: 4
+      Data: 75.20001
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 7|Model.P_BlackboardConditionNode2, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 064b2d31-6e1d-46c2-b5a9-f4d51547db15
+    - Name: computeOrder
+      Entry: 3
+      Data: 5
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 948.6668
+    - Name: 
+      Entry: 4
+      Data: 545
+    - Name: 
+      Entry: 4
+      Data: 355.3333
+    - Name: 
+      Entry: 4
+      Data: 174
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 1
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: JudgeType
+      Entry: 1
+      Data: If_JudgeDistanceByTargetPoint
+    - Name: Stops
+      Entry: 3
+      Data: 4
+    - Name: interval
+      Entry: 4
+      Data: 0.05
+    - Name: randomVariation
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|Model.P_ActionNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 6240efdf-6661-4ba6-b85b-5487c3d131de
+    - Name: computeOrder
+      Entry: 3
+      Data: 6
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1342.66675
+    - Name: 
+      Entry: 4
+      Data: 518.000061
+    - Name: 
+      Entry: 4
+      Data: 291.333374
+    - Name: 
+      Entry: 4
+      Data: 114.666687
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: CallType
+      Entry: 1
+      Data: Action_StayForWhile
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 9|Model.P_WaitNode1, Unity.Core
+    - Name: nodeCustomName
+      Entry: 6
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: a9ad98f3-9b09-455d-b463-cdf21035baf6
+    - Name: computeOrder
+      Entry: 3
+      Data: 7
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1703.66663
+    - Name: 
+      Entry: 4
+      Data: 528.6667
+    - Name: 
+      Entry: 4
+      Data: 178.666626
+    - Name: 
+      Entry: 4
+      Data: 134
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: seconds
+      Entry: 4
+      Data: 2
+    - Name: randomVariance
+      Entry: 4
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 10|Model.P_ActionNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 1
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: aff198f9-8971-4b1d-8915-6fade2449f25
+    - Name: computeOrder
+      Entry: 3
+      Data: 1
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 369.44928
+    - Name: 
+      Entry: 4
+      Data: 575.3334
+    - Name: 
+      Entry: 4
+      Data: 317.999969
+    - Name: 
+      Entry: 4
+      Data: 114
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: CallType
+      Entry: 1
+      Data: Action_TogglePatrolPoint
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 11|Model.P_BlackboardConditionNode2, Unity.Core
+    - Name: nodeCustomName
+      Entry: 1
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 1da29049-7e21-46e1-98a6-27b203420b35
+    - Name: computeOrder
+      Entry: 3
+      Data: 10
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 911.6667
+    - Name: 
+      Entry: 4
+      Data: 142.6667
+    - Name: 
+      Entry: 4
+      Data: 305.3333
+    - Name: 
+      Entry: 4
+      Data: 173.333344
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 3
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: JudgeType
+      Entry: 1
+      Data: If_JudgeIsHurt
+    - Name: Stops
+      Entry: 3
+      Data: 4
+    - Name: interval
+      Entry: 4
+      Data: 0.05
+    - Name: randomVariation
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 12|Model.P_ActionNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 1
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: b453a5ce-fcd2-402b-9ca1-865679df39df
+    - Name: computeOrder
+      Entry: 3
+      Data: 11
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1334
+    - Name: 
+      Entry: 4
+      Data: 171.000015
+    - Name: 
+      Entry: 4
+      Data: 291.333252
+    - Name: 
+      Entry: 4
+      Data: 114.666656
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: CallType
+      Entry: 1
+      Data: Action_StayForWhile
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 13|Model.P_WaitUntilStoppedNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 1
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 26bb2749-0018-4c0e-98d8-e4e49e86b887
+    - Name: computeOrder
+      Entry: 3
+      Data: 12
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1738.88342
+    - Name: 
+      Entry: 4
+      Data: 170.666672
+    - Name: 
+      Entry: 4
+      Data: 209.333374
+    - Name: 
+      Entry: 4
+      Data: 94.66666
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 14|Model.P_BlackboardConditionNode2, Unity.Core
+    - Name: nodeCustomName
+      Entry: 1
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: d7ba3ef7-6ecb-485d-a481-5297cba905c8
+    - Name: computeOrder
+      Entry: 3
+      Data: 13
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 928.6667
+    - Name: 
+      Entry: 4
+      Data: 343.333374
+    - Name: 
+      Entry: 4
+      Data: 305.3333
+    - Name: 
+      Entry: 4
+      Data: 173.333313
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 2
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: JudgeType
+      Entry: 1
+      Data: If_JudgeIsInFirstAction
+    - Name: Stops
+      Entry: 3
+      Data: 4
+    - Name: interval
+      Entry: 4
+      Data: 0.05
+    - Name: randomVariation
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 15|Model.P_WaitNode1, Unity.Core
+    - Name: nodeCustomName
+      Entry: 1
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 7f38e006-0210-4113-9d11-8cd558004f84
+    - Name: computeOrder
+      Entry: 3
+      Data: 14
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1383.13037
+    - Name: 
+      Entry: 4
+      Data: 316
+    - Name: 
+      Entry: 4
+      Data: 178.666626
+    - Name: 
+      Entry: 4
+      Data: 134
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: seconds
+      Entry: 4
+      Data: 2
+    - Name: randomVariance
+      Entry: 4
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 16|Model.P_WaitUntilStoppedNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 1
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 19dabe0a-fee1-4ab4-91c7-d79703e9c3db
+    - Name: computeOrder
+      Entry: 3
+      Data: 16
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 2045.33337
+    - Name: 
+      Entry: 4
+      Data: 344.666656
+    - Name: 
+      Entry: 4
+      Data: 209.333374
+    - Name: 
+      Entry: 4
+      Data: 94.66666
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 17|Model.P_ActionNode, Unity.Core
+    - Name: nodeCustomName
+      Entry: 1
+      Data: 
+    - Name: GUID
+      Entry: 1
+      Data: 9cd5f556-8720-4044-95c5-9446d6a16aa3
+    - Name: computeOrder
+      Entry: 3
+      Data: 15
+    - Name: position
+      Entry: 7
+      Data: UnityEngine.Rect, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1674.18372
+    - Name: 
+      Entry: 4
+      Data: 316.000031
+    - Name: 
+      Entry: 4
+      Data: 318
+    - Name: 
+      Entry: 4
+      Data: 114
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: expanded
+      Entry: 5
+      Data: false
+    - Name: debug
+      Entry: 5
+      Data: false
+    - Name: nodeLock
+      Entry: 5
+      Data: false
+    - Name: Order
+      Entry: 3
+      Data: 0
+    - Name: In
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Out
+      Entry: 7
+      Data: Model.Empty, Unity.Core
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: CallType
+      Entry: 1
+      Data: Action_FirstActionExpired
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: groups
+      Entry: 7
+      Data: 18|System.Collections.Generic.List`1[[GraphProcessor.Group, com.alelievr.NodeGraphProcessor.Runtime]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  serializedNodes: []
+  edges:
+  - GUID: be5b5343-7815-479d-a23d-70e72c423b35
+    owner: {fileID: 11400000}
+    inputNodeGUID: 04851834-7c45-4bfd-a874-24b9a5eb9ac5
+    outputNodeGUID: 0454cbe1-6dd4-4443-a348-8efa42ea6daa
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: f4b08cc3-f320-4c4c-a653-fb7ccc821984
+    owner: {fileID: 11400000}
+    inputNodeGUID: 064b2d31-6e1d-46c2-b5a9-f4d51547db15
+    outputNodeGUID: 25281c31-3669-4363-9b21-72c380107770
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 9e4e3bae-52ae-4471-bc46-99125093f0aa
+    owner: {fileID: 11400000}
+    inputNodeGUID: 0454cbe1-6dd4-4443-a348-8efa42ea6daa
+    outputNodeGUID: 25281c31-3669-4363-9b21-72c380107770
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 414cf8c0-8600-4d32-b020-5a71bd22ea0c
+    owner: {fileID: 11400000}
+    inputNodeGUID: 6240efdf-6661-4ba6-b85b-5487c3d131de
+    outputNodeGUID: 064b2d31-6e1d-46c2-b5a9-f4d51547db15
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 883c29d3-4c5d-48b0-bf84-14e9ea9db043
+    owner: {fileID: 11400000}
+    inputNodeGUID: aff198f9-8971-4b1d-8915-6fade2449f25
+    outputNodeGUID: b34f31e4-5d44-40e4-b511-107de9065b38
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: e6c4036d-1f4a-4c1d-b345-ae2dbb73c8eb
+    owner: {fileID: 11400000}
+    inputNodeGUID: 25281c31-3669-4363-9b21-72c380107770
+    outputNodeGUID: aff198f9-8971-4b1d-8915-6fade2449f25
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 3e0f610b-bff0-4acb-b01f-31292d7016d2
+    owner: {fileID: 11400000}
+    inputNodeGUID: 1da29049-7e21-46e1-98a6-27b203420b35
+    outputNodeGUID: 25281c31-3669-4363-9b21-72c380107770
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 16261f25-35f7-4722-98e0-c110dfa76d73
+    owner: {fileID: 11400000}
+    inputNodeGUID: b453a5ce-fcd2-402b-9ca1-865679df39df
+    outputNodeGUID: 1da29049-7e21-46e1-98a6-27b203420b35
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 12f42b6d-94c1-4603-a1c7-9d1e90e85c46
+    owner: {fileID: 11400000}
+    inputNodeGUID: 26bb2749-0018-4c0e-98d8-e4e49e86b887
+    outputNodeGUID: b453a5ce-fcd2-402b-9ca1-865679df39df
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 8b81c3b6-3fc0-414a-8ee6-512be6f80373
+    owner: {fileID: 11400000}
+    inputNodeGUID: a9ad98f3-9b09-455d-b463-cdf21035baf6
+    outputNodeGUID: 6240efdf-6661-4ba6-b85b-5487c3d131de
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 0459c587-5218-4c91-bc96-99b61b6cfc93
+    owner: {fileID: 11400000}
+    inputNodeGUID: d0bfe0e8-32d1-4cfc-9e87-96682c8080e7
+    outputNodeGUID: a9ad98f3-9b09-455d-b463-cdf21035baf6
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: fcbeb36e-38ce-4494-a341-4203d20d5c82
+    owner: {fileID: 11400000}
+    inputNodeGUID: 97cf0268-f070-4d32-a1fb-8f22f81007bb
+    outputNodeGUID: d0bfe0e8-32d1-4cfc-9e87-96682c8080e7
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 20ff2b0f-f391-4e5a-8194-32f4dd788916
+    owner: {fileID: 11400000}
+    inputNodeGUID: d7ba3ef7-6ecb-485d-a481-5297cba905c8
+    outputNodeGUID: 25281c31-3669-4363-9b21-72c380107770
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 28ed62ed-0879-41c5-a358-2226b73afc5d
+    owner: {fileID: 11400000}
+    inputNodeGUID: 7f38e006-0210-4113-9d11-8cd558004f84
+    outputNodeGUID: d7ba3ef7-6ecb-485d-a481-5297cba905c8
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: afdc9a2f-83d3-4363-88e2-a3e6892662a0
+    owner: {fileID: 11400000}
+    inputNodeGUID: 9cd5f556-8720-4044-95c5-9446d6a16aa3
+    outputNodeGUID: 7f38e006-0210-4113-9d11-8cd558004f84
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 872f4aac-37fa-4604-a2ec-409187001ab0
+    owner: {fileID: 11400000}
+    inputNodeGUID: 19dabe0a-fee1-4ab4-91c7-d79703e9c3db
+    outputNodeGUID: 9cd5f556-8720-4044-95c5-9446d6a16aa3
+    inputFieldName: In
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 4
+      y: 116
+      width: 150
+      height: 200
+    opened: 0
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 28
+      width: 150
+      height: 200
+    opened: 0
+    editorType:
+      serializedType: ConditionalProcessorView, NodeGraphProcessor.Examples, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  position: {x: 40, y: 144, z: 0}
+  scale: {x: 0.65751624, y: 0.65751624, z: 1}
+  references:
+    version: 2
+    RefIds: []

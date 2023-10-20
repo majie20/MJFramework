@@ -1,0 +1,16 @@
+{
+    "name": "StarkWebGL",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1e8ccb870274c4d3dbd4e7aa724ad45e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

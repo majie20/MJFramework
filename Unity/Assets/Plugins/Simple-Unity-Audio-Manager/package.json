@@ -1,0 +1,51 @@
+{
+	"name": "com.brogrammist.jsam",
+	"displayName": "Jacky's Simple Audio Manager",
+	"version": "3.0.0-preview.6",
+	"unity": "2022.2",
+	"description": "A decentralized audio playing system for Unity, designed for simplicity and built to scale!",
+	"category": "",
+	"documentationUrl": "https://jackyyang09.github.io/Simple-Unity-Audio-Manager/",
+	"author": {
+		"name": "Brogrammist",
+		"url": "https://github.com/jackyyang09/Simple-Unity-Audio-Manager"
+	},
+	"changelogUrl" : "https://github.com/jackyyang09/Simple-Unity-Audio-Manager/releases",
+	"samples": [
+        {
+            "displayName": "Dynamic Music",
+            "description": "",
+            "path": "./Samples~/Dynamic Music"
+        },
+		{
+			"displayName": "Extra Tips",
+			"description": "",
+			"path": "./Samples~/Extra Tips"
+		},
+		{
+			"displayName": "First-Person 3D",
+			"description": "FPS-Style Sample SCene",
+			"path": "./Samples~/First-Person 3D"
+		},
+		{
+			"displayName": "Loop Points",
+			"description": "Loop music using loop points!",
+			"path": "./Samples~/Loop Points"
+		},
+		{
+			"displayName": "Sample Pause Menu",
+			"description": "Sample showing how to implement volume controls",
+			"path": "./Samples~/Sample Pause Menu"
+		},
+		{
+			"displayName": "Shmup 2D",
+			"description": "",
+			"path": "./Samples~/Shmup 2D"
+		},
+		{
+			"displayName": "Video Volume",
+			"description": "",
+			"path": "./Samples~/Video Volume"
+		}
+	]
+}
