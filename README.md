@@ -14,9 +14,17 @@
     [UIBaseData(UIViewType = (int)UIViewType.Normal, PrefabPath = "Assets/Res/StartView.prefab",UIMaskMode = (int)UIMaskMode.BlackTransparentClick, UILayer = (int)Model.UIViewLayer.Normal, IsFullScreen = true, IsOperateMask = false)]
     ````
     可以很方便的管理UI
-+ 框架使用YooAsset进行资源管理，加载资源的方法全都在AssetsComponent这个脚本里
-+ 打包设置的文件：![ ](001.jpg)
-    除了PC、Android、iOS三个平台的设置外，还有额外有微信小游戏和抖音小游戏的设置：![ ](002.jpg)
-    目前已适配了微信小游戏和抖音小游戏
-+ 框架里有一套行为树系统，是拓展NPBehave的，行为树编辑器是由NodeGraphProcessor做的，早期是由xNode做的，里面的小怪的行为树：![ ](003.jpg)
-+ MAStar：一个可扩展的A*寻路组件
++ 框架使用YooAsset进行资源管理，加载资源的方法全都在AssetsComponent这个脚本里  
+    资源收集器：AssetsCollector  
+    ![ ](004.jpg)  
+    用于收集资源使用，设置完成后点击按钮导出到<font color=#008000>***[Init_ARS]***</font>，之后你就可以使用AssetsComponent加载这个文件，同时他也会加载他收集到的资源  
+    ![ ](005.jpg)  
+    ![ ](006.jpg)  
++ 打包设置的文件：  
+    ![ ](001.jpg)  
+    除了PC、Android、iOS三个平台的设置外，还有额外有微信小游戏和抖音小游戏的设置：  
+    ![ ](002.jpg)  
+    <font color=#008000 size=5>***目前已适配了微信小游戏和抖音小游戏***</font>
++ 框架里有一套行为树系统，是拓展NPBehave的，行为树编辑器是由NodeGraphProcessor做的，早期是由xNode做的，里面的小怪的行为树：  
+    ![ ](003.jpg)
++ ***MAStar：一个可扩展的A*寻路组件，扩展了GetEffective（将节点周围哪些节点加入计算）、ComputeCost（计算代价的方式）、ComparePos（计算最终路线中的有效节点）***
