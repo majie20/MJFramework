@@ -465,7 +465,7 @@ export class AudioChannelInstance {
                     if (this.source && this.source.mediaElement && this.source.needCanPlay && !this.source.isPlaying) {
                         this.source.mediaElement.play();
                     }
-                }, 2000);
+                }, 100);
             };
             const innerPlay = () => {
                 if (this.source && this.source.mediaElement) {

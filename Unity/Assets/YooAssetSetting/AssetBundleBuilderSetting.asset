@@ -17,6 +17,6 @@ MonoBehaviour:
   BuildPackage: DefaultPackage
   CompressOption: 1
   OutputNameStyle: 4
-  CopyBuildinFileOption: 5
+  CopyBuildinFileOption: 1
   CopyBuildinFileTags: 
   EncyptionClassName: EncryptionNone

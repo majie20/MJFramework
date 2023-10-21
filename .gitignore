@@ -88,3 +88,24 @@ Unity/Assets/StarkProxyData
 Unity/Assets/StarkProxyData.meta
 
 .vscode/settings.json
+
+Unity/Assets/Plugins/Animancer
+Unity/Assets/Plugins/Animancer.meta
+Unity/Assets/Plugins/Sirenix
+Unity/Assets/Plugins/Sirenix.meta
+Unity/Assets/Plugins/SLATE Cinematic Sequencer
+Unity/Assets/Plugins/SLATE Cinematic Sequencer.meta
+Unity/Assets/Plugins/Editor/CompilationVisualizer
+Unity/Assets/Plugins/Editor/CompilationVisualizer.meta
+Unity/Assets/Plugins/Editor/EditorIterationProfiler
+Unity/Assets/Plugins/Editor/EditorIterationProfiler.meta
+Unity/Assets/Plugins/Editor/ICSharpCode.SharpZipLib
+Unity/Assets/Plugins/Editor/ICSharpCode.SharpZipLib.meta
+Unity/Assets/Plugins/Editor/KCP
+Unity/Assets/Plugins/Editor/KCP.meta
+Unity/Assets/Plugins/Editor/LeoECS
+Unity/Assets/Plugins/Editor/LeoECS.meta
+Unity/Assets/Plugins/Render Queue
+Unity/Assets/Plugins/Render Queue.meta
+Unity/Assets/Plugins/System
+Unity/Assets/Plugins/System.meta

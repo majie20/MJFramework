@@ -20,6 +20,7 @@ namespace Model
         private void Awake()
         {
             Application.targetFrameRate = 120;
+            Application.runInBackground = true;
 
             NLog.Log.Debug($"------开始------");
             InitLogger();

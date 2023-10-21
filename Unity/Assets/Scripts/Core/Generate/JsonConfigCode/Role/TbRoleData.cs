@@ -7,24 +7,26 @@
 //------------------------------------------------------------------------------
 using Bright.Serialization;
 using System.Collections.Generic;
+using SimpleJSON;
+
+
 
 namespace cfg.Role
 {
-   
-public partial class TbRoleData
+
+public sealed partial class TbRoleData
 {
     private readonly List<Role.RoleData> _dataList;
-
+    
     private Dictionary<(int, int), Role.RoleData> _dataMapUnion;
 
-    public TbRoleData(ByteBuf _buf)
+    public TbRoleData(JSONNode _json)
     {
         _dataList = new List<Role.RoleData>();
         
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        foreach(JSONNode _row in _json.Children)
         {
-            Role.RoleData _v;
-            _v = Role.RoleData.DeserializeRoleData(_buf);
+            var _v = Role.RoleData.DeserializeRoleData(_row);
             _dataList.Add(_v);
         }
         _dataMapUnion = new Dictionary<(int, int), Role.RoleData>();
@@ -34,7 +36,6 @@ public partial class TbRoleData
         }
         PostInit();
     }
-
 
     public List<Role.RoleData> DataList => _dataList;
 
@@ -56,6 +57,7 @@ public partial class TbRoleData
             v.TranslateText(translator);
         }
     }
+
     
     partial void PostInit();
     partial void PostResolve();

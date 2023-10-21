@@ -7,18 +7,10 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using YooAsset;
 using static Model.AssetReferenceSettings;
+using Object = UnityEngine.Object;
 
 namespace Model
 {
-    //public struct LoadData
-    //{
-    //    public OperationHandleBase OperationHandle;
-    //    public long                FileSize;
-    //    public long                LastFileSize;
-    //    public bool                IsRawFile;
-    //    public string              Path;
-    //}
-
     public class AssetsComponent : Component, IAwake
     {
         private Dictionary<string, AssetOperationHandle>     _assetOperationDic;
@@ -106,7 +98,25 @@ namespace Model
             {
                 YooAssets.SetCacheSystemDisableCacheOnWebGL();
 
-                YooAssets.SetDownloadSystemUnityWebRequest(url => { return new UnityWebRequest($"{_hostServerURL}/{Path.GetFileName(url)}", UnityWebRequest.kHttpVerbGET); });
+                //                YooAssets.SetDownloadSystemUnityWebRequest(url =>
+                //                {
+                //#if UNITY_WEBGL
+                //                    //return false;
+                //#else
+                //                    // 注意：使用了BetterStreamingAssets插件，使用前需要初始化该插件！
+                //                    string buildinFolderName = YooAssets.GetPackage(ABSettings.PackageName).GetPackageBuildinRootDirectory();
+                //                    NLog.Log.Error(url);
+                //                    NLog.Log.Error($"{buildinFolderName}/{ABSettings.PackageName}/{Path.GetFileName(url)}");
+                //                    var path = $"{buildinFolderName}/{ABSettings.PackageName}/{Path.GetFileName(url)}";
+
+                //                    if (BetterStreamingAssets.FileExists(path))
+                //                    {
+                //                        return new UnityWebRequest(path, UnityWebRequest.kHttpVerbGET);
+                //                    }
+                //#endif
+
+                //                    return new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET);
+                //                });
 
                 var initParameters = new WebPlayModeParameters();
                 initParameters.BuildinQueryServices = new QueryStreamingAssetsFileServices();
@@ -189,7 +199,7 @@ namespace Model
 
         public UnityEngine.Object LoadSync(Type type, string sign)
         {
-            if (!_assetOperationDic.TryGetValue(sign, out AssetOperationHandle handle))
+            if (!_assetOperationDic.TryGetValue(sign, out var handle))
             {
                 throw new Exception($"LoadSync type : {type},sign : {sign}的资源没有加载！");
             }
@@ -204,7 +214,7 @@ namespace Model
 
         public SubAssetsOperationHandle LoadSubSync(Type type, string sign)
         {
-            if (!_subAssetOperationDic.TryGetValue(sign, out SubAssetsOperationHandle handle))
+            if (!_subAssetOperationDic.TryGetValue(sign, out var handle))
             {
                 throw new Exception($"LoadSubSync type : {type},sign : {sign}的资源没有加载！");
             }
@@ -228,20 +238,9 @@ namespace Model
 
         #region 异步
 
-        #region Sub
-
         public async UniTask<SubAssetsOperationHandle> LoadSubAsync(Type type, string sign, bool isCover = false)
         {
-            if (isCover)
-            {
-                UnloadSub(sign);
-            }
-
-            if (!_subAssetOperationDic.TryGetValue(sign, out SubAssetsOperationHandle handle))
-            {
-                handle = YooAssets.LoadSubAssetsAsync(sign, type);
-                _subAssetOperationDic.Add(sign, handle);
-            }
+            var handle = CreateLoadSubHandle(type, sign, isCover);
 
             if (!handle.IsDone)
             {
@@ -263,20 +262,9 @@ namespace Model
             return handle.GetSubAssetObject<B>(subSign);
         }
 
-        #endregion Sub
-
         public async UniTask<UnityEngine.Object> LoadAsync(Type type, string sign, bool isCover = false)
         {
-            if (isCover)
-            {
-                Unload(sign);
-            }
-
-            if (!_assetOperationDic.TryGetValue(sign, out AssetOperationHandle handle))
-            {
-                handle = YooAssets.LoadAssetAsync(sign, type);
-                _assetOperationDic.Add(sign, handle);
-            }
+            var handle = CreateLoadHandle(type, sign, isCover);
 
             if (!handle.IsDone)
             {
@@ -291,9 +279,9 @@ namespace Model
             return await LoadAsync(typeof(T), sign, isCover) as T;
         }
 
-        public async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string sign, LoadSceneMode sceneMode = LoadSceneMode.Single, bool activateOnLoad = false)
+        public async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string sign, LoadSceneMode sceneMode = LoadSceneMode.Single, bool suspendLoad = false)
         {
-            SceneOperationHandle handle = YooAssets.LoadSceneAsync(sign, sceneMode, activateOnLoad);
+            var handle = CreateLoadSceneHandle(sign, sceneMode, suspendLoad);
             await handle.ToUniTask();
 
             return handle.SceneObject;
@@ -323,7 +311,7 @@ namespace Model
             return _rawFilePathDic[sign];
         }
 
-        public async UniTask<AssetReferenceSettings> LoadAssetReferenceSettingsAsync(string sign, bool isCover = false)
+        public async UniTask LoadAssetReferenceSettingsAsync(string sign, bool isCover = false)
         {
             var handle = CreateLoadHandle(typeof(AssetReferenceSettings), sign, isCover);
 
@@ -331,28 +319,26 @@ namespace Model
             var settings = handle.AssetObject as AssetReferenceSettings;
 
             List<UniTask> tasks = new List<UniTask>();
-            var assembly = typeof(GameObject).Assembly;
+            //var assembly = typeof(GameObject).Assembly;
 
             foreach (var info in settings.InstantlyAssetDataList)
             {
                 HandleAssetReference(info.Path, sign, isCover);
 
-                var classType = assembly.GetType(info.TypeName);
-
                 if (info.Type == LoadType.Normal)
                 {
-                    if (classType == typeof(AssetReferenceSettings))
+                    if (info.TypeName == typeof(AssetReferenceSettings).FullName)
                     {
                         tasks.Add(LoadAssetReferenceSettingsAsync(info.Path, isCover));
                     }
                     else
                     {
-                        tasks.Add(CreateLoadHandle(classType, info.Path, isCover).ToUniTask());
+                        tasks.Add(CreateLoadHandle(typeof(Object), info.Path, isCover).ToUniTask());
                     }
                 }
                 else if (info.Type == LoadType.Sub)
                 {
-                    tasks.Add(CreateLoadSubHandle(classType, info.Path, isCover).ToUniTask());
+                    tasks.Add(CreateLoadSubHandle(typeof(Object), info.Path, isCover).ToUniTask());
                 }
             }
 
@@ -362,13 +348,11 @@ namespace Model
 
             if (settings.RearAssetDataList.Count > 0)
             {
-                LoadAssetDataListAsync(settings.RearAssetDataList, sign, isCover);
+                LoadAssetDataListAsync(settings.RearAssetDataList, sign, isCover).Forget();
             }
-
-            return settings;
         }
 
-        public async void LoadAssetDataListAsync(List<Info> infoList, string sign, bool isCover = false)
+        public async UniTaskVoid LoadAssetDataListAsync(List<Info> infoList, string sign, bool isCover = false)
         {
             var assembly = typeof(GameObject).Assembly;
 
@@ -421,6 +405,52 @@ namespace Model
         #endregion 异步
 
         #endregion 资源加载
+
+        #region 创建加载处理
+
+        public AssetOperationHandle CreateLoadHandle(Type type, string sign, bool isCover = false)
+        {
+            if (isCover)
+            {
+                Unload(sign);
+            }
+
+            if (!_assetOperationDic.TryGetValue(sign, out var handle))
+            {
+                handle = YooAssets.LoadAssetAsync(sign, type);
+                _assetOperationDic.Add(sign, handle);
+            }
+
+            return handle;
+        }
+
+        public SubAssetsOperationHandle CreateLoadSubHandle(Type type, string sign, bool isCover = false)
+        {
+            if (isCover)
+            {
+                UnloadSub(sign);
+            }
+
+            if (!_subAssetOperationDic.TryGetValue(sign, out var handle))
+            {
+                handle = YooAssets.LoadSubAssetsAsync(sign, type);
+                _subAssetOperationDic.Add(sign, handle);
+            }
+
+            return handle;
+        }
+
+        public RawFileOperationHandle CreateLoadRawFileHandle(string sign)
+        {
+            return YooAssets.LoadRawFileAsync(sign);
+        }
+
+        public SceneOperationHandle CreateLoadSceneHandle(string sign, LoadSceneMode sceneMode = LoadSceneMode.Single, bool suspendLoad = false)
+        {
+            return YooAssets.LoadSceneAsync(sign, sceneMode, suspendLoad);
+        }
+
+        #endregion 创建加载处理
 
         #region 资源卸载
 
@@ -533,52 +563,6 @@ namespace Model
 
         #endregion 资源卸载
 
-        #region 创建加载处理
-
-        public AssetOperationHandle CreateLoadHandle(Type type, string sign, bool isCover = false)
-        {
-            if (isCover)
-            {
-                Unload(sign);
-            }
-
-            if (!_assetOperationDic.TryGetValue(sign, out var handle))
-            {
-                handle = YooAssets.LoadAssetAsync(sign, type);
-                _assetOperationDic.Add(sign, handle);
-            }
-
-            return handle;
-        }
-
-        public SubAssetsOperationHandle CreateLoadSubHandle(Type type, string sign, bool isCover = false)
-        {
-            if (isCover)
-            {
-                UnloadSub(sign);
-            }
-
-            if (!_subAssetOperationDic.TryGetValue(sign, out var handle))
-            {
-                handle = YooAssets.LoadSubAssetsAsync(sign, type);
-                _subAssetOperationDic.Add(sign, handle);
-            }
-
-            return handle;
-        }
-
-        public RawFileOperationHandle CreateLoadRawFileHandle(string sign)
-        {
-            return YooAssets.LoadRawFileAsync(sign);
-        }
-
-        public SceneOperationHandle CreateLoadSceneHandle(string sign, LoadSceneMode sceneMode = LoadSceneMode.Single, bool suspendLoad = false)
-        {
-            return YooAssets.LoadSceneAsync(sign, sceneMode, suspendLoad);
-        }
-
-        #endregion 创建加载处理
-
         public void HandleAssetReference(string path, string sign, bool isCover)
         {
             if (_assetReferenceMap.TryGetValue(path, out var set))
@@ -683,7 +667,7 @@ namespace Model
 
         public bool ContainsKey(string sign)
         {
-            return _assetOperationDic.ContainsKey(sign) || _subAssetOperationDic.ContainsKey(sign);
+            return _assetOperationDic.ContainsKey(sign) || _subAssetOperationDic.ContainsKey(sign) || _rawFilePathDic.ContainsKey(sign);
         }
 
         public string GetHostServerURL()
@@ -694,9 +678,9 @@ namespace Model
             {
 #if MBuild
 #if WX
-                return $"http://192.168.31.141:8080/{platform}/StreamingAssets";
+                return $"http://192.168.31.141:8080/{platform}/StreamingAssets/{ABSettings.DefaultYooFolderName}/{ABSettings.PackageName}";
 #elif TT
-                return $"https://636c-cloud1-4gc89nkzefa0a08a-1321213358.tcb.qcloud.la/{platform}";
+                return $"http://192.168.31.141:8080/{platform}/StreamingAssets/{ABSettings.DefaultYooFolderName}/{ABSettings.PackageName}";
 #else
                 return $"http://192.168.1.7:8080/{platform}";
 #endif

@@ -1,5 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
+﻿using System;
 
 namespace Hotfix
 {
@@ -9,14 +8,14 @@ namespace Hotfix
 
         #region OpenUIView
 
-        public static async UniTask<Model.UIBaseComponent> OpenUIView(Type type, bool isCloseBack = false)
+        public static Model.UIBaseComponent OpenUIView(Type type, bool isCloseBack = false)
         {
             if (type.Namespace == MODEL_NAMESPACE)
             {
-                return await Model.UIHelper.OpenUIView(type, isCloseBack);
+                return Model.UIHelper.OpenUIView(type, isCloseBack);
             }
 
-            var component = await Model.UIHelper._OpenUIView(type, isCloseBack);
+            var component = Model.UIHelper._OpenUIView(type, isCloseBack);
 
             if (component == null)
             {
@@ -26,19 +25,25 @@ namespace Hotfix
             {
                 IOpen iOpen = component as IOpen;
                 iOpen?.Open();
+
+                if (component.IsLoadComplete)
+                {
+                    component.RefreshEnable();
+                    component.OnLoadComplete().Forget();
+                }
             }
 
             return component;
         }
 
-        public static async UniTask<Model.UIBaseComponent> OpenUIView<A>(Type type, A a, bool isCloseBack = false)
+        public static Model.UIBaseComponent OpenUIView<A>(Type type, A a, bool isCloseBack = false)
         {
             if (type.Namespace == MODEL_NAMESPACE)
             {
-                return await Model.UIHelper.OpenUIView(type, a, isCloseBack);
+                return Model.UIHelper.OpenUIView(type, a, isCloseBack);
             }
 
-            var component = await Model.UIHelper._OpenUIView(type, isCloseBack);
+            var component = Model.UIHelper._OpenUIView(type, isCloseBack);
 
             if (component == null)
             {
@@ -48,19 +53,25 @@ namespace Hotfix
             {
                 IOpen<A> iOpen = component as IOpen<A>;
                 iOpen?.Open(a);
+
+                if (component.IsLoadComplete)
+                {
+                    component.RefreshEnable();
+                    component.OnLoadComplete().Forget();
+                }
             }
 
             return component;
         }
 
-        public static async UniTask<Model.UIBaseComponent> OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
+        public static Model.UIBaseComponent OpenUIView<A, B>(Type type, A a, B b, bool isCloseBack = false)
         {
             if (type.Namespace == MODEL_NAMESPACE)
             {
-                return await Model.UIHelper.OpenUIView(type, a, b, isCloseBack);
+                return Model.UIHelper.OpenUIView(type, a, b, isCloseBack);
             }
 
-            var component = await Model.UIHelper._OpenUIView(type, isCloseBack);
+            var component = Model.UIHelper._OpenUIView(type, isCloseBack);
 
             if (component == null)
             {
@@ -70,19 +81,25 @@ namespace Hotfix
             {
                 IOpen<A, B> iOpen = component as IOpen<A, B>;
                 iOpen?.Open(a, b);
+
+                if (component.IsLoadComplete)
+                {
+                    component.RefreshEnable();
+                    component.OnLoadComplete().Forget();
+                }
             }
 
             return component;
         }
 
-        public static async UniTask<Model.UIBaseComponent> OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
+        public static Model.UIBaseComponent OpenUIView<A, B, C>(Type type, A a, B b, C c, bool isCloseBack = false)
         {
             if (type.Namespace == MODEL_NAMESPACE)
             {
-                return await Model.UIHelper.OpenUIView(type, a, b, c, isCloseBack);
+                return Model.UIHelper.OpenUIView(type, a, b, c, isCloseBack);
             }
 
-            var component = await Model.UIHelper._OpenUIView(type, isCloseBack);
+            var component = Model.UIHelper._OpenUIView(type, isCloseBack);
 
             if (component == null)
             {
@@ -92,29 +109,35 @@ namespace Hotfix
             {
                 IOpen<A, B, C> iOpen = component as IOpen<A, B, C>;
                 iOpen?.Open(a, b, c);
+
+                if (component.IsLoadComplete)
+                {
+                    component.RefreshEnable();
+                    component.OnLoadComplete().Forget();
+                }
             }
 
             return component;
         }
 
-        public static async UniTask<T> OpenUIView<T>(bool isCloseBack = false) where T : Model.UIBaseComponent
+        public static T OpenUIView<T>(bool isCloseBack = false) where T : Model.UIBaseComponent
         {
-            return (T)await OpenUIView(typeof(T), isCloseBack);
+            return (T)OpenUIView(typeof(T), isCloseBack);
         }
 
-        public static async UniTask<T> OpenUIView<T, A>(A a, bool isCloseBack = false) where T : Model.UIBaseComponent
+        public static T OpenUIView<T, A>(A a, bool isCloseBack = false) where T : Model.UIBaseComponent
         {
-            return (T)await OpenUIView(typeof(T), a, isCloseBack);
+            return (T)OpenUIView(typeof(T), a, isCloseBack);
         }
 
-        public static async UniTask<T> OpenUIView<T, A, B>(A a, B b, bool isCloseBack = false) where T : Model.UIBaseComponent
+        public static T OpenUIView<T, A, B>(A a, B b, bool isCloseBack = false) where T : Model.UIBaseComponent
         {
-            return (T)await OpenUIView(typeof(T), a, b, isCloseBack);
+            return (T)OpenUIView(typeof(T), a, b, isCloseBack);
         }
 
-        public static async UniTask<T> OpenUIView<T, A, B, C>(A a, B b, C c, bool isCloseBack = false) where T : Model.UIBaseComponent
+        public static T OpenUIView<T, A, B, C>(A a, B b, C c, bool isCloseBack = false) where T : Model.UIBaseComponent
         {
-            return (T)await OpenUIView(typeof(T), a, b, c, isCloseBack);
+            return (T)OpenUIView(typeof(T), a, b, c, isCloseBack);
         }
 
         #endregion OpenUIView

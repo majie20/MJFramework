@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------
 using Bright.Serialization;
 using System.Collections.Generic;
+using SimpleJSON;
 
 
 
@@ -15,16 +16,23 @@ namespace cfg.Const
 
 public sealed partial class GameConst :  Bright.Config.BeanBase 
 {
-    public GameConst(ByteBuf _buf) 
+    public GameConst(JSONNode _json) 
     {
-        DefPlayer = _buf.ReadInt();
-        DefGravity = _buf.ReadUnityVector2();
+        { if(!_json["def_player"].IsNumber) { throw new SerializationException(); }  DefPlayer = _json["def_player"]; }
+        { var _json2 = _json["def_gravity"]; if(!_json2.IsObject) { throw new SerializationException(); }  float __x; { if(!_json2["x"].IsNumber) { throw new SerializationException(); }  __x = _json2["x"]; } float __y; { if(!_json2["y"].IsNumber) { throw new SerializationException(); }  __y = _json2["y"]; } DefGravity = new UnityEngine.Vector2(__x, __y); }
         PostInit();
     }
 
-    public static GameConst DeserializeGameConst(ByteBuf _buf)
+    public GameConst(int def_player, UnityEngine.Vector2 def_gravity ) 
     {
-        return new Const.GameConst(_buf);
+        this.DefPlayer = def_player;
+        this.DefGravity = def_gravity;
+        PostInit();
+    }
+
+    public static GameConst DeserializeGameConst(JSONNode _json)
+    {
+        return new Const.GameConst(_json);
     }
 
     public int DefPlayer { get; private set; }
@@ -53,5 +61,4 @@ public sealed partial class GameConst :  Bright.Config.BeanBase
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

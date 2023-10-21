@@ -1,5 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using M.Algorithm;
 using UnityEngine;
@@ -66,11 +65,7 @@ namespace Model
 
             if (isFromAB)
             {
-                GameObject origin;
-
-                origin = Game.Instance.Scene.GetComponent<AssetsComponent>().LoadSync<GameObject>(sign);
-
-                obj = UnityEngine.Object.Instantiate(origin, Vector3.zero, Quaternion.identity, parent);
+                obj = Object.Instantiate(Game.Instance.Scene.GetComponent<AssetsComponent>().LoadSync<GameObject>(sign), Vector3.zero, Quaternion.identity, parent);
             }
             else
             {

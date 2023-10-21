@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------
 using Bright.Serialization;
 using System.Collections.Generic;
+using SimpleJSON;
 
 
 
@@ -15,19 +16,29 @@ namespace cfg.Monster
 
 public sealed partial class MonsterData :  Bright.Config.BeanBase 
 {
-    public MonsterData(ByteBuf _buf) 
+    public MonsterData(JSONNode _json) 
     {
-        Code = _buf.ReadInt();
-        Level = _buf.ReadInt();
-        Hp = _buf.ReadInt();
-        BasePower = _buf.ReadInt();
-        BaseMoveSpeed = _buf.ReadInt();
+        { if(!_json["code"].IsNumber) { throw new SerializationException(); }  Code = _json["code"]; }
+        { if(!_json["level"].IsNumber) { throw new SerializationException(); }  Level = _json["level"]; }
+        { if(!_json["hp"].IsNumber) { throw new SerializationException(); }  Hp = _json["hp"]; }
+        { if(!_json["base_power"].IsNumber) { throw new SerializationException(); }  BasePower = _json["base_power"]; }
+        { if(!_json["base_move_speed"].IsNumber) { throw new SerializationException(); }  BaseMoveSpeed = _json["base_move_speed"]; }
         PostInit();
     }
 
-    public static MonsterData DeserializeMonsterData(ByteBuf _buf)
+    public MonsterData(int code, int level, int hp, int base_power, int base_move_speed ) 
     {
-        return new Monster.MonsterData(_buf);
+        this.Code = code;
+        this.Level = level;
+        this.Hp = hp;
+        this.BasePower = base_power;
+        this.BaseMoveSpeed = base_move_speed;
+        PostInit();
+    }
+
+    public static MonsterData DeserializeMonsterData(JSONNode _json)
+    {
+        return new Monster.MonsterData(_json);
     }
 
     /// <summary>
@@ -79,5 +90,4 @@ public sealed partial class MonsterData :  Bright.Config.BeanBase
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

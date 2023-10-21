@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ namespace Model
 {
     [UIBaseData(UIViewType = (int)UIViewType.Pop, PrefabPath = "Assets/Res/UI/Prefab/DialogBoxView.prefab", UIMaskMode = (int)UIMaskMode.BlackTransparentClick,
         UILayer = (int)Model.UIViewLayer.Normal)]
-    public class DialogBoxViewComponent : UIBaseComponent, IAwake, IOpen<DialogBoxInfo>
+    public class DialogBoxViewComponent : UIBaseComponent, IOpen<DialogBoxInfo>
     {
         private Text         TextTitle;
         private Text         TextContent;
@@ -18,6 +19,7 @@ namespace Model
         public override void Awake()
         {
             base.Awake();
+
             ReferenceCollector rc = this.Entity.GameObject.GetComponent<ReferenceCollector>();
             this.TextTitle = rc.Get<GameObject>("TextTitle").GetComponent<Text>();
             this.TextContent = rc.Get<GameObject>("TextContent").GetComponent<Text>();
@@ -49,26 +51,30 @@ namespace Model
             base.Dispose();
         }
 
-        public void Open(DialogBoxInfo a)
+        public override async UniTaskVoid OnLoadComplete()
         {
-            this.Info = a;
-            this.TextTitle.text = a.title;
-            this.TextContent.text = a.content;
+            this.TextTitle.text = this.Info.title;
+            this.TextContent.text = this.Info.content;
             var len = BtnList.Count;
-            var count = a.btnTextList.Length;
+            var count = this.Info.btnTextList.Length;
 
             for (int i = 0; i < len; i++)
             {
                 if (i < count)
                 {
                     BtnList[i].gameObject.SetActive(true);
-                    TextBtnList[i].text = a.btnTextList[i];
+                    TextBtnList[i].text = this.Info.btnTextList[i];
                 }
                 else
                 {
                     BtnList[i].gameObject.SetActive(false);
                 }
             }
+        }
+
+        public void Open(DialogBoxInfo a)
+        {
+            this.Info = a;
         }
 
         private void OnBtnClick(int index)

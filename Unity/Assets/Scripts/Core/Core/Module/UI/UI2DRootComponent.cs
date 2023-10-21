@@ -64,11 +64,11 @@ namespace Model
             _components[_layerStack.Peek()].SetUIMask(false);
         }
 
-        public async UniTask<UIBaseComponent> OpenUIView(Type type, bool isCloseBack)
+        public UIBaseComponent OpenUIView(Type type, bool isCloseBack)
         {
             var attr = UIHelper.GetUIBaseDataAttribute(type);
             var layer = (UIViewLayer)attr.UILayer;
-            var component = await _components[layer].OpenUIView(type, attr, isCloseBack);
+            var component = _components[layer].OpenUIView(type, attr, isCloseBack);
 
             if (attr.IsOperateMask)
             {

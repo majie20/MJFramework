@@ -7,23 +7,28 @@
 //------------------------------------------------------------------------------
 using Bright.Serialization;
 using System.Collections.Generic;
+using SimpleJSON;
+
+
 
 namespace cfg.Const
 {
-   
-public partial class TbGameConst
+
+public sealed partial class TbGameConst
 {
 
      private readonly Const.GameConst _data;
 
-    public TbGameConst(ByteBuf _buf)
+    public TbGameConst(JSONNode _json)
     {
-        int n = _buf.ReadSize();
-        if (n != 1) throw new SerializationException("table mode=one, but size != 1");
-        _data = Const.GameConst.DeserializeGameConst(_buf);
+        if(!_json.IsArray)
+        {
+            throw new SerializationException();
+        }
+        if (_json.Count != 1) throw new SerializationException("table mode=one, but size != 1");
+        _data = Const.GameConst.DeserializeGameConst(_json[0]);
         PostInit();
     }
-
 
      public int DefPlayer => _data.DefPlayer;
      public UnityEngine.Vector2 DefGravity => _data.DefGravity;

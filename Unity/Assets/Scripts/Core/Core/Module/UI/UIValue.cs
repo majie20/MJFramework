@@ -24,7 +24,8 @@ namespace Model
 
     public enum UIMaskMode
     {
-        //None,
+        Null,
+        None,
         Transparent,
         TransparentClick,
         //TransparentPenetrate,

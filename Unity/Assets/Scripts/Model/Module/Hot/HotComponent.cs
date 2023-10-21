@@ -182,9 +182,9 @@ namespace Model
             DialogBoxInfo info = new DialogBoxInfo();
             info.title = "提示";
             info.content = "下载资源失败，是否重新下载？";
-            info.btnCallList = new[] {(Action) (async () => await Download()), () => UIHelper.CloseUIView<DialogBoxViewComponent>()};
-            info.btnTextList = new[] {"重试", "取消"};
-            UIHelper.OpenUIView<DialogBoxViewComponent, DialogBoxInfo>(info).Forget();
+            info.btnCallList = new[] { (Action)(async () => await Download()), () => UIHelper.CloseUIView<DialogBoxViewComponent>() };
+            info.btnTextList = new[] { "重试", "取消" };
+            UIHelper.OpenUIView<DialogBoxViewComponent, DialogBoxInfo>(info);
         }
 
         private void OnDownloadProgressCallback(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)

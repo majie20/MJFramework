@@ -1,4 +1,6 @@
-﻿using M.Algorithm;
+﻿using Cysharp.Threading.Tasks;
+using M.Algorithm;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,19 +20,21 @@ namespace Model
         protected StaticLinkedListDictionary<GameObject, Canvas>                    _childCanvasDic;
         protected StaticLinkedListDictionary<Canvas, TwoStaticLinkedList<Renderer>> _childRendererDic;
 
-        protected int  _sortOrder;
-        public    bool IsEnable;
+        private int        _sortOrder;
+        private UIMaskMode _maskMode;
+        public  bool       IsEnable;
+        public  bool       IsLoadComplete;
+        public  bool       IsOpen;
 
         public virtual void Awake()
         {
-            _Awake();
         }
 
         protected void _Awake()
         {
             AddComponent();
 
-            Canvas[] canvasArray = this.Entity.Transform.GetComponentsInChildren<Canvas>(true);
+            var canvasArray = this.Entity.Transform.GetComponentsInChildren<Canvas>(true);
             var len = canvasArray.Length;
             _childCanvasDic = new StaticLinkedListDictionary<GameObject, Canvas>(0, len);
             _childRendererDic = new StaticLinkedListDictionary<Canvas, TwoStaticLinkedList<Renderer>>(0, len);
@@ -39,6 +43,22 @@ namespace Model
             {
                 _childCanvasDic.Add(canvasArray[i].gameObject, canvasArray[i]);
                 _childRendererDic.Add(canvasArray[i], new TwoStaticLinkedList<Renderer>(0, 8));
+            }
+
+            if (_maskMode != UIMaskMode.Null)
+            {
+                SetMaskMode(_maskMode);
+            }
+
+            var component = Entity.Parent.GetComponent<UIManagerComponent>();
+            SetParentAndSortingLayer(component.Canvas);
+
+            Awake();
+
+            if (IsOpen)
+            {
+                RefreshEnable();
+                OnLoadComplete().Forget();
             }
         }
 
@@ -57,6 +77,42 @@ namespace Model
             _btnSelf = null;
             _imgSelf = null;
             base.Dispose();
+        }
+
+        public async UniTaskVoid CreateView(UIBaseDataAttribute attr)
+        {
+            if (IsLoadComplete)
+            {
+                SetSortingOrder(_sortOrder);
+
+                return;
+            }
+
+            _maskMode = UIMaskMode.Null;
+            var handle = Game.Instance.Scene.GetComponent<AssetsComponent>().CreateLoadHandle(typeof(GameObject), attr.PrefabPath);
+
+            if (!handle.IsDone)
+            {
+                await handle.ToUniTask().AttachExternalCancellation(Entity.CancellationToken);
+            }
+
+            IsLoadComplete = true;
+
+            Entity.GameObject = Game.Instance.Scene.GetComponent<GameObjPoolComponent>().HatchGameObjBySign(attr.PrefabPath, Entity.Parent.Transform, true);
+            Entity.Transform = Entity.GameObject.transform;
+            Entity.AddComponentView();
+
+            if (Entity.Transform.TryGetComponent<EntityIdHandle>(out var idHandle))
+            {
+                idHandle.Guid = Entity.Guid;
+            }
+
+            RectTransform rect = Entity.Transform.GetComponent<RectTransform>();
+            rect.localPosition = Vector3.zero;
+            rect.localScale = Vector3.one;
+            rect.localRotation = Quaternion.identity;
+
+            _Awake();
         }
 
         protected void AddComponent()
@@ -104,7 +160,7 @@ namespace Model
             _btnSelf.onClick.AddListener(OnBtnSelfClick);
         }
 
-        public void SetParentAndSortingLayer(Canvas canvas)
+        protected void SetParentAndSortingLayer(Canvas canvas)
         {
             var sortingLayerID = canvas.sortingLayerID;
 
@@ -128,15 +184,20 @@ namespace Model
             Game.Instance.EventSystem.Invoke<E_CloseUIView>();
         }
 
-        public void SetMaskMode(int mode)
+        public void SetMaskMode(UIMaskMode mode)
         {
-            var v = (UIMaskMode)mode;
+            _maskMode = mode;
 
-            if (v == UIMaskMode.Transparent)
+            if (!IsLoadComplete)
+            {
+                return;
+            }
+
+            if (_maskMode == UIMaskMode.Transparent)
             {
                 SetMaskMode(0, false, true);
             }
-            else if (v == UIMaskMode.TransparentClick)
+            else if (_maskMode == UIMaskMode.TransparentClick)
             {
                 SetMaskMode(0, true, true);
             }
@@ -144,13 +205,17 @@ namespace Model
             //{
             //    SetMaskMode(0, false, false);
             //}
-            else if (v == UIMaskMode.BlackTransparent)
+            else if (_maskMode == UIMaskMode.BlackTransparent)
             {
                 SetMaskMode(1, false, true);
             }
-            else if (v == UIMaskMode.BlackTransparentClick)
+            else if (_maskMode == UIMaskMode.BlackTransparentClick)
             {
                 SetMaskMode(1, true, true);
+            }
+            else if (_maskMode == UIMaskMode.None)
+            {
+                SetMaskMode(0, false, false);
             }
             //else if (v == UIMaskMode.BlackTransparentPenetrate)
             //{
@@ -158,7 +223,7 @@ namespace Model
             //}
         }
 
-        public void SetMaskMode(int alpha, bool interactable, bool blocksRaycasts)
+        private void SetMaskMode(int alpha, bool interactable, bool blocksRaycasts)
         {
             _imgSelf.color = alpha == 1 ? BLACK_TRANSPARENT : TRANSPARENT;
             _imgSelf.raycastTarget = blocksRaycasts;
@@ -167,10 +232,16 @@ namespace Model
 
         public void SetSortingOrder(int sortOrder)
         {
+            this._sortOrder = sortOrder;
+
+            if (!IsLoadComplete)
+            {
+                return;
+            }
+
             if (this.Canvas.sortingOrder != sortOrder)
             {
                 this.Canvas.sortingOrder = sortOrder;
-                this._sortOrder = sortOrder;
 
                 var sortingLayerID = this.Canvas.sortingLayerID;
                 var data = _childCanvasDic.GetElement(1);
@@ -299,29 +370,47 @@ namespace Model
             }
         }
 
+        public void RefreshEnable()
+        {
+            Canvas.enabled = IsEnable;
+        }
+
         public virtual void Close()
         {
-            Canvas.enabled = false;
+            if (IsLoadComplete)
+            {
+                Canvas.enabled = false;
+            }
+
+            IsEnable = false;
 
             foreach (var v in EventList)
             {
                 v.RemoveListener(this);
             }
 
-            _eventList.Clear();
+            EventList.Clear();
             OnClose();
         }
 
         public void Enable()
         {
-            Canvas.enabled = true;
+            if (IsLoadComplete)
+            {
+                Canvas.enabled = true;
+            }
+
             IsEnable = true;
             OnEnable();
         }
 
         public void Disable()
         {
-            Canvas.enabled = false;
+            if (IsLoadComplete)
+            {
+                Canvas.enabled = false;
+            }
+
             IsEnable = false;
             OnDisable();
         }
@@ -335,6 +424,10 @@ namespace Model
         }
 
         protected virtual void OnDisable()
+        {
+        }
+
+        public virtual async UniTaskVoid OnLoadComplete()
         {
         }
     }

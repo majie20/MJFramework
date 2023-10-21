@@ -1,9 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.U2D;
 
 namespace Model
 {
@@ -12,34 +9,26 @@ namespace Model
         private static int SORT_ORDER_INIT    = -32000;
         private static int SORT_ORDER_SPACING = 2000;
 
-        private Dictionary<Type, UIBaseComponent>         _uiComponentDic;
-        private Dictionary<Type, CancellationTokenSource> _tokenDic;
-        private Stack<Type>                               _uiStack;
-        private Stack<Type>                               _tempUIStack;
+        private Dictionary<Type, UIBaseComponent> _uiComponentDic;
+        private Stack<Type>                       _uiStack;
+        private Stack<Type>                       _tempUIStack;
 
         private int    _sortOrder;
-        private Canvas _canvas;
+        public  Canvas Canvas;
 
         public void Awake()
         {
             _uiComponentDic = new Dictionary<Type, UIBaseComponent>(20);
-            _tokenDic = new Dictionary<Type, CancellationTokenSource>(5);
             _uiStack = new Stack<Type>(5);
             _tempUIStack = new Stack<Type>();
             _sortOrder = SORT_ORDER_INIT;
 
-            _canvas = this.Entity.Transform.GetComponent<Canvas>();
+            Canvas = this.Entity.Transform.GetComponent<Canvas>();
         }
 
         public override void Dispose()
         {
-            foreach (var tokenSource in _tokenDic.Values)
-            {
-                tokenSource.Cancel();
-            }
-
-            _tokenDic = null;
-            _canvas = null;
+            Canvas = null;
             _uiComponentDic = null;
             _uiStack = null;
             _tempUIStack = null;
@@ -65,18 +54,9 @@ namespace Model
             }
         }
 
-        private async UniTask<UIBaseComponent> CreateView(Type type, UIBaseDataAttribute attr)
+        private UIBaseComponent CreateView(Type type, UIBaseDataAttribute attr)
         {
-            //if (!string.IsNullOrEmpty(attr.AtlasPath))
-            //{
-            //    await Game.Instance.Scene.GetComponent<AssetsComponent>().LoadAsyncOnly(attr.AtlasPath);
-            //}
-
-            await Game.Instance.Scene.GetComponent<AssetsComponent>().CreateLoadHandle(typeof(GameObject), attr.PrefabPath).ToUniTask();
-
-            UIBaseComponent component;
-
-            if (_uiComponentDic.TryGetValue(type, out component))
+            if (_uiComponentDic.TryGetValue(type, out var component))
             {
                 component.IsRuning = true;
                 component.Entity.AwakeCalled = true;
@@ -111,7 +91,7 @@ namespace Model
                     using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
                     {
                         ctx.PushObject(type);
-                        ctx.PushObject(ObjectHelper.CreateEntity<Entity>(this.Entity, null, attr.PrefabPath, true));
+                        ctx.PushObject(ObjectHelper.CreateUIEntity<Entity>(this.Entity, attr.PrefabPath));
                         ctx.PushBool(true);
                         ctx.Invoke();
                         component = ctx.ReadObject<UIBaseComponent>(0);
@@ -119,17 +99,17 @@ namespace Model
                 }
                 else
                 {
-                    component = ObjectHelper.CreateComponent(type, ObjectHelper.CreateEntity<Entity>(this.Entity, null, attr.PrefabPath, true)) as UIBaseComponent;
+                    component = ObjectHelper.CreateComponent(type, ObjectHelper.CreateUIEntity<Entity>(this.Entity, attr.PrefabPath)) as UIBaseComponent;
                 }
 #else
-                component = ObjectHelper.CreateComponent(type, ObjectHelper.CreateEntity<Entity>(this.Entity, null, attr.PrefabPath, true)) as UIBaseComponent;
+                component = ObjectHelper.CreateComponent(type, ObjectHelper.CreateUIEntity<Entity>(this.Entity, attr.PrefabPath)) as UIBaseComponent;
 #endif
-                RectTransform rect = component.Entity.Transform.GetComponent<RectTransform>();
-                rect.localPosition = Vector3.zero;
-                rect.localScale = Vector3.one;
-                rect.localRotation = Quaternion.identity;
+                component.IsLoadComplete = false;
+                component.IsOpen = false;
                 _uiComponentDic.Add(type, component);
             }
+
+            component.CreateView(attr).Forget();
 
             return component;
         }
@@ -171,11 +151,11 @@ namespace Model
                 {
                     if (isHide)
                     {
-                        _uiComponentDic[type].SetMaskMode(0, false, false);
+                        _uiComponentDic[type].SetMaskMode(UIMaskMode.None);
                     }
                     else
                     {
-                        _uiComponentDic[type].SetMaskMode(attr.UIMaskMode);
+                        _uiComponentDic[type].SetMaskMode((UIMaskMode)attr.UIMaskMode);
                     }
 
                     while (_tempUIStack.Count > 0)
@@ -195,32 +175,22 @@ namespace Model
             }
         }
 
-        public async UniTask<UIBaseComponent> OpenUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack)
+        public UIBaseComponent OpenUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack)
         {
             CloseUIView(type, attr, isCloseBack, true);
-            await UniTask.Yield();
 
-            var cts = new CancellationTokenSource();
-
-            if (!_tokenDic.ContainsKey(type))
-            {
-                _tokenDic.Add(type, cts);
-            }
-
-            var view = await CreateView(type, attr).AttachExternalCancellation(CancellationTokenSource.CreateLinkedTokenSource(cts.Token, Entity.CancellationToken).Token);
+            var view = CreateView(type, attr);
 
             if (attr.IsOperateMask)
             {
-                view.SetMaskMode(attr.UIMaskMode);
+                view.SetMaskMode((UIMaskMode)attr.UIMaskMode);
             }
             else
             {
-                view.SetMaskMode(0, false, false);
+                view.SetMaskMode((UIMaskMode)1);
             }
 
-            view.SetParentAndSortingLayer(_canvas);
             PushView(type);
-            _tokenDic.Remove(type);
 
             return view;
         }
@@ -233,20 +203,20 @@ namespace Model
             component.IsRuning = false;
             component.Entity.DisposeTimer();
 #if ILRuntime
-                if (type is ILRuntime.Reflection.ILRuntimeType)
-                {
-                    ILRuntime.CLR.Method.IMethod method = Game.Instance.Hotfix.MethodDic["Hotfix.ObjectHelper.RemoveLifecycle"];
+            if (type is ILRuntime.Reflection.ILRuntimeType)
+            {
+                ILRuntime.CLR.Method.IMethod method = Game.Instance.Hotfix.MethodDic["Hotfix.ObjectHelper.RemoveLifecycle"];
 
-                    using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
-                    {
-                        ctx.PushObject(component);
-                        ctx.Invoke();
-                    }
-                }
-                else
+                using (var ctx = Game.Instance.Hotfix.AppDomain.BeginInvoke(method))
                 {
-                    Game.Instance.LifecycleSystem.Remove(component);
+                    ctx.PushObject(component);
+                    ctx.Invoke();
                 }
+            }
+            else
+            {
+                Game.Instance.LifecycleSystem.Remove(component);
+            }
 #else
             Game.Instance.LifecycleSystem.Remove(component);
 #endif
@@ -259,14 +229,6 @@ namespace Model
 
         private void CloseUIView(Type type, UIBaseDataAttribute attr, bool isCloseBack, bool isOpen)
         {
-            if (_tokenDic.TryGetValue(type, out var tokenSource))
-            {
-                tokenSource.Cancel();
-                Game.Instance.Scene.GetComponent<GameObjPoolComponent>().RecycleAllGameObj(attr.PrefabPath);
-                Game.Instance.Scene.GetComponent<ComponentPoolComponent>().RecycleAllComponent(type);
-                _tokenDic.Remove(type);
-            }
-
             var uiViewType = (UIViewType)attr.UIViewType;
 
             if (_uiStack.Contains(type))
@@ -334,7 +296,7 @@ namespace Model
                 {
                     if (isCloseBack)
                     {
-                        //关闭old的界面A前面的pop界面
+                        //关闭旧的界面A下面的pop界面
                         Stack<Type> tempUIStack = new Stack<Type>();
 
                         while (true)
@@ -386,7 +348,7 @@ namespace Model
                     }
                     else
                     {
-                        //关闭old的界面A和old的界面A与即将打开的界面A之间的pop界面
+                        //关闭旧的界面A和旧的界面A与即将打开的新的界面A之间的pop界面
                         while (true)
                         {
                             var tempType = _uiStack.Peek();

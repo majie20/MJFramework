@@ -360,7 +360,7 @@ namespace Model
 
     public class EventBase<B> : IEvent
     {
-        protected StaticLinkedListDictionary<Component, B> _datas = new StaticLinkedListDictionary<Component, B>(0, EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> _datas = new(0, EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -408,7 +408,7 @@ namespace Model
 
     public class EventBase<B, T1> : IEvent
     {
-        protected StaticLinkedListDictionary<Component, B> _datas = new StaticLinkedListDictionary<Component, B>(0, EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> _datas = new(0, EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -456,7 +456,7 @@ namespace Model
 
     public class EventBase<B, T1, T2> : IEvent
     {
-        protected StaticLinkedListDictionary<Component, B> _datas = new StaticLinkedListDictionary<Component, B>(0, EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> _datas = new(0, EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -504,7 +504,7 @@ namespace Model
 
     public class EventBase<B, T1, T2, T3> : IEvent
     {
-        protected StaticLinkedListDictionary<Component, B> _datas = new StaticLinkedListDictionary<Component, B>(0, EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> _datas = new(0, EventValue.INITIAL_COUNT);
 
         public EventBase()
         {
@@ -552,7 +552,7 @@ namespace Model
 
     public class EventBase<B, T1, T2, T3, T4> : IEvent
     {
-        protected StaticLinkedListDictionary<Component, B> _datas = new StaticLinkedListDictionary<Component, B>(0, EventValue.INITIAL_COUNT);
+        protected StaticLinkedListDictionary<Component, B> _datas = new(0, EventValue.INITIAL_COUNT);
 
         public EventBase()
         {

@@ -13,7 +13,7 @@ namespace Model
 #elif UNITY_IOS
             return "ios";
 #elif UNITY_WEBGL
-            return "WebGL";
+            return "webgl";
 #endif
         }
 

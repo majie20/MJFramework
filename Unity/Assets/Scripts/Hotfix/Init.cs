@@ -22,7 +22,7 @@ namespace Hotfix
                 () =>
                 {
                     ObjectHelper.CreateComponent<TestComponent, string>(Model.ObjectHelper.CreateEntity<Model.Entity>(Model.Game.Instance.Scene), "dadjajdlkjadlkjaljdalkd", false);
-                }, 100, 1, null, false, () => NLog.Log.Error("aaaaaaaa"));
+                }, 100, 1, null, false, () => NLog.Log.Error("aaaaaaaa")).Forget();
 
             //ObjectHelper.CreateComponent<TestComponent>(Model.ObjectHelper.CreateEntity<Model.Entity>(Model.Game.Instance.Scene).GetAwaiter().GetResult(), false);
             //ObjectHelper.CreateComponent<GameDataComponent>(Model.Game.Instance.Scene, false);

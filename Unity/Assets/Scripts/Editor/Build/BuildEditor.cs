@@ -51,7 +51,7 @@ public class BuildEditor
 
         if (assetsBundleSettings.PlayMode == EPlayMode.WebPlayMode)
         {
-            assetBundleBuilderSetting.CopyBuildinFileOption = ECopyBuildinFileOption.ClearAll;
+            assetBundleBuilderSetting.CopyBuildinFileOption = ECopyBuildinFileOption.ClearAndCopyAll;
             assetBundleBuilderSetting.OutputNameStyle = EOutputNameStyle.BundleName_HashName;
         }
         else
@@ -73,10 +73,10 @@ public class BuildEditor
 
         if (settings.HotfixMode == HotfixMode.ILRunTime)
         {
-            stepList.Add(new RemoveDefineStep() {Name = "HybridCLR"});
+            stepList.Add(new RemoveDefineStep() { Name = "HybridCLR" });
             stepList.Add(new CloseHybridCLRStep());
             stepList.Add(new OpenILRuntimeStep());
-            stepList.Add(new AddDefineStep() {Name = "ILRuntime"});
+            stepList.Add(new AddDefineStep() { Name = "ILRuntime" });
             stepList.Add(new ILRuntimeCLRClearStep());
             stepList.Add(new ILRuntimeCLRBindingStep());
             stepList.Add(new HotfixEditorStep());
@@ -84,18 +84,18 @@ public class BuildEditor
         else if (settings.HotfixMode == HotfixMode.HybridCLR)
         {
             stepList.Add(new ILRuntimeCLRClearStep());
-            stepList.Add(new RemoveDefineStep() {Name = "ILRuntime"});
+            stepList.Add(new RemoveDefineStep() { Name = "ILRuntime" });
             stepList.Add(new CloseILRuntimeStep());
             stepList.Add(new OpenHybridCLRStep());
-            stepList.Add(new AddDefineStep() {Name = "HybridCLR"});
+            stepList.Add(new AddDefineStep() { Name = "HybridCLR" });
             stepList.Add(new HotfixAnyStep());
         }
         else
         {
             stepList.Add(new ILRuntimeCLRClearStep());
-            stepList.Add(new RemoveDefineStep() {Name = "ILRuntime"});
+            stepList.Add(new RemoveDefineStep() { Name = "ILRuntime" });
             stepList.Add(new CloseILRuntimeStep());
-            stepList.Add(new RemoveDefineStep() {Name = "HybridCLR"});
+            stepList.Add(new RemoveDefineStep() { Name = "HybridCLR" });
             stepList.Add(new CloseHybridCLRStep());
             stepList.Add(new HotfixEditorStep());
         }
@@ -115,56 +115,54 @@ public class BuildEditor
         {
             stepList.Add(new SwitchPlatformStep());
             stepList.Add(new CloseBetterStreamingAssetsStep());
-            stepList.Add(new DisableUnity_Logs_ViewerStep());
         }
         else
         {
             stepList.Add(new OpenBetterStreamingAssetsStep());
             stepList.Add(new SwitchPlatformStep());
-            stepList.Add(new EnableUnity_Logs_ViewerStep());
         }
 
         switch (settings.GameType)
         {
             case GameType.NormalGame:
-                stepList.Add(new RemoveDefineStep() {Name = "WX"});
+                stepList.Add(new RemoveDefineStep() { Name = "WX" });
                 stepList.Add(new CloseWXMiniGameStep());
-                stepList.Add(new RemoveDefineStep() {Name = "TT"});
+                stepList.Add(new RemoveDefineStep() { Name = "TT" });
                 stepList.Add(new CloseTTMiniGameStep());
 
                 break;
             case GameType.WXGame:
-                stepList.Add(new RemoveDefineStep() {Name = "TT"});
+                stepList.Add(new RemoveDefineStep() { Name = "TT" });
                 stepList.Add(new CloseTTMiniGameStep());
                 stepList.Add(new OpenWXMiniGameStep());
-                stepList.Add(new AddDefineStep() {Name = "WX"});
+                stepList.Add(new AddDefineStep() { Name = "WX" });
 
                 break;
             case GameType.TTGame:
-                stepList.Add(new RemoveDefineStep() {Name = "WX"});
+                stepList.Add(new RemoveDefineStep() { Name = "WX" });
                 stepList.Add(new CloseWXMiniGameStep());
                 stepList.Add(new OpenTTMiniGameStep());
-                stepList.Add(new AddDefineStep() {Name = "TT"});
+                stepList.Add(new AddDefineStep() { Name = "TT" });
 
                 break;
             case GameType.QQGame:
-                stepList.Add(new RemoveDefineStep() {Name = "WX"});
+                stepList.Add(new RemoveDefineStep() { Name = "WX" });
                 stepList.Add(new CloseWXMiniGameStep());
-                stepList.Add(new RemoveDefineStep() {Name = "TT"});
+                stepList.Add(new RemoveDefineStep() { Name = "TT" });
                 stepList.Add(new CloseTTMiniGameStep());
 
                 break;
             case GameType.GoogleGame:
-                stepList.Add(new RemoveDefineStep() {Name = "WX"});
+                stepList.Add(new RemoveDefineStep() { Name = "WX" });
                 stepList.Add(new CloseWXMiniGameStep());
-                stepList.Add(new RemoveDefineStep() {Name = "TT"});
+                stepList.Add(new RemoveDefineStep() { Name = "TT" });
                 stepList.Add(new CloseTTMiniGameStep());
 
                 break;
             case GameType.FacebookGame:
-                stepList.Add(new RemoveDefineStep() {Name = "WX"});
+                stepList.Add(new RemoveDefineStep() { Name = "WX" });
                 stepList.Add(new CloseWXMiniGameStep());
-                stepList.Add(new RemoveDefineStep() {Name = "TT"});
+                stepList.Add(new RemoveDefineStep() { Name = "TT" });
                 stepList.Add(new CloseTTMiniGameStep());
 
                 break;

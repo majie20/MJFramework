@@ -25,7 +25,7 @@ namespace M.ActionPipeline
             if (!_isRunning)
             {
                 _isRunning = true;
-                _actions.Peek().Play();
+                _actions.Peek().Play().Forget();
             }
         }
 
@@ -35,7 +35,7 @@ namespace M.ActionPipeline
 
             if (_actions.Count > 0)
             {
-                _actions.Peek().Play();
+                _actions.Peek().Play().Forget();
             }
             else
             {

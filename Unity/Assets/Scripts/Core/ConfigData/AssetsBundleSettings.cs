@@ -155,6 +155,26 @@ namespace Model
         {
             PackageName = Assembly.Load("Unity.Editor").GetType("EditorHelper").InvokeMember("GetPackageName",
                 BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod, null, null, null) as string;
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.AssetDatabase.SaveAssets();
+            UnityEditor.AssetDatabase.Refresh();
+        }
+#endif
+
+        [HorizontalGroup("DefaultYooFolderName")]
+        [LabelText("YooAsset文件夹名称")]
+        [ReadOnly]
+        public string DefaultYooFolderName;
+
+#if UNITY_EDITOR
+        [HorizontalGroup("DefaultYooFolderName", 150)]
+        [Button("获取YooAsset文件夹名称", 30)]
+        private void GetDefaultYooFolderName()
+        {
+            DefaultYooFolderName = YooAssetSettingsData.Setting.DefaultYooFolderName;
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.AssetDatabase.SaveAssets();
+            UnityEditor.AssetDatabase.Refresh();
         }
 #endif
 
@@ -206,7 +226,7 @@ namespace Model
 
         public static IEnumerable GetPlayModeValues = new ValueDropdownList<EPlayMode>()
         {
-            {"编辑器模拟模式", EPlayMode.EditorSimulateMode}, {"单机模式", EPlayMode.OfflinePlayMode}, {"联机模式", EPlayMode.HostPlayMode}, {"WebGL模式", EPlayMode.WebPlayMode},
+            { "编辑器模拟模式", EPlayMode.EditorSimulateMode }, { "单机模式", EPlayMode.OfflinePlayMode }, { "联机模式", EPlayMode.HostPlayMode }, { "WebGL模式", EPlayMode.WebPlayMode },
         };
 
         public static IEnumerable GetHotfixModeValues
@@ -234,9 +254,9 @@ namespace Model
                 yield return new ValueDropdownItem<GameType>("普通游戏", GameType.NormalGame);
                 yield return new ValueDropdownItem<GameType>("微信小游戏", GameType.WXGame);
                 yield return new ValueDropdownItem<GameType>("抖音小游戏", GameType.TTGame);
-                yield return new ValueDropdownItem<GameType>("QQ小游戏", GameType.QQGame);
-                yield return new ValueDropdownItem<GameType>("Google免安装游戏", GameType.GoogleGame);
-                yield return new ValueDropdownItem<GameType>("Facebook小游戏", GameType.FacebookGame);
+                //yield return new ValueDropdownItem<GameType>("QQ小游戏", GameType.QQGame);
+                //yield return new ValueDropdownItem<GameType>("Google免安装游戏", GameType.GoogleGame);
+                //yield return new ValueDropdownItem<GameType>("Facebook小游戏", GameType.FacebookGame);
             }
         }
 

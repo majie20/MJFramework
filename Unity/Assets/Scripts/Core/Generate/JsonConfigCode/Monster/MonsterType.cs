@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------
 using Bright.Serialization;
 using System.Collections.Generic;
+using SimpleJSON;
 
 
 
@@ -15,17 +16,25 @@ namespace cfg.Monster
 
 public sealed partial class MonsterType :  Bright.Config.BeanBase 
 {
-    public MonsterType(ByteBuf _buf) 
+    public MonsterType(JSONNode _json) 
     {
-        Id = _buf.ReadInt();
-        Name = _buf.ReadString();
-        TypeCode = _buf.ReadString();
+        { if(!_json["id"].IsNumber) { throw new SerializationException(); }  Id = _json["id"]; }
+        { if(!_json["name"].IsString) { throw new SerializationException(); }  Name = _json["name"]; }
+        { if(!_json["type_code"].IsString) { throw new SerializationException(); }  TypeCode = _json["type_code"]; }
         PostInit();
     }
 
-    public static MonsterType DeserializeMonsterType(ByteBuf _buf)
+    public MonsterType(int id, string name, string type_code ) 
     {
-        return new Monster.MonsterType(_buf);
+        this.Id = id;
+        this.Name = name;
+        this.TypeCode = type_code;
+        PostInit();
+    }
+
+    public static MonsterType DeserializeMonsterType(JSONNode _json)
+    {
+        return new Monster.MonsterType(_json);
     }
 
     /// <summary>
@@ -65,5 +74,4 @@ public sealed partial class MonsterType :  Bright.Config.BeanBase
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

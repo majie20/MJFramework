@@ -19,5 +19,6 @@ MonoBehaviour:
   EncryptType: 2
   EncryptPassword: 111111111111111111111111
   EncryptOffsetVolume: 32
-  PlayMode: 1
+  PlayMode: 0
   PackageName: DefaultPackage
+  DefaultYooFolderName: yoo

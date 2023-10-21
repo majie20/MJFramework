@@ -13,19 +13,16 @@ namespace M.ActionPipeline
             _pipeline = pipeline;
         }
 
-        public void Play()
+        public async UniTaskVoid Play()
         {
-            UniTask.Void(async () =>
+            var b = await _task.SuppressCancellationThrow();
+
+            if (b)
             {
-                var b = await _task.SuppressCancellationThrow();
+                return;
+            }
 
-                if (b)
-                {
-                    return;
-                }
-
-                _pipeline.Finish();
-            });
+            _pipeline.Finish();
         }
     }
 }

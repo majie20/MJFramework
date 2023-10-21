@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Model
@@ -6,7 +7,7 @@ namespace Model
     [LifeCycle]
     [UIBaseData(UIViewType = (int)UIViewType.Normal, PrefabPath = "Assets/Res/UI/Prefab/Main/MainView.prefab", UIMaskMode = (int)UIMaskMode.BlackTransparentClick,
         UILayer = (int)Model.UIViewLayer.Normal, IsFullScreen = true, IsOperateMask = false)]
-    public class MainViewComponent : UIBaseComponent, IOpen, IAwake
+    public class MainViewComponent : UIBaseComponent, IOpen
     {
         private Button btnPlay;
 
@@ -43,6 +44,11 @@ namespace Model
         public override void Dispose()
         {
             base.Dispose();
+        }
+
+        public override async UniTaskVoid OnLoadComplete()
+        {
+
         }
 
         public void Open()

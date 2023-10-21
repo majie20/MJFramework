@@ -42,11 +42,8 @@ namespace Model
 
             ObjectHelper.CreateComponent<UIRootComponent>(ObjectHelper.CreateEntity<Entity>(scene, null, ConstData.UI_ROOT, true), false);
 
-            LoadSceneData data = new LoadSceneData()
-            {
-                ScenePath = ConstData.MAIN_SCENE, SettingsPath = new List<string>() { ConstData.GAME_LOAD_COMPLETE_ARS }, Call = OnGameLoadComplete
-            };
-            await UIHelper.OpenUIView<LoadingViewComponent, LoadUseType, LoadSceneData>(LoadUseType.Hot, data);
+            LoadSceneData data = new LoadSceneData() { ScenePath = ConstData.MAIN_SCENE, AssetPaths = LoadInfo.InfosMap[1], Call = OnGameLoadComplete };
+            UIHelper.OpenUIView<LoadingViewComponent, LoadUseType, LoadSceneData>(LoadUseType.Hot, data);
         }
 
         private static async UniTask OnGameLoadComplete()
@@ -71,7 +68,7 @@ namespace Model
             Game.Instance.Hotfix.GotoHotfix();
 #endif
 
-            await UIHelper.OpenUIView<StartViewComponent>();
+            UIHelper.OpenUIView<StartViewComponent>();
 
             Rigidbody2DComponent.PM2D_FullFriction = await assetsComponent.LoadAsync<PhysicsMaterial2D>(ConstData.Full_Friction);
             Rigidbody2DComponent.PM2D_NoFriction = await assetsComponent.LoadAsync<PhysicsMaterial2D>(ConstData.No_Friction);

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Model
@@ -20,12 +21,15 @@ namespace Model
 
     [UIBaseData(UIViewType = (int)UIViewType.Normal, PrefabPath = "Assets/Res/UI/Prefab/Loading/LoadingView.prefab", AtlasPath = "Assets/Res/UI/Texture/StaticSprite/S_Loading",
         UIMaskMode = (int)UIMaskMode.Transparent, UILayer = (int)Model.UIViewLayer.Highest, IsOperateMask = false, IsFullScreen = true)]
-    public class LoadingViewComponent : UIBaseComponent, IOpen<LoadUseType, LoadSceneData>, IAwake
+    public class LoadingViewComponent : UIBaseComponent, IOpen<LoadUseType, LoadSceneData>
     {
         private LoadProgressType _loadProgressType;
         private Text             TextProgress;
         private Slider           SliderProgress;
         private string           _hintText;
+
+        private LoadUseType   _loadUseType;
+        private LoadSceneData _loadSceneData;
 
         public override void Awake()
         {
@@ -42,7 +46,7 @@ namespace Model
             base.Dispose();
         }
 
-        public async void Open(LoadUseType useType, LoadSceneData data)
+        public override async UniTaskVoid OnLoadComplete()
         {
             _hintText = "";
             _loadProgressType = LoadProgressType.None;
@@ -52,14 +56,20 @@ namespace Model
             Game.Instance.EventSystem.AddListener<E_LoadingViewProgressRefresh1, int, int, long, long>(this, OnLoadingViewProgressRefresh);
             Game.Instance.EventSystem.AddListener<E_LoadingViewProgressRefresh2, float>(this, OnLoadingViewProgressRefresh);
 
-            if (useType == LoadUseType.Hot)
+            if (_loadUseType == LoadUseType.Hot)
             {
-                await Game.Instance.Scene.GetComponent<HotComponent>().Run(data);
+                await Game.Instance.Scene.GetComponent<HotComponent>().Run(_loadSceneData);
             }
-            else if (useType == LoadUseType.Normal)
+            else if (_loadUseType == LoadUseType.Normal)
             {
-                await Game.Instance.Scene.GetComponent<GameManagerComponent>().Run(data);
+                await Game.Instance.Scene.GetComponent<GameManagerComponent>().Run(_loadSceneData);
             }
+        }
+
+        public void Open(LoadUseType useType, LoadSceneData data)
+        {
+            _loadUseType = useType;
+            _loadSceneData = data;
         }
 
         protected override void OnClose()

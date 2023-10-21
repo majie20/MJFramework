@@ -6,12 +6,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using Bright.Serialization;
-
+using SimpleJSON;
 
 namespace cfg
 {
    
-public partial class Tables
+public sealed partial class Tables
 {
     public Const.TbGameConst TbGameConst {get; }
     public Role.TbRole TbRole {get; }
@@ -19,7 +19,7 @@ public partial class Tables
     public Monster.TbMonsterData TbMonsterData {get; }
     public Monster.TbMonster TbMonster {get; }
 
-    public Tables(System.Func<string, ByteBuf> loader)
+    public Tables(System.Func<string, JSONNode> loader)
     {
         var tables = new System.Collections.Generic.Dictionary<string, object>();
         TbGameConst = new Const.TbGameConst(loader("const_tbgameconst")); 
@@ -32,8 +32,8 @@ public partial class Tables
         tables.Add("Monster.TbMonsterData", TbMonsterData);
         TbMonster = new Monster.TbMonster(loader("monster_tbmonster")); 
         tables.Add("Monster.TbMonster", TbMonster);
-
         PostInit();
+
         TbGameConst.Resolve(tables); 
         TbRole.Resolve(tables); 
         TbRoleData.Resolve(tables); 

@@ -124,6 +124,19 @@ namespace Model
             }
         }
 
+        public void DisposeTimer()
+        {
+            AwakeCalled = false;
+            Called = true;
+
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+                _cancellationTokenSource = null;
+            }
+        }
+
         #endregion Task
 
         public Entity()
@@ -205,6 +218,10 @@ namespace Model
 
         private void AddToComponentView(Component component)
         {
+            if (_componentView == null)
+            {
+                return;
+            }
 #if ILRuntime
             if (component is ComponentAdapter.Adapter componentAdapter)
             {
@@ -223,6 +240,11 @@ namespace Model
 
         private void RemoveToComponentView(Component component)
         {
+            if (_componentView == null)
+            {
+                return;
+            }
+
             _componentView.dic.Remove(component);
         }
 
@@ -248,19 +270,6 @@ namespace Model
             }
 
             return null;
-        }
-
-        public void DisposeTimer()
-        {
-            AwakeCalled = false;
-            Called = true;
-
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource.Dispose();
-                _cancellationTokenSource = null;
-            }
         }
 
         public void RemoveChild(long guid)

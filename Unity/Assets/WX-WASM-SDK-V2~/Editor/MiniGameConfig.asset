@@ -15,7 +15,7 @@ MonoBehaviour:
   ProjectConf:
     projectName: casualgameone
     Appid: wx5e4a710d3f4cdd82
-    CDN: http://192.168.31.141:8080
+    CDN: http://192.168.31.141:8080/webgl
     assetLoadType: 0
     compressDataPackage: 1
     VideoUrl: 
@@ -51,7 +51,7 @@ MonoBehaviour:
     Il2CppOptimizeSize: 0
     profilingFuncs: 0
     Webgl2: 1
-    fbslim: 1
+    fbslim: 0
     DeleteStreamingAssets: 0
     ProfilingMemory: 0
     CleanBuild: 0

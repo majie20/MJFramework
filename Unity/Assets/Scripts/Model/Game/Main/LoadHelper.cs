@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using NLog;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using YooAsset;
@@ -10,9 +11,9 @@ namespace Model
 {
     public class LoadSceneData
     {
-        public string        ScenePath;
-        public List<string>  SettingsPath;
-        public Func<UniTask> Call;
+        public string                            ScenePath;
+        public List<AssetReferenceSettings.Info> AssetPaths;
+        public Func<UniTask>                     Call;
     }
 
     public class LoadHelper
@@ -26,20 +27,30 @@ namespace Model
                 ObjectHelper.RemoveEntity(gameRoot.Entity);
             }
 
+            UniTask.Void(async () => await SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Single));
+
             UI2DRootComponent ui2DRootComponent = Game.Instance.GGetComponent<UI2DRootComponent>();
             ui2DRootComponent.ClearUIViewByLayer(UIViewLayer.Low);
             ui2DRootComponent.ClearUIViewByLayer(UIViewLayer.Normal);
             ui2DRootComponent.ClearUIViewByLayer(UIViewLayer.High);
             ui2DRootComponent.ClearUIViewByLayer(UIViewLayer.Top);
 
-            await SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Single);
-
             Game.Instance.EventSystem.Invoke<E_LoadStateSwitch, LoadProgressType>(LoadProgressType.LoadAssets);
             ResHelper.GCAndUnload();
-            AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
-            data.SettingsPath.Add(data.ScenePath);
+            await UniTask.Delay(200);
 
-            var downloader = YooAssets.CreateBundleDownloader(data.SettingsPath.ToArray(), 32, 3);
+            data.AssetPaths ??= new List<AssetReferenceSettings.Info>();
+
+            AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
+            var paths = new string[data.AssetPaths.Count + 1];
+            paths[0] = data.ScenePath;
+
+            for (int i = data.AssetPaths.Count - 1; i >= 0; i--)
+            {
+                paths[i + 1] = data.AssetPaths[i].Path;
+            }
+
+            var downloader = YooAssets.CreateBundleDownloader(paths, 32, 3);
             downloader.OnDownloadErrorCallback = OnDownloadErrorCallback;
             downloader.OnDownloadProgressCallback = OnDownloadProgressCallback;
             downloader.OnDownloadOverCallback = OnDownloadOverCallback;
@@ -47,19 +58,70 @@ namespace Model
             downloader.BeginDownload();
             await downloader;
 
-            List<UniTask> tasks = new List<UniTask> { component.LoadSceneAsync(data.ScenePath), component.LoadAssetReferenceSettingsAsync(data.SettingsPath[0]) };
-
-            for (int i = data.SettingsPath.Count - 2; i >= 1; i--)
+            if (downloader.CurrentDownloadCount > 0)
             {
-                if (!string.IsNullOrEmpty(data.SettingsPath[i]))
+                await UniTask.Delay(500);
+            }
+
+            var handles = new List<OperationHandleBase>();
+            var tasks = new List<UniTask>();
+
+            var progress = new Progress<float>(f =>
+            {
+                var score = 0.0f;
+
+                for (int i = handles.Count - 1; i >= 0; i--)
                 {
-                    tasks.Add(component.CreateLoadHandle(typeof(Object), data.SettingsPath[i]).ToUniTask());
+                    score += handles[i].Progress;
+                }
+
+                Game.Instance.EventSystem.Invoke<E_LoadingViewProgressRefresh2, float>(score / handles.Count);
+            });
+            var handle1 = component.CreateLoadSceneHandle(data.ScenePath);
+            handles.Add(handle1);
+            tasks.Add(handle1.ToUniTask(progress));
+
+            for (int i = data.AssetPaths.Count - 1; i >= 0; i--)
+            {
+                var info = data.AssetPaths[i];
+
+                if (info.Type == LoadType.Normal)
+                {
+                    var handle = component.CreateLoadHandle(typeof(Object), info.Path);
+                    handles.Add(handle);
+                    tasks.Add(handle.ToUniTask(progress));
+                }
+                else if (info.Type == LoadType.Sub)
+                {
+                    var handle = component.CreateLoadSubHandle(typeof(Object), info.Path);
+                    handles.Add(handle);
+                    tasks.Add(handle.ToUniTask(progress));
+                }
+                else if (info.Type == LoadType.RawFile)
+                {
+                    var handle = component.CreateLoadRawFileHandle(info.Path);
+                    handles.Add(handle);
+                    tasks.Add(handle.ToUniTask(progress));
                 }
             }
 
             await UniTask.WhenAll(tasks);
+            tasks.Clear();
 
-            //await UniTask.Delay(500);
+            for (int i = data.AssetPaths.Count - 1; i >= 0; i--)
+            {
+                var info = data.AssetPaths[i];
+
+                if (info.Type == LoadType.Normal && info.TypeName == typeof(AssetReferenceSettings).FullName)
+                {
+                    tasks.Add(component.LoadAssetReferenceSettingsAsync(info.Path));
+                }
+            }
+
+            tasks.AddRange(component.SaveRawFileList(data.AssetPaths));
+
+            await UniTask.WhenAll(tasks);
+
             NLog.Log.Debug("资源加载完成------------------------11----");
 
             ObjectHelper.CreateComponent<GameRootComponent>(ObjectHelper.CreateEntity<Entity>(Game.Instance.Scene, GameObject.Find("GameRoot")));
@@ -70,7 +132,6 @@ namespace Model
             }
 
             ResHelper.GCAndUnload();
-            //await UniTask.Delay(300);
 
             UIHelper.CloseUIView<LoadingViewComponent>();
             Game.Instance.EventSystem.Invoke<E_LoadSceneFinish>();

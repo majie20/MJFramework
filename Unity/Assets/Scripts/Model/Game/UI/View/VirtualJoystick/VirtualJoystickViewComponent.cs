@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Model
 {
     [LifeCycle]
-    [UIBaseData(UIViewType = (int) UIViewType.Pop, PrefabPath = "Assets/Res/UI/Prefab/VirtualJoystick/VirtualJoystickView.prefab", UIMaskMode = (int) UIMaskMode.BlackTransparent,
-        UILayer = (int) UIViewLayer.Low, IsOperateMask = false)]
-    public class VirtualJoystickViewComponent : UIBaseComponent, IOpen, IAwake
+    [UIBaseData(UIViewType = (int)UIViewType.Pop, PrefabPath = "Assets/Res/UI/Prefab/VirtualJoystick/VirtualJoystickView.prefab", UIMaskMode = (int)UIMaskMode.BlackTransparent,
+        UILayer = (int)UIViewLayer.Low, IsOperateMask = false)]
+    public class VirtualJoystickViewComponent : UIBaseComponent, IOpen
     {
         private CanvasGroup _buttons;
         private CanvasGroup _joystick;
@@ -70,6 +71,10 @@ namespace Model
             _arrows = null;
             InputManager = null;
             base.Dispose();
+        }
+
+        public override async UniTaskVoid OnLoadComplete()
+        {
         }
 
         public void Open()

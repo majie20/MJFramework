@@ -7,7 +7,7 @@ namespace Model
     [LifeCycle]
     [UIBaseData(UIViewType = (int)UIViewType.Normal, PrefabPath = "Assets/Res/UI/Prefab/Start/StartView.prefab", AtlasPath = "Assets/Res/UI/Texture/StaticSprite/S_Start",
         UIMaskMode = (int)UIMaskMode.BlackTransparentClick, UILayer = (int)Model.UIViewLayer.Normal, IsFullScreen = true, IsOperateMask = false)]
-    public class StartViewComponent : UIBaseComponent, IOpen, IAwake
+    public class StartViewComponent : UIBaseComponent, IOpen
     {
         private Button btnPlay;
 
@@ -50,6 +50,10 @@ namespace Model
         public override void Dispose()
         {
             base.Dispose();
+        }
+
+        public override async UniTaskVoid OnLoadComplete()
+        {
         }
 
         public void Open()

@@ -95,7 +95,7 @@ namespace Model
 
                 if (_way == AttackWay.Continuous)
                 {
-                    AsyncTimerHelper.TimeHandle(() => { _beAttackedMap.Remove(guid); }, _interval, 1, _cts);
+                    AsyncTimerHelper.TimeHandle(() => { _beAttackedMap.Remove(guid); }, _interval, 1, _cts).Forget();
                 }
 
                 CharacterComponent characterComponent = Entity.GetComponent<CharacterComponent>();

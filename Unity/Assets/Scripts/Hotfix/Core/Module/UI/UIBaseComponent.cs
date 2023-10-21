@@ -4,7 +4,6 @@
     {
         public override void Awake()
         {
-            _Awake();
         }
 
         public override void Dispose()

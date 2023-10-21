@@ -7,24 +7,26 @@
 //------------------------------------------------------------------------------
 using Bright.Serialization;
 using System.Collections.Generic;
+using SimpleJSON;
+
+
 
 namespace cfg.Monster
 {
-   
-public partial class TbMonster
+
+public sealed partial class TbMonster
 {
     private readonly Dictionary<int, Monster.MonsterType> _dataMap;
     private readonly List<Monster.MonsterType> _dataList;
     
-    public TbMonster(ByteBuf _buf)
+    public TbMonster(JSONNode _json)
     {
         _dataMap = new Dictionary<int, Monster.MonsterType>();
         _dataList = new List<Monster.MonsterType>();
         
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        foreach(JSONNode _row in _json.Children)
         {
-            Monster.MonsterType _v;
-            _v = Monster.MonsterType.DeserializeMonsterType(_buf);
+            var _v = Monster.MonsterType.DeserializeMonsterType(_row);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -54,6 +56,7 @@ public partial class TbMonster
             v.TranslateText(translator);
         }
     }
+    
     
     partial void PostInit();
     partial void PostResolve();

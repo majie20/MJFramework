@@ -1,5 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
+﻿using System;
 using System.Reflection;
 using UnityEngine;
 
@@ -29,14 +28,13 @@ namespace Model
                     component = (Component)Activator.CreateInstance(type);
                 }
 #else
-                component = (Component) Activator.CreateInstance(type);
+                component = (Component)Activator.CreateInstance(type);
 #endif
             }
 
             entity.AddComponent(component);
             component.Entity = entity;
             component.IsRuning = true;
-
             component.AddComponentParent();
 
             return component;
@@ -92,22 +90,22 @@ namespace Model
 
         public static T CreateComponent<T>(Entity entity, bool isFromPool = true) where T : Component
         {
-            return (T) CreateComponent(typeof(T), entity, isFromPool);
+            return (T)CreateComponent(typeof(T), entity, isFromPool);
         }
 
         public static T CreateComponent<T, A>(Entity entity, A a, bool isFromPool = true) where T : Component
         {
-            return (T) CreateComponent(typeof(T), entity, a, isFromPool);
+            return (T)CreateComponent(typeof(T), entity, a, isFromPool);
         }
 
         public static T CreateComponent<T, A, B>(Entity entity, A a, B b, bool isFromPool = true) where T : Component
         {
-            return (T) CreateComponent(typeof(T), entity, a, b, isFromPool);
+            return (T)CreateComponent(typeof(T), entity, a, b, isFromPool);
         }
 
         public static T CreateComponent<T, A, B, C>(Entity entity, A a, B b, C c, bool isFromPool = true) where T : Component
         {
-            return (T) CreateComponent(typeof(T), entity, a, b, c, isFromPool);
+            return (T)CreateComponent(typeof(T), entity, a, b, c, isFromPool);
         }
 
         public static void CreateComponents(Entity entity, params Type[] types)
@@ -178,13 +176,24 @@ namespace Model
 
         #region CreateEntity
 
+        public static T CreateUIEntity<T>(Entity eParent, string sign) where T : Entity
+        {
+            var entity = Game.Instance.Scene.GetComponent<EntityPoolComponent>().HatchEntity<T>();
+            entity.Sign = sign;
+            entity.SetParent(eParent);
+            entity.AwakeCalled = true;
+            entity.Called = false;
+
+            return entity;
+        }
+
         public static T CreateEntity<T>(Entity eParent, Transform parent = null, string sign = "OrdinaryGameObject", bool isFromAB = false, bool isParentCanNull = false)
             where T : Entity
         {
             var entity = Game.Instance.Scene.GetComponent<EntityPoolComponent>().HatchEntity<T>();
 
             entity.GameObject = Game.Instance.Scene.GetComponent<GameObjPoolComponent>()
-               .HatchGameObjBySign(sign, !isParentCanNull && parent == null ? eParent.Transform : parent, isFromAB);
+               .HatchGameObjBySign(sign, (!isParentCanNull && parent == null) ? eParent.Transform : parent, isFromAB);
             entity.Sign = sign;
             entity.Transform = entity.GameObject.transform;
             entity.SetParent(eParent);
@@ -192,9 +201,7 @@ namespace Model
             entity.AwakeCalled = true;
             entity.Called = false;
 
-            var idHandle = entity.Transform.GetComponent<EntityIdHandle>();
-
-            if (idHandle != null)
+            if (entity.Transform.TryGetComponent<EntityIdHandle>(out var idHandle))
             {
                 idHandle.Guid = entity.Guid;
             }
@@ -213,9 +220,7 @@ namespace Model
             entity.AwakeCalled = true;
             entity.Called = false;
 
-            var idHandle = entity.Transform.GetComponent<EntityIdHandle>();
-
-            if (idHandle != null)
+            if (entity.Transform.TryGetComponent<EntityIdHandle>(out var idHandle))
             {
                 idHandle.Guid = entity.Guid;
             }
