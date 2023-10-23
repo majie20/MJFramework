@@ -54,7 +54,6 @@ namespace Model
             assetsComponent.Unload(ConstData.INIT_ARS);
             await assetsComponent.ClearPackageUnusedCacheFilesAsync();
 
-            Game.Instance.Scene.GetComponent<SpriteComponent>().Init();
             GameConfigDataComponent gameConfigDataComponent = ObjectHelper.CreateComponent<GameConfigDataComponent>(Game.Instance.Scene, false);
 
             UnitDataComponent unitDataComponent = ObjectHelper.CreateComponent<UnitDataComponent>(Game.Instance.Scene, false);

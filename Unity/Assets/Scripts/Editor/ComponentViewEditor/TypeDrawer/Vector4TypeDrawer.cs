@@ -10,8 +10,8 @@ public class Vector4TypeDrawer : ITypeDrawer
         return type.FullName == typeof(Vector4).FullName;
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
-        return EditorGUILayout.Vector4Field(memberName, (Vector4)value);
+        return EditorGUILayout.Vector4Field(fieldName, (Vector4)value);
     }
 }

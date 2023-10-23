@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 [TypeDrawer]
 public class DateTimeTypeDrawer : ITypeDrawer
@@ -10,10 +11,11 @@ public class DateTimeTypeDrawer : ITypeDrawer
     }
 
     // Note: This is a very basic implementation. The ToString() method conversion will cut off milliseconds.
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
         var dateString = value.ToString();
-        var newDateString = EditorGUILayout.TextField(memberName, dateString);
+        //EditorGUI.
+        var newDateString = EditorGUILayout.TextField(fieldName, dateString, GUILayout.ExpandWidth(true));
 
         return newDateString != dateString
                 ? DateTime.Parse(newDateString)

@@ -1,6 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
 using M.Algorithm;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,6 +56,7 @@ namespace Model
 
             if (IsOpen)
             {
+                SetSortingOrder(_sortOrder);
                 RefreshEnable();
                 OnLoadComplete().Forget();
             }
@@ -101,6 +101,7 @@ namespace Model
             Entity.GameObject = Game.Instance.Scene.GetComponent<GameObjPoolComponent>().HatchGameObjBySign(attr.PrefabPath, Entity.Parent.Transform, true);
             Entity.Transform = Entity.GameObject.transform;
             Entity.AddComponentView();
+            Entity.AddToComponentView(this);
 
             if (Entity.Transform.TryGetComponent<EntityIdHandle>(out var idHandle))
             {

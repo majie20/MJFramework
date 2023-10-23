@@ -1,4 +1,5 @@
-﻿using NPBehave;
+﻿using System;
+using NPBehave;
 using System.Collections.Generic;
 using GraphProcessor;
 using UnityEngine;
@@ -48,11 +49,11 @@ namespace Model
 
         private Node CreateNode(P_BaseNode pNode)
         {
-            List<Node> nodes = null;
+            Node[] nodes = null;
 
             if (pNode is P_IfNode)
             {
-                nodes = new List<Node> { CreateNode(pNode.GetOutputPort("True").owner as P_BaseNode), CreateNode(pNode.GetOutputPort("False").owner as P_BaseNode) };
+                nodes = new[] { CreateNode(pNode.GetOutputPort("True").owner as P_BaseNode), CreateNode(pNode.GetOutputPort("False").owner as P_BaseNode) };
             }
             else
             {
@@ -63,19 +64,19 @@ namespace Model
 
                     if (count > 0)
                     {
-                        nodes = new List<Node>();
+                        nodes = new Node[count];
 
                         for (int j = 0; j < count; j++)
                         {
-                            nodes.Add(CreateNode(edges[j].inputNode as P_BaseNode));
+                            nodes[j] = CreateNode(edges[j].inputNode as P_BaseNode);
                         }
 
-                        nodes.Sort((n1, n2) => n2.Order - n1.Order);
+                        Array.Sort(nodes, (n1, n2) => n2.Order - n1.Order);
                     }
                 }
             }
 
-            return Game.Instance.Scene.GetComponent<NPNodePoolComponent>().HatchNode(pNode, nodes?.ToArray());
+            return Game.Instance.Scene.GetComponent<NPNodePoolComponent>().HatchNode(pNode, nodes);
         }
 
         public virtual void Dispose()

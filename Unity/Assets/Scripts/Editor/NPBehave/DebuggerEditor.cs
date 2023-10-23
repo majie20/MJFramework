@@ -5,18 +5,18 @@
 
 //namespace NPBehave
 //{
-//    [CustomEditor(typeof(Debugger))]
-//    public class DebuggerEditor : Editor
+//    public class DebuggerEditor
 //    {
-//        public override void OnInspectorGUI()
+//        public void Open(object root)
 //        {
 //            GUILayout.Label("NPBehave Debugger", EditorStyles.centeredGreyMiniLabel);
 
 //            if (GUILayout.Button("Open Debugger"))
 //            {
-//                DebuggerWindow.selectedDebugger = ((Debugger)target);
-//                DebuggerWindow.selectedObject = DebuggerWindow.selectedDebugger.transform;
+//                //DebuggerWindow.selectedDebugger = ((Debugger)target);
+//                //DebuggerWindow.selectedObject = DebuggerWindow.selectedDebugger.transform;
 //                DebuggerWindow.ShowWindow();
+                
 //            }
 //        }
 //    }

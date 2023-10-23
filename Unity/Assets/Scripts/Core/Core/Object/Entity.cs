@@ -212,13 +212,16 @@ namespace Model
 
         public void AddComponentView()
         {
+#if UNITY_EDITOR
             var component = GameObject.GetComponent<Model.ComponentView>();
             _componentView = component == null ? GameObject.AddComponent<Model.ComponentView>() : component;
+#endif
         }
 
-        private void AddToComponentView(Component component)
+        public void AddToComponentView(Component component)
         {
-            if (_componentView == null)
+#if UNITY_EDITOR
+            if (_componentView == null || _componentView.dic.ContainsKey(component))
             {
                 return;
             }
@@ -236,16 +239,20 @@ namespace Model
             var type = component.GetType();
             _componentView.dic.Add(component, type);
 #endif
+
+#endif
         }
 
         private void RemoveToComponentView(Component component)
         {
+#if UNITY_EDITOR
             if (_componentView == null)
             {
                 return;
             }
 
             _componentView.dic.Remove(component);
+#endif
         }
 
         public void SetParent(Entity entity)

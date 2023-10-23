@@ -10,8 +10,8 @@ public class ColorTypeDrawer : ITypeDrawer
         return type.FullName == typeof(Color).FullName;
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
-        return EditorGUILayout.ColorField(memberName, (Color)value);
+        return EditorGUILayout.ColorField(fieldName, (Color)value);
     }
 }

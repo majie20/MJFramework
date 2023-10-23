@@ -10,8 +10,8 @@ public class RectTypeDrawer : ITypeDrawer
         return type.FullName == typeof(Rect).FullName;
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
-        return EditorGUILayout.RectField(memberName, (Rect)value);
+        return EditorGUILayout.RectField(fieldName, (Rect)value);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using CatJson;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace Model
     [LifeCycle]
     public class SpriteComponent : Component, IAwake
     {
-        public static Sprite                             Transparent = Sprite.Create(Texture2D.blackTexture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 100);
+        //public static Sprite                             Transparent = Sprite.Create(Texture2D.blackTexture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 100);
         private       Dictionary<Image, string>          _operateImageDic;
         private       Dictionary<SpriteRenderer, string> _operateSRDic;
         private       Dictionary<Action<Sprite>, string> _operateActionDic;
@@ -20,9 +19,6 @@ namespace Model
             _operateImageDic = new Dictionary<Image, string>();
             _operateSRDic = new Dictionary<SpriteRenderer, string>();
             _operateActionDic = new Dictionary<Action<Sprite>, string>();
-            Init();
-
-            //SpriteAtlasManager.atlasRequested += RequestAtlas;
         }
 
         public override void Dispose()
@@ -30,23 +26,10 @@ namespace Model
             _operateImageDic = null;
             _operateSRDic = null;
             _operateActionDic = null;
-            //SpriteAtlasManager.atlasRequested -= RequestAtlas;
             base.Dispose();
         }
 
-        public void Init()
-        {
-            AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
-        }
-
-        //private void RequestAtlas(string tag, System.Action<SpriteAtlas> callback)
-        //{
-        //    var path = $"{ConstData.ATLAS_PATH}{tag}.spriteatlas";
-        //    var sa = Game.Instance.Scene.GetComponent<AssetsComponent>().LoadSync<SpriteAtlas>(path);
-        //    callback(sa);
-        //}
-
-        public async UniTask SetSprite(Image image, string path)
+        public async UniTaskVoid SetSprite(Image image, string path)
         {
             if (_operateImageDic.TryGetValue(image, out var old))
             {
@@ -75,7 +58,7 @@ namespace Model
             }
         }
 
-        public async UniTask SetSprite(SpriteRenderer sr, string path)
+        public async UniTaskVoid SetSprite(SpriteRenderer sr, string path)
         {
             if (_operateSRDic.TryGetValue(sr, out var old))
             {
@@ -104,7 +87,7 @@ namespace Model
             }
         }
 
-        public async UniTask SetSprite(Action<Sprite> call, string path)
+        public async UniTaskVoid SetSprite(Action<Sprite> call, string path)
         {
             if (_operateActionDic.TryGetValue(call, out var old))
             {

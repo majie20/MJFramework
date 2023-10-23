@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 [TypeDrawer]
 public class IntTypeDrawer : ITypeDrawer
@@ -10,8 +11,8 @@ public class IntTypeDrawer : ITypeDrawer
         return type.FullName == typeof(int).FullName;
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
-        return EditorGUILayout.IntField(memberName, (int)value);
+        return EditorGUILayout.IntField(fieldName, (int)value,GUILayout.ExpandWidth(true));
     }
 }

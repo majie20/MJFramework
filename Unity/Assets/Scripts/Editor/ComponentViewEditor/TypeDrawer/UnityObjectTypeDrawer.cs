@@ -1,17 +1,19 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 [TypeDrawer]
 public class UnityObjectTypeDrawer : ITypeDrawer
 {
     public bool HandlesType(Type type)
     {
-        return type.FullName == typeof(UnityEngine.Object).FullName ||
-                type.IsSubclassOf(typeof(UnityEngine.Object));
+        return type.FullName == typeof(UnityEngine.Object).FullName || type.IsSubclassOf(typeof(UnityEngine.Object));
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
-        return EditorGUILayout.ObjectField(memberName, (UnityEngine.Object)value, memberType, true);
+        //EditorGUI.ObjectField()
+        return EditorGUILayout.ObjectField(fieldName, (UnityEngine.Object)value, memberType, true);
+        //return null;
     }
 }

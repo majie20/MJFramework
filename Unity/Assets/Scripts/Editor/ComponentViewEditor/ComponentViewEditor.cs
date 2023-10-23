@@ -15,7 +15,7 @@ using UnityEngine;
 [CustomEditor(typeof(ComponentView))]
 public class ComponentViewEditor : Editor
 {
-    private string text = "";
+    private string _text = "";
 
     private static ComponentViewEditor instance;
     private static int                 time;
@@ -23,7 +23,7 @@ public class ComponentViewEditor : Editor
     public override void OnInspectorGUI()
     {
         instance = this;
-        this.text = EditorGUILayout.TextField(text);
+        this._text = EditorGUILayout.TextField(_text);
         EditorGUILayout.Space(10);
 
         EditorGUILayout.BeginVertical();
@@ -33,9 +33,9 @@ public class ComponentViewEditor : Editor
 
         foreach (var v in dic)
         {
-            if (Regex.IsMatch(v.Value.FullName.ToLower(), this.text.ToLower()))
+            if (Regex.IsMatch(v.Value.FullName.ToLower(), this._text.ToLower()))
             {
-                ComponentViewHelper.Draw(v);
+                ComponentViewHelper.Draw(v.Key, v.Value);
             }
         }
 
@@ -45,6 +45,7 @@ public class ComponentViewEditor : Editor
     private void OnDestroy()
     {
         instance = null;
+        ComponentViewHelper.Init();
     }
 
     static ComponentViewEditor()
@@ -65,12 +66,19 @@ public class ComponentViewEditor : Editor
     }
 }
 
+[InitializeOnLoad]
 public static class ComponentViewHelper
 {
-    public static readonly List<ITypeDrawer> typeDrawers = new List<ITypeDrawer>();
+    public static readonly List<ITypeDrawer> TypeDrawers = new();
 
     static ComponentViewHelper()
     {
+        Init();
+    }
+
+    public static void Init()
+    {
+        TypeDrawers.Clear();
         Assembly assembly = typeof(ComponentViewHelper).Assembly;
 
         foreach (Type type in assembly.GetTypes())
@@ -81,25 +89,27 @@ public static class ComponentViewHelper
             }
 
             ITypeDrawer iTypeDrawer = (ITypeDrawer)Activator.CreateInstance(type);
-            typeDrawers.Add(iTypeDrawer);
+            TypeDrawers.Add(iTypeDrawer);
         }
     }
 
-    public static void Draw(KeyValuePair<Model.Component, Type> obj)
+    public static void Draw(Model.Component obj, Type type)
     {
         try
         {
-            EditorGUILayout.LabelField($"{obj.Value.FullName}:", new GUIStyle { fontSize = 12 });
-            FieldInfo[] fields = obj.Value.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            EditorGUILayout.LabelField($"{type.FullName}:", new GUIStyle { fontSize = 12 });
+            FieldInfo[] fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            EditorGUI.indentLevel++;
 
+            
 #if ILRuntime
-            if (obj.Key is CrossBindingAdaptorType instance)
+            if (obj is CrossBindingAdaptorType instance)
             {
                 foreach (FieldInfo fieldInfo in fields)
                 {
-                    Type type = fieldInfo.FieldType;
+                    Type fieldType = fieldInfo.FieldType;
 
-                    if (type.IsDefined(typeof(HideInInspector), false))
+                    if (fieldType.IsDefined(typeof(HideInInspector), false))
                     {
                         continue;
                     }
@@ -109,61 +119,40 @@ public static class ComponentViewHelper
                         continue;
                     }
 
-                    for (int i = 0; i < typeDrawers.Count; i++)
-                    {
-                        var typeDrawer = typeDrawers[i];
+                    ITypeDrawer typeDrawer1 = null;
 
-                        if (!typeDrawer.HandlesType(type))
+                    for (int i = 0; i < TypeDrawers.Count; i++)
+                    {
+                        var typeDrawer = TypeDrawers[i];
+
+                        if (!typeDrawer.HandlesType(fieldType))
                         {
                             continue;
                         }
 
-                        string fieldName = fieldInfo.Name;
-                        object value = fieldInfo.GetValue(instance.ILInstance);
-                        typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+                        typeDrawer1 = typeDrawer;
 
                         break;
                     }
+
+                    if (typeDrawer1 == null)
+                    {
+                        typeDrawer1 = new ObjectTypeDrawer();
+                    }
+
+                    string fieldName = fieldInfo.Name;
+                    object value = fieldInfo.GetValue(instance.ILInstance);
+                    typeDrawer1.DrawAndGetNewValue(fieldType, fieldName, value, null);
                 }
             }
             else
             {
-                foreach (FieldInfo fieldInfo in fields)
-                {
-                    Type type = fieldInfo.FieldType;
-
-                    if (type.IsDefined(typeof(HideInInspector), false))
-                    {
-                        continue;
-                    }
-
-                    if (fieldInfo.IsDefined(typeof(HideInInspector), false))
-                    {
-                        continue;
-                    }
-
-                    for (int i = 0; i < typeDrawers.Count; i++)
-                    {
-                        var typeDrawer = typeDrawers[i];
-
-                        if (!typeDrawer.HandlesType(type))
-                        {
-                            continue;
-                        }
-
-                        string fieldName = fieldInfo.Name;
-                        object value = fieldInfo.GetValue(obj.Key);
-                        typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
-
-                        break;
-                    }
-                }
-            }
-#else
+#endif
             foreach (FieldInfo fieldInfo in fields)
             {
-                Type type = fieldInfo.FieldType;
-                if (type.IsDefined(typeof(HideInInspector), false))
+                Type fieldType = fieldInfo.FieldType;
+
+                if (fieldType.IsDefined(typeof(HideInInspector), false))
                 {
                     continue;
                 }
@@ -173,27 +162,39 @@ public static class ComponentViewHelper
                     continue;
                 }
 
-                for (int i = 0; i < typeDrawers.Count; i++)
-                {
-                    var typeDrawer = typeDrawers[i];
+                ITypeDrawer typeDrawer1 = null;
 
-                    if (!typeDrawer.HandlesType(type))
+                for (int i = 0; i < TypeDrawers.Count; i++)
+                {
+                    var typeDrawer = TypeDrawers[i];
+
+                    if (!typeDrawer.HandlesType(fieldType))
                     {
                         continue;
                     }
 
-                    string fieldName = fieldInfo.Name;
-                    object value = fieldInfo.GetValue(obj.Key);
-                    typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+                    typeDrawer1 = typeDrawer;
 
                     break;
                 }
+
+                if (typeDrawer1 == null)
+                {
+                    typeDrawer1 = new ObjectTypeDrawer();
+                }
+
+                string fieldName = fieldInfo.Name;
+                object value = fieldInfo.GetValue(obj);
+                typeDrawer1.DrawAndGetNewValue(fieldType, fieldName, value, null);
+            }
+#if ILRuntime
             }
 #endif
+            EditorGUI.indentLevel--;
         }
         catch (Exception e)
         {
-            Debug.Log($"component view error: {obj.Value.FullName}+==>{e}"); // MDEBUG:
+            Debug.Log($"component view error: {type.FullName}+==>{e}"); // MDEBUG:
         }
     }
 }

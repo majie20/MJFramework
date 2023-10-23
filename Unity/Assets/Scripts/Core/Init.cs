@@ -123,7 +123,12 @@ namespace Model
             if (Keyboard.current.escapeKey.wasReleasedThisFrame)
             {
                 Game.Instance.EventSystem.Invoke<E_GameQuit>();
-                Application.Quit();
+
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
+		        Application.Quit();
+#endif
             }
         }
 

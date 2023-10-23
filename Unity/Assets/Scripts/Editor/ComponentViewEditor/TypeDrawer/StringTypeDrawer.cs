@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 [TypeDrawer]
 public class StringTypeDrawer : ITypeDrawer
@@ -9,8 +10,8 @@ public class StringTypeDrawer : ITypeDrawer
         return type.FullName == typeof(string).FullName;
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
-        return EditorGUILayout.DelayedTextField(memberName, (string)value);
+        return EditorGUILayout.DelayedTextField(fieldName, (string)value, GUILayout.ExpandWidth(true));
     }
 }

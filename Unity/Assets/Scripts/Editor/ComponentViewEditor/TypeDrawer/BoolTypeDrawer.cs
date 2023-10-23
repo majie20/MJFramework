@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 [TypeDrawer]
 public class BoolTypeDrawer : ITypeDrawer
@@ -9,8 +10,8 @@ public class BoolTypeDrawer : ITypeDrawer
         return type.FullName == typeof(bool).FullName;
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
-        return EditorGUILayout.Toggle(memberName, (bool)value);
+        return EditorGUILayout.Toggle(fieldName, (bool)value, GUILayout.ExpandWidth(true));
     }
 }

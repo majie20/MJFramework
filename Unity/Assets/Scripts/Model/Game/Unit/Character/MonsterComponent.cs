@@ -12,6 +12,7 @@
         public void Start()
         {
             //this.Entity.EventSystem.Invoke<E_CharacterStateMachineToggle, StateMachineToggleInfo>(new StateMachineToggleInfo(StateMachineType.Idle));
+            //AsyncTimerHelper.TimeHandle(() => ObjectHelper.RemoveEntity(Entity), 100, 1).Forget();
         }
 
         private void OnUnitDataInitialize(int code)

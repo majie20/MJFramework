@@ -95,6 +95,7 @@ namespace Model
                 parent = new GameObject(sign).transform;
                 parent.SetParent(root.transform);
                 parent.localPosition = Vector3.one * 10000;
+                parent.gameObject.SetActive(false);
                 parentDic.Add(sign, parent);
             }
 

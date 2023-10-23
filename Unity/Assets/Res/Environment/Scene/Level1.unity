@@ -332,18 +332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a542c4251cc63884ba019a306ea7bfb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   UnitBornHandles:
   - {fileID: 1573913276}
-  WrapMode: 1
+  WrapMode: 0
   Loop: 0
   Interval: 0.05
   TriggerMode: 1
@@ -372,15 +363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe233bca0142a14c97784ea3367b6e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   Type: 0
   Handle: {fileID: 447987362}
 --- !u!1 &448419628
@@ -595,15 +577,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f25484ee07d5ad248a0e51eea759cd83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   UnitBaseDataSettings: {fileID: 11400000, guid: 8e50e095620c26c48a67d5632693d1b0,
     type: 2}
   IsPatrol: 1
@@ -989,15 +962,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7552a74360b103248a42216b0aad2cbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   Areas:
   - {fileID: 447987361}
   BornPoint: {fileID: 448419629}

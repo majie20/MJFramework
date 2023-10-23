@@ -375,16 +375,6 @@ namespace Model
 
                     break;
 
-                case BuildTarget.WSAPlayer:
-                    buildTargetGroup = BuildTargetGroup.WSA;
-
-                    break;
-
-                case BuildTarget.StandaloneLinux64:
-                    buildTargetGroup = BuildTargetGroup.Standalone;
-
-                    break;
-
                 case BuildTarget.PS4:
                     buildTargetGroup = BuildTargetGroup.PS4;
 
@@ -395,38 +385,13 @@ namespace Model
 
                     break;
 
-                case BuildTarget.tvOS:
-                    buildTargetGroup = BuildTargetGroup.tvOS;
-
-                    break;
-
                 case BuildTarget.Switch:
                     buildTargetGroup = BuildTargetGroup.Switch;
 
                     break;
 
-                case BuildTarget.Lumin:
-                    buildTargetGroup = BuildTargetGroup.Lumin;
-
-                    break;
-
-                case BuildTarget.Stadia:
-                    buildTargetGroup = BuildTargetGroup.Stadia;
-
-                    break;
-
-                case BuildTarget.GameCoreXboxOne:
-                    buildTargetGroup = BuildTargetGroup.GameCoreXboxOne;
-
-                    break;
-
                 case BuildTarget.PS5:
                     buildTargetGroup = BuildTargetGroup.PS5;
-
-                    break;
-
-                case BuildTarget.EmbeddedLinux:
-                    buildTargetGroup = BuildTargetGroup.EmbeddedLinux;
 
                     break;
 

@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 [TypeDrawer]
 public class EnumTypeDrawer : ITypeDrawer
@@ -9,13 +10,13 @@ public class EnumTypeDrawer : ITypeDrawer
         return type.IsEnum;
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
         if (memberType.IsDefined(typeof(FlagsAttribute), false))
         {
-            return EditorGUILayout.EnumFlagsField(memberName, (Enum)value);
+            return EditorGUILayout.EnumFlagsField(fieldName, (Enum)value, GUILayout.ExpandWidth(true));
         }
 
-        return EditorGUILayout.EnumPopup(memberName, (Enum)value);
+        return EditorGUILayout.EnumPopup(fieldName, (Enum)value, GUILayout.ExpandWidth(true));
     }
 }

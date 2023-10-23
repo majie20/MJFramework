@@ -42,11 +42,12 @@ namespace Model
             data.AssetPaths ??= new List<AssetReferenceSettings.Info>();
 
             AssetsComponent component = Game.Instance.Scene.GetComponent<AssetsComponent>();
+#if UNITY_WEBGL
             var paths = new string[data.AssetPaths.Count + 1];
             paths[0] = data.ScenePath;
 
-            for (int i = data.AssetPaths.Count - 1; i >= 0; i--)
             {
+            for (int i = data.AssetPaths.Count - 1; i >= 0; i--)
                 paths[i + 1] = data.AssetPaths[i].Path;
             }
 
@@ -62,7 +63,7 @@ namespace Model
             {
                 await UniTask.Delay(500);
             }
-
+#endif
             var handles = new List<OperationHandleBase>();
             var tasks = new List<UniTask>();
 

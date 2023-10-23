@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 [TypeDrawer]
 public class DoubleTypeDrawer : ITypeDrawer
@@ -9,8 +10,8 @@ public class DoubleTypeDrawer : ITypeDrawer
         return type.FullName == typeof(double).FullName;
     }
 
-    public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
+    public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
-        return EditorGUILayout.DoubleField(memberName, (double)value);
+        return EditorGUILayout.DoubleField(fieldName, (double)value, GUILayout.ExpandWidth(true));
     }
 }
