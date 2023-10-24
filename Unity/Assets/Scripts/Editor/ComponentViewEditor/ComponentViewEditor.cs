@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using Component = Model.Component;
 
 [InitializeOnLoad]
 [CustomEditor(typeof(ComponentView))]
@@ -69,7 +70,8 @@ public class ComponentViewEditor : Editor
 [InitializeOnLoad]
 public static class ComponentViewHelper
 {
-    public static readonly List<ITypeDrawer> TypeDrawers = new();
+    public static readonly List<ITypeDrawer>           TypeDrawers = new();
+    private static         Dictionary<Component, bool> Map         = new();
 
     static ComponentViewHelper()
     {
@@ -78,6 +80,7 @@ public static class ComponentViewHelper
 
     public static void Init()
     {
+        Map.Clear();
         TypeDrawers.Clear();
         Assembly assembly = typeof(ComponentViewHelper).Assembly;
 
@@ -97,11 +100,19 @@ public static class ComponentViewHelper
     {
         try
         {
-            EditorGUILayout.LabelField($"{type.FullName}:", new GUIStyle { fontSize = 12 });
+            Map.TryGetValue(obj, out var b);
+            b = EditorGUILayout.Foldout(b, $"{type.FullName}:");
+            Map[obj] = b;
+
+            if (b)
+            {
+                return;
+            }
+
+            //EditorGUILayout.LabelField($"{type.FullName}:", new GUIStyle { fontSize = 12 });
             FieldInfo[] fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             EditorGUI.indentLevel++;
 
-            
 #if ILRuntime
             if (obj is CrossBindingAdaptorType instance)
             {
@@ -194,7 +205,7 @@ public static class ComponentViewHelper
         }
         catch (Exception e)
         {
-            Debug.Log($"component view error: {type.FullName}+==>{e}"); // MDEBUG:
+            Debug.LogError($"component view error: {type.FullName}+==>{e}"); // MDEBUG:
         }
     }
 }

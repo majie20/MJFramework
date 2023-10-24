@@ -2,6 +2,7 @@ using Sirenix.Utilities.Editor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Model;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ public class DictionaryTypeDrawer : ITypeDrawer
         return type.IsGenericType && type.GetGenericTypeDefinition().FullName == typeof(Dictionary<,>).FullName;
     }
 
-    public Dictionary<object, int> Map = new();
+    private Dictionary<object, (int, bool)> map = new();
 
     public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
@@ -64,31 +65,62 @@ public class DictionaryTypeDrawer : ITypeDrawer
         var dictionary = (value as IDictionary);
 
         GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField($"{fieldName}:");
-        Map.TryGetValue(value, out var num);
-        num = EditorGUILayout.IntField("第几页：", num);
-        Map[value] = num;
+        map.TryGetValue(value, out var data);
+        data.Item2 = EditorGUILayout.Foldout(data.Item2, $"{fieldName}:");
+        data.Item1 = EditorGUILayout.IntField("第几页：", data.Item1);
+        map[value] = data;
         GUILayout.EndHorizontal();
-        EditorGUI.indentLevel++;
-        int j = 0;
 
-        foreach (var k in dictionary.Keys)
+        //绘制成功就继续绘制
+        if (data.Item2)
         {
-            if (j >= num * 5 && j < (num + 1) * 5 && j < dictionary.Count)
+            EditorGUI.indentLevel++;
+            var result1 = fieldName == "_assetOperationDic";
+            var result2 = fieldName == "_subAssetOperationDic";
+            string result3 = null;
+            int j = 0;
+
+            foreach (var k in dictionary.Keys)
             {
-                var v = dictionary[k];
-                typeDrawer1.DrawAndGetNewValue(types[0], $"Key_{j}", k, null);
-                typeDrawer2.DrawAndGetNewValue(types[1], $"Value_{j}", v, null);
-                var color = GUI.backgroundColor;
-                GUI.backgroundColor = Color.black;
-                GUILayout.Box(GUIContent.none, GUILayout.ExpandWidth(true), GUILayout.Height(5));
-                GUI.backgroundColor = color;
+                if (j >= data.Item1 * 5 && j < (data.Item1 + 1) * 5 && j < dictionary.Count)
+                {
+                    var v = dictionary[k];
+                    GUILayout.BeginHorizontal();
+                    GUILayout.BeginVertical();
+                    typeDrawer1.DrawAndGetNewValue(types[0], $"Key_{j}", k, null);
+                    typeDrawer2.DrawAndGetNewValue(types[1], $"Value_{j}", v, null);
+                    GUILayout.EndVertical();
+
+                    if ((result1 || result2) && GUILayout.Button("卸载", GUILayout.ExpandHeight(true), GUILayout.Width(100)))
+                    {
+                        result3 = (string)k;
+                    }
+
+                    GUILayout.EndHorizontal();
+
+                    var color = GUI.backgroundColor;
+                    GUI.backgroundColor = Color.black;
+                    GUILayout.Box(GUIContent.none, GUILayout.ExpandWidth(true), GUILayout.Height(5));
+                    GUI.backgroundColor = color;
+                }
+
+                j++;
             }
 
-            j++;
-        }
+            if (!string.IsNullOrEmpty(result3))
+            {
+                if (result1)
+                {
+                    Model.Game.Instance.Scene.GetComponent<AssetsComponent>().Unload(result3);
+                }
+                else if (result2)
+                {
+                    Model.Game.Instance.Scene.GetComponent<AssetsComponent>().UnloadSub(result3);
+                }
+            }
 
-        EditorGUI.indentLevel--;
+            EditorGUI.indentLevel--;
+        }
 
         return null;
     }

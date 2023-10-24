@@ -1219,7 +1219,7 @@ MonoBehaviour:
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
-  position: {x: -201.33333, y: -102, z: 0}
+  position: {x: -342.66666, y: 47.333332, z: 0}
   scale: {x: 0.7561437, y: 0.7561437, z: 1}
   references:
     version: 2

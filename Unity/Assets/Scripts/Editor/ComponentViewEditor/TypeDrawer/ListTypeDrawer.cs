@@ -14,7 +14,7 @@ public class ListTypeDrawer : ITypeDrawer
         return (type.IsGenericType && type.GetGenericTypeDefinition().FullName == typeof(List<>).FullName) || type.IsArray;
     }
 
-    public Dictionary<object, int> Map = new();
+    private Dictionary<object, (int, bool)> map = new();
 
     public object DrawAndGetNewValue(Type memberType, string fieldName, object value, object target)
     {
@@ -54,21 +54,26 @@ public class ListTypeDrawer : ITypeDrawer
         var list = (value as IList);
 
         GUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField($"{fieldName}:");
-        Map.TryGetValue(value, out var num);
-        num = EditorGUILayout.IntField("第几页：", num);
-        Map[value] = num;
+        map.TryGetValue(value, out var data);
+        data.Item2 = EditorGUILayout.Foldout(data.Item2, $"{fieldName}:");
+        data.Item1 = EditorGUILayout.IntField("第几页：", data.Item1);
+        map[value] = data;
         GUILayout.EndHorizontal();
-        EditorGUI.indentLevel++;
 
-        for (int j = num * 5; j < (num + 1) * 5 && j < list.Count; j++)
+        //绘制成功就继续绘制
+        if (data.Item2)
         {
-            var o = list[j];
+            EditorGUI.indentLevel++;
 
-            typeDrawer1.DrawAndGetNewValue(type, $"Element_{j}", o, null);
+            for (int j = data.Item1 * 5; j < (data.Item1 + 1) * 5 && j < list.Count; j++)
+            {
+                var o = list[j];
+
+                typeDrawer1.DrawAndGetNewValue(type, $"Element_{j}", o, null);
+            }
+
+            EditorGUI.indentLevel--;
         }
-
-        EditorGUI.indentLevel--;
 
         return null;
     }

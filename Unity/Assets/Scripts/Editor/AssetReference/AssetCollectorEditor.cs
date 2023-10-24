@@ -116,7 +116,7 @@ public class AssetCollectorEditor
             {
                 var fileExtension = Path.GetExtension(pathList[j]);
 
-                if (IgnoreFileExtensions.Contains(fileExtension))
+                if (IgnoreFileExtensions.Contains(fileExtension) || Path.GetFileNameWithoutExtension(pathList[j]).StartsWith("~"))
                 {
                     continue;
                 }
